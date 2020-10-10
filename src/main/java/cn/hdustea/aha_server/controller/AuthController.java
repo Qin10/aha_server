@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * @program: aha_server
@@ -32,16 +33,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseBean login(@RequestBody LoginUser loginUser) throws Exception {
         String token = authService.login(loginUser);
-        return new ResponseBean(200, "登录成功", token, TimeUtil.getFormattedTime(new Date()));
+        HashMap<String, String> responseMap = new HashMap<>();
+        responseMap.put("token", token);
+        return new ResponseBean(200, "登录成功", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 
     @PostMapping("/register")
     public ResponseBean register(@RequestBody User user) throws Exception {
-        boolean isRegistered = authService.register(user);
-        if (isRegistered) {
-            return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
-        } else {
-            throw new ForbiddenException("未知错误，注册失败");
-        }
+        authService.register(user);
+        return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
     }
 }

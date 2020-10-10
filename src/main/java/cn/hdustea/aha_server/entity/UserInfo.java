@@ -20,5 +20,4 @@ public class UserInfo {
     private boolean gender;
     private Date birthday;
     private String signature;
-    private User user;
 }

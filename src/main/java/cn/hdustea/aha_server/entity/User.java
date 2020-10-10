@@ -13,7 +13,6 @@ import java.sql.Timestamp;
 @Data
 public class User {
     private int id;
-    private String username;
     private String phone;
     private String password;
     private Timestamp createdTime;

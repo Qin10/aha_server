@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.exception.DaoException;
 import cn.hdustea.aha_server.exception.ForbiddenException;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.apache.shiro.ShiroException;
@@ -26,15 +27,22 @@ public class ExceptionController {
     // 捕捉shiro的异常
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
-    public ResponseBean handle401(ShiroException e) {
+    public ResponseBean handleShiroException(ShiroException e) {
         return new ResponseBean(401, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 
     //捕获403
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseBean handle403(ForbiddenException e) {
+    public ResponseBean handleForbiddenException(ForbiddenException e) {
         return new ResponseBean(403, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    //捕获数据库异常
+    @ExceptionHandler(DaoException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseBean handleDaoException(DaoException e) {
+        return new ResponseBean(500, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 
     // 捕捉其他所有异常

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * @program: aha_server
@@ -17,12 +18,14 @@ import java.util.Date;
  * @create: 2020-10-10 03:00
  **/
 @RestController
-public class WeiXinProgramController {
+public class WechatProgramController {
     @Autowired
     private WechatProgramService wechatProgramService;
     @PostMapping("/wxLogin")
     public ResponseBean wechatLogin(@RequestParam("code") String code) throws Exception {
         String token = wechatProgramService.wechatLogin(code);
-        return new ResponseBean(200, "登录成功", token, TimeUtil.getFormattedTime(new Date()));
+        HashMap<String, String> responseMap = new HashMap<>();
+        responseMap.put("token",token);
+        return new ResponseBean(200, "登录成功", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 }
