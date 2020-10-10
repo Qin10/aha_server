@@ -10,8 +10,12 @@ import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,5 +46,14 @@ public class AuthController {
     public ResponseBean register(@RequestBody User user) throws Exception {
         authService.register(user);
         return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
+    }
+    @RequiresAuthentication
+    @GetMapping("/logout")
+    public ResponseBean logout() {
+        Subject subject = SecurityUtils.getSubject();
+        String token = (String) subject.getPrincipal();
+        String phone = JWTUtil.getAccount(token);
+        authService.logout(phone);
+        return new ResponseBean(200, "登出成功", null, TimeUtil.getFormattedTime(new Date()));
     }
 }

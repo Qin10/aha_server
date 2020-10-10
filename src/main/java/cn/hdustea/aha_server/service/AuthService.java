@@ -8,6 +8,7 @@ import cn.hdustea.aha_server.exception.DaoException;
 import cn.hdustea.aha_server.exception.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.UserNotFoundException;
 import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,10 @@ public class AuthService {
     private UserService userService;
     @Autowired
     private UserInfoService userInfoService;
+    @Autowired
+    private RedisUtil redisUtil;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30*24*60*60;
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -38,6 +42,7 @@ public class AuthService {
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
                 String token = JWTUtil.sign(user.getPhone(), user.getPassword());
+                redisUtil.set(user.getPhone(),token,REFRESH_TOKEN_EXPIRE_TIME);
                 return token;
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");
@@ -64,5 +69,9 @@ public class AuthService {
         } else {
             throw new DaoException("账号已存在！");
         }
+    }
+
+    public void logout(String phone){
+        redisUtil.del(phone);
     }
 }

@@ -3,6 +3,9 @@ package cn.hdustea.aha_server.shiro;
 import cn.hdustea.aha_server.dao.UserDao;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.RedisUtil;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.authc.AuthenticationException;
@@ -15,13 +18,20 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletResponse;
+
+@Slf4j
 @Service
 public class MyRealm extends AuthorizingRealm {
 
-    private static final Logger LOGGER = LogManager.getLogger(MyRealm.class);
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private RedisUtil redisUtil;
+    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
 
     /**
      * 大坑！，必须重写此方法，不然Shiro会报错
@@ -49,7 +59,7 @@ public class MyRealm extends AuthorizingRealm {
      * 默认使用此方法进行用户名正确与否验证，错误抛出异常即可。
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken auth) {
         String token = (String) auth.getCredentials();
         // 解密获得username，用于和数据库进行对比
         String phone = JWTUtil.getAccount(token);
@@ -61,10 +71,31 @@ public class MyRealm extends AuthorizingRealm {
         if (user == null) {
             throw new AuthenticationException("用户不存在！");
         }
-
-        if (!JWTUtil.verify(token, phone, user.getPassword())) {
-            throw new AuthenticationException("用户名或密码错误！");
+        try {
+            boolean verify = JWTUtil.verify(token, phone, user.getPassword());
+            if (!verify) {
+                throw new AuthenticationException("用户名或密码错误！");
+            }
+        } catch (TokenExpiredException e) {
+            if (!refreshToken(token, user)) {
+                throw new AuthenticationException("用户凭证已过期！");
+            }
         }
         return new SimpleAuthenticationInfo(token, token, "my_realm");
+    }
+
+    /**
+     * 尝试从redis中获取refreshToken信息并刷新token,返回于header中的Authorization字段。
+     */
+    protected boolean refreshToken(String token, User user) {
+        String possibleToken = (String) redisUtil.get(user.getPhone());
+        if (possibleToken != null && possibleToken.equals(token)) {
+            String newToken = JWTUtil.sign(user.getPhone(), user.getPassword());
+            redisUtil.set(user.getPhone(), newToken, REFRESH_TOKEN_EXPIRE_TIME);
+            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+            response.setHeader("Authorization", newToken);
+            return true;
+        }
+        return false;
     }
 }

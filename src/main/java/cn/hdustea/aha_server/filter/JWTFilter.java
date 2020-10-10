@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.filter;
 
 import cn.hdustea.aha_server.shiro.JWTToken;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +12,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 鉴权登录过滤器
+ **/
+@Slf4j
 public class JWTFilter extends BasicHttpAuthenticationFilter {
-
-    private Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     /**
      * 判断用户是否想要登入。

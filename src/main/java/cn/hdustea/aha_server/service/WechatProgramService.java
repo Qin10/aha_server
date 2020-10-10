@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.entity.Oauth;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.util.WechatUtil;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ import org.springframework.stereotype.Service;
 public class WechatProgramService {
     @Autowired
     private OauthService oauthService;
+    @Autowired
+    private RedisUtil redisUtil;
+    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30*24*60*60;
 
     public String wechatLogin(String code) throws Exception {
         String openId = WechatUtil.getWxInfo(code).getOpenId();
@@ -27,6 +31,7 @@ public class WechatProgramService {
         } else {
             User user = wechatOauth.getUser();
             String token = JWTUtil.sign(user.getPhone(), user.getPassword());
+            redisUtil.set(user.getPhone(),token,REFRESH_TOKEN_EXPIRE_TIME);
             return token;
         }
     }
