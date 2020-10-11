@@ -32,6 +32,8 @@ public class AuthService {
     private UserInfoService userInfoService;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private SmsService smsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
     private static final String REFRESH_TOKEN_PREFIX = "user:token:";
@@ -57,12 +59,9 @@ public class AuthService {
     }
 
     public void register(RegisterUser registerUser) throws Exception {
-        String possibleCode = (String) redisUtil.get(REGISTER_MESSAGE_CODE_PREFIX + registerUser.getPhone());
-        if (possibleCode == null) {
-            throw new MessageVerificationException("验证码失效！");
-        }
-        if (!possibleCode.equals(registerUser.getCode())) {
-            throw new MessageVerificationException("验证码错误！");
+        boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode());
+        if (!SmsVerifyResult) {
+            throw new MessageVerificationException("验证码失效或错误！");
         }
         User user = new User();
         user.setPhone(registerUser.getPhone());

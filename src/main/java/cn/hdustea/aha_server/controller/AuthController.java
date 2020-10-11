@@ -31,6 +31,7 @@ import java.util.HashMap;
  * @create: 2020-10-10 00:51
  **/
 @RestController
+
 public class AuthController {
     @Autowired
     private AuthService authService;
@@ -48,6 +49,7 @@ public class AuthController {
         authService.register(registerUser);
         return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
     }
+
     @RequiresAuthentication
     @GetMapping("/logout")
     public ResponseBean logout() {

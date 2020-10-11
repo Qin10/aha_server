@@ -46,6 +46,6 @@ public class UserInfoController {
         String filename = userInfoService.updateAvatarFilenameByPhone(file, phone);
         HashMap<String, String> responseMap = new HashMap<>();
         responseMap.put("filename", filename);
-        return new ResponseBean(200, "succ", responseMap, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean(200, "头像修改成功！", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 }

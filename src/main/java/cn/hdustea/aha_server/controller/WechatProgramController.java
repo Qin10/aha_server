@@ -17,15 +17,17 @@ import java.util.HashMap;
  * @author: HduStea_YY
  * @create: 2020-10-10 03:00
  **/
+
 @RestController
 public class WechatProgramController {
     @Autowired
     private WechatProgramService wechatProgramService;
+
     @PostMapping("/wxLogin")
     public ResponseBean wechatLogin(@RequestParam("code") String code) throws Exception {
         String token = wechatProgramService.wechatLogin(code);
         HashMap<String, String> responseMap = new HashMap<>();
-        responseMap.put("token",token);
+        responseMap.put("token", token);
         return new ResponseBean(200, "登录成功", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 }
