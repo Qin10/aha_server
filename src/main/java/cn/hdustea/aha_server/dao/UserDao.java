@@ -27,7 +27,7 @@ public interface UserDao {
     })
     User findUserByPhone(@Param("phone") String phone);
 
-    @Insert("insert into user (phone,password,created_time,avatar_url,role_id) values (#{phone},#{password},#{createdTime},#{avatarUrl},#{roleId})")
+    @Insert("insert into user (phone,password,created_time,role_id) values (#{phone},#{password},#{createdTime},#{roleId})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int saveUser(User user);
 

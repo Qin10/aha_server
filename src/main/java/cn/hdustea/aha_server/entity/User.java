@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -12,11 +13,11 @@ import java.sql.Timestamp;
  **/
 @Data
 public class User {
+    @JsonIgnore
     private int id;
     private String phone;
     private String password;
     private Timestamp createdTime;
-    private String avatarUrl;
     private int roleId;
     private Role role;
 }

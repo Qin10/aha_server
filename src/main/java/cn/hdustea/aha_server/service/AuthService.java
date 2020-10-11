@@ -1,11 +1,13 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.bean.LoginUser;
+import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.DaoException;
 import cn.hdustea.aha_server.exception.InvalidPasswordException;
+import cn.hdustea.aha_server.exception.MessageVerificationException;
 import cn.hdustea.aha_server.exception.UserNotFoundException;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
@@ -31,8 +33,9 @@ public class AuthService {
     @Autowired
     private RedisUtil redisUtil;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30*24*60*60;
+    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
     private static final String REFRESH_TOKEN_PREFIX = "user:token:";
+    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -43,7 +46,7 @@ public class AuthService {
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
                 String token = JWTUtil.sign(user.getPhone(), user.getPassword());
-                redisUtil.set(REFRESH_TOKEN_PREFIX+user.getPhone(),token,REFRESH_TOKEN_EXPIRE_TIME);
+                redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, REFRESH_TOKEN_EXPIRE_TIME);
                 return token;
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");
@@ -53,15 +56,24 @@ public class AuthService {
         }
     }
 
-    public void register(User user) throws Exception {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+    public void register(RegisterUser registerUser) throws Exception {
+        String possibleCode = (String) redisUtil.get(REGISTER_MESSAGE_CODE_PREFIX + registerUser.getPhone());
+        if (possibleCode == null) {
+            throw new MessageVerificationException("验证码失效！");
+        }
+        if (!possibleCode.equals(registerUser.getCode())) {
+            throw new MessageVerificationException("验证码错误！");
+        }
+        User user = new User();
+        user.setPhone(registerUser.getPhone());
+        user.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
         if (userService.getUserByPhone(user.getPhone()) == null) {
             userService.saveUser(user);
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
-            userInfo.setNickname(user.getPhone());
+            userInfo.setNickname(registerUser.getNickname());
             UserInfo possibleUserInfo = userInfoService.getUserInfoByUserId(user.getId());
             if (possibleUserInfo != null) {
                 userInfoService.deleteUserInfoById(possibleUserInfo.getId());
@@ -72,7 +84,7 @@ public class AuthService {
         }
     }
 
-    public void logout(String phone){
+    public void logout(String phone) {
         redisUtil.del(phone);
     }
 }

@@ -27,4 +27,9 @@ class AhaServerApplicationTests {
     void testInfoDao() {
         System.out.println(userInfoDao.findUserInfoByUserId(1));
     }
+
+    @Test
+    void testUserInfo(){
+        userInfoDao.updateAvatarFilename("gugugugu","14");
+    }
 }

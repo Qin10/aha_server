@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.LoginUser;
+import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.ForbiddenException;
@@ -43,8 +44,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseBean register(@RequestBody User user) throws Exception {
-        authService.register(user);
+    public ResponseBean register(@RequestBody RegisterUser registerUser) throws Exception {
+        authService.register(registerUser);
         return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
     }
     @RequiresAuthentication

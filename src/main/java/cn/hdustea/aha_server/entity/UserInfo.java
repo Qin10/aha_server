@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.ToString;
 
@@ -14,10 +15,13 @@ import java.util.Date;
 @Data
 @ToString(callSuper = true)
 public class UserInfo {
+    @JsonIgnore
     private int id;
+    @JsonIgnore
     private int userId;
     private String nickname;
     private boolean gender;
     private Date birthday;
     private String signature;
+    private String avatarFilename;
 }
