@@ -32,6 +32,7 @@ public class AuthService {
     private RedisUtil redisUtil;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30*24*60*60;
+    private static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -42,7 +43,7 @@ public class AuthService {
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
                 String token = JWTUtil.sign(user.getPhone(), user.getPassword());
-                redisUtil.set(user.getPhone(),token,REFRESH_TOKEN_EXPIRE_TIME);
+                redisUtil.set(REFRESH_TOKEN_PREFIX+user.getPhone(),token,REFRESH_TOKEN_EXPIRE_TIME);
                 return token;
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");

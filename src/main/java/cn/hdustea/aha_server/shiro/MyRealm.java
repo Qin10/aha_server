@@ -32,6 +32,7 @@ public class MyRealm extends AuthorizingRealm {
     @Autowired
     private RedisUtil redisUtil;
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
+    private static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
     /**
      * 大坑！，必须重写此方法，不然Shiro会报错
@@ -88,10 +89,10 @@ public class MyRealm extends AuthorizingRealm {
      * 尝试从redis中获取refreshToken信息并刷新token,返回于header中的Authorization字段。
      */
     protected boolean refreshToken(String token, User user) {
-        String possibleToken = (String) redisUtil.get(user.getPhone());
+        String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + user.getPhone());
         if (possibleToken != null && possibleToken.equals(token)) {
             String newToken = JWTUtil.sign(user.getPhone(), user.getPassword());
-            redisUtil.set(user.getPhone(), newToken, REFRESH_TOKEN_EXPIRE_TIME);
+            redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), newToken, REFRESH_TOKEN_EXPIRE_TIME);
             HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
             response.setHeader("Authorization", newToken);
             return true;

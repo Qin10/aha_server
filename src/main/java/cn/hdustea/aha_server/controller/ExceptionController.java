@@ -32,7 +32,6 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
     public ResponseBean handleShiroException(ShiroException e) {
-        System.out.println(e.getClass());
         return new ResponseBean(401, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 
