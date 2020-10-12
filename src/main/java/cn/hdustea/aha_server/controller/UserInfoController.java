@@ -30,6 +30,16 @@ public class UserInfoController {
     @Resource
     private UserInfoService userInfoService;
 
+    @RequiresAuthentication
+    @GetMapping("/me")
+    public ResponseBean getPersonalUserInfo() {
+        Subject subject = SecurityUtils.getSubject();
+        String token = (String) subject.getPrincipal();
+        String phone = JWTUtil.getAccount(token);
+        UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
+        return new ResponseBean(200, "succ", userInfo, TimeUtil.getFormattedTime(new Date()));
+    }
+
     /**
      * 通过手机号查询用户信息的接口
      *

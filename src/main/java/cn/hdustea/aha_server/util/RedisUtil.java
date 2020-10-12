@@ -516,8 +516,7 @@ public class RedisUtil {
      * @param key   键
      * @param start 开始 0 是第一个元素
      * @param end   结束 -1代表所有值
-     * @return
-     * @取出来的元素 总数 end-start+1
+     * @return 总数 end-start+1
      */
     public List<Object> lGet(String key, long start, long end) {
         try {

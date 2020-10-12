@@ -228,7 +228,7 @@ public class Validation {
     }
 
     /**
-     * 判断字段是否为正整数正则表达式 >=0 符合返回ture
+     * 判断字段是否为正整数正则表达式 &gt;=0 符合返回ture
      *
      * @param str
      * @return boolean
@@ -238,7 +238,7 @@ public class Validation {
     }
 
     /**
-     * 判断字段是否为负整数正则表达式 <=0 符合返回ture
+     * 判断字段是否为负整数正则表达式 &lt;=0 符合返回ture
      *
      * @param str
      * @return boolean
@@ -258,7 +258,7 @@ public class Validation {
     }
 
     /**
-     * 判断字段是否为正浮点数正则表达式 >=0 符合返回ture
+     * 判断字段是否为正浮点数正则表达式 &gt;=0 符合返回ture
      *
      * @param str
      * @return boolean
@@ -268,7 +268,7 @@ public class Validation {
     }
 
     /**
-     * 判断字段是否为负浮点数正则表达式 <=0 符合返回ture
+     * 判断字段是否为负浮点数正则表达式 &lt;=0 符合返回ture
      *
      * @param str
      * @return boolean
