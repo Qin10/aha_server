@@ -15,24 +15,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.Date;
 
 /**
- * @program: aha_server
- * @description: 授权鉴权服务类
- * @author: HduStea_YY
- * @create: 2020-10-10 02:07
+ * 授权鉴权服务类
+ *
+ * @author STEA_YY
  **/
 @Service
 public class AuthService {
-    @Autowired
+    @Resource
     private UserService userService;
-    @Autowired
+    @Resource
     private UserInfoService userInfoService;
-    @Autowired
+    @Resource
     private RedisUtil redisUtil;
-    @Autowired
+    @Resource
     private SmsService smsService;
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
@@ -44,7 +44,7 @@ public class AuthService {
     }
 
     public String login(LoginUser loginUser) throws Exception {
-        User user = userService.getUserByPhone(loginUser.getAccount());
+        User user = userService.getUserByPhone(loginUser.getPhone());
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
                 String token = JWTUtil.sign(user.getPhone(), user.getPassword());

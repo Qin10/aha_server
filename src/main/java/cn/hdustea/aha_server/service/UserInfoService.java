@@ -10,17 +10,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 
 /**
- * @program: aha_server
- * @description: 用户详细信息服务类
- * @author: HduStea_YY
- * @create: 2020-10-10 11:30
+ * 用户详细信息服务类
+ *
+ * @author STEA_YY
  **/
 @Service
 public class UserInfoService {
-    @Autowired
+    @Resource
     private UserInfoDao userInfoDao;
     private static final String AVATAR_PATH = "C:\\server\\avatar\\";
 

@@ -12,13 +12,18 @@ import org.springframework.util.CollectionUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import javax.annotation.Resource;
+
 /**
- * @author 王赛超 基于spring和redis的redisTemplate工具类 针对所有的hash 都是以h开头的方法 针对所有的Set 都是以s开头的方法 不含通用方法 针对所有的List 都是以l开头的方法
+ * Redis操作工具类
+ * 基于spring和redis的redisTemplate工具类 针对所有的hash 都是以h开头的方法 针对所有的Set 都是以s开头的方法 不含通用方法 针对所有的List 都是以l开头的方法
+ *
+ * @author 王赛超
  */
 @Component
 @Slf4j
 public class RedisUtil {
-    @Autowired
+    @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     // =============================common============================

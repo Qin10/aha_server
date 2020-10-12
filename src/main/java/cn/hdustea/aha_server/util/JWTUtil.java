@@ -9,6 +9,11 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 import java.util.Date;
 
+/**
+ * JWT令牌颁发工具类
+ *
+ * @author STEA_YY
+ **/
 public class JWTUtil {
     // 过期时间10分钟
     private static final long EXPIRE_TIME = 10 * 60 * 1000;

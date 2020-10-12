@@ -14,10 +14,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * @program: aha_server
- * @description: 文件上传的工具类
- * @author: HduStea_YY
- * @create: 2020-10-11 16:39
+ * 文件上传的工具类
+ *
+ * @author STEA_YY
  **/
 public class FileUtil {
 

@@ -13,7 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 鉴权登录过滤器
+ * Shiro使用的JWT鉴权过滤器
+ *
+ * @author STEA_YY
  **/
 @Slf4j
 public class JWTFilter extends BasicHttpAuthenticationFilter {
@@ -21,6 +23,10 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     /**
      * 判断用户是否想要登入。
      * 检测header里面是否包含Authorization字段即可
+     *
+     * @param request
+     * @param response
+     * @return
      */
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
@@ -30,7 +36,12 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
     }
 
     /**
+     * 执行登录
      *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
@@ -52,6 +63,11 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
      * 所以我们在这里返回true，Controller中可以通过 subject.isAuthenticated() 来判断用户是否登入
      * 如果有些资源只有登入用户才能访问，我们只需要在方法上面加上 @RequiresAuthentication 注解即可
      * 但是这样做有一个缺点，就是不能够对GET,POST等请求进行分别过滤鉴权(因为我们重写了官方的方法)，但实际上对应用影响不大
+     *
+     * @param request
+     * @param response
+     * @param mappedValue
+     * @return
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
@@ -67,6 +83,11 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 对跨域提供支持
+     *
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
@@ -85,6 +106,9 @@ public class JWTFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 将非法请求跳转到 /401
+     *
+     * @param req
+     * @param resp
      */
     private void responseError(ServletRequest req, ServletResponse resp) {
 

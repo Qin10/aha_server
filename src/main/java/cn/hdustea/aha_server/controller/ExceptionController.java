@@ -12,21 +12,20 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
- * @program: aha_server
- * @description: 统一异常处理控制器
- * @author: HduStea_YY
- * @create: 2020-10-10 02:31
+ * 统一异常处理控制器
+ *
+ * @author STEA_YY
  **/
 @RestControllerAdvice
 public class ExceptionController {
 
-    @Autowired
+    @Resource
     private AuthService authService;
-
 
     // 捕捉shiro的异常
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
@@ -48,7 +47,6 @@ public class ExceptionController {
     public ResponseBean handleDaoException(DaoException e) {
         return new ResponseBean(500, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
-
 
     // 捕捉其他所有异常
     @ExceptionHandler(Exception.class)

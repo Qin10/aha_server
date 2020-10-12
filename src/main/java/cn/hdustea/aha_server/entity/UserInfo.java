@@ -7,10 +7,9 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * @program: aha_server
- * @description: 带详细信息的用户实体类
- * @author: HduStea_YY
- * @create: 2020-10-09 17:04
+ * 带详细信息的用户实体类
+ *
+ * @author STEA_YY
  **/
 @Data
 @ToString(callSuper = true)

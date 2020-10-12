@@ -4,11 +4,17 @@ import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Random;
 
+/**
+ * 短信服务类
+ *
+ * @author STEA_YY
+ **/
 @Service
 public class SmsService {
-    @Autowired
+    @Resource
     private RedisUtil redisUtil;
     private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
     private static final int MESSAGE_EXPIRED_TIME = 60 * 5;

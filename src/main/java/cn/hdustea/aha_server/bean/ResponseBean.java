@@ -3,10 +3,9 @@ package cn.hdustea.aha_server.bean;
 import lombok.Data;
 
 /**
- * @program: aha_server
- * @description: 包裹响应数据的Javabean
- * @author: HduStea_YY
- * @create: 2020-10-09 11:50
+ * 包裹响应数据的Javabean
+ *
+ * @author STEA_YY
  **/
 @Data
 public class ResponseBean {

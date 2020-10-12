@@ -10,10 +10,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @program: aha_server
- * @description: 微信小程序鉴权授权相关工具类
- * @author: HduStea_YY
- * @create: 2020-10-10 03:04
+ * 微信小程序鉴权授权相关工具类
+ *
+ * @author STEA_YY
  **/
 public class WechatUtil {
     public static WechatBean getWxInfo(String code) throws IOException {

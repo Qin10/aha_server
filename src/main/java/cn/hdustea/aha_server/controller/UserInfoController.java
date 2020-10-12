@@ -14,20 +14,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
- * @program: aha_server
- * @description: 用户信息控制类
- * @author: HduStea_YY
- * @create: 2020-10-11 19:35
+ * 用户信息控制类
+ *
+ * @author STEA_YY
  **/
 @RequestMapping("/userInfo")
 @RestController
 public class UserInfoController {
-    @Autowired
+    @Resource
     private UserInfoService userInfoService;
 
     @RequiresAuthentication

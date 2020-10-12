@@ -21,21 +21,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
- * @program: aha_server
- * @description: 授权鉴权控制类
- * @author: HduStea_YY
- * @create: 2020-10-10 00:51
+ * 授权鉴权控制类
+ *
+ * @author STEA_YY
  **/
 @RestController
 
 public class AuthController {
-    @Autowired
+    @Resource
     private AuthService authService;
 
+    /**
+     * @param loginUser
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/login")
     public ResponseBean login(@RequestBody LoginUser loginUser) throws Exception {
         String token = authService.login(loginUser);

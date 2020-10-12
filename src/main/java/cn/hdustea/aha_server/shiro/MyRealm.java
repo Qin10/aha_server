@@ -21,15 +21,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 自定义Realm,完成Shiro鉴权
+ *
+ * @author STEA_YY
+ **/
 @Slf4j
 @Service
 public class MyRealm extends AuthorizingRealm {
 
-    @Autowired
+    @Resource
     private UserDao userDao;
-    @Autowired
+    @Resource
     private RedisUtil redisUtil;
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
     private static final String REFRESH_TOKEN_PREFIX = "user:token:";

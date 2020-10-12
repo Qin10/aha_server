@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 
+/**
+ * 短信业务控制器
+ *
+ * @author STEA_YY
+ **/
 @RestController
 @RequestMapping("/sms")
 public class SmsController {
-    @Autowired
+    @Resource
     private SmsService smsService;
 
     @GetMapping("/sendCode/{phone}")

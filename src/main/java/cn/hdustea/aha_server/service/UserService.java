@@ -5,15 +5,16 @@ import cn.hdustea.aha_server.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
- * @program: aha_server
- * @description: 用户服务类
- * @author: HduStea_YY
- * @create: 2020-10-10 00:48
+ * 用户服务类
+ *
+ * @author STEA_YY
  **/
 @Service
 public class UserService {
-    @Autowired
+    @Resource
     private UserDao userDao;
 
     public User getUserByPhone(String phone) {

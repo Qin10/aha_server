@@ -17,6 +17,11 @@ import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Shiro配置类
+ *
+ * @author STEA_YY
+ **/
 @Configuration
 public class ShiroConfig {
 
@@ -90,9 +95,7 @@ public class ShiroConfig {
     }
 
     /**
-     * 凭证匹配器
-     * （由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了
-     * ）
+     * 凭证匹配器（由于我们的密码校验交给Shiro的SimpleAuthenticationInfo进行处理了）
      *
      * @return
      */

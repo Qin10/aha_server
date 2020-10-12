@@ -3,10 +3,9 @@ package cn.hdustea.aha_server.entity;
 import lombok.Data;
 
 /**
- * @program: aha_server
- * @description: 第三方Oauth2登录数据的实体类
- * @author: HduStea_YY
- * @create: 2020-10-09 16:09
+ * 第三方Oauth2方式登录数据的实体类
+ *
+ * @author STEA_YY
  **/
 @Data
 public class Oauth {

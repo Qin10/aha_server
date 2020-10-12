@@ -5,15 +5,16 @@ import cn.hdustea.aha_server.entity.Oauth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
- * @program: aha_server
- * @description: 第三方登录的服务类
- * @author: HduStea_YY
- * @create: 2020-10-10 03:55
+ * 第三方登录的服务类
+ *
+ * @author STEA_YY
  **/
 @Service
 public class OauthService {
-    @Autowired
+    @Resource
     private OauthDao oauthDao;
 
     public Oauth getOauthByOauthTypeAndOauthId(String oauthType, String oauthId) {

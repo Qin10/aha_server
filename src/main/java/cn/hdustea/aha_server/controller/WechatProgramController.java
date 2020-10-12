@@ -8,19 +8,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
- * @program: aha_server
- * @description: 微信小程序授权/鉴权控制器
- * @author: HduStea_YY
- * @create: 2020-10-10 03:00
+ * 微信小程序授权/鉴权控制器
+ *
+ * @author STEA_YY
  **/
 
 @RestController
 public class WechatProgramController {
-    @Autowired
+    @Resource
     private WechatProgramService wechatProgramService;
 
     @PostMapping("/wxLogin")
