@@ -20,6 +20,14 @@ import java.util.Date;
  **/
 public class FileUtil {
 
+    /**
+     * 上传文件至指定路径
+     *
+     * @param file 文件
+     * @param path 绝对路径
+     * @return 文件名
+     * @throws IOException
+     */
     public static String upload(MultipartFile file, String path) throws IOException {
         if (file.isEmpty()) {
             throw new IOException("文件为空！");
@@ -30,6 +38,12 @@ public class FileUtil {
         return fileName;
     }
 
+    /**
+     * 删除文件
+     *
+     * @param filePath 文件绝对路径
+     * @return 是否删除成功
+     */
     public static boolean delete(String filePath) {
         File file = new File(filePath);
         if (file.exists()) {
