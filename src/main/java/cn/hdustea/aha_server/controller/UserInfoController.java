@@ -30,6 +30,12 @@ public class UserInfoController {
     @Resource
     private UserInfoService userInfoService;
 
+    /**
+     * 通过手机号查询用户信息的接口
+     *
+     * @param phone 手机号
+     * @return
+     */
     @RequiresAuthentication
     @GetMapping("/{phone}")
     public ResponseBean getUserInfoByPhone(@PathVariable("phone") String phone) {
@@ -37,6 +43,14 @@ public class UserInfoController {
         return new ResponseBean(200, "succ", userInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 修改当前登录用户头像的接口
+     *
+     * @param file 图片文件
+     * @return
+     * @throws IOException
+     * @throws DaoException
+     */
     @RequiresAuthentication
     @PostMapping("/avatar")
     public ResponseBean updateUserAvatar(@RequestParam("file") MultipartFile file) throws IOException, DaoException {

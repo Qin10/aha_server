@@ -17,6 +17,13 @@ public class OauthService {
     @Resource
     private OauthDao oauthDao;
 
+    /**
+     * 根据第三方凭证编号获取凭证实体
+     *
+     * @param oauthType 第三方凭证类型
+     * @param oauthId   第三方凭证编号
+     * @return 第三方登录凭证
+     */
     public Oauth getOauthByOauthTypeAndOauthId(String oauthType, String oauthId) {
         return oauthDao.findOauthByOauthTypeAndOauthId(oauthType, oauthId);
     }

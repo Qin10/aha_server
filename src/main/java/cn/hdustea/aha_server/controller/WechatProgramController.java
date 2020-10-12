@@ -23,6 +23,13 @@ public class WechatProgramController {
     @Resource
     private WechatProgramService wechatProgramService;
 
+    /**
+     * 通过微信小程序授权登录的接口
+     *
+     * @param code 小程序请求码
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/wxLogin")
     public ResponseBean wechatLogin(@RequestParam("code") String code) throws Exception {
         String token = wechatProgramService.wechatLogin(code);

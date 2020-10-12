@@ -24,6 +24,13 @@ public class SmsController {
     @Resource
     private SmsService smsService;
 
+    /**
+     * 向目标手机号发送短信验证码的接口
+     *
+     * @param phone 手机号
+     * @return
+     * @throws SmsException
+     */
     @GetMapping("/sendCode/{phone}")
     public ResponseBean sendSmsCode(@PathVariable("phone") String phone) throws SmsException {
         boolean isSent = smsService.sendSmsCode(phone);

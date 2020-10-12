@@ -23,6 +23,9 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 自定义Realm,完成Shiro鉴权
@@ -57,8 +60,10 @@ public class MyRealm extends AuthorizingRealm {
         User user = userDao.findUserByPhone(phone);
         SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
         simpleAuthorizationInfo.addRole(user.getRole().getName());
-//        Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
-//        simpleAuthorizationInfo.addStringPermissions(permission);
+//        if (user.getPermission()!=null){
+//            Set<String> permission = new HashSet<>(Arrays.asList(user.getPermission().split(",")));
+//            simpleAuthorizationInfo.addStringPermissions(permission);
+//        }
         return simpleAuthorizationInfo;
     }
 

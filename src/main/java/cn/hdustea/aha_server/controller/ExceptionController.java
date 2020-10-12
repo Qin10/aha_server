@@ -27,30 +27,46 @@ public class ExceptionController {
     @Resource
     private AuthService authService;
 
-    // 捕捉shiro的异常
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    /**
+     * 捕捉shiro框架相关异常
+     *
+     * @param e
+     * @return 响应403
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ShiroException.class)
     public ResponseBean handleShiroException(ShiroException e) {
-        return new ResponseBean(401, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+        e.printStackTrace();
+        return new ResponseBean(403, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 
-    //捕获403
+    /**
+     * 捕捉禁止访问异常
+     *
+     * @param e
+     * @return 响应403
+     */
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
     public ResponseBean handleForbiddenException(ForbiddenException e) {
         return new ResponseBean(403, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 
-    //捕获数据库异常
+    /**
+     * 捕获数据库操作异常
+     *
+     * @param e
+     * @return
+     */
     @ExceptionHandler(DaoException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean handleDaoException(DaoException e) {
-        return new ResponseBean(500, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean(e.getErrorCode() != null ? e.getErrorCode() : 500, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 
     // 捕捉其他所有异常
     @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean globalException(HttpServletRequest request, Throwable ex) {
         ex.printStackTrace();
         return new ResponseBean(getStatus(request).value(), ex.getMessage(), null, TimeUtil.getFormattedTime(new Date()));

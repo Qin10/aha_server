@@ -25,6 +25,13 @@ public class WechatProgramService {
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
     private static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
+    /**
+     * 使用微信请求code完成登录校验
+     *
+     * @param code 微信请求code
+     * @return token令牌
+     * @throws Exception
+     */
     public String wechatLogin(String code) throws Exception {
         String openId = WechatUtil.getWxInfo(code).getOpenId();
         Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId("wechat", openId);

@@ -2,22 +2,19 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
-import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.exception.DaoException;
-import cn.hdustea.aha_server.exception.InvalidPasswordException;
+import cn.hdustea.aha_server.exception.daoException.InsertException;
+import cn.hdustea.aha_server.exception.daoException.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.MessageVerificationException;
-import cn.hdustea.aha_server.exception.UserNotFoundException;
+import cn.hdustea.aha_server.exception.daoException.UserNotFoundException;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.util.Date;
 
 /**
  * 授权鉴权服务类
@@ -43,6 +40,13 @@ public class AuthService {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
     }
 
+    /**
+     * 传入手机号+密码完成登录校验并获取令牌
+     *
+     * @param loginUser
+     * @return token令牌
+     * @throws Exception
+     */
     public String login(LoginUser loginUser) throws Exception {
         User user = userService.getUserByPhone(loginUser.getPhone());
         if (user != null) {
@@ -54,10 +58,16 @@ public class AuthService {
                 throw new InvalidPasswordException("用户名或密码错误！");
             }
         } else {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("用户不存在！");
         }
     }
 
+    /**
+     * 传入注册信息和短信验证码，完成验证码校验并处理注册请求
+     *
+     * @param registerUser
+     * @throws Exception
+     */
     public void register(RegisterUser registerUser) throws Exception {
         boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode());
         if (!SmsVerifyResult) {
@@ -79,10 +89,15 @@ public class AuthService {
             }
             userInfoService.saveUserInfo(userInfo);
         } else {
-            throw new DaoException("账号已存在！");
+            throw new InsertException("账号已存在！");
         }
     }
 
+    /**
+     * 处理用户登出请求，移除token
+     *
+     * @param phone 手机号
+     */
     public void logout(String phone) {
         redisUtil.del(phone);
     }

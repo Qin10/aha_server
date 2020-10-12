@@ -15,6 +15,13 @@ import java.util.Map;
  * @author STEA_YY
  **/
 public class WechatUtil {
+    /**
+     * 传入微信请求code返回授权校验结果
+     *
+     * @param code 微信请求code
+     * @return 包含了各种校验信息的Map
+     * @throws IOException
+     */
     public static WechatBean getWxInfo(String code) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";

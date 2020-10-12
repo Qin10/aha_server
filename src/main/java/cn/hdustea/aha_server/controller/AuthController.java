@@ -3,19 +3,12 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.bean.ResponseBean;
-import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.exception.ForbiddenException;
-import cn.hdustea.aha_server.exception.InvalidPasswordException;
-import cn.hdustea.aha_server.exception.UserNotFoundException;
 import cn.hdustea.aha_server.service.AuthService;
-import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.subject.Subject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,8 +30,10 @@ public class AuthController {
     private AuthService authService;
 
     /**
-     * @param loginUser
-     * @return
+     * 用户通过账号密码方式登录的接口
+     *
+     * @param loginUser 包含账号密码的实体，从请求Json中获取
+     * @return HTTP响应
      * @throws Exception
      */
     @PostMapping("/login")
@@ -49,12 +44,24 @@ public class AuthController {
         return new ResponseBean(200, "登录成功", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 用户通过手机号注册的接口
+     *
+     * @param registerUser 包含注册信息的实体
+     * @return
+     * @throws Exception
+     */
     @PostMapping("/register")
     public ResponseBean register(@RequestBody RegisterUser registerUser) throws Exception {
         authService.register(registerUser);
         return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 用户登出的接口
+     *
+     * @return
+     */
     @RequiresAuthentication
     @GetMapping("/logout")
     public ResponseBean logout() {
