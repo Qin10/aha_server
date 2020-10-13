@@ -29,8 +29,8 @@ public interface UserDao {
 
     @Insert("insert into user (phone,password,created_time,role_id) values (#{phone},#{password},#{createdTime},#{roleId})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    int saveUser(User user);
+    void saveUser(User user);
 
     @Update("update user set password = #{newPassword} where phone = #{phone}")
-    int updatePassword(@Param("phone") String phone, @Param("newPassword") String password);
+    void updatePassword(@Param("phone") String phone, @Param("newPassword") String password);
 }

@@ -9,7 +9,6 @@ import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.HandlerMethod;
@@ -38,9 +37,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
      *
      * @param request  用户请求
      * @param response HTTP响应
-     * @param handler
-     * @return
-     * @throws Exception
+     * @param handler  被拦截对象
+     * @return 是否通过
+     * @throws Exception 向上抛出异常
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -103,8 +102,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if (possibleToken != null && possibleToken.equals(token)) {
             String newToken = JWTUtil.sign(user.getPhone(), user.getPassword());
             redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), newToken, REFRESH_TOKEN_EXPIRE_TIME);
-            HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
-            response.setHeader("Authorization", newToken);
+            ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletResponse response;
+            if (requestAttributes != null) {
+                response = requestAttributes.getResponse();
+                if (response != null) {
+                    response.setHeader("Authorization", newToken);
+                }
+            }
+
             return true;
         }
         return false;

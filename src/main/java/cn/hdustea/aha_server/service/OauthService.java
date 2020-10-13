@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.dao.OauthDao;
 import cn.hdustea.aha_server.entity.Oauth;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

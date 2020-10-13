@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,9 +19,8 @@ public class WechatUtil {
      *
      * @param code 微信请求code
      * @return 包含了各种校验信息的Map
-     * @throws IOException
      */
-    public static WechatBean getWxInfo(String code) throws IOException {
+    public static WechatBean getWxInfo(String code) {
         ObjectMapper objectMapper = new ObjectMapper();
         String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
         Map<String, String> requestUrlParam = new HashMap<>();
@@ -40,9 +38,9 @@ public class WechatUtil {
         ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity(requestUrl, requestUrlParam, Map.class);
         Map<String, String> responseBody = mapResponseEntity.getBody();
         WechatBean wechatBean = new WechatBean();
-        wechatBean.setOpenId(responseBody.get("openid"));
-        wechatBean.setSessionKey(responseBody.get("session_key"));
-        wechatBean.setUnionid(responseBody.get("unionid"));
+        wechatBean.setOpenId(responseBody != null ? responseBody.get("openid") : null);
+        wechatBean.setSessionKey(responseBody != null ? responseBody.get("session_key") : null);
+        wechatBean.setUnionid(responseBody != null ? responseBody.get("unionid") : null);
         return wechatBean;
 //        String response = HttpClientUtil.doPost(requestUrl, requestUrlParam);
 //        ObjectMapper mapper = new ObjectMapper();

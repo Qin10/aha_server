@@ -3,7 +3,6 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.service.WechatProgramService;
 import cn.hdustea.aha_server.util.TimeUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,8 +26,8 @@ public class WechatProgramController {
      * 通过微信小程序授权登录的接口
      *
      * @param code 小程序请求码
-     * @return
-     * @throws Exception
+     * @return HTTP响应实体
+     * @throws Exception 向上抛出异常
      */
     @PostMapping("/wxLogin")
     public ResponseBean wechatLogin(@RequestParam("code") String code) throws Exception {

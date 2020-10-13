@@ -1,14 +1,7 @@
 package cn.hdustea.aha_server.util;
 
-import cn.hdustea.aha_server.bean.ResponseBean;
-import org.springframework.boot.system.ApplicationHome;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,7 +19,7 @@ public class FileUtil {
      * @param file 文件
      * @param path 绝对路径
      * @return 文件名
-     * @throws IOException
+     * @throws IOException IO操作异常
      */
     public static String upload(MultipartFile file, String path) throws IOException {
         if (file.isEmpty()) {

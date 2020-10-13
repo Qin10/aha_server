@@ -7,7 +7,6 @@ import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
-import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.util.JWTUtil;
@@ -37,7 +36,7 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
     private static final String REFRESH_TOKEN_PREFIX = "user:token:";
-    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
+//    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -46,9 +45,9 @@ public class AuthService {
     /**
      * 传入手机号+密码完成登录校验并获取令牌
      *
-     * @param loginUser
+     * @param loginUser 登录信息实体类
      * @return token令牌
-     * @throws Exception
+     * @throws Exception 向上抛出异常
      */
     public String login(LoginUser loginUser) throws Exception {
         User user = userService.getUserByPhone(loginUser.getPhone());
@@ -68,8 +67,8 @@ public class AuthService {
     /**
      * 传入注册信息和短信验证码，完成验证码校验并处理注册请求
      *
-     * @param registerUser
-     * @throws Exception
+     * @param registerUser 包含注册信息的实体
+     * @throws Exception 向上抛出异常
      */
     public void register(RegisterUser registerUser) throws Exception {
         boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode(), SmsService.REGISTER_MESSAGE);

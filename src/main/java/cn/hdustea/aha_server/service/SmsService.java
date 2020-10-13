@@ -1,7 +1,6 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.util.RedisUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -50,7 +49,7 @@ public class SmsService {
      * 生成随机验证码
      *
      * @param length 随机验证码的长度
-     * @return
+     * @return 随机验证码
      */
     public String makeSmsCode(int length) {
         Random random = new Random();

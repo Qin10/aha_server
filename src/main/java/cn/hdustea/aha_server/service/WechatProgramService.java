@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.Oauth;
 import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.WechatUnauthorizedException;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
@@ -32,10 +31,10 @@ public class WechatProgramService {
      * @param code 微信请求code
      * @return token令牌
      * @throws WechatUnauthorizedException 微信小程序授权信息未找到异常
-     * @throws IOException
+     * @throws IOException IO操作异常
      */
     public String wechatLogin(String code) throws WechatUnauthorizedException, IOException {
-        String openId = null;
+        String openId;
         openId = WechatUtil.getWxInfo(code).getOpenId();
         Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId("wechat", openId);
         if (wechatOauth == null) {

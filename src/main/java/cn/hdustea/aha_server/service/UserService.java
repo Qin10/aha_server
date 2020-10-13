@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.dao.UserDao;
 import cn.hdustea.aha_server.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +20,7 @@ public class UserService {
      * 根据手机号查询用户实体
      *
      * @param phone 手机号
-     * @return
+     * @return 用户实体类
      */
     public User getUserByPhone(String phone) {
         return userDao.findUserByPhone(phone);
@@ -30,20 +29,18 @@ public class UserService {
     /**
      * 保存用户实体
      *
-     * @param user
-     * @return
+     * @param user 用户实体类
      */
-    public int saveUser(User user) {
-        return userDao.saveUser(user);
+    public void saveUser(User user) {
+        userDao.saveUser(user);
     }
 
     /**
      *
      * @param phone 手机号
      * @param newPassword 新的密码
-     * @return
      */
-    public int updatePassword(String phone, String newPassword) {
-        return userDao.updatePassword(phone, newPassword);
+    public void updatePassword(String phone, String newPassword) {
+        userDao.updatePassword(phone, newPassword);
     }
 }

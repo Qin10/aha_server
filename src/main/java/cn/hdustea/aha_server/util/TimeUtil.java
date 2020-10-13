@@ -38,7 +38,7 @@ public class TimeUtil {
      *
      * @param dateStr 日期字符串
      * @return 日期类
-     * @throws ParseException
+     * @throws ParseException 日期转化异常
      */
     public static Date tranStringToDate(String dateStr) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");

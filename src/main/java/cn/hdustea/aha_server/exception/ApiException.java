@@ -1,12 +1,14 @@
 package cn.hdustea.aha_server.exception;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 服务器抛出（接口）异常类
  *
  * @author STEA_YY
  **/
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class ApiException extends Exception {
     private Integer code;
@@ -17,5 +19,6 @@ public class ApiException extends Exception {
     }
 
     public ApiException() {
+        super();
     }
 }

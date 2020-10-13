@@ -3,17 +3,13 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.exception.ApiException;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
-import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
-import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -24,8 +20,6 @@ import java.util.Date;
 @RestControllerAdvice
 public class ExceptionController {
 
-    @Resource
-    private AuthService authService;
 
     /**
      * 捕捉用户鉴权相关异常

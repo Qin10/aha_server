@@ -1,7 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.ResponseBean;
-import cn.hdustea.aha_server.exception.apiException.SmsException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageSendException;
 import cn.hdustea.aha_server.service.SmsService;
 import cn.hdustea.aha_server.util.TimeUtil;
@@ -25,10 +24,10 @@ public class SmsController {
     private SmsService smsService;
 
     /**
-     * 向目标手机号发送短信验证码的接口
+     * 向目标手机号发送注册短信验证码的接口
      *
      * @param phone 手机号
-     * @return
+     * @return HTTP响应实体类
      * @throws MessageSendException 验证短信发送失败异常类
      */
     @GetMapping("/sendCode/register/{phone}")
@@ -41,6 +40,13 @@ public class SmsController {
         }
     }
 
+    /**
+     * 向目标手机号发送重置密码短信验证码的接口
+     *
+     * @param phone 手机号
+     * @return HTTP响应实体类
+     * @throws MessageSendException 短信发送异常
+     */
     @GetMapping("/sendCode/changePassword/{phone}")
     public ResponseBean sendSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(phone, SmsService.CHANGE_PASSWORD_MESSAGE);

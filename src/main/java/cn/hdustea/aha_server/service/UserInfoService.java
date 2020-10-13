@@ -3,7 +3,6 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.dao.UserInfoDao;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
@@ -36,8 +35,8 @@ public class UserInfoService {
     /**
      * 保存用户详细信息
      *
-     * @param userInfo
-     * @throws InsertException
+     * @param userInfo 用户详细信息实体类
+     * @throws InsertException 插入失败实体类
      */
     public void saveUserInfo(UserInfo userInfo) throws InsertException {
         UserInfo possibleUserInfo = userInfoDao.findUserInfoById(userInfo.getUserId());
@@ -51,8 +50,8 @@ public class UserInfoService {
     /**
      * 根据id删除用户详细信息
      *
-     * @param id
-     * @throws DeleteException
+     * @param id 用户id
+     * @throws DeleteException 删除失败异常
      */
     public void deleteUserInfoById(int id) throws DaoException {
         UserInfo userInfo = userInfoDao.findUserInfoById(id);
@@ -69,12 +68,12 @@ public class UserInfoService {
      * @param file  图片文件
      * @param phone 手机号
      * @return 保存的图片文件名
-     * @throws UpdateException
+     * @throws UpdateException 更新失败异常
      */
     public String updateAvatarFilenameByPhone(MultipartFile file, String phone) throws UpdateException {
         UserInfo userInfo = userInfoDao.findUserInfoByPhone(phone);
         if (userInfo != null) {
-            String filename = null;
+            String filename;
             try {
                 filename = FileUtil.upload(file, AVATAR_PATH);
             } catch (IOException e) {

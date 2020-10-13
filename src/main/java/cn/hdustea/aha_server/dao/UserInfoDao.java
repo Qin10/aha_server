@@ -1,9 +1,7 @@
 package cn.hdustea.aha_server.dao;
 
-import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import org.apache.ibatis.annotations.*;
-import org.apache.ibatis.mapping.FetchType;
 import org.springframework.stereotype.Component;
 
 @Mapper
@@ -20,7 +18,7 @@ public interface UserInfoDao {
 
     @Insert("INSERT INTO user_info (user_id,nickname,gender,birthday,signature,avatar_filename) VALUES (#{userId},#{nickname},#{gender},#{birthday},#{signature},#{avatarFilename})")
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
-    int saveUserInfo(UserInfo userInfo);
+    void saveUserInfo(UserInfo userInfo);
 
     @Update("UPDATE user_info SET user_id=#{userId},nickname=#{nickname},gender=#{gender},birthday=#{birthday},signature=#{signature},avatar_filename=#{avatarFilename} WHERE id = #{id}")
     void updateUserInfo(UserInfo userInfo);

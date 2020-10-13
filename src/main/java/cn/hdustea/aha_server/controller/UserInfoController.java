@@ -2,10 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.ResponseBean;
-import cn.hdustea.aha_server.dao.UserInfoDao;
-import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.JWTUtil;
@@ -15,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -30,6 +26,10 @@ public class UserInfoController {
     @Resource
     private UserInfoService userInfoService;
 
+    /**
+     * @param request HTTP请求
+     * @return HTTP响应实体
+     */
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean getPersonalUserInfo(HttpServletRequest request) {
@@ -43,7 +43,7 @@ public class UserInfoController {
      * 通过手机号查询用户信息的接口
      *
      * @param phone 手机号
-     * @return
+     * @return HTTP响应实体
      */
     @RequiresLogin
     @GetMapping("/{phone}")
@@ -56,8 +56,8 @@ public class UserInfoController {
      * 修改当前登录用户头像的接口
      *
      * @param file 图片文件
-     * @return
-     * @throws UpdateException
+     * @return HTTP响应实体
+     * @throws UpdateException 更新失败异常
      */
     @RequiresLogin
     @PostMapping("/avatar")
