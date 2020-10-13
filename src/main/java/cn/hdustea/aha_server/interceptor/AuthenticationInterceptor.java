@@ -33,6 +33,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
     private static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
+    /**
+     * 处理鉴权请求
+     *
+     * @param request  用户请求
+     * @param response HTTP响应
+     * @param handler
+     * @return
+     * @throws Exception
+     */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
@@ -82,6 +91,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    /**
+     * 尝试刷新用户token
+     *
+     * @param token 过期token
+     * @param user  当前用户
+     * @return 是否刷新成功
+     */
     protected boolean refreshToken(String token, User user) {
         String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + user.getPhone());
         if (possibleToken != null && possibleToken.equals(token)) {

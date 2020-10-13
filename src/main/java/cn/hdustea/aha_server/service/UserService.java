@@ -36,4 +36,14 @@ public class UserService {
     public int saveUser(User user) {
         return userDao.saveUser(user);
     }
+
+    /**
+     *
+     * @param phone 手机号
+     * @param newPassword 新的密码
+     * @return
+     */
+    public int updatePassword(String phone, String newPassword) {
+        return userDao.updatePassword(phone, newPassword);
+    }
 }

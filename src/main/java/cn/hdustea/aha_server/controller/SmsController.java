@@ -31,9 +31,19 @@ public class SmsController {
      * @return
      * @throws MessageSendException 验证短信发送失败异常类
      */
-    @GetMapping("/sendCode/{phone}")
+    @GetMapping("/sendCode/register/{phone}")
+    public ResponseBean sendRegisterSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
+        boolean isSent = smsService.sendSmsCode(phone, SmsService.REGISTER_MESSAGE);
+        if (isSent) {
+            return new ResponseBean(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
+        } else {
+            throw new MessageSendException();
+        }
+    }
+
+    @GetMapping("/sendCode/changePassword/{phone}")
     public ResponseBean sendSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
-        boolean isSent = smsService.sendSmsCode(phone);
+        boolean isSent = smsService.sendSmsCode(phone, SmsService.CHANGE_PASSWORD_MESSAGE);
         if (isSent) {
             return new ResponseBean(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
         } else {

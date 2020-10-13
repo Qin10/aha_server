@@ -31,4 +31,6 @@ public interface UserDao {
     @Options(useGeneratedKeys = true, keyProperty = "id", keyColumn = "id")
     int saveUser(User user);
 
+    @Update("update user set password = #{newPassword} where phone = #{phone}")
+    int updatePassword(@Param("phone") String phone, @Param("newPassword") String password);
 }

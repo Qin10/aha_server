@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.bean.ChangePasswordBean;
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.entity.User;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.security.auth.login.AccountNotFoundException;
 import java.sql.Timestamp;
 
 /**
@@ -70,7 +72,7 @@ public class AuthService {
      * @throws Exception
      */
     public void register(RegisterUser registerUser) throws Exception {
-        boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode());
+        boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode(), SmsService.REGISTER_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
@@ -92,6 +94,25 @@ public class AuthService {
         } else {
             throw new AccountExistedException();
         }
+    }
+
+    /**
+     * @param changePasswordBean 存放修改密码相关信息的实体类
+     * @throws MessageCheckException    短信验证码校验异常
+     * @throws AccountNotFoundException 账号未找到异常
+     */
+    public void changePassword(ChangePasswordBean changePasswordBean) throws MessageCheckException, AccountNotFoundException {
+        String phone = changePasswordBean.getPhone();
+        boolean SmsVerifyResult = smsService.verifySmsCode(phone, changePasswordBean.getCode(), SmsService.CHANGE_PASSWORD_MESSAGE);
+        if (!SmsVerifyResult) {
+            throw new MessageCheckException();
+        }
+        User user = userService.getUserByPhone(phone);
+        if (user == null) {
+            throw new AccountNotFoundException();
+        }
+        String encodedPassword = bCryptPasswordEncoder.encode(changePasswordBean.getNewPassword());
+        userService.updatePassword(phone, encodedPassword);
     }
 
     /**

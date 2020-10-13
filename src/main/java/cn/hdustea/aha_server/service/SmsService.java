@@ -17,7 +17,10 @@ public class SmsService {
     @Resource
     private RedisUtil redisUtil;
     private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
+    private static final String CHANGE_PASSWORD_MESSAGE_CODE_PREFIX = "user:changePassword:code:";
     private static final int MESSAGE_EXPIRED_TIME = 60 * 5;
+    public static final int REGISTER_MESSAGE = 0;
+    public static final int CHANGE_PASSWORD_MESSAGE = 1;
 
     /**
      * 向目标手机号发送验证码短信
@@ -25,10 +28,21 @@ public class SmsService {
      * @param phone 手机号
      * @return code是否发送成功
      */
-    public boolean sendSmsCode(String phone) {
+    public boolean sendSmsCode(String phone, int type) {
 //        String code = makeSmsCode(4);
         String code = "1234";
-        redisUtil.set(REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+        switch (type) {
+            case REGISTER_MESSAGE: {
+                System.out.println(2);
+                redisUtil.set(REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                break;
+            }
+            case CHANGE_PASSWORD_MESSAGE: {
+                System.out.println(1);
+                redisUtil.set(CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                break;
+            }
+        }
         return true;
     }
 
@@ -55,11 +69,23 @@ public class SmsService {
      * @param code  传入验证码
      * @return 校验结果
      */
-    public boolean verifySmsCode(String phone, String code) {
-        String possibleCode = (String) redisUtil.get(REGISTER_MESSAGE_CODE_PREFIX + phone);
+    public boolean verifySmsCode(String phone, String code, int type) {
+        String possibleCode = null;
+        switch (type) {
+            case REGISTER_MESSAGE: {
+                possibleCode = (String) redisUtil.get(REGISTER_MESSAGE_CODE_PREFIX + phone);
+                break;
+            }
+            case CHANGE_PASSWORD_MESSAGE: {
+                possibleCode = (String) redisUtil.get(CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone);
+                System.out.println(possibleCode);
+                break;
+            }
+        }
         if (possibleCode == null) {
             return false;
         }
+        System.out.println(possibleCode+code);
         return possibleCode.equals(code);
     }
 }

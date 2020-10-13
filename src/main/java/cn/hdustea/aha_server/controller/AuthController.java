@@ -1,11 +1,14 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.bean.ChangePasswordBean;
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.User;
+import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
+import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.security.auth.Subject;
+import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -57,6 +61,21 @@ public class AuthController {
     public ResponseBean register(@RequestBody RegisterUser registerUser) throws Exception {
         authService.register(registerUser);
         return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    /**
+     * 用户修改密码请求
+     *
+     * @param request            HTTP请求
+     * @param changePasswordBean 存放修改密码相关信息的实体类
+     * @return
+     * @throws MessageCheckException    短信验证码校验异常
+     * @throws AccountNotFoundException 账号未找到异常
+     */
+    @PostMapping("/changePassword")
+    public ResponseBean changePassword(HttpServletRequest request, @RequestBody ChangePasswordBean changePasswordBean) throws MessageCheckException, AccountNotFoundException {
+        authService.changePassword(changePasswordBean);
+        return new ResponseBean(200, "密码修改成功！", null, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
