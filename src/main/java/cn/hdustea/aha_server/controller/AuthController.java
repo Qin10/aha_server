@@ -1,20 +1,22 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.subject.Subject;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.security.auth.Subject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -62,11 +64,10 @@ public class AuthController {
      *
      * @return
      */
-    @RequiresAuthentication
+    @RequiresLogin
     @GetMapping("/logout")
-    public ResponseBean logout() {
-        Subject subject = SecurityUtils.getSubject();
-        String token = (String) subject.getPrincipal();
+    public ResponseBean logout(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
         String phone = JWTUtil.getAccount(token);
         authService.logout(phone);
         return new ResponseBean(200, "登出成功", null, TimeUtil.getFormattedTime(new Date()));

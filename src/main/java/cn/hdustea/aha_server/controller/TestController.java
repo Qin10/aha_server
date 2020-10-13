@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
-import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import cn.hdustea.aha_server.annotation.RequiresLogin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestController {
 
-    @RequiresAuthentication
+    @RequiresLogin
     @GetMapping("/hello")
     public String helloWorld() {
         return "Hello World!";

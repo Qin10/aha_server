@@ -1,11 +1,11 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.exception.AuthenticationException;
 import cn.hdustea.aha_server.exception.DaoException;
 import cn.hdustea.aha_server.exception.ForbiddenException;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.TimeUtil;
-import org.apache.shiro.ShiroException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -34,8 +34,8 @@ public class ExceptionController {
      * @return 响应403
      */
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    @ExceptionHandler(ShiroException.class)
-    public ResponseBean handleShiroException(ShiroException e) {
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseBean handleShiroException(AuthenticationException e) {
         e.printStackTrace();
         return new ResponseBean(403, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
