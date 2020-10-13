@@ -2,15 +2,15 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.Oauth;
 import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.exception.AuthenticationException;
+import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.WechatUnauthorizedException;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.util.WechatUtil;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 /**
  * 微信小程序授权/鉴权服务类
@@ -31,13 +31,15 @@ public class WechatProgramService {
      *
      * @param code 微信请求code
      * @return token令牌
-     * @throws Exception
+     * @throws WechatUnauthorizedException 微信小程序授权信息未找到异常
+     * @throws IOException
      */
-    public String wechatLogin(String code) throws Exception {
-        String openId = WechatUtil.getWxInfo(code).getOpenId();
+    public String wechatLogin(String code) throws WechatUnauthorizedException, IOException {
+        String openId = null;
+        openId = WechatUtil.getWxInfo(code).getOpenId();
         Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId("wechat", openId);
         if (wechatOauth == null) {
-            throw new AuthenticationException("未找到授权信息");
+            throw new WechatUnauthorizedException();
         } else {
             User user = wechatOauth.getUser();
             String token = JWTUtil.sign(REFRESH_TOKEN_PREFIX + user.getPhone(), user.getPassword());

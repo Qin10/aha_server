@@ -4,10 +4,11 @@ import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.exception.daoException.InsertException;
-import cn.hdustea.aha_server.exception.daoException.InvalidPasswordException;
-import cn.hdustea.aha_server.exception.MessageVerificationException;
-import cn.hdustea.aha_server.exception.daoException.UserNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.InvalidPasswordException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
+import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
+import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -31,7 +32,7 @@ public class AuthService {
     private RedisUtil redisUtil;
     @Resource
     private SmsService smsService;
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
     private static final String REFRESH_TOKEN_PREFIX = "user:token:";
     private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
@@ -71,7 +72,7 @@ public class AuthService {
     public void register(RegisterUser registerUser) throws Exception {
         boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode());
         if (!SmsVerifyResult) {
-            throw new MessageVerificationException("验证码失效或错误！");
+            throw new MessageCheckException();
         }
         User user = new User();
         user.setPhone(registerUser.getPhone());
@@ -89,7 +90,7 @@ public class AuthService {
             }
             userInfoService.saveUserInfo(userInfo);
         } else {
-            throw new InsertException("账号已存在！");
+            throw new AccountExistedException();
         }
     }
 

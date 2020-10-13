@@ -3,11 +3,13 @@ package cn.hdustea.aha_server.interceptor;
 import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.User;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.JwtExpiredException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
 import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import cn.hdustea.aha_server.exception.AuthenticationException;
+import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.HandlerMethod;
@@ -57,21 +59,21 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 }
                 String phone = JWTUtil.getAccount(token);
                 if (phone == null) {
-                    throw new AuthenticationException("用户凭证校验失败！");
+                    throw new TokenCheckException();
                 }
 
                 User user = userService.getUserByPhone(phone);
                 if (user == null) {
-                    throw new AuthenticationException("用户不存在！");
+                    throw new TokenCheckException();
                 }
                 try {
                     boolean verify = JWTUtil.verify(token, phone, user.getPassword());
                     if (!verify) {
-                        throw new AuthenticationException("用户名或密码错误！");
+                        throw new TokenCheckException();
                     }
                 } catch (TokenExpiredException e) {
                     if (!refreshToken(token, user)) {
-                        throw new AuthenticationException("用户凭证已过期！");
+                        throw new JwtExpiredException();
                     }
                 }
                 return true;

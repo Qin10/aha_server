@@ -5,7 +5,8 @@ import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.dao.UserInfoDao;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.exception.DaoException;
+import cn.hdustea.aha_server.exception.apiException.DaoException;
+import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
@@ -56,12 +57,11 @@ public class UserInfoController {
      *
      * @param file 图片文件
      * @return
-     * @throws IOException
-     * @throws DaoException
+     * @throws UpdateException
      */
     @RequiresLogin
     @PostMapping("/avatar")
-    public ResponseBean updateUserAvatar(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException, DaoException {
+    public ResponseBean updateUserAvatar(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws UpdateException {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getAccount(token);
         String filename = userInfoService.updateAvatarFilenameByPhone(file, phone);
