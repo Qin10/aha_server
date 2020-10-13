@@ -5,14 +5,12 @@ import cn.hdustea.aha_server.bean.ChangePasswordBean;
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.security.auth.login.AccountNotFoundException;
@@ -51,10 +49,11 @@ public class AuthController {
      *
      * @param registerUser 包含注册信息的实体
      * @return HTTP响应实体类
-     * @throws Exception 向上抛出异常
+     * @throws DaoException          数据库操作异常
+     * @throws MessageCheckException 短信验证码校验异常
      */
     @PostMapping("/register")
-    public ResponseBean register(@RequestBody RegisterUser registerUser) throws Exception {
+    public ResponseBean register(@RequestBody RegisterUser registerUser) throws MessageCheckException, DaoException {
         authService.register(registerUser);
         return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
     }
@@ -63,13 +62,14 @@ public class AuthController {
      * 用户修改密码请求
      *
      * @param changePasswordBean 存放修改密码相关信息的实体类
+     * @param phone              手机号
      * @return HTTP响应实体类
      * @throws MessageCheckException    短信验证码校验异常
      * @throws AccountNotFoundException 账号未找到异常
      */
-    @PostMapping("/changePassword")
-    public ResponseBean changePassword(@RequestBody ChangePasswordBean changePasswordBean) throws MessageCheckException, AccountNotFoundException {
-        authService.changePassword(changePasswordBean);
+    @PostMapping("/changePassword/{phone}")
+    public ResponseBean changePassword(@RequestBody ChangePasswordBean changePasswordBean, @PathVariable("phone") String phone) throws MessageCheckException, AccountNotFoundException {
+        authService.changePassword(changePasswordBean, phone);
         return new ResponseBean(200, "密码修改成功！", null, TimeUtil.getFormattedTime(new Date()));
     }
 

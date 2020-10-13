@@ -9,7 +9,6 @@ import lombok.Data;
  **/
 @Data
 public class ChangePasswordBean {
-    private String phone;
     private String newPassword;
     private String code;
 }

@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
+import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
 import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
@@ -68,9 +69,10 @@ public class AuthService {
      * 传入注册信息和短信验证码，完成验证码校验并处理注册请求
      *
      * @param registerUser 包含注册信息的实体
-     * @throws Exception 向上抛出异常
+     * @throws DaoException 数据库操作异常
+     * @throws MessageCheckException 短信验证码校验异常
      */
-    public void register(RegisterUser registerUser) throws Exception {
+    public void register(RegisterUser registerUser) throws DaoException, MessageCheckException {
         boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode(), SmsService.REGISTER_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
@@ -100,8 +102,7 @@ public class AuthService {
      * @throws MessageCheckException    短信验证码校验异常
      * @throws AccountNotFoundException 账号未找到异常
      */
-    public void changePassword(ChangePasswordBean changePasswordBean) throws MessageCheckException, AccountNotFoundException {
-        String phone = changePasswordBean.getPhone();
+    public void changePassword(ChangePasswordBean changePasswordBean, String phone) throws MessageCheckException, AccountNotFoundException {
         boolean SmsVerifyResult = smsService.verifySmsCode(phone, changePasswordBean.getCode(), SmsService.CHANGE_PASSWORD_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
