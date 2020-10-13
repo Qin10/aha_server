@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.Random;
 
+import static cn.hdustea.aha_server.util.RedisUtil.CHANGE_PASSWORD_MESSAGE_CODE_PREFIX;
+import static cn.hdustea.aha_server.util.RedisUtil.REGISTER_MESSAGE_CODE_PREFIX;
+
 /**
  * 短信服务类
  *
@@ -15,10 +18,14 @@ import java.util.Random;
 public class SmsService {
     @Resource
     private RedisUtil redisUtil;
-    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
-    private static final String CHANGE_PASSWORD_MESSAGE_CODE_PREFIX = "user:changePassword:code:";
     private static final int MESSAGE_EXPIRED_TIME = 60 * 5;
+    /**
+     * 注册验证码
+     */
     public static final int REGISTER_MESSAGE = 0;
+    /**
+     * 修改密码验证码
+     */
     public static final int CHANGE_PASSWORD_MESSAGE = 1;
 
     /**
@@ -84,7 +91,7 @@ public class SmsService {
         if (possibleCode == null) {
             return false;
         }
-        System.out.println(possibleCode+code);
+        System.out.println(possibleCode + code);
         return possibleCode.equals(code);
     }
 }

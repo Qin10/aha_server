@@ -19,6 +19,9 @@ import javax.annotation.Resource;
 import javax.security.auth.login.AccountNotFoundException;
 import java.sql.Timestamp;
 
+import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_EXPIRE_TIME;
+import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
+
 /**
  * 授权鉴权服务类
  *
@@ -35,8 +38,6 @@ public class AuthService {
     @Resource
     private SmsService smsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
-    private static final String REFRESH_TOKEN_PREFIX = "user:token:";
 //    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
 
     public AuthService() {

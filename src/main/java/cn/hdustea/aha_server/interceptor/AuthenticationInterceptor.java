@@ -19,6 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
+import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_EXPIRE_TIME;
+import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
+
 /**
  * 鉴权拦截器
  *
@@ -29,8 +32,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     private UserService userService;
     @Resource
     private RedisUtil redisUtil;
-    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
-    private static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
     /**
      * 处理鉴权请求
