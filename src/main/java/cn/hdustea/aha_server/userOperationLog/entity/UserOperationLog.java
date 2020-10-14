@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.entity;
+package cn.hdustea.aha_server.userOperationLog.entity;
 
 import lombok.Data;
 

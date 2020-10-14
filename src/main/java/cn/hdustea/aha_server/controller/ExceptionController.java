@@ -30,7 +30,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
     public ResponseBean handleShiroException(AuthenticationException e) {
-        e.printStackTrace();
+//        e.printStackTrace();
         return new ResponseBean(e.getCode(), e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 

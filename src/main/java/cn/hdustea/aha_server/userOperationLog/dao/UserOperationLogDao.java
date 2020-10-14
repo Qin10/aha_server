@@ -1,6 +1,6 @@
-package cn.hdustea.aha_server.dao;
+package cn.hdustea.aha_server.userOperationLog.dao;
 
-import cn.hdustea.aha_server.entity.UserOperationLog;
+import cn.hdustea.aha_server.userOperationLog.entity.UserOperationLog;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
