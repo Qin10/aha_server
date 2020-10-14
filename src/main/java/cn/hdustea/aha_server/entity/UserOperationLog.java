@@ -10,7 +10,7 @@ import java.util.Date;
  * @author STEA_YY
  */
 @Data
-public class SysLog {
+public class UserOperationLog {
     private Integer id;
     private String account;
     private String operation;

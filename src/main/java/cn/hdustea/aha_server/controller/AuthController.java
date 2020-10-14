@@ -1,6 +1,5 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.annotation.Log;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.ChangePasswordBean;
 import cn.hdustea.aha_server.bean.LoginUser;
@@ -37,7 +36,6 @@ public class AuthController {
      * @return HTTP响应实体类
      * @throws Exception 向上抛出异常
      */
-    @Log("手机号密码登录")
     @PostMapping("/login")
     public ResponseBean login(@RequestBody LoginUser loginUser) throws Exception {
         String token = authService.login(loginUser);
@@ -54,7 +52,6 @@ public class AuthController {
      * @throws DaoException          数据库操作异常
      * @throws MessageCheckException 短信验证码校验异常
      */
-    @Log("手机号注册")
     @PostMapping("/register")
     public ResponseBean register(@RequestBody RegisterUser registerUser) throws MessageCheckException, DaoException {
         authService.register(registerUser);
@@ -70,7 +67,6 @@ public class AuthController {
      * @throws MessageCheckException    短信验证码校验异常
      * @throws AccountNotFoundException 账号未找到异常
      */
-    @Log("修改用户密码")
     @PostMapping("/changePassword/{phone}")
     public ResponseBean changePassword(@RequestBody ChangePasswordBean changePasswordBean, @PathVariable("phone") String phone) throws MessageCheckException, AccountNotFoundException {
         authService.changePassword(changePasswordBean, phone);

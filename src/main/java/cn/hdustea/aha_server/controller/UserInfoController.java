@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.annotation.Log;
+import cn.hdustea.aha_server.annotation.UserOperationLog;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.UserInfo;
@@ -31,7 +31,7 @@ public class UserInfoController {
      * @param request HTTP请求
      * @return HTTP响应实体
      */
-    @Log("获取登录用户信息")
+    @UserOperationLog("获取登录用户信息")
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean getPersonalUserInfo(HttpServletRequest request) {
@@ -47,7 +47,7 @@ public class UserInfoController {
      * @param phone 手机号
      * @return HTTP响应实体
      */
-    @Log("获取某个用户信息")
+    @UserOperationLog("获取某个用户信息")
     @RequiresLogin
     @GetMapping("/{phone}")
     public ResponseBean getUserInfoByPhone(@PathVariable("phone") String phone) {
