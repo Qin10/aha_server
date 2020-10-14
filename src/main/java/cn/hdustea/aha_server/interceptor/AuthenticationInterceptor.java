@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.JwtExpiredException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenNotFoundException;
 import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
@@ -64,7 +65,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             if (requiresLogin.required()) {
                 // 执行认证
                 if (token == null) {
-                    throw new RuntimeException("无token，请重新登录");
+                    throw new TokenNotFoundException("无token，请重新登录");
                 }
                 String phone = JWTUtil.getAccount(token);
                 if (phone == null) {
