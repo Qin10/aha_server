@@ -38,7 +38,8 @@ public class AuthService {
     @Resource
     private SmsService smsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-//    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
+    //    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
+    private final static String SECRET = "Gzysb233";
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -55,7 +56,7 @@ public class AuthService {
         User user = userService.getUserByPhone(loginUser.getPhone());
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
-                String token = JWTUtil.sign(user.getPhone(), user.getPassword());
+                String token = JWTUtil.sign(user.getPhone(), SECRET);
                 redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, REFRESH_TOKEN_EXPIRE_TIME);
                 return token;
             } else {
@@ -70,7 +71,7 @@ public class AuthService {
      * 传入注册信息和短信验证码，完成验证码校验并处理注册请求
      *
      * @param registerUser 包含注册信息的实体
-     * @throws DaoException 数据库操作异常
+     * @throws DaoException          数据库操作异常
      * @throws MessageCheckException 短信验证码校验异常
      */
     public void register(RegisterUser registerUser) throws DaoException, MessageCheckException {
