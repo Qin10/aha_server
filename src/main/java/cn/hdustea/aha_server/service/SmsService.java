@@ -39,12 +39,10 @@ public class SmsService {
         String code = "1234";
         switch (type) {
             case REGISTER_MESSAGE: {
-                System.out.println(2);
                 redisUtil.set(REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             case CHANGE_PASSWORD_MESSAGE: {
-                System.out.println(1);
                 redisUtil.set(CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
@@ -84,14 +82,12 @@ public class SmsService {
             }
             case CHANGE_PASSWORD_MESSAGE: {
                 possibleCode = (String) redisUtil.get(CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone);
-                System.out.println(possibleCode);
                 break;
             }
         }
         if (possibleCode == null) {
             return false;
         }
-        System.out.println(possibleCode + code);
         return possibleCode.equals(code);
     }
 }
