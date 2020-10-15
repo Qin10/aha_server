@@ -12,4 +12,9 @@ mybatis:
     map-underscore-to-camel-case: true
 server:
   port: 8089
-
+jwt-config:
+  secret: Gzysb233
+  expireTime: 600
+  refreshTokenExpireTime: 604800
+file-upload-path:
+  avatarPath: C:/server/avatar/

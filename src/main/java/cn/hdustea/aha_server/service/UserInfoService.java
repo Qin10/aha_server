@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.dao.UserInfoDao;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
@@ -22,7 +23,8 @@ import java.io.IOException;
 public class UserInfoService {
     @Resource
     private UserInfoDao userInfoDao;
-    private static final String AVATAR_PATH = "C:\\server\\avatar\\";
+    @Resource
+    private FileUploadPathConfig fileUploadPathConfig;
 
     public UserInfo getUserInfoByUserId(int userId) {
         return userInfoDao.findUserInfoByUserId(userId);
@@ -75,7 +77,7 @@ public class UserInfoService {
         if (userInfo != null) {
             String filename;
             try {
-                filename = FileUtil.upload(file, AVATAR_PATH);
+                filename = FileUtil.upload(file, fileUploadPathConfig.getAvatarPath());
             } catch (IOException e) {
                 throw new UpdateException("未知错误，修改失败！");
             }

@@ -34,10 +34,6 @@ public class RedisUtil {
      */
     public static final String CHANGE_PASSWORD_MESSAGE_CODE_PREFIX = "user:changePassword:code:";
     /**
-     * RefreshToken存入Redis有效期
-     */
-    public static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
-    /**
      * RefreshToken Redis前缀
      */
     public static final String REFRESH_TOKEN_PREFIX = "user:token:";

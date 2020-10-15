@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.bean.ChangePasswordBean;
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
+import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
@@ -19,7 +20,6 @@ import javax.annotation.Resource;
 import javax.security.auth.login.AccountNotFoundException;
 import java.sql.Timestamp;
 
-import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_EXPIRE_TIME;
 import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 
 /**
@@ -39,7 +39,8 @@ public class AuthService {
     private SmsService smsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     //    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
-    private final static String SECRET = "Gzysb233";
+    @Resource
+    private JWTConfig jwtConfig;
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -56,8 +57,8 @@ public class AuthService {
         User user = userService.getUserByPhone(loginUser.getPhone());
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
-                String token = JWTUtil.sign(user.getPhone(), SECRET);
-                redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, REFRESH_TOKEN_EXPIRE_TIME);
+                String token = JWTUtil.sign(user.getPhone(), jwtConfig.getSecret(),jwtConfig.getExpireTime());
+                redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
                 return token;
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");

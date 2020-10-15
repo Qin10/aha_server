@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.entity.Oauth;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.WechatUnauthorizedException;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+
+import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 
 /**
  * 微信小程序授权/鉴权服务类
@@ -22,8 +25,8 @@ public class WechatProgramService {
     private OauthService oauthService;
     @Resource
     private RedisUtil redisUtil;
-    private static final int REFRESH_TOKEN_EXPIRE_TIME = 30 * 24 * 60 * 60;
-    private static final String REFRESH_TOKEN_PREFIX = "user:token:";
+    @Resource
+    private JWTConfig jwtConfig;
 
     /**
      * 使用微信请求code完成登录校验
@@ -41,8 +44,8 @@ public class WechatProgramService {
             throw new WechatUnauthorizedException();
         } else {
             User user = wechatOauth.getUser();
-            String token = JWTUtil.sign(REFRESH_TOKEN_PREFIX + user.getPhone(), user.getPassword());
-            redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, REFRESH_TOKEN_EXPIRE_TIME);
+            String token = JWTUtil.sign(user.getPhone(), jwtConfig.getSecret(),jwtConfig.getExpireTime());
+            redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
             return token;
         }
     }

@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.interceptor;
 
 import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.JwtExpiredException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
@@ -20,7 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
-import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_EXPIRE_TIME;
 import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 
 /**
@@ -31,7 +31,8 @@ import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Resource
     private RedisUtil redisUtil;
-    private final static String SECRET = "Gzysb233";
+    @Resource
+    private JWTConfig jwtConfig;
 
     /**
      * 处理鉴权请求
@@ -71,7 +72,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     throw new TokenCheckException();
                 }
                 try {
-                    boolean verify = JWTUtil.verify(token, phone, SECRET);
+                    boolean verify = JWTUtil.verify(token, phone, jwtConfig.getSecret());
                     if (!verify) {
                         throw new TokenCheckException();
                     }
@@ -96,8 +97,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     protected boolean refreshToken(String token, String phone) {
         String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + phone);
         if (possibleToken != null && possibleToken.equals(token)) {
-            String newToken = JWTUtil.sign(phone, SECRET);
-            redisUtil.set(REFRESH_TOKEN_PREFIX + phone, newToken, REFRESH_TOKEN_EXPIRE_TIME);
+            String newToken = JWTUtil.sign(phone, jwtConfig.getSecret(),jwtConfig.getExpireTime());
+            redisUtil.set(REFRESH_TOKEN_PREFIX + phone, newToken, jwtConfig.getRefreshTokenExpireTime());
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletResponse response;
             if (requestAttributes != null) {
