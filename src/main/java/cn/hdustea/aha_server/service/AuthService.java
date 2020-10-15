@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.bean.ChangePasswordBean;
 import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
+import cn.hdustea.aha_server.bean.TokenAndUserInfoBean;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
@@ -53,13 +54,14 @@ public class AuthService {
      * @return token令牌
      * @throws Exception 向上抛出异常
      */
-    public String login(LoginUser loginUser) throws Exception {
+    public TokenAndUserInfoBean login(LoginUser loginUser) throws Exception {
         User user = userService.getUserByPhone(loginUser.getPhone());
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
-                String token = JWTUtil.sign(user.getPhone(), jwtConfig.getSecret(),jwtConfig.getExpireTime());
+                String token = JWTUtil.sign(user.getPhone(), jwtConfig.getSecret(), jwtConfig.getExpireTime());
                 redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
-                return token;
+                UserInfo userInfo = userInfoService.getUserInfoByPhone(user.getPhone());
+                return new TokenAndUserInfoBean(token, userInfo);
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");
             }

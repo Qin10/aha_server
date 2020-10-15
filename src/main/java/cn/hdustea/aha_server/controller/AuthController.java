@@ -1,10 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.bean.ChangePasswordBean;
-import cn.hdustea.aha_server.bean.LoginUser;
-import cn.hdustea.aha_server.bean.RegisterUser;
-import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.bean.*;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
@@ -38,10 +35,8 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseBean login(@RequestBody LoginUser loginUser) throws Exception {
-        String token = authService.login(loginUser);
-        HashMap<String, String> responseMap = new HashMap<>();
-        responseMap.put("token", token);
-        return new ResponseBean(200, "登录成功", responseMap, TimeUtil.getFormattedTime(new Date()));
+        TokenAndUserInfoBean tokenAndUserInfoBean = authService.login(loginUser);
+        return new ResponseBean(200, "登录成功", tokenAndUserInfoBean, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -49,13 +44,14 @@ public class AuthController {
      *
      * @param registerUser 包含注册信息的实体
      * @return HTTP响应实体类
-     * @throws DaoException          数据库操作异常
-     * @throws MessageCheckException 短信验证码校验异常
+     * @throws Exception 向上抛出异常
      */
     @PostMapping("/register")
-    public ResponseBean register(@RequestBody RegisterUser registerUser) throws MessageCheckException, DaoException {
+    public ResponseBean register(@RequestBody RegisterUser registerUser) throws Exception {
         authService.register(registerUser);
-        return new ResponseBean(200, "注册成功", null, TimeUtil.getFormattedTime(new Date()));
+        LoginUser loginUser = new LoginUser(registerUser.getPhone(), registerUser.getPassword());
+        TokenAndUserInfoBean tokenAndUserInfoBean = authService.login(loginUser);
+        return new ResponseBean(200, "注册成功", tokenAndUserInfoBean, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
