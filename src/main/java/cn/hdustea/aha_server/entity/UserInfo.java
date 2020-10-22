@@ -21,6 +21,16 @@ public class UserInfo {
     private String nickname;
     private boolean gender;
     private Date birthday;
+    private Integer typeId;
     private String signature;
     private String avatarFilename;
+    private String school;
+    private String academy;
+    private String major;
+    private Integer grade;
+    private String intro;
+    private String specialtyTags;
+    private String trueName;
+    private String compTags;
+    private Integer resumeId;
 }

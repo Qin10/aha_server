@@ -17,6 +17,8 @@ public class User {
     private String phone;
     private String password;
     private Timestamp createdTime;
+    private String studentRecFilename;
+    private String contribPoint;
     private int roleId;
     private Role role;
 }

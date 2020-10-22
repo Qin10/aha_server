@@ -67,22 +67,15 @@ public class UserInfoService {
     /**
      * 根据手机号更新用户头像
      *
-     * @param file  图片文件
-     * @param phone 手机号
+     * @param filename 图片文件名
+     * @param phone    手机号
      * @return 保存的图片文件名
      * @throws UpdateException 更新失败异常
      */
-    public String updateAvatarFilenameByPhone(MultipartFile file, String phone) throws UpdateException {
+    public void updateAvatarFilenameByPhone(String filename, String phone) throws UpdateException {
         UserInfo userInfo = userInfoDao.findUserInfoByPhone(phone);
         if (userInfo != null) {
-            String filename;
-            try {
-                filename = FileUtil.upload(file, fileUploadPathConfig.getAvatarPath());
-            } catch (IOException e) {
-                throw new UpdateException("未知错误，修改失败！");
-            }
             userInfoDao.updateAvatarFilename(filename, phone);
-            return filename;
         } else {
             throw new UpdateException("用户不存在，修改失败！");
         }

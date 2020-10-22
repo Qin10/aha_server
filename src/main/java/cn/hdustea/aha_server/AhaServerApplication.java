@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server;
 
+import cn.hdustea.aha_server.config.AliyunOSSConfig;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +13,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  * @author STEA_YY
  */
 @SpringBootApplication
-@EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class})
+@EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class, AliyunOSSConfig.class})
 
 public class AhaServerApplication {
 

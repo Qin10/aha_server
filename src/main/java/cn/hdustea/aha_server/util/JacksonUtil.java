@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.util;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.codec.binary.Base64;
 
 import java.util.Map;
 
@@ -46,5 +47,9 @@ public class JacksonUtil {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.readValue(jsonString, Map.class);
+    }
+
+    public static String toBase64String(byte[] binaryData) {
+        return new String(Base64.encodeBase64(binaryData));
     }
 }

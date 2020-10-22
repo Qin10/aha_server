@@ -18,3 +18,12 @@ jwt-config:
   refreshTokenExpireTime: 604800
 file-upload-path:
   avatarPath: C:/server/avatar/
+aliyun-oss:
+  endpoint: oss-cn-hangzhou.aliyuncs.com
+  accessKeyId: LTAI4FxzTX4h82duMDLYJagD
+  accessKeySecret: oLoBad86TicKfOc5TeYe1dKjcbzbLa
+  bucketName: aha-server
+  expireTime: 6000
+  maxSize: 500
+  callbackHost: http://krakens.tpddns.cn:18089/
+  dirPrefix: aha
