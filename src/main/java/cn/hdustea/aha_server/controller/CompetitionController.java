@@ -44,7 +44,7 @@ public class CompetitionController {
     }
 
     @RequiresLogin
-    @PostMapping()
+    @PostMapping("/tag")
     public ResponseBean saveCompetitionTag(@RequestBody CompetitionTag competitionTag) {
         competitionService.saveCompetitionTag(competitionTag);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
