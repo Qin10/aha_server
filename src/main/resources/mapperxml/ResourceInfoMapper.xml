@@ -6,7 +6,6 @@
     <!--@Table resource_info-->
     <id column="id" property="id" />
     <result column="res_id" property="resId" />
-    <result column="name" property="name" />
     <result column="intro_pic_filename" property="introPicFilename" />
     <result column="intro" property="intro" />
     <result column="member" property="member" />
@@ -15,7 +14,7 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, res_id, `name`, intro_pic_filename, intro, `member`, phone, vx
+    id, res_id, intro_pic_filename, intro, `member`, phone, vx
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -29,25 +28,17 @@
     delete from resource_info
     where id = #{id}
   </delete>
-  <insert id="insert" parameterType="cn.hdustea.aha_server.entity.ResourceInfo">
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ResourceInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into resource_info (id, res_id, `name`, intro_pic_filename, intro, `member`, phone, 
-      vx)
-    values (#{id}, #{resId}, #{name}, #{introPicFilename}, #{intro}, #{member}, #{phone}, 
-      #{vx})
+    insert into resource_info (res_id, intro_pic_filename, intro, `member`, phone, vx)
+    values (#{resId}, #{introPicFilename}, #{intro}, #{member}, #{phone}, #{vx})
   </insert>
-  <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.ResourceInfo">
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ResourceInfo" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into resource_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="resId != null">
         res_id,
-      </if>
-      <if test="name != null">
-        `name`,
       </if>
       <if test="introPicFilename != null">
         intro_pic_filename,
@@ -66,14 +57,8 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id},
-      </if>
       <if test="resId != null">
         #{resId},
-      </if>
-      <if test="name != null">
-        #{name},
       </if>
       <if test="introPicFilename != null">
         #{introPicFilename},
@@ -99,9 +84,6 @@
       <if test="resId != null">
         res_id = #{resId},
       </if>
-      <if test="name != null">
-        `name` = #{name},
-      </if>
       <if test="introPicFilename != null">
         intro_pic_filename = #{introPicFilename},
       </if>
@@ -124,7 +106,6 @@
     <!--@mbg.generated-->
     update resource_info
     set res_id = #{resId},
-      `name` = #{name},
       intro_pic_filename = #{introPicFilename},
       intro = #{intro},
       `member` = #{member},

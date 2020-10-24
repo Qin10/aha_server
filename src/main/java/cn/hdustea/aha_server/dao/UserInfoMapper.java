@@ -29,5 +29,9 @@ public interface UserInfoMapper {
 
     int updateAvatarFilenameByUserId(@Param("updatedAvatarFilename")String updatedAvatarFilename,@Param("userId")Integer userId);
 
+    int updateResumeIdByUserId(@Param("updatedResumeId")String updatedResumeId,@Param("userId")Integer userId);
+
+
+
 
 }

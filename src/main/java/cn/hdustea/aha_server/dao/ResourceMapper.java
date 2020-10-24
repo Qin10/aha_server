@@ -1,13 +1,13 @@
 package cn.hdustea.aha_server.dao;
+import org.apache.ibatis.annotations.Param;
 
 import cn.hdustea.aha_server.entity.Resource;
-import org.springframework.stereotype.Component;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * ${description}
+ *
+ * @author STEA_YY
+ **/
 public interface ResourceMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -20,4 +20,8 @@ public interface ResourceMapper {
     int updateByPrimaryKeySelective(Resource record);
 
     int updateByPrimaryKey(Resource record);
+
+    Integer selectAuthorUserIdById(@Param("id")Integer id);
+
+
 }

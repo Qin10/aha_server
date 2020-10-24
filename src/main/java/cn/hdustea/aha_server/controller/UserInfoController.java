@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.OssPolicyBean;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
+import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.userOperationLog.annotation.LogUserOperation;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 用户信息控制类
@@ -66,11 +68,21 @@ public class UserInfoController {
      * @throws Exception 向上抛出异常
      */
     @RequiresLogin
-    @GetMapping("/avatar")
+    @GetMapping("/avatar/sign")
     public ResponseBean signUpdateUserAvatar(HttpServletRequest request) throws Exception {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getAccount(token);
-        OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone, "userInfo/avatar", phone);
+        OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @PostMapping("/avatar")
+    public ResponseBean updateUserAvatar(HttpServletRequest request, @RequestBody Map<String, String> requestMap) throws UpdateException {
+        String token = request.getHeader("Authorization");
+        String phone = JWTUtil.getAccount(token);
+        String filename = requestMap.get("filename");
+        userInfoService.updateAvatarFilenameByPhone(filename, phone);
+        return new ResponseBean(200, "succ", null, "修改成功！");
     }
 }

@@ -1,7 +1,6 @@
 package cn.hdustea.aha_server.dao;
 
 import cn.hdustea.aha_server.entity.ResourceInfo;
-import org.springframework.stereotype.Component;
 
 /**
  * ${description}

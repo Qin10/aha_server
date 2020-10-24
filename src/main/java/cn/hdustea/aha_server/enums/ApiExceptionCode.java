@@ -23,6 +23,10 @@ public enum ApiExceptionCode {
      */
     ACCESS_FORBIDDEN(104, "无权限访问！"),
     /**
+     * 无权限操作
+     */
+    PERMISSION_DENIED(105, "无权限操作！"),
+    /**
      * 用户不存在
      */
     USER_NOT_FOUND(301, "用户不存在！"),
@@ -50,6 +54,10 @@ public enum ApiExceptionCode {
      * 删除失败
      */
     DELETE_ERROR(403, "删除失败"),
+    /**
+     * 未找到结果
+     */
+    SELECT_ERROR(404, "未找到结果！"),
     /**
      * 验证短信发送失败
      */

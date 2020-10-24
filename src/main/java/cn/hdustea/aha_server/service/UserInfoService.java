@@ -8,6 +8,7 @@ import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.util.FileUtil;
 import org.springframework.stereotype.Service;
@@ -26,16 +27,14 @@ public class UserInfoService {
     @Resource
     private UserInfoMapper userInfoMapper;
     @Resource
-    private UserMapper userMapper;
-    @Resource
-    private FileUploadPathConfig fileUploadPathConfig;
+    private UserService userService;
 
     public UserInfo getUserInfoByUserId(int userId) {
         return userInfoMapper.selectByPrimaryKey(userId);
     }
 
     public UserInfo getUserInfoByPhone(String phone) {
-        User user = userMapper.selectByPhone(phone);
+        User user = userService.getUserByPhone(phone);
         if (user == null) {
             return null;
         }
@@ -81,10 +80,18 @@ public class UserInfoService {
      * @throws UpdateException 更新失败异常
      */
     public void updateAvatarFilenameByPhone(String filename, String phone) throws UpdateException {
-        User user = userMapper.selectByPhone(phone);
+        User user = userService.getUserByPhone(phone);
         if (user == null) {
             throw new UpdateException("用户不存在，修改失败！");
         }
         userInfoMapper.updateAvatarFilenameByUserId(filename, user.getId());
+    }
+
+    public void updateResumeIdByPhone(String resumeId, String phone) throws UpdateException {
+        User user = userService.getUserByPhone(phone);
+        if (user == null) {
+            throw new UpdateException("用户不存在，修改失败！");
+        }
+        userInfoMapper.updateResumeIdByUserId(resumeId, user.getId());
     }
 }

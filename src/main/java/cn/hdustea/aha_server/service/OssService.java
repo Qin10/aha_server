@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.config.AliyunOSSConfig;
 import cn.hdustea.aha_server.util.JacksonUtil;
 import cn.hdustea.aha_server.util.RestTemplateUtil;
 import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.net.URL;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
@@ -30,11 +32,8 @@ public class OssService {
     private OSS oss;
     @Resource
     private AliyunOSSConfig aliyunOSSConfig;
-    @Resource
-    private RestTemplateUtil restTemplateUtil;
 
-
-    public OssPolicyBean signUpload(String dir, String callbackUrl, String account) throws Exception {
+    public OssPolicyBean signUpload(String dir) {
         String host = "http://" + aliyunOSSConfig.getBucketName() + "." + aliyunOSSConfig.getEndpoint();
         Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
         PolicyConditions policyConditions = new PolicyConditions();
@@ -50,5 +49,10 @@ public class OssService {
         ossPolicyBean.setSignature(signature);
         ossPolicyBean.setExpire(expiration.getTime());
         return ossPolicyBean;
+    }
+
+    public URL signDownload(String filename) {
+        Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
+        return oss.generatePresignedUrl(aliyunOSSConfig.getBucketName(), filename, expiration);
     }
 }
