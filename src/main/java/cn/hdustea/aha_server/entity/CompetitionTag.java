@@ -8,7 +8,7 @@ import lombok.Data;
 * @author STEA_YY
 **/
 @Data
-public class Role {
+public class CompetitionTag {
     private Integer id;
 
     private String name;

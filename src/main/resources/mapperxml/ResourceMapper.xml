@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hdustea.aha_server.dao.ResourceMapper">
+  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.Resource">
+    <!--@mbg.generated-->
+    <!--@Table `resource`-->
+    <id column="id" property="id" />
+    <result column="comp_id" property="compId" />
+    <result column="level" property="level" />
+    <result column="type" property="type" />
+    <result column="date" property="date" />
+    <result column="read" property="read" />
+    <result column="collect" property="collect" />
+    <result column="meaning" property="meaning" />
+    <result column="avatar_filename" property="avatarFilename" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, comp_id, `level`, `type`, `date`, `read`, `collect`, meaning, avatar_filename
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from `resource`
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from `resource`
+    where id = #{id}
+  </delete>
+  <insert id="insert" parameterType="cn.hdustea.aha_server.entity.Resource">
+    <!--@mbg.generated-->
+    insert into `resource` (id, comp_id, `level`, `type`, `date`, `read`, `collect`, meaning, 
+      avatar_filename)
+    values (#{id}, #{compId}, #{level}, #{type}, #{date}, #{read}, #{collect}, #{meaning}, 
+      #{avatarFilename})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.Resource">
+    <!--@mbg.generated-->
+    insert into `resource`
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="compId != null">
+        comp_id,
+      </if>
+      <if test="level != null">
+        `level`,
+      </if>
+      <if test="type != null">
+        `type`,
+      </if>
+      <if test="date != null">
+        `date`,
+      </if>
+      <if test="read != null">
+        `read`,
+      </if>
+      <if test="collect != null">
+        `collect`,
+      </if>
+      <if test="meaning != null">
+        meaning,
+      </if>
+      <if test="avatarFilename != null">
+        avatar_filename,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="compId != null">
+        #{compId},
+      </if>
+      <if test="level != null">
+        #{level},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="date != null">
+        #{date},
+      </if>
+      <if test="read != null">
+        #{read},
+      </if>
+      <if test="collect != null">
+        #{collect},
+      </if>
+      <if test="meaning != null">
+        #{meaning},
+      </if>
+      <if test="avatarFilename != null">
+        #{avatarFilename},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.Resource">
+    <!--@mbg.generated-->
+    update `resource`
+    <set>
+      <if test="compId != null">
+        comp_id = #{compId},
+      </if>
+      <if test="level != null">
+        `level` = #{level},
+      </if>
+      <if test="type != null">
+        `type` = #{type},
+      </if>
+      <if test="date != null">
+        `date` = #{date},
+      </if>
+      <if test="read != null">
+        `read` = #{read},
+      </if>
+      <if test="collect != null">
+        `collect` = #{collect},
+      </if>
+      <if test="meaning != null">
+        meaning = #{meaning},
+      </if>
+      <if test="avatarFilename != null">
+        avatar_filename = #{avatarFilename},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Resource">
+    <!--@mbg.generated-->
+    update `resource`
+    set comp_id = #{compId},
+      `level` = #{level},
+      `type` = #{type},
+      `date` = #{date},
+      `read` = #{read},
+      `collect` = #{collect},
+      meaning = #{meaning},
+      avatar_filename = #{avatarFilename}
+    where id = #{id}
+  </update>
+</mapper>

@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.userOperationLog.aspect;
 
+import cn.hdustea.aha_server.entity.UserOperationLog;
 import cn.hdustea.aha_server.userOperationLog.annotation.LogUserOperation;
-import cn.hdustea.aha_server.userOperationLog.entity.UserOperationLog;
 import cn.hdustea.aha_server.userOperationLog.event.UserOperationLogEvent;
 import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
@@ -104,7 +104,7 @@ public class LogAspect {
     @AfterReturning(pointcut = "pointcut()", returning = "ret")
     public void afterReturning(Object ret) {
         long time = System.currentTimeMillis() - beginTime;
-        userOperationLog.setTime((int) time);
+        userOperationLog.setTime((Long) time);
         applicationContext.publishEvent(new UserOperationLogEvent(userOperationLog));
     }
 

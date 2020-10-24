@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.userOperationLog.event;
 
-import cn.hdustea.aha_server.userOperationLog.entity.UserOperationLog;
+import cn.hdustea.aha_server.entity.UserOperationLog;
 import org.springframework.context.ApplicationEvent;
 
 /**

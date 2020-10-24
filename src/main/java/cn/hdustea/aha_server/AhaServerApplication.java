@@ -3,6 +3,7 @@ package cn.hdustea.aha_server;
 import cn.hdustea.aha_server.config.AliyunOSSConfig;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
  */
 @SpringBootApplication
 @EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class, AliyunOSSConfig.class})
+@MapperScan(basePackages = "cn.hdustea.aha_server.dao")
 
 public class AhaServerApplication {
 

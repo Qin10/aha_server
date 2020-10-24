@@ -1,7 +1,9 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
-import cn.hdustea.aha_server.dao.UserInfoDao;
+import cn.hdustea.aha_server.dao.UserInfoMapper;
+import cn.hdustea.aha_server.dao.UserMapper;
+import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
@@ -22,16 +24,22 @@ import java.io.IOException;
 @Service
 public class UserInfoService {
     @Resource
-    private UserInfoDao userInfoDao;
+    private UserInfoMapper userInfoMapper;
+    @Resource
+    private UserMapper userMapper;
     @Resource
     private FileUploadPathConfig fileUploadPathConfig;
 
     public UserInfo getUserInfoByUserId(int userId) {
-        return userInfoDao.findUserInfoByUserId(userId);
+        return userInfoMapper.selectByPrimaryKey(userId);
     }
 
     public UserInfo getUserInfoByPhone(String phone) {
-        return userInfoDao.findUserInfoByPhone(phone);
+        User user = userMapper.selectByPhone(phone);
+        if (user == null) {
+            return null;
+        }
+        return userInfoMapper.selectByUserId(user.getId());
     }
 
     /**
@@ -41,9 +49,9 @@ public class UserInfoService {
      * @throws InsertException 插入失败实体类
      */
     public void saveUserInfo(UserInfo userInfo) throws InsertException {
-        UserInfo possibleUserInfo = userInfoDao.findUserInfoById(userInfo.getUserId());
+        UserInfo possibleUserInfo = userInfoMapper.selectByUserId(userInfo.getUserId());
         if (possibleUserInfo == null) {
-            userInfoDao.saveUserInfo(userInfo);
+            userInfoMapper.insertSelective(userInfo);
         } else {
             throw new InsertException("用户详情已存在，无法插入！");
         }
@@ -56,9 +64,9 @@ public class UserInfoService {
      * @throws DeleteException 删除失败异常
      */
     public void deleteUserInfoById(int id) throws DaoException {
-        UserInfo userInfo = userInfoDao.findUserInfoById(id);
+        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(id);
         if (userInfo != null) {
-            userInfoDao.deleteUserInfo(id);
+            userInfoMapper.deleteByPrimaryKey(id);
         } else {
             throw new DeleteException("不存在对应记录，删除用户详情失败！");
         }
@@ -73,11 +81,10 @@ public class UserInfoService {
      * @throws UpdateException 更新失败异常
      */
     public void updateAvatarFilenameByPhone(String filename, String phone) throws UpdateException {
-        UserInfo userInfo = userInfoDao.findUserInfoByPhone(phone);
-        if (userInfo != null) {
-            userInfoDao.updateAvatarFilename(filename, phone);
-        } else {
+        User user = userMapper.selectByPhone(phone);
+        if (user == null) {
             throw new UpdateException("用户不存在，修改失败！");
         }
+        userInfoMapper.updateAvatarFilenameByUserId(filename, user.getId());
     }
 }

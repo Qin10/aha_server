@@ -1,7 +1,8 @@
 package cn.hdustea.aha_server.userOperationLog.listener;
 
-import cn.hdustea.aha_server.userOperationLog.dao.UserOperationLogDao;
-import cn.hdustea.aha_server.userOperationLog.entity.UserOperationLog;
+
+import cn.hdustea.aha_server.dao.UserOperationLogMapper;
+import cn.hdustea.aha_server.entity.UserOperationLog;
 import cn.hdustea.aha_server.userOperationLog.event.UserOperationLogEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
@@ -22,13 +23,13 @@ import javax.annotation.Resource;
 @Component
 public class UserOperationLogListener {
     @Resource
-    private UserOperationLogDao userOperationLogDao;
+    private UserOperationLogMapper userOperationLogMapper;
 
     @Async
     @Order
     @EventListener(UserOperationLogEvent.class)
     public void saveLog(UserOperationLogEvent event) {
         UserOperationLog log = (UserOperationLog) event.getSource();
-        userOperationLogDao.saveUserOperationLog(log);
+        userOperationLogMapper.insertSelective(log);
     }
 }

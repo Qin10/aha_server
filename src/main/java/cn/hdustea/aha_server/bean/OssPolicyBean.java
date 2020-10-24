@@ -15,6 +15,5 @@ public class OssPolicyBean {
     private String policy;
     private String signature;
     private long expire;
-    private String callback;
     private String dir;
 }

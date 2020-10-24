@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hdustea.aha_server.dao.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.UserInfo">
+    <!--@mbg.generated-->
+    <!--@Table user_info-->
+    <id column="id" property="id" />
+    <result column="user_id" property="userId" />
+    <result column="nickname" property="nickname" />
+    <result column="gender" property="gender" />
+    <result column="birthday" property="birthday" />
+    <result column="type_id" property="typeId" />
+    <result column="signature" property="signature" />
+    <result column="avatar_filename" property="avatarFilename" />
+    <result column="school" property="school" />
+    <result column="academy" property="academy" />
+    <result column="major" property="major" />
+    <result column="grade" property="grade" />
+    <result column="intro" property="intro" />
+    <result column="specialty_tags" property="specialtyTags" />
+    <result column="true_name" property="trueName" />
+    <result column="comp_tags" property="compTags" />
+    <result column="resume_id" property="resumeId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, user_id, nickname, gender, birthday, type_id, signature, avatar_filename, school, 
+    academy, major, grade, intro, specialty_tags, true_name, comp_tags, resume_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from user_info
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from user_info
+    where id = #{id}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.UserInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_info (user_id, nickname, gender, birthday, type_id, signature, 
+      avatar_filename, school, academy, major, grade, intro, specialty_tags, 
+      true_name, comp_tags, resume_id)
+    values (#{userId}, #{nickname}, #{gender}, #{birthday}, #{typeId}, #{signature}, 
+      #{avatarFilename}, #{school}, #{academy}, #{major}, #{grade}, #{intro}, #{specialtyTags}, 
+      #{trueName}, #{compTags}, #{resumeId})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.UserInfo" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="gender != null">
+        gender,
+      </if>
+      <if test="birthday != null">
+        birthday,
+      </if>
+      <if test="typeId != null">
+        type_id,
+      </if>
+      <if test="signature != null">
+        signature,
+      </if>
+      <if test="avatarFilename != null">
+        avatar_filename,
+      </if>
+      <if test="school != null">
+        school,
+      </if>
+      <if test="academy != null">
+        academy,
+      </if>
+      <if test="major != null">
+        major,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="intro != null">
+        intro,
+      </if>
+      <if test="specialtyTags != null">
+        specialty_tags,
+      </if>
+      <if test="trueName != null">
+        true_name,
+      </if>
+      <if test="compTags != null">
+        comp_tags,
+      </if>
+      <if test="resumeId != null">
+        resume_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="nickname != null">
+        #{nickname},
+      </if>
+      <if test="gender != null">
+        #{gender},
+      </if>
+      <if test="birthday != null">
+        #{birthday},
+      </if>
+      <if test="typeId != null">
+        #{typeId},
+      </if>
+      <if test="signature != null">
+        #{signature},
+      </if>
+      <if test="avatarFilename != null">
+        #{avatarFilename},
+      </if>
+      <if test="school != null">
+        #{school},
+      </if>
+      <if test="academy != null">
+        #{academy},
+      </if>
+      <if test="major != null">
+        #{major},
+      </if>
+      <if test="grade != null">
+        #{grade},
+      </if>
+      <if test="intro != null">
+        #{intro},
+      </if>
+      <if test="specialtyTags != null">
+        #{specialtyTags},
+      </if>
+      <if test="trueName != null">
+        #{trueName},
+      </if>
+      <if test="compTags != null">
+        #{compTags},
+      </if>
+      <if test="resumeId != null">
+        #{resumeId},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.UserInfo">
+    <!--@mbg.generated-->
+    update user_info
+    <set>
+      <if test="userId != null">
+        user_id = #{userId},
+      </if>
+      <if test="nickname != null">
+        nickname = #{nickname},
+      </if>
+      <if test="gender != null">
+        gender = #{gender},
+      </if>
+      <if test="birthday != null">
+        birthday = #{birthday},
+      </if>
+      <if test="typeId != null">
+        type_id = #{typeId},
+      </if>
+      <if test="signature != null">
+        signature = #{signature},
+      </if>
+      <if test="avatarFilename != null">
+        avatar_filename = #{avatarFilename},
+      </if>
+      <if test="school != null">
+        school = #{school},
+      </if>
+      <if test="academy != null">
+        academy = #{academy},
+      </if>
+      <if test="major != null">
+        major = #{major},
+      </if>
+      <if test="grade != null">
+        grade = #{grade},
+      </if>
+      <if test="intro != null">
+        intro = #{intro},
+      </if>
+      <if test="specialtyTags != null">
+        specialty_tags = #{specialtyTags},
+      </if>
+      <if test="trueName != null">
+        true_name = #{trueName},
+      </if>
+      <if test="compTags != null">
+        comp_tags = #{compTags},
+      </if>
+      <if test="resumeId != null">
+        resume_id = #{resumeId},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.UserInfo">
+    <!--@mbg.generated-->
+    update user_info
+    set user_id = #{userId},
+      nickname = #{nickname},
+      gender = #{gender},
+      birthday = #{birthday},
+      type_id = #{typeId},
+      signature = #{signature},
+      avatar_filename = #{avatarFilename},
+      school = #{school},
+      academy = #{academy},
+      major = #{major},
+      grade = #{grade},
+      intro = #{intro},
+      specialty_tags = #{specialtyTags},
+      true_name = #{trueName},
+      comp_tags = #{compTags},
+      resume_id = #{resumeId}
+    where id = #{id}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-10-24-->
+  <select id="selectByUserId" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from user_info
+    where user_id=#{userId}
+  </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-10-24-->
+  <update id="updateAvatarFilenameByUserId">
+    update user_info
+    set avatar_filename=#{updatedAvatarFilename}
+    where user_id=#{userId}
+  </update>
+</mapper>

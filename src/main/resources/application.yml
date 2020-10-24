@@ -25,5 +25,3 @@ aliyun-oss:
   bucketName: aha-server
   expireTime: 6000
   maxSize: 500
-  callbackHost: http://krakens.tpddns.cn:18089/
-  dirPrefix: aha

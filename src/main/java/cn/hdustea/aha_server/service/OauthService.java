@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dao.OauthDao;
+import cn.hdustea.aha_server.dao.OauthMapper;
 import cn.hdustea.aha_server.entity.Oauth;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 @Service
 public class OauthService {
     @Resource
-    private OauthDao oauthDao;
+    private OauthMapper oauthMapper;
 
     /**
      * 根据第三方凭证编号获取凭证实体
@@ -24,6 +24,6 @@ public class OauthService {
      * @return 第三方登录凭证
      */
     public Oauth getOauthByOauthTypeAndOauthId(String oauthType, String oauthId) {
-        return oauthDao.findOauthByOauthTypeAndOauthId(oauthType, oauthId);
+        return oauthMapper.selectByOauthTypeAndOauthId(oauthType, oauthId);
     }
 }

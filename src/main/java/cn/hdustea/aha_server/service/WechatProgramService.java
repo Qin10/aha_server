@@ -10,7 +10,6 @@ import cn.hdustea.aha_server.util.WechatUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 
 import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 
@@ -24,6 +23,8 @@ public class WechatProgramService {
     @Resource
     private OauthService oauthService;
     @Resource
+    private UserService userService;
+    @Resource
     private RedisUtil redisUtil;
     @Resource
     private JWTConfig jwtConfig;
@@ -34,17 +35,17 @@ public class WechatProgramService {
      * @param code 微信请求code
      * @return token令牌
      * @throws WechatUnauthorizedException 微信小程序授权信息未找到异常
-     * @throws IOException IO操作异常
      */
-    public String wechatLogin(String code) throws WechatUnauthorizedException, IOException {
+    public String wechatLogin(String code) throws WechatUnauthorizedException {
         String openId;
         openId = WechatUtil.getWxInfo(code).getOpenId();
         Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId("wechat", openId);
         if (wechatOauth == null) {
             throw new WechatUnauthorizedException();
         } else {
-            User user = wechatOauth.getUser();
-            String token = JWTUtil.sign(user.getPhone(), jwtConfig.getSecret(),jwtConfig.getExpireTime());
+            Integer userId = wechatOauth.getUserId();
+            User user = userService.getUserById(userId);
+            String token = JWTUtil.sign(user.getPhone(), jwtConfig.getSecret(), jwtConfig.getExpireTime());
             redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
             return token;
         }

@@ -21,8 +21,6 @@ public class AliyunOSSConfig {
     private String bucketName;
     private int expireTime;
     private int maxSize;
-    private String callbackHost;
-    private String dirPrefix;
 
     @Bean
     public OSS OSS() {

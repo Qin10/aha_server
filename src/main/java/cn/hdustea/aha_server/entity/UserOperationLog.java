@@ -1,22 +1,28 @@
-package cn.hdustea.aha_server.userOperationLog.entity;
-
-import lombok.Data;
+package cn.hdustea.aha_server.entity;
 
 import java.util.Date;
+import lombok.Data;
 
 /**
- * 系统日志实体类
- *
- * @author STEA_YY
- */
+* ${description}
+*
+* @author STEA_YY
+**/
 @Data
 public class UserOperationLog {
     private Integer id;
+
     private String account;
+
     private String operation;
-    private Integer time;
+
+    private Long time;
+
     private String method;
+
     private String params;
+
     private String ip;
+
     private Date createTime;
 }
