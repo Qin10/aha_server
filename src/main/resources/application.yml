@@ -10,6 +10,7 @@ spring:
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapperxml/*.xml
 server:
   port: 8089
 jwt-config:
