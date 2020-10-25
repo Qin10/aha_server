@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.entity;
 
 import lombok.Data;
+import org.springframework.data.annotation.Transient;
 
 /**
  * ${description}
@@ -15,6 +16,7 @@ public class Competition {
      * 所属赛事标签（外键）
      */
     private Integer compTagId;
+
     private CompetitionTag competitionTag;
 
     /**

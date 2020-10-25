@@ -46,4 +46,6 @@ public class User {
      * 角色id(外键)
      */
     private Integer roleId;
+
+    private Role role;
 }

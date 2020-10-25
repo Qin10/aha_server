@@ -8,6 +8,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 比赛信息的服务类
@@ -21,11 +22,12 @@ public class CompetitionService {
     @Resource
     private CompetitionTagMapper competitionTagMapper;
 
+    public List<Competition> getAllCompetition() {
+        return competitionMapper.selectAll();
+    }
+
     public Competition getCompetitionById(int id) {
-        Competition competition = competitionMapper.selectByPrimaryKey(id);
-        CompetitionTag competitionTag = competitionTagMapper.selectByPrimaryKey(competition.getCompTagId());
-        competition.setCompetitionTag(competitionTag);
-        return competition;
+        return competitionMapper.selectByPrimaryKey(id);
     }
 
     public void saveCompetition(Competition competition) {
@@ -37,6 +39,10 @@ public class CompetitionService {
             throw new UpdateException();
         }
         competitionMapper.updateByPrimaryKeySelective(competition);
+    }
+
+    public List<CompetitionTag> getAllCompetitionTag() {
+        return competitionTagMapper.selectAll();
     }
 
     public CompetitionTag getCompetitionTagById(int id) {

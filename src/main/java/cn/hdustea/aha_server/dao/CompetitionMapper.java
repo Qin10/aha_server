@@ -1,13 +1,17 @@
 package cn.hdustea.aha_server.dao;
 
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
+
 import cn.hdustea.aha_server.entity.Competition;
 import org.springframework.stereotype.Component;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * ${description}
+ *
+ * @author STEA_YY
+ **/
 public interface CompetitionMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -16,6 +20,8 @@ public interface CompetitionMapper {
     int insertSelective(Competition record);
 
     Competition selectByPrimaryKey(Integer id);
+
+    List<Competition> selectAll();
 
     int updateByPrimaryKeySelective(Competition record);
 

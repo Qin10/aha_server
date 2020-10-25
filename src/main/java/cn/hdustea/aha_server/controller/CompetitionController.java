@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 竞赛信息的控制类
@@ -30,10 +31,24 @@ public class CompetitionController {
     }
 
     @RequiresLogin
+    @GetMapping()
+    public ResponseBean getAllCompetition() {
+        List<Competition> competitions = competitionService.getAllCompetition();
+        return new ResponseBean(200, "succ", competitions, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
     @GetMapping("/tag/{id}")
     public ResponseBean getCompetitionTagById(@PathVariable("id") int id) {
         CompetitionTag competitionTag = competitionService.getCompetitionTagById(id);
         return new ResponseBean(200, "succ", competitionTag, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @GetMapping("/tag")
+    public ResponseBean getAllCompetitionTag() {
+        List<CompetitionTag> competitionTags = competitionService.getAllCompetitionTag();
+        return new ResponseBean(200, "succ", competitionTags, TimeUtil.getFormattedTime(new Date()));
     }
 
     @RequiresLogin
