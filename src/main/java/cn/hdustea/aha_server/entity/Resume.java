@@ -20,6 +20,7 @@ public class Resume {
     @Id
     @JsonIgnore
     private ObjectId id;
+    private String name;
     private String phone;
     private String email;
     private String gender;
