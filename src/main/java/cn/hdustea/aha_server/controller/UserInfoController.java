@@ -68,7 +68,7 @@ public class UserInfoController {
      * @throws Exception 向上抛出异常
      */
     @RequiresLogin
-    @GetMapping("/avatar/sign")
+    @GetMapping("/avatar/sign/upload")
     public ResponseBean signUpdateUserAvatar(HttpServletRequest request) throws Exception {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getAccount(token);

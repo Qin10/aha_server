@@ -46,23 +46,22 @@ public class ResumeService {
         return resumeDao.save(resume);
     }
 
-    public void updateResume(Resume resume) throws UpdateException {
-        if (!resumeDao.existsById(resume.getId())) {
-            throw new UpdateException("简历记录不存在！");
-        }
+    public void updateResume(Resume resume) {
         resumeDao.save(resume);
     }
 
-
-
     public void updateResumeByPhone(Resume resume, String phone) throws UpdateException {
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
-        if (userInfo == null || userInfo.getResumeId() == null) {
-            throw new UpdateException("简历记录不存在！");
+        if (userInfo == null) {
+            throw new UpdateException("用户不存在！");
+        }
+        if (userInfo.getResumeId() == null) {
+            resume.setId(new ObjectId());
+            userInfoService.updateResumeIdByPhone(resume.getId().toString(), phone);
         } else {
             resume.setId(new ObjectId(userInfo.getResumeId()));
-            updateResume(resume);
         }
+        updateResume(resume);
     }
 
     public void deleteResumeById(ObjectId id) {

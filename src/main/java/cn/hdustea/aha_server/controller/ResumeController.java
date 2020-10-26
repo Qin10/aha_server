@@ -3,14 +3,12 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.Resume;
-import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.ResumeService;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
-import org.bson.types.ObjectId;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

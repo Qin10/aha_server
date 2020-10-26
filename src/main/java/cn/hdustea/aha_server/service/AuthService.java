@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.bean.LoginUser;
 import cn.hdustea.aha_server.bean.RegisterUser;
 import cn.hdustea.aha_server.bean.TokenAndUserInfoBean;
 import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
@@ -14,6 +15,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.insertException
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
+import org.bson.types.ObjectId;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,8 @@ public class AuthService {
     private UserService userService;
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private ResumeService resumeService;
     @Resource
     private RedisUtil redisUtil;
     @Resource
@@ -92,6 +96,9 @@ public class AuthService {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
             userInfo.setNickname(registerUser.getNickname());
+            Resume resume = new Resume();
+            resumeService.saveResume(resume);
+            userInfo.setResumeId(resume.getId().toString());
             UserInfo possibleUserInfo = userInfoService.getUserInfoByUserId(user.getId());
             if (possibleUserInfo != null) {
                 userInfoService.deleteUserInfoById(possibleUserInfo.getId());
