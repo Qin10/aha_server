@@ -1,21 +1,14 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.dao.ResumeDao;
-import cn.hdustea.aha_server.dao.UserMapper;
 import cn.hdustea.aha_server.entity.Resume;
-import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
-import cn.hdustea.aha_server.util.TimeUtil;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.Optional;
 
 /**
  * 用户简历的服务类
@@ -42,7 +35,7 @@ public class ResumeService {
     }
 
     public Resume saveResume(Resume resume) {
-        resume.setId(new ObjectId());
+        resume.setId(null);
         return resumeDao.save(resume);
     }
 
@@ -56,12 +49,12 @@ public class ResumeService {
             throw new UpdateException("用户不存在！");
         }
         if (userInfo.getResumeId() == null) {
-            resume.setId(new ObjectId());
-            userInfoService.updateResumeIdByPhone(resume.getId().toString(), phone);
+            Resume savedResume = saveResume(resume);
+            userInfoService.updateResumeIdByPhone(savedResume.getId().toString(), phone);
         } else {
             resume.setId(new ObjectId(userInfo.getResumeId()));
+            updateResume(resume);
         }
-        updateResume(resume);
     }
 
     public void deleteResumeById(ObjectId id) {

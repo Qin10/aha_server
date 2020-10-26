@@ -1,8 +1,10 @@
 package cn.hdustea.aha_server.entity;
 
 import cn.hdustea.aha_server.entity.resume.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -15,11 +17,13 @@ import java.util.List;
 @Document(collection = "resume")
 @Data
 public class Resume {
+    @Id
+    @JsonIgnore
     private ObjectId id;
-    private String contact;
+    private Contact contact;
     private String gender;
     private String birth;
-    private String highestDegree;
+    private String hDegree;
     private String identity;
     private String currentGrade;
     private String workPlace;
