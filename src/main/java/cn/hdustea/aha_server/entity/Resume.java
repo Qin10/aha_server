@@ -20,7 +20,8 @@ public class Resume {
     @Id
     @JsonIgnore
     private ObjectId id;
-    private Contact contact;
+    private String phone;
+    private String email;
     private String gender;
     private String birth;
     private String hDegree;
@@ -34,5 +35,5 @@ public class Resume {
     private List<PracticeExperience> practiceExperiences;
     private String projectSkill;
     private List<Honor> honors;
-    private String selfDescription;
+    private String intro;
 }
