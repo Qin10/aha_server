@@ -28,10 +28,10 @@ public class Resume {
     private String currentGrade;
     private String workPlace;
     private String profession;
-    private List<EduExperience> eduExperiences;
-    private List<SchoolExperience> schoolExperiences;
-    private List<ProjectExperience> projectExperiences;
-    private List<PracticeExperience> practiceExperiences;
+    private List<EduExperience> eduExpers;
+    private List<SchoolExperience> schoolExpers;
+    private List<ProjectExperience> projectExpers;
+    private List<PracticeExperience> practiceExpers;
     private String projectSkill;
     private List<Honor> honors;
     private String selfDescription;
