@@ -41,7 +41,7 @@ public class ResourceController {
     public ResponseBean signUploadFile(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
-        OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone);
+        OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone,true);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 

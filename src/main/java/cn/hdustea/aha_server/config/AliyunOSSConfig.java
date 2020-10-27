@@ -18,7 +18,8 @@ public class AliyunOSSConfig {
     private String endpoint;
     private String accessKeyId;
     private String accessKeySecret;
-    private String bucketName;
+    private String publicBucketName;
+    private String privateBucketName;
     private int expireTime;
     private int maxSize;
 

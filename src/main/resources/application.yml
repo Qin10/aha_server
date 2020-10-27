@@ -28,6 +28,7 @@ aliyun-oss:
   endpoint: oss-cn-hangzhou.aliyuncs.com
   accessKeyId: LTAI4FxzTX4h82duMDLYJagD
   accessKeySecret: oLoBad86TicKfOc5TeYe1dKjcbzbLa
-  bucketName: aha-server
+  publicBucketName: aha-public
+  privateBucketName: aha-resource
   expireTime: 6000
   maxSize: 500

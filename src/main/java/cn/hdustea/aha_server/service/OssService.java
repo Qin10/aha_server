@@ -33,8 +33,14 @@ public class OssService {
     @Resource
     private AliyunOSSConfig aliyunOSSConfig;
 
-    public OssPolicyBean signUpload(String dir) {
-        String host = "http://" + aliyunOSSConfig.getBucketName() + "." + aliyunOSSConfig.getEndpoint();
+    public OssPolicyBean signUpload(String dir,boolean isPrivate) {
+        String bucketName;
+        if (isPrivate){
+            bucketName = aliyunOSSConfig.getPrivateBucketName();
+        } else {
+            bucketName = aliyunOSSConfig.getPublicBucketName();
+        }
+        String host = "http://" + bucketName + "." + aliyunOSSConfig.getEndpoint();
         Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
         PolicyConditions policyConditions = new PolicyConditions();
         policyConditions.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
@@ -53,6 +59,6 @@ public class OssService {
 
     public URL signDownload(String filename) {
         Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
-        return oss.generatePresignedUrl(aliyunOSSConfig.getBucketName(), filename, expiration);
+        return oss.generatePresignedUrl(aliyunOSSConfig.getPrivateBucketName(), filename, expiration);
     }
 }

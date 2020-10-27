@@ -45,6 +45,7 @@ public class UserInfo {
      */
     private String signature;
 
+
     /**
      * 用户头像文件保存路径
      */

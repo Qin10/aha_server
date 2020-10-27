@@ -26,6 +26,6 @@ class AhaServerApplicationTests {
 
     @Test
     void testAliOssUpload(){
-        System.out.println(ossService.signUpload("abc/"));
+        System.out.println(ossService.signUpload("abc/",false));
     }
 }
