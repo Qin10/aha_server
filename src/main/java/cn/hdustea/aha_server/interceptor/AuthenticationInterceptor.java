@@ -2,12 +2,12 @@ package cn.hdustea.aha_server.interceptor;
 
 import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.bean.JwtPayloadBean;
 import cn.hdustea.aha_server.config.JWTConfig;
-import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.JwtExpiredException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.NoticeNotSignedException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenNotFoundException;
-import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -67,18 +67,20 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 if (token == null) {
                     throw new TokenNotFoundException("无token，请重新登录");
                 }
-                String phone = JWTUtil.getAccount(token);
-                if (phone == null) {
-                    throw new TokenCheckException();
-                }
+                JwtPayloadBean jwtPayloadBean = JWTUtil.getPayload(token);
                 try {
-                    boolean verify = JWTUtil.verify(token, phone, jwtConfig.getSecret());
+                    boolean verify = JWTUtil.verify(token, jwtPayloadBean, jwtConfig.getSecret());
                     if (!verify) {
                         throw new TokenCheckException();
                     }
                 } catch (TokenExpiredException e) {
-                    if (!refreshToken(token, phone)) {
+                    if (!refreshToken(token, jwtPayloadBean)) {
                         throw new JwtExpiredException();
+                    }
+                }
+                if (requiresLogin.requireSignNotice()) {
+                    if (!jwtPayloadBean.isSignedNotice()) {
+                        throw new NoticeNotSignedException();
                     }
                 }
                 return true;
@@ -90,15 +92,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     /**
      * 尝试刷新用户token
      *
-     * @param token 过期token
-     * @param phone 当前用户手机号
+     * @param token          过期token
+     * @param jwtPayloadBean 当前用户的payload
      * @return 是否刷新成功
      */
-    protected boolean refreshToken(String token, String phone) {
-        String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + phone);
+    protected boolean refreshToken(String token, JwtPayloadBean jwtPayloadBean) {
+        String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + jwtPayloadBean.getAccount());
         if (possibleToken != null && possibleToken.equals(token)) {
-            String newToken = JWTUtil.sign(phone, jwtConfig.getSecret(),jwtConfig.getExpireTime());
-            redisUtil.set(REFRESH_TOKEN_PREFIX + phone, newToken, jwtConfig.getRefreshTokenExpireTime());
+            String newToken = JWTUtil.sign(jwtPayloadBean, jwtConfig.getSecret(), jwtConfig.getExpireTime());
+            redisUtil.set(REFRESH_TOKEN_PREFIX + jwtPayloadBean.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletResponse response;
             if (requestAttributes != null) {

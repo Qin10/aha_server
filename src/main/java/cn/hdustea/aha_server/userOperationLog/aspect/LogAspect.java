@@ -63,7 +63,7 @@ public class LogAspect {
         // 从token中获取用户名
         String token = request.getHeader("Authorization");
         if (token != null) {
-            String account = JWTUtil.getAccount(token);
+            String account = JWTUtil.getPayload(token).getAccount();
             userOperationLog.setAccount(account);
         }
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();

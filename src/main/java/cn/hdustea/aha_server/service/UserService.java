@@ -46,4 +46,8 @@ public class UserService {
     public void updatePassword(String phone, String newPassword) {
         userMapper.updatePasswordByPhone(newPassword, phone);
     }
+
+    public void updateIsSignedNotice(String phone,boolean isSignedNotice) {
+        userMapper.updateIsSignedNoticeByPhone(isSignedNotice, phone);
+    }
 }

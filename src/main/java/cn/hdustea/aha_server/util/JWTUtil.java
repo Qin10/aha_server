@@ -1,5 +1,7 @@
 package cn.hdustea.aha_server.util;
 
+import cn.hdustea.aha_server.bean.JwtPayloadBean;
+import cn.hdustea.aha_server.entity.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -23,11 +25,13 @@ public class JWTUtil {
      * @param secret 秘钥
      * @return 是否正确
      */
-    public static boolean verify(String token, String account, String secret) {
+    public static boolean verify(String token, JwtPayloadBean jwtPayloadBean, String secret) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             JWTVerifier verifier = JWT.require(algorithm)
-                    .withClaim("account", account)
+                    .withClaim("account", jwtPayloadBean.getAccount())
+                    .withClaim("roleName", jwtPayloadBean.getRoleName())
+                    .withClaim("isSignedNotice", jwtPayloadBean.isSignedNotice())
                     .build();
             verifier.verify(token);
             return true;
@@ -43,28 +47,42 @@ public class JWTUtil {
      *
      * @return token中包含的用户名
      */
-    public static String getAccount(String token) {
+    public static JwtPayloadBean getPayload(String token) {
+        JwtPayloadBean jwtPayloadBean = new JwtPayloadBean();
         try {
             DecodedJWT jwt = JWT.decode(token);
-            return jwt.getClaim("account").asString();
-        } catch (JWTDecodeException e) {
-            return null;
+            jwtPayloadBean.setAccount(jwt.getClaim("account").asString());
+            jwtPayloadBean.setRoleName(jwt.getClaim("roleName").asString());
+            jwtPayloadBean.setSignedNotice(jwt.getClaim("isSignedNotice").asBoolean());
+        } catch (JWTDecodeException | NullPointerException ignored) {
+
         }
+        return jwtPayloadBean;
+    }
+
+    public static JwtPayloadBean packagePayload(User user){
+        JwtPayloadBean jwtPayloadBean = new JwtPayloadBean();
+        jwtPayloadBean.setAccount(user.getPhone());
+        jwtPayloadBean.setRoleName(user.getRole().getName());
+        jwtPayloadBean.setSignedNotice(user.getIsSignedNotice());
+        return jwtPayloadBean;
     }
 
     /**
      * 生成签名,10分钟后过期
      *
-     * @param account 用户凭证
-     * @param secret  秘钥
+     * @param jwtPayloadBean payload封装类
+     * @param secret         秘钥
      * @return 加密的token
      */
-    public static String sign(String account, String secret,int expireTime) {
+    public static String sign(JwtPayloadBean jwtPayloadBean, String secret, int expireTime) {
         Date date = new Date(System.currentTimeMillis() + (expireTime * 1000));
         Algorithm algorithm = Algorithm.HMAC256(secret);
         // 附带username信息
         return JWT.create()
-                .withClaim("account", account)
+                .withClaim("account", jwtPayloadBean.getAccount())
+                .withClaim("roleName", jwtPayloadBean.getRoleName())
+                .withClaim("isSignedNotice", jwtPayloadBean.isSignedNotice())
                 .withExpiresAt(date)
                 .sign(algorithm);
     }

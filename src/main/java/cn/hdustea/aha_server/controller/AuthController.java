@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.*;
-import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.JWTUtil;
@@ -70,6 +69,22 @@ public class AuthController {
     }
 
     /**
+     * @param request
+     * @return
+     * @throws AccountNotFoundException
+     */
+    @RequiresLogin(requireSignNotice = false)
+    @GetMapping("/sign/notice")
+    public ResponseBean signNotice(HttpServletRequest request) throws AccountNotFoundException {
+        String token = request.getHeader("Authorization");
+        String phone = JWTUtil.getPayload(token).getAccount();
+        String updatedToken = authService.signNotice(phone);
+        HashMap<String, String> responseMap = new HashMap<>();
+        responseMap.put("token", updatedToken);
+        return new ResponseBean(200, "已同意用户协议", responseMap, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    /**
      * 用户登出的接口
      *
      * @return HTTP响应实体类
@@ -78,7 +93,7 @@ public class AuthController {
     @GetMapping("/logout")
     public ResponseBean logout(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         authService.logout(phone);
         return new ResponseBean(200, "登出成功", null, TimeUtil.getFormattedTime(new Date()));
     }

@@ -27,6 +27,10 @@ public enum ApiExceptionCode {
      */
     PERMISSION_DENIED(105, "无权限操作！"),
     /**
+     * 未签署服务协议
+     */
+    NOTICE_NOT_SIGNED(106, "未签署服务协议！"),
+    /**
      * 用户不存在
      */
     USER_NOT_FOUND(301, "用户不存在！"),

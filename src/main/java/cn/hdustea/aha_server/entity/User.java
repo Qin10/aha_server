@@ -3,7 +3,6 @@ package cn.hdustea.aha_server.entity;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -13,7 +12,6 @@ import lombok.Data;
  **/
 @Data
 public class User {
-    @JsonIgnore
     private Integer id;
 
     /**
@@ -24,7 +22,6 @@ public class User {
     /**
      * 用户密码
      */
-    @JsonIgnore
     private String password;
 
     /**
@@ -41,6 +38,11 @@ public class User {
      * 贡献点
      */
     private BigDecimal contribPoint;
+
+    /**
+     * 是否签署服务协议
+     */
+    private Boolean isSignedNotice;
 
     /**
      * 角色id(外键)

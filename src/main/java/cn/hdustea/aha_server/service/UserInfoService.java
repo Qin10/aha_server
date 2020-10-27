@@ -56,6 +56,18 @@ public class UserInfoService {
         }
     }
 
+    public void updateUserInfo(UserInfo userInfo) {
+        userInfoMapper.updateByPrimaryKeySelective(userInfo);
+    }
+
+    public void updateUserInfoByPhone(UserInfo userInfo, String phone) throws UpdateException {
+        User user = userService.getUserByPhone(phone);
+        if (user == null) {
+            throw new UpdateException("用户不存在，修改失败！");
+        }
+        userInfoMapper.updateByUserId(userInfo, user.getId());
+    }
+
     /**
      * 根据id删除用户详细信息
      *

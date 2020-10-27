@@ -1,9 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.bean.ChangePasswordBean;
-import cn.hdustea.aha_server.bean.LoginUser;
-import cn.hdustea.aha_server.bean.RegisterUser;
-import cn.hdustea.aha_server.bean.TokenAndUserInfoBean;
+import cn.hdustea.aha_server.bean.*;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.entity.User;
@@ -15,7 +12,6 @@ import cn.hdustea.aha_server.exception.apiException.daoException.insertException
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
-import org.bson.types.ObjectId;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -62,8 +58,7 @@ public class AuthService {
         User user = userService.getUserByPhone(loginUser.getPhone());
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
-                String token = JWTUtil.sign(user.getPhone(), jwtConfig.getSecret(), jwtConfig.getExpireTime());
-                redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
+                String token = signToken(user);
                 UserInfo userInfo = userInfoService.getUserInfoByPhone(user.getPhone());
                 return new TokenAndUserInfoBean(token, userInfo);
             } else {
@@ -89,6 +84,7 @@ public class AuthService {
         User user = new User();
         user.setPhone(registerUser.getPhone());
         user.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
+        user.setIsSignedNotice(registerUser.isSignedNotice());
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
         if (userService.getUserByPhone(user.getPhone()) == null) {
@@ -127,6 +123,15 @@ public class AuthService {
         userService.updatePassword(phone, encodedPassword);
     }
 
+    public String signNotice(String phone) throws AccountNotFoundException {
+        User user = userService.getUserByPhone(phone);
+        if (user == null) {
+            throw new AccountNotFoundException();
+        }
+        userService.updateIsSignedNotice(phone, true);
+        return signToken(user);
+    }
+
     /**
      * 处理用户登出请求，移除token
      *
@@ -134,5 +139,12 @@ public class AuthService {
      */
     public void logout(String phone) {
         redisUtil.del(phone);
+    }
+
+    private String signToken(User user) {
+        JwtPayloadBean jwtPayloadBean = JWTUtil.packagePayload(user);
+        String token = JWTUtil.sign(jwtPayloadBean, jwtConfig.getSecret(), jwtConfig.getExpireTime());
+        redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
+        return token;
     }
 }

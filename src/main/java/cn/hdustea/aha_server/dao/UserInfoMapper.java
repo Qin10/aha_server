@@ -27,6 +27,8 @@ public interface UserInfoMapper {
 
     int updateByPrimaryKey(UserInfo record);
 
+    int updateByUserId(@Param("updated")UserInfo updated,@Param("userId")Integer userId);
+
     int updateAvatarFilenameByUserId(@Param("updatedAvatarFilename")String updatedAvatarFilename,@Param("userId")Integer userId);
 
     int updateResumeIdByUserId(@Param("updatedResumeId")String updatedResumeId,@Param("userId")Integer userId);

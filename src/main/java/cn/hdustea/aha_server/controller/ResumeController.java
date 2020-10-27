@@ -38,7 +38,7 @@ public class ResumeController {
     @PostMapping()
     public ResponseBean saveResume(HttpServletRequest request, @RequestBody Resume resume) throws UpdateException {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         Resume savedResume = resumeService.saveResume(resume);
         userInfoService.updateResumeIdByPhone(savedResume.getId().toString(), phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
@@ -48,7 +48,7 @@ public class ResumeController {
     @PutMapping()
     public ResponseBean updateResume(HttpServletRequest request, @RequestBody Resume resume) throws UpdateException {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         resumeService.updateResumeByPhone(resume, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }

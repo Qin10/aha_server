@@ -25,7 +25,7 @@ public class Resume {
     private String email;
     private String gender;
     private String birth;
-    private String hDegree;
+    private String highestDegree;
     private String identity;
     private String currentGrade;
     private String workPlace;

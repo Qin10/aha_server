@@ -1,7 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.OssPolicyBean;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.userOperationLog.annotation.LogUserOperation;
@@ -10,7 +9,6 @@ import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.JWTUtil;
-import cn.hdustea.aha_server.util.JacksonUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,13 +35,22 @@ public class UserInfoController {
      * @return HTTP响应实体
      */
     @LogUserOperation("获取登录用户信息")
-    @RequiresLogin
+    @RequiresLogin(requireSignNotice = false)
     @GetMapping("/me")
     public ResponseBean getPersonalUserInfo(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
         return new ResponseBean(200, "succ", userInfo, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin(requireSignNotice = false)
+    @PostMapping("/me")
+    public ResponseBean updatePersonalUserInfo(HttpServletRequest request, @RequestBody UserInfo userInfo) throws UpdateException {
+        String token = request.getHeader("Authorization");
+        String phone = JWTUtil.getPayload(token).getAccount();
+        userInfoService.updateUserInfoByPhone(userInfo, phone);
+        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -65,22 +72,21 @@ public class UserInfoController {
      *
      * @param request HTTP请求
      * @return HTTP响应实体
-     * @throws Exception 向上抛出异常
      */
-    @RequiresLogin
+    @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
-    public ResponseBean signUpdateUserAvatar(HttpServletRequest request) throws Exception {
+    public ResponseBean signUpdateUserAvatar(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
-    @RequiresLogin
+    @RequiresLogin(requireSignNotice = false)
     @PostMapping("/avatar")
     public ResponseBean updateUserAvatar(HttpServletRequest request, @RequestBody Map<String, String> requestMap) throws UpdateException {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         String filename = requestMap.get("filename");
         userInfoService.updateAvatarFilenameByPhone(filename, phone);
         return new ResponseBean(200, "succ", null, "修改成功！");

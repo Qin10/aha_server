@@ -4,13 +4,11 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.OssPolicyBean;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.Resource;
-import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.ResourceService;
-import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +38,9 @@ public class ResourceController {
 
     @RequiresLogin
     @GetMapping("/sign/upload")
-    public ResponseBean signUploadFile(HttpServletRequest request) throws Exception {
+    public ResponseBean signUploadFile(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
@@ -51,7 +49,7 @@ public class ResourceController {
     @PostMapping()
     public ResponseBean saveResource(HttpServletRequest request, @RequestBody Resource resource) {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         resourceService.saveResourceAndAuthor(resource, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
@@ -60,7 +58,7 @@ public class ResourceController {
     @PutMapping("/{id}")
     public ResponseBean updateResourceById(HttpServletRequest request, @RequestBody Resource resource, @PathVariable("id") int id) throws UpdateException, PermissionDeniedException {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
         }
@@ -73,7 +71,7 @@ public class ResourceController {
     @DeleteMapping("/{id}")
     public ResponseBean deleteResourceById(HttpServletRequest request, @PathVariable("id") int id) throws PermissionDeniedException, DeleteException {
         String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getAccount(token);
+        String phone = JWTUtil.getPayload(token).getAccount();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
         }
