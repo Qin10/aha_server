@@ -129,6 +129,7 @@ public class AuthService {
             throw new AccountNotFoundException();
         }
         userService.updatesignedNotice(phone, true);
+        user.setSignedNotice(true);
         return signToken(user);
     }
 

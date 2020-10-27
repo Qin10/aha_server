@@ -46,7 +46,7 @@ public class UserInfoController {
     }
 
     @RequiresLogin(requireSignNotice = false)
-    @PostMapping("/me")
+    @PutMapping("/me")
     public ResponseBean updatePersonalUserInfo(HttpServletRequest request, @RequestBody UserInfo userInfo) throws UpdateException {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
