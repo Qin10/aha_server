@@ -11,5 +11,5 @@ import lombok.Data;
 public class JwtPayloadBean {
     private String account;
     private String roleName;
-    private boolean isSignedNotice;
+    private boolean signedNotice;
 }

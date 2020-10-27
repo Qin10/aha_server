@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.OssPolicyBean;
+import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.userOperationLog.annotation.LogUserOperation;
@@ -40,8 +41,8 @@ public class UserInfoController {
     public ResponseBean getPersonalUserInfo(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
-        UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
-        return new ResponseBean(200, "succ", userInfo, TimeUtil.getFormattedTime(new Date()));
+        PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(phone);
+        return new ResponseBean(200, "succ", personalUserInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
     @RequiresLogin(requireSignNotice = false)

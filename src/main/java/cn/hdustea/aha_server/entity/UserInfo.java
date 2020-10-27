@@ -12,6 +12,7 @@ import lombok.Data;
  **/
 @Data
 public class UserInfo {
+    @JsonIgnore
     private Integer id;
 
     /**
@@ -94,5 +95,6 @@ public class UserInfo {
     /**
      * 用户简历id（MongoDB）
      */
+    @JsonIgnore
     private String resumeId;
 }

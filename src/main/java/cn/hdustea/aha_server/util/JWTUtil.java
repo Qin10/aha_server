@@ -31,7 +31,7 @@ public class JWTUtil {
             JWTVerifier verifier = JWT.require(algorithm)
                     .withClaim("account", jwtPayloadBean.getAccount())
                     .withClaim("roleName", jwtPayloadBean.getRoleName())
-                    .withClaim("isSignedNotice", jwtPayloadBean.isSignedNotice())
+                    .withClaim("signedNotice", jwtPayloadBean.isSignedNotice())
                     .build();
             verifier.verify(token);
             return true;
@@ -53,7 +53,7 @@ public class JWTUtil {
             DecodedJWT jwt = JWT.decode(token);
             jwtPayloadBean.setAccount(jwt.getClaim("account").asString());
             jwtPayloadBean.setRoleName(jwt.getClaim("roleName").asString());
-            jwtPayloadBean.setSignedNotice(jwt.getClaim("isSignedNotice").asBoolean());
+            jwtPayloadBean.setSignedNotice(jwt.getClaim("signedNotice").asBoolean());
         } catch (JWTDecodeException | NullPointerException ignored) {
 
         }
@@ -64,7 +64,7 @@ public class JWTUtil {
         JwtPayloadBean jwtPayloadBean = new JwtPayloadBean();
         jwtPayloadBean.setAccount(user.getPhone());
         jwtPayloadBean.setRoleName(user.getRole().getName());
-        jwtPayloadBean.setSignedNotice(user.getIsSignedNotice());
+        jwtPayloadBean.setSignedNotice(user.getSignedNotice());
         return jwtPayloadBean;
     }
 
@@ -82,7 +82,7 @@ public class JWTUtil {
         return JWT.create()
                 .withClaim("account", jwtPayloadBean.getAccount())
                 .withClaim("roleName", jwtPayloadBean.getRoleName())
-                .withClaim("isSignedNotice", jwtPayloadBean.isSignedNotice())
+                .withClaim("signedNotice", jwtPayloadBean.isSignedNotice())
                 .withExpiresAt(date)
                 .sign(algorithm);
     }

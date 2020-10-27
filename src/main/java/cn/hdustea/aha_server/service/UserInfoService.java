@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.dao.UserInfoMapper;
 import cn.hdustea.aha_server.dao.UserMapper;
@@ -39,6 +40,20 @@ public class UserInfoService {
             return null;
         }
         return userInfoMapper.selectByUserId(user.getId());
+    }
+
+    public PersonalUserInfoBean getPersonalUserInfo(String phone) {
+        User user = userService.getUserByPhone(phone);
+        if (user == null) {
+            return null;
+        }
+        UserInfo userInfo = userInfoMapper.selectByUserId(user.getId());
+        PersonalUserInfoBean personalUserInfoBean = new PersonalUserInfoBean();
+        personalUserInfoBean.setPhone(user.getPhone());
+        personalUserInfoBean.setContribPoint(user.getContribPoint());
+        personalUserInfoBean.setSignedNotice(user.getSignedNotice());
+        personalUserInfoBean.setUserInfo(userInfo);
+        return personalUserInfoBean;
     }
 
     /**

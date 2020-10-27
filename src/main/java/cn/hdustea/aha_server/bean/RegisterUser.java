@@ -12,6 +12,6 @@ public class RegisterUser {
     private String phone;
     private String password;
     private String nickname;
-    private boolean isSignedNotice;
+    private boolean signedNotice;
     private String code;
 }

@@ -54,13 +54,13 @@ public class AuthService {
      * @return token令牌
      * @throws Exception 向上抛出异常
      */
-    public TokenAndUserInfoBean login(LoginUser loginUser) throws Exception {
+    public TokenAndPersonalUserInfoBean login(LoginUser loginUser) throws Exception {
         User user = userService.getUserByPhone(loginUser.getPhone());
         if (user != null) {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
                 String token = signToken(user);
-                UserInfo userInfo = userInfoService.getUserInfoByPhone(user.getPhone());
-                return new TokenAndUserInfoBean(token, userInfo);
+                PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
+                return new TokenAndPersonalUserInfoBean(token, personalUserInfo);
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");
             }
@@ -84,7 +84,7 @@ public class AuthService {
         User user = new User();
         user.setPhone(registerUser.getPhone());
         user.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
-        user.setIsSignedNotice(registerUser.isSignedNotice());
+        user.setSignedNotice(registerUser.isSignedNotice());
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
         if (userService.getUserByPhone(user.getPhone()) == null) {
@@ -128,7 +128,7 @@ public class AuthService {
         if (user == null) {
             throw new AccountNotFoundException();
         }
-        userService.updateIsSignedNotice(phone, true);
+        userService.updatesignedNotice(phone, true);
         return signToken(user);
     }
 

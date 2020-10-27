@@ -34,8 +34,8 @@ public class AuthController {
      */
     @PostMapping("/login")
     public ResponseBean login(@RequestBody LoginUser loginUser) throws Exception {
-        TokenAndUserInfoBean tokenAndUserInfoBean = authService.login(loginUser);
-        return new ResponseBean(200, "登录成功", tokenAndUserInfoBean, TimeUtil.getFormattedTime(new Date()));
+        TokenAndPersonalUserInfoBean tokenAndPersonalUserInfoBean = authService.login(loginUser);
+        return new ResponseBean(200, "登录成功", tokenAndPersonalUserInfoBean, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -49,8 +49,8 @@ public class AuthController {
     public ResponseBean register(@RequestBody RegisterUser registerUser) throws Exception {
         authService.register(registerUser);
         LoginUser loginUser = new LoginUser(registerUser.getPhone(), registerUser.getPassword());
-        TokenAndUserInfoBean tokenAndUserInfoBean = authService.login(loginUser);
-        return new ResponseBean(200, "注册成功", tokenAndUserInfoBean, TimeUtil.getFormattedTime(new Date()));
+        TokenAndPersonalUserInfoBean tokenAndPersonalUserInfoBean = authService.login(loginUser);
+        return new ResponseBean(200, "注册成功", tokenAndPersonalUserInfoBean, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**

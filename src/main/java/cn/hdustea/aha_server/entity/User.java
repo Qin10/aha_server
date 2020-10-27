@@ -42,7 +42,7 @@ public class User {
     /**
      * 是否签署服务协议
      */
-    private Boolean isSignedNotice;
+    private Boolean signedNotice;
 
     /**
      * 角色id(外键)

@@ -11,7 +11,7 @@ import lombok.Data;
  **/
 @Data
 @AllArgsConstructor
-public class TokenAndUserInfoBean {
+public class TokenAndPersonalUserInfoBean {
     private String token;
-    private UserInfo userInfo;
+    private PersonalUserInfoBean personalUserInfo;
 }

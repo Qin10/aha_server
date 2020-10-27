@@ -24,7 +24,7 @@ public interface UserMapper {
 
     int updatePasswordByPhone(@Param("updatedPassword") String updatedPassword, @Param("phone") String phone);
 
-    int updateIsSignedNoticeByPhone(@Param("updatedIsSignedNotice")Boolean updatedIsSignedNotice,@Param("phone")String phone);
+    int updatesignedNoticeByPhone(@Param("updatedsignedNotice")Boolean updatedsignedNotice,@Param("phone")String phone);
 
 
 }
