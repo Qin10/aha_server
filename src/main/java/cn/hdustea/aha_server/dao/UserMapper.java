@@ -1,10 +1,9 @@
 package cn.hdustea.aha_server.dao;
 
-import cn.hdustea.aha_server.entity.User;
-import org.apache.ibatis.annotations.Param;
+import cn.hdustea.aha_server.entity.User;import org.apache.ibatis.annotations.Param;
 
 /**
- * 用户的数据库操作接口
+ * ${description}
  *
  * @author STEA_YY
  **/
@@ -25,6 +24,9 @@ public interface UserMapper {
 
     int updatePasswordByPhone(@Param("updatedPassword") String updatedPassword, @Param("phone") String phone);
 
-    int updatesignedNoticeByPhone(@Param("updatedsignedNotice") Boolean updatedsignedNotice, @Param("phone") String phone);
+    int updateSignedNoticeByPhone(@Param("updatedSignedNotice") Boolean updatedSignedNotice, @Param("phone") String phone);
+
+    int updateSignedContractByPhone(@Param("updatedSignedContract")Boolean updatedSignedContract,@Param("phone")String phone);
+
 
 }

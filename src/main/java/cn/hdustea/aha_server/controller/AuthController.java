@@ -2,16 +2,19 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.*;
+import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -80,6 +83,15 @@ public class AuthController {
         HashMap<String, String> responseMap = new HashMap<>();
         responseMap.put("token", updatedToken);
         return new ResponseBean(200, "已同意用户协议", responseMap, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @PostMapping("/sign/contract")
+    public ResponseBean signContract(HttpServletRequest request, MultipartFile file, @Validated Contract contract) throws IOException, AccountNotFoundException {
+        String token = request.getHeader("Authorization");
+        String phone = JWTUtil.getPayload(token).getAccount();
+        authService.signContract(phone, file, contract);
+        return new ResponseBean(200, "已签署合同", null, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**

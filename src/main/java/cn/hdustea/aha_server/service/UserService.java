@@ -1,10 +1,14 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.dao.UserMapper;
 import cn.hdustea.aha_server.entity.User;
+import cn.hdustea.aha_server.util.FileUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 /**
  * 用户服务类
@@ -56,6 +60,10 @@ public class UserService {
      * @param signedNotice 是否同意服务协议
      */
     public void updatesignedNotice(String phone, boolean signedNotice) {
-        userMapper.updatesignedNoticeByPhone(signedNotice, phone);
+        userMapper.updateSignedNoticeByPhone(signedNotice, phone);
+    }
+
+    public void updateSignedContract(String phone, boolean signedContract) {
+        userMapper.updateSignedContractByPhone(signedContract, phone);
     }
 }

@@ -1,7 +1,9 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.bean.*;
+import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
@@ -10,13 +12,17 @@ import cn.hdustea.aha_server.exception.apiException.authenticationException.Inva
 import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
 import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
+import cn.hdustea.aha_server.util.FileUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.IOException;
+import java.util.Date;
 import java.sql.Timestamp;
 
 import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
@@ -42,6 +48,10 @@ public class AuthService {
     //    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
     @Resource
     private JWTConfig jwtConfig;
+    @Resource
+    private FileUploadPathConfig fileUploadPathConfig;
+    @Resource
+    private ContractService contractService;
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -140,6 +150,19 @@ public class AuthService {
         userService.updatesignedNotice(phone, true);
         user.setSignedNotice(true);
         return signToken(user);
+    }
+
+    public void signContract(String phone,MultipartFile file, Contract contract) throws IOException, AccountNotFoundException {
+        User user = userService.getUserByPhone(phone);
+        if (user == null) {
+            throw new AccountNotFoundException();
+        }
+        contract.setUserId(user.getId());
+        String filename = FileUtil.upload(file, fileUploadPathConfig.getContractSignaturePath());
+        contract.setSignatureFilename(filename);
+        contract.setSignTime(new Date());
+        contractService.saveContract(contract);
+        userService.updateSignedContract(phone,true);
     }
 
     /**

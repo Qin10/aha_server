@@ -11,5 +11,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("file-upload-path")
 @Data
 public class FileUploadPathConfig {
-    private String avatarPath;
+    private String contractSignaturePath;
 }
