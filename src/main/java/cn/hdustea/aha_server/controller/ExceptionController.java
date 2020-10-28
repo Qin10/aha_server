@@ -1,11 +1,13 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.enums.ApiExceptionCode;
 import cn.hdustea.aha_server.exception.ApiException;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -55,6 +57,18 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean handleApiException(ApiException e) {
         return new ResponseBean(e.getCode(), e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    /**
+     * 捕捉参数校验异常
+     *
+     * @param e 参数校验异常类
+     * @return 返回错误码和HTTP500
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseBean handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return new ResponseBean(ApiExceptionCode.ARGUMENTS_VALID_FAIL.getValue(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), null, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**

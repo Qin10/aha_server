@@ -3,10 +3,10 @@ package cn.hdustea.aha_server.dao;
 import cn.hdustea.aha_server.entity.UserOperationLog;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * 用户行为日志的数据库操作接口
+ *
+ * @author STEA_YY
+ **/
 public interface UserOperationLogMapper {
     int deleteByPrimaryKey(Integer id);
 

@@ -1,25 +1,19 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
-import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.dao.UserInfoMapper;
-import cn.hdustea.aha_server.dao.UserMapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
-import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
-import cn.hdustea.aha_server.util.FileUtil;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 
 /**
- * 用户详细信息服务类
+ * 用户公有信息服务类
  *
  * @author STEA_YY
  **/
@@ -30,10 +24,22 @@ public class UserInfoService {
     @Resource
     private UserService userService;
 
+    /**
+     * 根据用户id获取用户公有信息
+     *
+     * @param userId 用户id
+     * @return 用户公有信息实体类
+     */
     public UserInfo getUserInfoByUserId(int userId) {
         return userInfoMapper.selectByPrimaryKey(userId);
     }
 
+    /**
+     * 根据手机号获取用户公有信息
+     *
+     * @param phone 用户手机号
+     * @return 用户公有信息实体类
+     */
     public UserInfo getUserInfoByPhone(String phone) {
         User user = userService.getUserByPhone(phone);
         if (user == null) {
@@ -42,6 +48,12 @@ public class UserInfoService {
         return userInfoMapper.selectByUserId(user.getId());
     }
 
+    /**
+     * 根据手机号获取用户个人详细信息
+     *
+     * @param phone 用户手机号
+     * @return 用户个人详细信息
+     */
     public PersonalUserInfoBean getPersonalUserInfo(String phone) {
         User user = userService.getUserByPhone(phone);
         if (user == null) {
@@ -57,10 +69,10 @@ public class UserInfoService {
     }
 
     /**
-     * 保存用户详细信息
+     * 保存用户公有信息
      *
-     * @param userInfo 用户详细信息实体类
-     * @throws InsertException 插入失败实体类
+     * @param userInfo 用户公有信息实体类
+     * @throws InsertException 插入失败异常
      */
     public void saveUserInfo(UserInfo userInfo) throws InsertException {
         UserInfo possibleUserInfo = userInfoMapper.selectByUserId(userInfo.getUserId());
@@ -75,6 +87,13 @@ public class UserInfoService {
         userInfoMapper.updateByPrimaryKeySelective(userInfo);
     }
 
+    /**
+     * 根据手机号修改用户公有信息
+     *
+     * @param userInfo 用户公有信息实体类
+     * @param phone    用户手机号
+     * @throws UpdateException 修改失败异常
+     */
     public void updateUserInfoByPhone(UserInfo userInfo, String phone) throws UpdateException {
         User user = userService.getUserByPhone(phone);
         if (user == null) {
@@ -84,9 +103,9 @@ public class UserInfoService {
     }
 
     /**
-     * 根据id删除用户详细信息
+     * 根据id删除用户公有信息
      *
-     * @param id 用户id
+     * @param id 用户公有信息id
      * @throws DeleteException 删除失败异常
      */
     public void deleteUserInfoById(int id) throws DaoException {
@@ -99,11 +118,10 @@ public class UserInfoService {
     }
 
     /**
-     * 根据手机号更新用户头像
+     * 根据手机号更新用户头像文件名
      *
      * @param filename 图片文件名
      * @param phone    手机号
-     * @return 保存的图片文件名
      * @throws UpdateException 更新失败异常
      */
     public void updateAvatarFilenameByPhone(String filename, String phone) throws UpdateException {
@@ -114,6 +132,13 @@ public class UserInfoService {
         userInfoMapper.updateAvatarFilenameByUserId(filename, user.getId());
     }
 
+    /**
+     * 根据手机号修改用户简历id
+     *
+     * @param resumeId 简历id（MongoDB ObjectId）
+     * @param phone    用户手机号
+     * @throws UpdateException 修改失败异常
+     */
     public void updateResumeIdByPhone(String resumeId, String phone) throws UpdateException {
         User user = userService.getUserByPhone(phone);
         if (user == null) {

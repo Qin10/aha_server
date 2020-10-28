@@ -32,8 +32,7 @@ public class UserInfoController {
     private OssService ossService;
 
     /**
-     * @param request HTTP请求
-     * @return HTTP响应实体
+     * 获取已登录用户信息（包括全部公有信息和部分私有信息）的接口
      */
     @LogUserOperation("获取登录用户信息")
     @RequiresLogin(requireSignNotice = false)
@@ -45,6 +44,12 @@ public class UserInfoController {
         return new ResponseBean(200, "succ", personalUserInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 修改已登录用户公共信息的接口
+     *
+     * @param userInfo 用户公共信息的实体类
+     * @throws UpdateException 修改失败异常
+     */
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
     public ResponseBean updatePersonalUserInfo(HttpServletRequest request, @RequestBody UserInfo userInfo) throws UpdateException {
@@ -58,7 +63,6 @@ public class UserInfoController {
      * 通过手机号查询用户信息的接口
      *
      * @param phone 手机号
-     * @return HTTP响应实体
      */
     @LogUserOperation("获取某个用户信息")
     @RequiresLogin
@@ -69,20 +73,23 @@ public class UserInfoController {
     }
 
     /**
-     * 签名向OSS上传用户头像的请求的接口
-     *
-     * @param request HTTP请求
-     * @return HTTP响应实体
+     * 签名向OSS上传用户头像的请求的接口，上传后的文件为公共读私有写
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
     public ResponseBean signUpdateUserAvatar(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
-        OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone,false);
+        OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone, false);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 修改用户头像文件名的接口
+     *
+     * @param requestMap 包含了修改后头像文件名的Map对象
+     * @throws UpdateException 修改失败异常
+     */
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/avatar")
     public ResponseBean updateUserAvatar(HttpServletRequest request, @RequestBody Map<String, String> requestMap) throws UpdateException {

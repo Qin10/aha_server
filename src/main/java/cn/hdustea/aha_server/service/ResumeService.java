@@ -22,10 +22,23 @@ public class ResumeService {
     @Resource
     private UserInfoService userInfoService;
 
+    /**
+     * 根据id查询简历
+     *
+     * @param id 简历id
+     * @return 简历实体类
+     */
     public Resume getResumeById(ObjectId id) {
         return resumeDao.findById(id).get();
     }
 
+    /**
+     * 根据手机号查询简历
+     *
+     * @param phone 用户手机号
+     * @return 简历实体类
+     * @throws SelectException 查询失败异常
+     */
     public Resume getResumeByPhone(String phone) throws SelectException {
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
         if (userInfo == null || userInfo.getResumeId() == null) {
@@ -34,15 +47,33 @@ public class ResumeService {
         return resumeDao.findById(new ObjectId(userInfo.getResumeId())).get();
     }
 
+    /**
+     * 新建简历
+     *
+     * @param resume 简历实体类
+     * @return 增加了id字段的简历实体类
+     */
     public Resume saveResume(Resume resume) {
         resume.setId(null);
         return resumeDao.save(resume);
     }
 
+    /**
+     * 修改简历
+     *
+     * @param resume 简历实体类
+     */
     public void updateResume(Resume resume) {
         resumeDao.save(resume);
     }
 
+    /**
+     * 根据用户手机号修改简历
+     *
+     * @param resume 简历实体类
+     * @param phone  用户手机号
+     * @throws UpdateException 修改失败异常
+     */
     public void updateResumeByPhone(Resume resume, String phone) throws UpdateException {
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
         if (userInfo == null) {
@@ -57,6 +88,11 @@ public class ResumeService {
         }
     }
 
+    /**
+     * 根据id删除简历
+     *
+     * @param id 简历id
+     */
     public void deleteResumeById(ObjectId id) {
         resumeDao.deleteById(id);
     }

@@ -1,19 +1,25 @@
 package cn.hdustea.aha_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 /**
- * ${description}
+ * 资源详细信息的实体类
  *
  * @author STEA_YY
  **/
 @Data
 public class ResourceInfo {
+    @JsonIgnore
     private Integer id;
 
     /**
      * 资源表id（外键）
      */
+    @NotNull(message = "资源id不能为空！")
     private Integer resId;
 
     /**

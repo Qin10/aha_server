@@ -27,7 +27,6 @@ public class SmsController {
      * 向目标手机号发送注册短信验证码的接口
      *
      * @param phone 手机号
-     * @return HTTP响应实体类
      * @throws MessageSendException 验证短信发送失败异常类
      */
     @GetMapping("/sendCode/register/{phone}")
@@ -44,7 +43,6 @@ public class SmsController {
      * 向目标手机号发送重置密码短信验证码的接口
      *
      * @param phone 手机号
-     * @return HTTP响应实体类
      * @throws MessageSendException 短信发送异常
      */
     @GetMapping("/sendCode/changePassword/{phone}")

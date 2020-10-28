@@ -8,7 +8,7 @@ import cn.hdustea.aha_server.entity.UserInfo;
 import org.springframework.stereotype.Component;
 
 /**
- * ${description}
+ * 用户公共信息
  *
  * @author STEA_YY
  **/
@@ -27,13 +27,10 @@ public interface UserInfoMapper {
 
     int updateByPrimaryKey(UserInfo record);
 
-    int updateByUserId(@Param("updated")UserInfo updated,@Param("userId")Integer userId);
+    int updateByUserId(@Param("updated") UserInfo updated, @Param("userId") Integer userId);
 
-    int updateAvatarFilenameByUserId(@Param("updatedAvatarFilename")String updatedAvatarFilename,@Param("userId")Integer userId);
+    int updateAvatarFilenameByUserId(@Param("updatedAvatarFilename") String updatedAvatarFilename, @Param("userId") Integer userId);
 
-    int updateResumeIdByUserId(@Param("updatedResumeId")String updatedResumeId,@Param("userId")Integer userId);
-
-
-
+    int updateResumeIdByUserId(@Param("updatedResumeId") String updatedResumeId, @Param("userId") Integer userId);
 
 }

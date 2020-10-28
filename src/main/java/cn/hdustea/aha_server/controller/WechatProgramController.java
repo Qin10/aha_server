@@ -26,7 +26,6 @@ public class WechatProgramController {
      * 通过微信小程序授权登录的接口
      *
      * @param code 小程序请求码
-     * @return HTTP响应实体
      * @throws Exception 向上抛出异常
      */
     @PostMapping("/wxLogin")

@@ -33,9 +33,16 @@ public class OssService {
     @Resource
     private AliyunOSSConfig aliyunOSSConfig;
 
-    public OssPolicyBean signUpload(String dir,boolean isPrivate) {
+    /**
+     * 签名oss上传文件请求
+     *
+     * @param dir       资源上传路径
+     * @param isPrivate 该资源是否为私有
+     * @return oss相关信息
+     */
+    public OssPolicyBean signUpload(String dir, boolean isPrivate) {
         String bucketName;
-        if (isPrivate){
+        if (isPrivate) {
             bucketName = aliyunOSSConfig.getPrivateBucketName();
         } else {
             bucketName = aliyunOSSConfig.getPublicBucketName();
@@ -57,6 +64,12 @@ public class OssService {
         return ossPolicyBean;
     }
 
+    /**
+     * 签名下载OSS中的私有文件
+     *
+     * @param filename 文件名（包括路径）
+     * @return 访问URL
+     */
     public URL signDownload(String filename) {
         Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
         return oss.generatePresignedUrl(aliyunOSSConfig.getPrivateBucketName(), filename, expiration);

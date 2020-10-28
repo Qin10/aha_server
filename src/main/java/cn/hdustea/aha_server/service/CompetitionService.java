@@ -34,6 +34,12 @@ public class CompetitionService {
         competitionMapper.insertSelective(competition);
     }
 
+    /**
+     * 修改竞赛信息
+     *
+     * @param competition 竞赛信息的实体类
+     * @throws UpdateException 修改失败异常
+     */
     public void updateCompetition(Competition competition) throws UpdateException {
         if (competitionMapper.selectByPrimaryKey(competition.getId()) == null) {
             throw new UpdateException();
@@ -41,18 +47,40 @@ public class CompetitionService {
         competitionMapper.updateByPrimaryKeySelective(competition);
     }
 
+    /**
+     * 获取所有竞赛标签
+     *
+     * @return 竞赛标签列表
+     */
     public List<CompetitionTag> getAllCompetitionTag() {
         return competitionTagMapper.selectAll();
     }
 
+    /**
+     * 根据id获取竞赛标签
+     *
+     * @param id 竞赛标签id
+     * @return 竞赛标签实体类
+     */
     public CompetitionTag getCompetitionTagById(int id) {
         return competitionTagMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * 新建竞赛标签
+     *
+     * @param competitionTag 竞赛标签实体类
+     */
     public void saveCompetitionTag(CompetitionTag competitionTag) {
         competitionTagMapper.insertSelective(competitionTag);
     }
 
+    /**
+     * 修改竞赛标签
+     *
+     * @param competitionTag 竞赛标签实体类
+     * @throws UpdateException 修改失败异常
+     */
     public void updateCompetitionTag(CompetitionTag competitionTag) throws UpdateException {
         if (competitionTagMapper.selectByPrimaryKey(competitionTag.getId()) == null) {
             throw new UpdateException();

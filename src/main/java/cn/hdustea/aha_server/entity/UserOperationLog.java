@@ -1,13 +1,14 @@
 package cn.hdustea.aha_server.entity;
 
 import java.util.Date;
+
 import lombok.Data;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * 用户行为日志的实体类
+ *
+ * @author STEA_YY
+ **/
 @Data
 public class UserOperationLog {
     private Integer id;

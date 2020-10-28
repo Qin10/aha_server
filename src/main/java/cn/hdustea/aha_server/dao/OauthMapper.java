@@ -7,7 +7,7 @@ import java.util.List;
 import cn.hdustea.aha_server.entity.Oauth;
 
 /**
- * ${description}
+ * 第三方登录信息的数据库操作接口
  *
  * @author STEA_YY
  **/

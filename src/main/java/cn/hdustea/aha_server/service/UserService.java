@@ -21,7 +21,7 @@ public class UserService {
     }
 
     /**
-     * 根据手机号查询用户实体
+     * 根据手机号查询用户
      *
      * @param phone 手机号
      * @return 用户实体类
@@ -31,7 +31,7 @@ public class UserService {
     }
 
     /**
-     * 保存用户实体
+     * 保存用户
      *
      * @param user 用户实体类
      */
@@ -40,6 +40,8 @@ public class UserService {
     }
 
     /**
+     * 修改密码
+     *
      * @param phone       手机号
      * @param newPassword 新的密码
      */
@@ -47,7 +49,13 @@ public class UserService {
         userMapper.updatePasswordByPhone(newPassword, phone);
     }
 
-    public void updatesignedNotice(String phone,boolean signedNotice) {
+    /**
+     * 修改是否同意服务协议标识
+     *
+     * @param phone        手机号
+     * @param signedNotice 是否同意服务协议
+     */
+    public void updatesignedNotice(String phone, boolean signedNotice) {
         userMapper.updatesignedNoticeByPhone(signedNotice, phone);
     }
 }

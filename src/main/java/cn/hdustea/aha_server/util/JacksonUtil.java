@@ -49,6 +49,12 @@ public class JacksonUtil {
         return mapper.readValue(jsonString, Map.class);
     }
 
+    /**
+     * 二进制数据转base64
+     *
+     * @param binaryData 二进制数据
+     * @return base64字符串
+     */
     public static String toBase64String(byte[] binaryData) {
         return new String(Base64.encodeBase64(binaryData));
     }

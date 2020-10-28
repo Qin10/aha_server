@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.data.annotation.Transient;
 
 /**
- * ${description}
+ * 竞赛信息的实体类
  *
  * @author STEA_YY
  **/

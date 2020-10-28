@@ -8,7 +8,7 @@ import cn.hdustea.aha_server.entity.CompetitionTag;
 import org.springframework.stereotype.Component;
 
 /**
- * ${description}
+ * 竞赛标签的数据库操作接口
  *
  * @author STEA_YY
  **/

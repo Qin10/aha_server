@@ -51,7 +51,7 @@ public class AuthService {
      * 传入手机号+密码完成登录校验并获取令牌
      *
      * @param loginUser 登录信息实体类
-     * @return token令牌
+     * @return token令牌和用户部分信息
      * @throws Exception 向上抛出异常
      */
     public TokenAndPersonalUserInfoBean login(LoginUser loginUser) throws Exception {
@@ -106,6 +106,8 @@ public class AuthService {
     }
 
     /**
+     * 处理用户修改密码的请求
+     *
      * @param changePasswordBean 存放修改密码相关信息的实体类
      * @throws MessageCheckException    短信验证码校验异常
      * @throws AccountNotFoundException 账号未找到异常
@@ -123,6 +125,13 @@ public class AuthService {
         userService.updatePassword(phone, encodedPassword);
     }
 
+    /**
+     * 处理用户同意服务协议的接口，将用户表相应字段置为true，并返回新的token
+     *
+     * @param phone 手机号
+     * @return 新的token令牌
+     * @throws AccountNotFoundException 用户不存在异常
+     */
     public String signNotice(String phone) throws AccountNotFoundException {
         User user = userService.getUserByPhone(phone);
         if (user == null) {

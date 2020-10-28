@@ -11,6 +11,7 @@ import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.ResourceService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,11 @@ public class ResourceController {
     @javax.annotation.Resource
     private OssService ossService;
 
+    /**
+     * 根据id获取资源的接口
+     *
+     * @param id 资源id
+     */
     @RequiresLogin
     @GetMapping("/{id}")
     public ResponseBean getResourceById(@PathVariable("id") int id) {
@@ -36,24 +42,40 @@ public class ResourceController {
         return new ResponseBean(200, "succ", resource, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 获取oss上传签名的接口，上传后的资源的读写权限均为私有
+     */
     @RequiresLogin
     @GetMapping("/sign/upload")
     public ResponseBean signUploadFile(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
-        OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone,true);
+        OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone, true);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 创建新资源的接口
+     *
+     * @param resource 资源的实体类
+     */
     @RequiresLogin
     @PostMapping()
-    public ResponseBean saveResource(HttpServletRequest request, @RequestBody Resource resource) {
+    public ResponseBean saveResource(HttpServletRequest request, @RequestBody @Validated Resource resource) {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
         resourceService.saveResourceAndAuthor(resource, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 根据id修改资源的接口，只有资源的拥有者有请求权限
+     *
+     * @param resource 修改后的资源实体类
+     * @param id       要修改的资源的id
+     * @throws UpdateException           修改失败异常
+     * @throws PermissionDeniedException 无操作资源权限的异常
+     */
     @RequiresLogin
     @PutMapping("/{id}")
     public ResponseBean updateResourceById(HttpServletRequest request, @RequestBody Resource resource, @PathVariable("id") int id) throws UpdateException, PermissionDeniedException {
@@ -67,6 +89,13 @@ public class ResourceController {
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 根据id删除资源的接口，只有资源的拥有者有请求权限
+     *
+     * @param id 要删除的资源的id
+     * @throws PermissionDeniedException 无操作资源权限的异常
+     * @throws DeleteException           删除失败异常
+     */
     @RequiresLogin
     @DeleteMapping("/{id}")
     public ResponseBean deleteResourceById(HttpServletRequest request, @PathVariable("id") int id) throws PermissionDeniedException, DeleteException {

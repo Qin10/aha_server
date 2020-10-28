@@ -43,9 +43,9 @@ public class JWTUtil {
     }
 
     /**
-     * 获得token中的信息无需secret解密也能获得
+     * 获得token中的Payload，无需secret解密也能获得
      *
-     * @return token中包含的用户名
+     * @return token中的Payload数据
      */
     public static JwtPayloadBean getPayload(String token) {
         JwtPayloadBean jwtPayloadBean = new JwtPayloadBean();
@@ -60,7 +60,13 @@ public class JWTUtil {
         return jwtPayloadBean;
     }
 
-    public static JwtPayloadBean packagePayload(User user){
+    /**
+     * 根据用户实体类打包payload
+     *
+     * @param user 用户实体类
+     * @return payload封装实体
+     */
+    public static JwtPayloadBean packagePayload(User user) {
         JwtPayloadBean jwtPayloadBean = new JwtPayloadBean();
         jwtPayloadBean.setAccount(user.getPhone());
         jwtPayloadBean.setRoleName(user.getRole().getName());
@@ -71,7 +77,7 @@ public class JWTUtil {
     /**
      * 生成签名,10分钟后过期
      *
-     * @param jwtPayloadBean payload封装类
+     * @param jwtPayloadBean payload封装实体
      * @param secret         秘钥
      * @return 加密的token
      */

@@ -2,10 +2,13 @@ package cn.hdustea.aha_server.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
- * ${description}
+ * 资源的实体类
  *
  * @author STEA_YY
  **/
@@ -21,6 +24,7 @@ public class Resource {
     /**
      * 资源全称
      */
+    @NotEmpty(message = "资源名称不能为空！")
     private String name;
 
     /**

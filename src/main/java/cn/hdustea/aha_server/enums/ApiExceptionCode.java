@@ -69,7 +69,11 @@ public enum ApiExceptionCode {
     /**
      * 短信验证码错误
      */
-    MESSAGE_CHECK_FAIL(502, "短信验证码错误！");
+    MESSAGE_CHECK_FAIL(502, "短信验证码错误！"),
+    /**
+     * 参数校验失败
+     */
+    ARGUMENTS_VALID_FAIL(601, "参数校验失败！");
 
     private final Integer value;
     private final String desc;

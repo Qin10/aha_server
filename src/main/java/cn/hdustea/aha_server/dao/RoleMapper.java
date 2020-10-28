@@ -4,10 +4,10 @@ import cn.hdustea.aha_server.entity.Role;
 import org.springframework.stereotype.Component;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * 用户角色的数据库操作接口
+ *
+ * @author STEA_YY
+ **/
 public interface RoleMapper {
     int deleteByPrimaryKey(Integer id);
 

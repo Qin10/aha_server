@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
- * ${description}
+ * 用户公共信息的实体类
  *
  * @author STEA_YY
  **/
@@ -45,7 +45,6 @@ public class UserInfo {
      * 用户个性签名
      */
     private String signature;
-
 
     /**
      * 用户头像文件保存路径
