@@ -5,12 +5,12 @@ spring:
     username: root
     password: ROOT_root123
   redis:
-    host: localhost
+    host: 127.0.0.1
     port: 6379
   data:
     mongodb:
       port: 27017
-      host: localhost
+      host: 127.0.0.1
       database: aha
 mybatis:
   configuration:
