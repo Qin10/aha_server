@@ -6,6 +6,7 @@ import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.Resource;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.ResourceService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * 竞赛资源的控制类
@@ -106,6 +108,15 @@ public class ResourceController {
         }
         resourceService.deleteResourceById(id);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @GetMapping("/sign/download/{id}")
+    public ResponseBean signDownloadResourceByid(HttpServletRequest request, @PathVariable("id") int id) throws SelectException {
+        String url = resourceService.signDownloadResourceByid(id);
+        HashMap<String, String> responseMap = new HashMap<>();
+        responseMap.put("url", url);
+        return new ResponseBean(200, "succ", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 
 }

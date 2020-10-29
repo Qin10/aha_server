@@ -5,9 +5,12 @@ import cn.hdustea.aha_server.dao.UserInfoMapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import org.springframework.stereotype.Service;
 import cn.hdustea.aha_server.entity.Resource;
+
+import java.net.URL;
 
 /**
  * 竞赛资源的服务类
@@ -20,6 +23,8 @@ public class ResourceService {
     private ResourceMapper resourceMapper;
     @javax.annotation.Resource
     private UserService userService;
+    @javax.annotation.Resource
+    private OssService ossService;
 
     /**
      * 根据id获取资源
@@ -89,5 +94,17 @@ public class ResourceService {
             throw new DeleteException("不存在对应记录！");
         }
         resourceMapper.deleteByPrimaryKey(id);
+    }
+
+    public String signDownloadResourceByid(int id) throws SelectException {
+        Resource resource = resourceMapper.selectByPrimaryKey(id);
+        if (resource == null) {
+            throw new SelectException("不存在对应记录！");
+        }
+        if (resource.getFilename() == null) {
+            throw new SelectException("资源文件为空！");
+        }
+        URL url = ossService.signDownload(resource.getFilename());
+        return url.toString();
     }
 }
