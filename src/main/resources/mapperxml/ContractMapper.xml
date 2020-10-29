@@ -7,15 +7,12 @@
     <id column="id" property="id" />
     <result column="user_id" property="userId" />
     <result column="name" property="name" />
-    <result column="phone" property="phone" />
-    <result column="vx" property="vx" />
-    <result column="email" property="email" />
     <result column="signature_filename" property="signatureFilename" />
     <result column="sign_time" property="signTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, `name`, phone, vx, email, signature_filename, sign_time
+    id, user_id, `name`, signature_filename, sign_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -31,10 +28,8 @@
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Contract" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into contract (user_id, `name`, phone, vx, email, signature_filename, sign_time
-      )
-    values (#{userId}, #{name}, #{phone}, #{vx}, #{email}, #{signatureFilename}, #{signTime}
-      )
+    insert into contract (user_id, `name`, signature_filename, sign_time)
+    values (#{userId}, #{name}, #{signatureFilename}, #{signTime})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Contract" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -45,15 +40,6 @@
       </if>
       <if test="name != null">
         `name`,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="vx != null">
-        vx,
-      </if>
-      <if test="email != null">
-        email,
       </if>
       <if test="signatureFilename != null">
         signature_filename,
@@ -68,15 +54,6 @@
       </if>
       <if test="name != null">
         #{name},
-      </if>
-      <if test="phone != null">
-        #{phone},
-      </if>
-      <if test="vx != null">
-        #{vx},
-      </if>
-      <if test="email != null">
-        #{email},
       </if>
       <if test="signatureFilename != null">
         #{signatureFilename},
@@ -96,15 +73,6 @@
       <if test="name != null">
         `name` = #{name},
       </if>
-      <if test="phone != null">
-        phone = #{phone},
-      </if>
-      <if test="vx != null">
-        vx = #{vx},
-      </if>
-      <if test="email != null">
-        email = #{email},
-      </if>
       <if test="signatureFilename != null">
         signature_filename = #{signatureFilename},
       </if>
@@ -119,9 +87,6 @@
     update contract
     set user_id = #{userId},
       `name` = #{name},
-      phone = #{phone},
-      vx = #{vx},
-      email = #{email},
       signature_filename = #{signatureFilename},
       sign_time = #{signTime}
     where id = #{id}
