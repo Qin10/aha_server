@@ -16,4 +16,6 @@ public @interface RequiresLogin {
     boolean required() default true;
 
     boolean requireSignNotice() default true;
+
+    boolean requireSignContract() default false;
 }

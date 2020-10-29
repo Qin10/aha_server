@@ -12,4 +12,5 @@ public class JwtPayloadBean {
     private String account;
     private String roleName;
     private boolean signedNotice;
+    private boolean signedContract;
 }

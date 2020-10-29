@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class PersonalUserInfoBean {
     private String phone;
     private boolean signedNotice;
+    private boolean signedContract;
     private BigDecimal contribPoint;
     private UserInfo userInfo;
 }

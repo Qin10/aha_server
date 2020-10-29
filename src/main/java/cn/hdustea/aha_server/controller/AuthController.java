@@ -90,8 +90,10 @@ public class AuthController {
     public ResponseBean signContract(HttpServletRequest request, MultipartFile file, @Validated Contract contract) throws IOException, AccountNotFoundException {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
-        authService.signContract(phone, file, contract);
-        return new ResponseBean(200, "已签署合同", null, TimeUtil.getFormattedTime(new Date()));
+        String updatedToken = authService.signContract(phone, file, contract);
+        HashMap<String, String> responseMap = new HashMap<>();
+        responseMap.put("token", updatedToken);
+        return new ResponseBean(200, "已签署合同", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**

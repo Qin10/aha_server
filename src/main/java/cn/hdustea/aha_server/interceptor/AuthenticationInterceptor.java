@@ -4,10 +4,8 @@ import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.JwtPayloadBean;
 import cn.hdustea.aha_server.config.JWTConfig;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.JwtExpiredException;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.NoticeNotSignedException;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.*;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -41,10 +39,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
      * @param response HTTP响应
      * @param handler  被拦截对象
      * @return 是否通过
-     * @throws Exception 向上抛出异常
+     * @throws AuthenticationException 鉴权失败异常
      */
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws AuthenticationException {
         String token = request.getHeader("Authorization");// 从 http 请求头中取出 token
         // 如果不是映射到方法直接通过
         if (!(handler instanceof HandlerMethod)) {
@@ -81,6 +79,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 if (requiresLogin.requireSignNotice()) {
                     if (!jwtPayloadBean.isSignedNotice()) {
                         throw new NoticeNotSignedException();
+                    }
+                }
+                if (requiresLogin.requireSignContract()) {
+                    if (!jwtPayloadBean.isSignedContract()) {
+                        throw new ContractNotSignedException();
                     }
                 }
                 return true;

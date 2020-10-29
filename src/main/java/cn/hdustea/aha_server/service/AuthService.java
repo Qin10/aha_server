@@ -10,6 +10,7 @@ import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.util.FileUtil;
@@ -152,17 +153,22 @@ public class AuthService {
         return signToken(user);
     }
 
-    public void signContract(String phone,MultipartFile file, Contract contract) throws IOException, AccountNotFoundException {
+    public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, AccountNotFoundException, UpdateException {
         User user = userService.getUserByPhone(phone);
         if (user == null) {
             throw new AccountNotFoundException();
+        }
+        if (user.getSignedContract()) {
+            throw new UpdateException("已经签署过合同！");
         }
         contract.setUserId(user.getId());
         String filename = FileUtil.upload(file, fileUploadPathConfig.getContractSignaturePath());
         contract.setSignatureFilename(filename);
         contract.setSignTime(new Date());
         contractService.saveContract(contract);
-        userService.updateSignedContract(phone,true);
+        userService.updateSignedContract(phone, true);
+        user.setSignedContract(true);
+        return signToken(user);
     }
 
     /**

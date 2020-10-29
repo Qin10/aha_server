@@ -31,6 +31,10 @@ public enum ApiExceptionCode {
      */
     NOTICE_NOT_SIGNED(106, "未签署服务协议！"),
     /**
+     * 未签署合同
+     */
+    CONTRACT_NOT_SIGNED(107, "未签署合同！"),
+    /**
      * 用户不存在
      */
     USER_NOT_FOUND(301, "用户不存在！"),
@@ -45,7 +49,7 @@ public enum ApiExceptionCode {
     /**
      * 未找到微信授权信息
      */
-    WECHAT_UNAUTHORIZED(301, "未找到微信授权信息！"),
+    WECHAT_UNAUTHORIZED(304, "未找到微信授权信息！"),
     /**
      * 创建失败
      */

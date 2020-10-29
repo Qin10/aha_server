@@ -64,6 +64,7 @@ public class UserInfoService {
         personalUserInfoBean.setPhone(user.getPhone());
         personalUserInfoBean.setContribPoint(user.getContribPoint());
         personalUserInfoBean.setSignedNotice(user.getSignedNotice());
+        personalUserInfoBean.setSignedContract(user.getSignedContract());
         personalUserInfoBean.setUserInfo(userInfo);
         return personalUserInfoBean;
     }

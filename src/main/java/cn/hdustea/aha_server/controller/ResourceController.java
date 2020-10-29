@@ -45,7 +45,7 @@ public class ResourceController {
     /**
      * 获取oss上传签名的接口，上传后的资源的读写权限均为私有
      */
-    @RequiresLogin
+    @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload")
     public ResponseBean signUploadFile(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
@@ -59,7 +59,7 @@ public class ResourceController {
      *
      * @param resource 资源的实体类
      */
-    @RequiresLogin
+    @RequiresLogin(requireSignContract = true)
     @PostMapping()
     public ResponseBean saveResource(HttpServletRequest request, @RequestBody @Validated Resource resource) {
         String token = request.getHeader("Authorization");
@@ -76,7 +76,7 @@ public class ResourceController {
      * @throws UpdateException           修改失败异常
      * @throws PermissionDeniedException 无操作资源权限的异常
      */
-    @RequiresLogin
+    @RequiresLogin(requireSignContract = true)
     @PutMapping("/{id}")
     public ResponseBean updateResourceById(HttpServletRequest request, @RequestBody Resource resource, @PathVariable("id") int id) throws UpdateException, PermissionDeniedException {
         String token = request.getHeader("Authorization");
@@ -96,7 +96,7 @@ public class ResourceController {
      * @throws PermissionDeniedException 无操作资源权限的异常
      * @throws DeleteException           删除失败异常
      */
-    @RequiresLogin
+    @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/{id}")
     public ResponseBean deleteResourceById(HttpServletRequest request, @PathVariable("id") int id) throws PermissionDeniedException, DeleteException {
         String token = request.getHeader("Authorization");
