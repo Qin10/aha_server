@@ -22,5 +22,5 @@ public class Competition {
     /**
      * 赛事图片保存路径
      */
-    private Integer picFilename;
+    private Integer picUrl;
 }

@@ -15,12 +15,12 @@
     <result column="read" property="read" />
     <result column="collect" property="collect" />
     <result column="meaning" property="meaning" />
-    <result column="avatar_filename" property="avatarFilename" />
+    <result column="avatar_url" property="avatarUrl" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     id, author_user_id, `name`, filename, comp_id, `level`, `type`, `date`, `read`, `collect`, 
-    meaning, avatar_filename
+    meaning, avatar_url
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -37,9 +37,9 @@
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Resource" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into `resource` (author_user_id, `name`, filename, comp_id, `level`, `type`, `date`, 
-      `read`, `collect`, meaning, avatar_filename)
+      `read`, `collect`, meaning, avatar_url)
     values (#{authorUserId}, #{name}, #{filename}, #{compId}, #{level}, #{type}, #{date}, 
-      #{read}, #{collect}, #{meaning}, #{avatarFilename})
+      #{read}, #{collect}, #{meaning}, #{avatarUrl})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Resource" useGeneratedKeys="true">
     <!--@mbg.generated-->
@@ -75,8 +75,8 @@
       <if test="meaning != null">
         meaning,
       </if>
-      <if test="avatarFilename != null">
-        avatar_filename,
+      <if test="avatarUrl != null">
+        avatar_url,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -110,8 +110,8 @@
       <if test="meaning != null">
         #{meaning},
       </if>
-      <if test="avatarFilename != null">
-        #{avatarFilename},
+      <if test="avatarUrl != null">
+        #{avatarUrl},
       </if>
     </trim>
   </insert>
@@ -149,8 +149,8 @@
       <if test="meaning != null">
         meaning = #{meaning},
       </if>
-      <if test="avatarFilename != null">
-        avatar_filename = #{avatarFilename},
+      <if test="avatarUrl != null">
+        avatar_url = #{avatarUrl},
       </if>
     </set>
     where id = #{id}
@@ -168,7 +168,7 @@
       `read` = #{read},
       `collect` = #{collect},
       meaning = #{meaning},
-      avatar_filename = #{avatarFilename}
+      avatar_url = #{avatarUrl}
     where id = #{id}
   </update>
 

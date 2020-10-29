@@ -49,7 +49,7 @@ public class UserInfo {
     /**
      * 用户头像文件保存路径
      */
-    private String avatarFilename;
+    private String avatarUrl;
 
     /**
      * 用户学校

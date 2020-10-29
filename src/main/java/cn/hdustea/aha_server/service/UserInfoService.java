@@ -121,16 +121,16 @@ public class UserInfoService {
     /**
      * 根据手机号更新用户头像文件名
      *
-     * @param filename 图片文件名
-     * @param phone    手机号
+     * @param fileUrl 图片路径
+     * @param phone   手机号
      * @throws UpdateException 更新失败异常
      */
-    public void updateAvatarFilenameByPhone(String filename, String phone) throws UpdateException {
+    public void updateAvatarUrlByPhone(String fileUrl, String phone) throws UpdateException {
         User user = userService.getUserByPhone(phone);
         if (user == null) {
             throw new UpdateException("用户不存在，修改失败！");
         }
-        userInfoMapper.updateAvatarFilenameByUserId(filename, user.getId());
+        userInfoMapper.updateAvatarUrlByUserId(fileUrl, user.getId());
     }
 
     /**

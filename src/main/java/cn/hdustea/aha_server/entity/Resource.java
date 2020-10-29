@@ -70,5 +70,5 @@ public class Resource {
     /**
      * 项目头像路径
      */
-    private String avatarFilename;
+    private String avatarUrl;
 }

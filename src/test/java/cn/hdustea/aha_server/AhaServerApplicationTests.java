@@ -28,4 +28,9 @@ class AhaServerApplicationTests {
     void testAliOssUpload(){
         System.out.println(ossService.signUpload("abc/",false));
     }
+
+    @Test
+    void testOssBuildUrl(){
+        System.out.println(ossService.buildPublicDownloadUrl("avatar/15677751219/1603972075808/avatar.JPG"));
+    }
 }

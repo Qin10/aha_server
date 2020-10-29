@@ -29,7 +29,7 @@ public interface UserInfoMapper {
 
     int updateByUserId(@Param("updated") UserInfo updated, @Param("userId") Integer userId);
 
-    int updateAvatarFilenameByUserId(@Param("updatedAvatarFilename") String updatedAvatarFilename, @Param("userId") Integer userId);
+    int updateAvatarUrlByUserId(@Param("updatedAvatarUrl") String updatedAvatarUrl, @Param("userId") Integer userId);
 
     int updateResumeIdByUserId(@Param("updatedResumeId") String updatedResumeId, @Param("userId") Integer userId);
 

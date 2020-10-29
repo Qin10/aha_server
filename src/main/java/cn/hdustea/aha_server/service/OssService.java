@@ -74,4 +74,13 @@ public class OssService {
         Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
         return oss.generatePresignedUrl(aliyunOSSConfig.getPrivateBucketName(), filename, expiration);
     }
+
+    public String buildPublicDownloadUrl(String filename) {
+        return "https://" +
+                aliyunOSSConfig.getPublicBucketName() +
+                "." +
+                aliyunOSSConfig.getEndpoint() +
+                "/" +
+                filename;
+    }
 }

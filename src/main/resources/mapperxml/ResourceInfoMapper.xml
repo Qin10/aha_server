@@ -1,116 +1,119 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.dao.ResourceInfoMapper">
-  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.ResourceInfo">
-    <!--@mbg.generated-->
-    <!--@Table resource_info-->
-    <id column="id" property="id" />
-    <result column="res_id" property="resId" />
-    <result column="intro_pic_filename" property="introPicFilename" />
-    <result column="intro" property="intro" />
-    <result column="member" property="member" />
-    <result column="phone" property="phone" />
-    <result column="vx" property="vx" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    id, res_id, intro_pic_filename, intro, `member`, phone, vx
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from resource_info
-    where id = #{id}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from resource_info
-    where id = #{id}
-  </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ResourceInfo" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into resource_info (res_id, intro_pic_filename, intro, `member`, phone, vx)
-    values (#{resId}, #{introPicFilename}, #{intro}, #{member}, #{phone}, #{vx})
-  </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ResourceInfo" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into resource_info
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="resId != null">
-        res_id,
-      </if>
-      <if test="introPicFilename != null">
-        intro_pic_filename,
-      </if>
-      <if test="intro != null">
-        intro,
-      </if>
-      <if test="member != null">
-        `member`,
-      </if>
-      <if test="phone != null">
-        phone,
-      </if>
-      <if test="vx != null">
-        vx,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="resId != null">
-        #{resId},
-      </if>
-      <if test="introPicFilename != null">
-        #{introPicFilename},
-      </if>
-      <if test="intro != null">
-        #{intro},
-      </if>
-      <if test="member != null">
-        #{member},
-      </if>
-      <if test="phone != null">
-        #{phone},
-      </if>
-      <if test="vx != null">
-        #{vx},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.ResourceInfo">
-    <!--@mbg.generated-->
-    update resource_info
-    <set>
-      <if test="resId != null">
-        res_id = #{resId},
-      </if>
-      <if test="introPicFilename != null">
-        intro_pic_filename = #{introPicFilename},
-      </if>
-      <if test="intro != null">
-        intro = #{intro},
-      </if>
-      <if test="member != null">
-        `member` = #{member},
-      </if>
-      <if test="phone != null">
-        phone = #{phone},
-      </if>
-      <if test="vx != null">
-        vx = #{vx},
-      </if>
-    </set>
-    where id = #{id}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ResourceInfo">
-    <!--@mbg.generated-->
-    update resource_info
-    set res_id = #{resId},
-      intro_pic_filename = #{introPicFilename},
-      intro = #{intro},
-      `member` = #{member},
-      phone = #{phone},
-      vx = #{vx}
-    where id = #{id}
-  </update>
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.ResourceInfo">
+        <!--@mbg.generated-->
+        <!--@Table resource_info-->
+        <id column="id" property="id"/>
+        <result column="res_id" property="resId"/>
+        <result column="intro_pic_url" property="introPicUrl"/>
+        <result column="intro" property="intro"/>
+        <result column="member" property="member"/>
+        <result column="phone" property="phone"/>
+        <result column="vx" property="vx"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, res_id, intro_pic_url, intro, `member`, phone, vx
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from resource_info
+        where id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from resource_info
+        where id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ResourceInfo"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into resource_info (res_id, intro_pic_url, intro, `member`, phone, vx)
+        values (#{resId}, #{introPicUrl}, #{intro}, #{member}, #{phone}, #{vx})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.ResourceInfo" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into resource_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="resId != null">
+                res_id,
+            </if>
+            <if test="introPicUrl != null">
+                intro_pic_url,
+            </if>
+            <if test="intro != null">
+                intro,
+            </if>
+            <if test="member != null">
+                `member`,
+            </if>
+            <if test="phone != null">
+                phone,
+            </if>
+            <if test="vx != null">
+                vx,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="resId != null">
+                #{resId},
+            </if>
+            <if test="introPicUrl != null">
+                #{introPicUrl},
+            </if>
+            <if test="intro != null">
+                #{intro},
+            </if>
+            <if test="member != null">
+                #{member},
+            </if>
+            <if test="phone != null">
+                #{phone},
+            </if>
+            <if test="vx != null">
+                #{vx},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.ResourceInfo">
+        <!--@mbg.generated-->
+        update resource_info
+        <set>
+            <if test="resId != null">
+                res_id = #{resId},
+            </if>
+            <if test="introPicUrl != null">
+                intro_pic_url = #{introPicUrl},
+            </if>
+            <if test="intro != null">
+                intro = #{intro},
+            </if>
+            <if test="member != null">
+                `member` = #{member},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="vx != null">
+                vx = #{vx},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ResourceInfo">
+        <!--@mbg.generated-->
+        update resource_info
+        set res_id        = #{resId},
+            intro_pic_url = #{introPicUrl},
+            intro         = #{intro},
+            `member`      = #{member},
+            phone         = #{phone},
+            vx            = #{vx}
+        where id = #{id}
+    </update>
 </mapper>

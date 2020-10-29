@@ -96,7 +96,7 @@ public class UserInfoController {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
         String filename = requestMap.get("filename");
-        userInfoService.updateAvatarFilenameByPhone(filename, phone);
+        userInfoService.updateAvatarUrlByPhone(filename, phone);
         return new ResponseBean(200, "succ", null, "修改成功！");
     }
 }

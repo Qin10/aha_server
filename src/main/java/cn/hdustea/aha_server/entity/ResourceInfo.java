@@ -25,7 +25,7 @@ public class ResourceInfo {
     /**
      * 项目具体介绍图保存路径
      */
-    private String introPicFilename;
+    private String introPicUrl;
 
     /**
      * 项目具体介绍
