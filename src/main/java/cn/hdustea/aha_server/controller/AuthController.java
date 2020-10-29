@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.*;
 import cn.hdustea.aha_server.entity.Contract;
+import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.JWTUtil;
@@ -87,7 +88,7 @@ public class AuthController {
 
     @RequiresLogin
     @PostMapping("/sign/contract")
-    public ResponseBean signContract(HttpServletRequest request, MultipartFile file, @Validated Contract contract) throws IOException, AccountNotFoundException {
+    public ResponseBean signContract(HttpServletRequest request, MultipartFile file, @Validated Contract contract) throws IOException, AccountNotFoundException, UpdateException {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
         String updatedToken = authService.signContract(phone, file, contract);
