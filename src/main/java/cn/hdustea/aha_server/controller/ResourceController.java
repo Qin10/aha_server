@@ -118,5 +118,4 @@ public class ResourceController {
         responseMap.put("url", url);
         return new ResponseBean(200, "succ", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
-
 }
