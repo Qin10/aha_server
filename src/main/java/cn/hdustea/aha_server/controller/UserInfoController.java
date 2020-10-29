@@ -95,8 +95,8 @@ public class UserInfoController {
     public ResponseBean updateUserAvatar(HttpServletRequest request, @RequestBody Map<String, String> requestMap) throws UpdateException {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
-        String filename = requestMap.get("filename");
-        userInfoService.updateAvatarUrlByPhone(filename, phone);
+        String fileUrl = requestMap.get("fileUrl");
+        userInfoService.updateAvatarUrlByPhone(fileUrl, phone);
         return new ResponseBean(200, "succ", null, "修改成功！");
     }
 }
