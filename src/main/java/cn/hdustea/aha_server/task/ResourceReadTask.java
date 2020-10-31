@@ -27,7 +27,6 @@ public class ResourceReadTask {
     @Scheduled(cron = "0 0 6,23 * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourceRead() {
-        List<Integer> resourceIds = resourceMapper.selectId();
         log.info("Resource Read Task is Running");
         Map<Object, Object> resourceReadMap = redisUtil.hmget(RedisUtil.RESOURCE_READ_KEY);
         for (Map.Entry<Object, Object> entry : resourceReadMap.entrySet()) {
