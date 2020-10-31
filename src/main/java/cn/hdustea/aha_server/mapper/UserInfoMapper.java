@@ -1,11 +1,8 @@
-package cn.hdustea.aha_server.dao;
+package cn.hdustea.aha_server.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
-
 import cn.hdustea.aha_server.entity.UserInfo;
-import org.springframework.stereotype.Component;
 
 /**
  * 用户公共信息

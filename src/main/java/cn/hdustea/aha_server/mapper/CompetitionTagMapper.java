@@ -1,11 +1,8 @@
-package cn.hdustea.aha_server.dao;
-
-import org.apache.ibatis.annotations.Param;
+package cn.hdustea.aha_server.mapper;
 
 import java.util.List;
 
 import cn.hdustea.aha_server.entity.CompetitionTag;
-import org.springframework.stereotype.Component;
 
 /**
  * 竞赛标签的数据库操作接口

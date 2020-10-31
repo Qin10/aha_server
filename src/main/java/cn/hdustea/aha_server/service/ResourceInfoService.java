@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dao.ResourceInfoMapper;
+import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
 import cn.hdustea.aha_server.entity.ResourceInfo;
 import org.springframework.stereotype.Service;
 

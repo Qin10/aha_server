@@ -1,7 +1,6 @@
-package cn.hdustea.aha_server.dao;
+package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.Role;
-import org.springframework.stereotype.Component;
 
 /**
  * 用户角色的数据库操作接口

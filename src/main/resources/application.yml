@@ -12,6 +12,9 @@ spring:
       port: 27017
       host: 127.0.0.1
       database: aha
+    redis:
+      repositories:
+        enabled: false
 mybatis:
   configuration:
     map-underscore-to-camel-case: true

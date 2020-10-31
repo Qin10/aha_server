@@ -1,6 +1,9 @@
-package cn.hdustea.aha_server.dao;
+package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.Resource;import org.apache.ibatis.annotations.Param;import java.util.List;
+import cn.hdustea.aha_server.entity.Resource;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * ${description}
@@ -20,7 +23,7 @@ public interface ResourceMapper {
 
     int updateByPrimaryKey(Resource record);
 
-    Integer selectAuthorUserIdById(@Param("id") Integer id);
+    String selectAuthorPhoneById(@Param("id") Integer id);
 
     List<Integer> selectId();
 

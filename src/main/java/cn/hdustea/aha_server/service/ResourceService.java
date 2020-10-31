@@ -1,15 +1,12 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dao.ResourceInfoMapper;
-import cn.hdustea.aha_server.dao.ResourceMapper;
-import cn.hdustea.aha_server.dao.UserInfoMapper;
+import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
+import cn.hdustea.aha_server.mapper.ResourceMapper;
 import cn.hdustea.aha_server.entity.ResourceInfo;
 import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
-import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.stereotype.Service;
 import cn.hdustea.aha_server.entity.Resource;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,9 +84,8 @@ public class ResourceService {
      * @return 判断结果
      */
     public boolean hasPermission(String phone, int id) {
-        Integer authorUserId = resourceMapper.selectAuthorUserIdById(id);
-        User user = userService.getUserByPhone(phone);
-        return user.getId().equals(authorUserId);
+        String authorPhone = resourceMapper.selectAuthorPhoneById(id);
+        return phone.equals(authorPhone);
     }
 
     /**

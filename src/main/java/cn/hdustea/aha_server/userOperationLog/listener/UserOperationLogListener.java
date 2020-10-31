@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.userOperationLog.listener;
 
 
-import cn.hdustea.aha_server.dao.UserOperationLogMapper;
+import cn.hdustea.aha_server.mapper.UserOperationLogMapper;
 import cn.hdustea.aha_server.entity.UserOperationLog;
 import cn.hdustea.aha_server.userOperationLog.event.UserOperationLogEvent;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.dao;
+package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.User;import org.apache.ibatis.annotations.Param;
 

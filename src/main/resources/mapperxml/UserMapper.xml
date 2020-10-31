@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="cn.hdustea.aha_server.dao.UserMapper">
+<mapper namespace="cn.hdustea.aha_server.mapper.UserMapper">
     <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.User">
         <!--@mbg.generated-->
         <!--@Table `user`-->
@@ -14,7 +14,7 @@
         <result column="signed_contract" property="signedContract"/>
         <result column="role_id" property="roleId"/>
         <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="role_id"
-                     select="cn.hdustea.aha_server.dao.RoleMapper.selectByPrimaryKey"/>
+                     select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

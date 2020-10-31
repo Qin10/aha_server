@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dao.ContractMapper;
+import cn.hdustea.aha_server.mapper.ContractMapper;
 import cn.hdustea.aha_server.entity.Contract;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
-import cn.hdustea.aha_server.dao.UserInfoMapper;
+import cn.hdustea.aha_server.mapper.UserInfoMapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;

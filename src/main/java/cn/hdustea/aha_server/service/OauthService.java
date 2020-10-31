@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dao.OauthMapper;
+import cn.hdustea.aha_server.mapper.OauthMapper;
 import cn.hdustea.aha_server.entity.Oauth;
 import org.springframework.stereotype.Service;
 

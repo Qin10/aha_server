@@ -16,7 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  */
 @SpringBootApplication
 @EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class, AliyunOSSConfig.class})
-@MapperScan(basePackages = "cn.hdustea.aha_server.dao")
+@MapperScan(basePackages = "cn.hdustea.aha_server.mapper")
 @EnableScheduling
 public class AhaServerApplication {
 

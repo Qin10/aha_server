@@ -1,8 +1,7 @@
 package cn.hdustea.aha_server.task;
 
-import cn.hdustea.aha_server.dao.ResourceMapper;
+import cn.hdustea.aha_server.mapper.ResourceMapper;
 import cn.hdustea.aha_server.entity.Resource;
-import cn.hdustea.aha_server.service.ResourceService;
 import cn.hdustea.aha_server.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

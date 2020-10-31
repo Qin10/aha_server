@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dao.CompetitionMapper;
-import cn.hdustea.aha_server.dao.CompetitionTagMapper;
+import cn.hdustea.aha_server.mapper.CompetitionMapper;
+import cn.hdustea.aha_server.mapper.CompetitionTagMapper;
 import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.CompetitionTag;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
