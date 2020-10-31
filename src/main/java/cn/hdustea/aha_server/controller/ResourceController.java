@@ -4,11 +4,13 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.OssPolicyBean;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.Resource;
+import cn.hdustea.aha_server.entity.ResourceInfo;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
+import cn.hdustea.aha_server.service.ResourceInfoService;
 import cn.hdustea.aha_server.service.ResourceService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
@@ -29,6 +31,8 @@ import java.util.HashMap;
 public class ResourceController {
     @javax.annotation.Resource
     private ResourceService resourceService;
+    @javax.annotation.Resource
+    private ResourceInfoService resourceInfoService;
     @javax.annotation.Resource
     private OssService ossService;
 
@@ -117,5 +121,24 @@ public class ResourceController {
         HashMap<String, String> responseMap = new HashMap<>();
         responseMap.put("url", url);
         return new ResponseBean(200, "succ", responseMap, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @GetMapping("/info/{id}")
+    public ResponseBean getResourceInfoById(@PathVariable("id") int id) {
+        ResourceInfo resourceInfo = resourceInfoService.getResourceInfoByResourceId(id);
+        return new ResponseBean(200, "succ", resourceInfo, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @PutMapping("/info/{id}")
+    public ResponseBean updateResourceInfoById(HttpServletRequest request, @RequestBody ResourceInfo resourceInfo, @PathVariable("id") int id) throws PermissionDeniedException {
+        String token = request.getHeader("Authorization");
+        String phone = JWTUtil.getPayload(token).getAccount();
+        if (!resourceService.hasPermission(phone, id)) {
+            throw new PermissionDeniedException();
+        }
+        resourceInfoService.updateResourceInfoByResourceId(resourceInfo, id);
+        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 }
