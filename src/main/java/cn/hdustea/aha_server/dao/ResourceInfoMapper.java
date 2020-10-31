@@ -1,4 +1,6 @@
 package cn.hdustea.aha_server.dao;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.hdustea.aha_server.entity.ResourceInfo;
 
@@ -19,4 +21,10 @@ public interface ResourceInfoMapper {
     int updateByPrimaryKeySelective(ResourceInfo record);
 
     int updateByPrimaryKey(ResourceInfo record);
+
+    ResourceInfo selectByResId(@Param("resId")Integer resId);
+
+    int updateByResId(@Param("updated")ResourceInfo updated,@Param("resId")Integer resId);
+
+
 }

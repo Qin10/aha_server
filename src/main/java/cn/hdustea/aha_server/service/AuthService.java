@@ -18,6 +18,7 @@ import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -87,6 +88,7 @@ public class AuthService {
      * @throws DaoException          数据库操作异常
      * @throws MessageCheckException 短信验证码校验异常
      */
+    @Transactional(rollbackFor = Exception.class)
     public void register(RegisterUser registerUser) throws DaoException, MessageCheckException {
         boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode(), SmsService.REGISTER_MESSAGE);
         if (!SmsVerifyResult) {
@@ -153,6 +155,7 @@ public class AuthService {
         return signToken(user);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, AccountNotFoundException, UpdateException {
         User user = userService.getUserByPhone(phone);
         if (user == null) {

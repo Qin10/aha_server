@@ -8,7 +8,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 资源的实体类
+ * ${description}
  *
  * @author STEA_YY
  **/
@@ -17,14 +17,14 @@ public class Resource {
     private Integer id;
 
     /**
-     * 作者id（外键）
+     * 作者手机号（外键）
      */
-    private Integer authorUserId;
+    private String authorPhone;
 
     /**
      * 资源全称
      */
-    @NotEmpty(message = "资源名称不能为空！")
+    @NotEmpty(message = "资源全称不能为空！")
     private String name;
 
     /**

@@ -1,11 +1,9 @@
 package cn.hdustea.aha_server.dao;
 
-import org.apache.ibatis.annotations.Param;
-
-import cn.hdustea.aha_server.entity.Resource;
+import cn.hdustea.aha_server.entity.Resource;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
- * 资源的数据库操作接口
+ * ${description}
  *
  * @author STEA_YY
  **/
@@ -24,4 +22,7 @@ public interface ResourceMapper {
 
     Integer selectAuthorUserIdById(@Param("id") Integer id);
 
+    List<Integer> selectId();
+
+    int updateReadById(@Param("updatedRead") Integer updatedRead, @Param("id") Integer id);
 }

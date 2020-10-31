@@ -1,14 +1,18 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.dao.ResourceInfoMapper;
 import cn.hdustea.aha_server.dao.ResourceMapper;
 import cn.hdustea.aha_server.dao.UserInfoMapper;
+import cn.hdustea.aha_server.entity.ResourceInfo;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
+import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.stereotype.Service;
 import cn.hdustea.aha_server.entity.Resource;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
 
@@ -22,9 +26,13 @@ public class ResourceService {
     @javax.annotation.Resource
     private ResourceMapper resourceMapper;
     @javax.annotation.Resource
+    private ResourceInfoMapper resourceInfoMapper;
+    @javax.annotation.Resource
     private UserService userService;
     @javax.annotation.Resource
     private OssService ossService;
+    @javax.annotation.Resource
+    private RedisUtil redisUtil;
 
     /**
      * 根据id获取资源
@@ -33,6 +41,7 @@ public class ResourceService {
      * @return 资源实体类
      */
     public Resource getResourceById(int id) {
+        addReadByResourceId(id);
         return resourceMapper.selectByPrimaryKey(id);
     }
 
@@ -51,10 +60,13 @@ public class ResourceService {
      * @param resource 资源实体类
      * @param phone    用户手机号
      */
+    @Transactional(rollbackFor = Exception.class)
     public void saveResourceAndAuthor(Resource resource, String phone) {
-        User user = userService.getUserByPhone(phone);
-        resource.setAuthorUserId(user.getId());
+        resource.setAuthorPhone(phone);
         resourceMapper.insertSelective(resource);
+        ResourceInfo resourceInfo = new ResourceInfo();
+        resourceInfo.setResId(resource.getId());
+        resourceInfoMapper.insertSelective(resourceInfo);
     }
 
     /**
@@ -106,5 +118,9 @@ public class ResourceService {
         }
         URL url = ossService.signDownload(resource.getFilename());
         return url.toString();
+    }
+
+    private void addReadByResourceId(int resourceId) {
+        redisUtil.incr(RedisUtil.RESOURCE_READ_PREFIX + resourceId, 1);
     }
 }

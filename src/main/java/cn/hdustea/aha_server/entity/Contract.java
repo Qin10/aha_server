@@ -3,6 +3,8 @@ package cn.hdustea.aha_server.entity;
 import java.util.Date;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * ${description}
  *
@@ -20,6 +22,7 @@ public class Contract {
     /**
      * 联系人
      */
+    @NotEmpty(message = "联系人不能为空")
     private String name;
 
     /**
