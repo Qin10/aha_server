@@ -31,8 +31,6 @@ public class ResourceService {
     private UserService userService;
     @javax.annotation.Resource
     private OssService ossService;
-    @javax.annotation.Resource
-    private RedisUtil redisUtil;
 
     /**
      * 根据id获取资源
@@ -41,7 +39,6 @@ public class ResourceService {
      * @return 资源实体类
      */
     public Resource getResourceById(int id) {
-        addReadByResourceId(id);
         return resourceMapper.selectByPrimaryKey(id);
     }
 
@@ -118,9 +115,5 @@ public class ResourceService {
         }
         URL url = ossService.signDownload(resource.getFilename());
         return url.toString();
-    }
-
-    private void addReadByResourceId(int resourceId) {
-        redisUtil.incr(RedisUtil.RESOURCE_READ_PREFIX + resourceId, 1);
     }
 }

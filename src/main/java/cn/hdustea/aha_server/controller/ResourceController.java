@@ -13,6 +13,7 @@ import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.ResourceInfoService;
 import cn.hdustea.aha_server.service.ResourceService;
 import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +36,8 @@ public class ResourceController {
     private ResourceInfoService resourceInfoService;
     @javax.annotation.Resource
     private OssService ossService;
+    @javax.annotation.Resource
+    private RedisUtil redisUtil;
 
     /**
      * 根据id获取资源的接口
@@ -126,6 +129,7 @@ public class ResourceController {
     @RequiresLogin
     @GetMapping("/info/{id}")
     public ResponseBean getResourceInfoById(@PathVariable("id") int id) {
+        addReadByResourceId(id);
         ResourceInfo resourceInfo = resourceInfoService.getResourceInfoByResourceId(id);
         return new ResponseBean(200, "succ", resourceInfo, TimeUtil.getFormattedTime(new Date()));
     }
@@ -140,5 +144,9 @@ public class ResourceController {
         }
         resourceInfoService.updateResourceInfoByResourceId(resourceInfo, id);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    private void addReadByResourceId(int resourceId) {
+        redisUtil.incr(RedisUtil.RESOURCE_READ_PREFIX + resourceId, 1);
     }
 }
