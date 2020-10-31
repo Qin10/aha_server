@@ -1,10 +1,13 @@
 package cn.hdustea.aha_server;
 
+import cn.hdustea.aha_server.mapper.ResourceMapper;
 import cn.hdustea.aha_server.service.OssService;
+import cn.hdustea.aha_server.service.ResourceService;
 import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -16,6 +19,8 @@ class AhaServerApplicationTests {
     private UserService userService;
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private ResourceMapper resourceMapper;
 
     @Test
     void contextLoads() {
@@ -37,8 +42,13 @@ class AhaServerApplicationTests {
     }
 
     @Test
-    void testRedis(){
-        redisUtil.incr("testaaaa",1);
+    void testRedis() {
+        redisUtil.incr("testaaaa", 1);
         System.out.println(redisUtil.get("testaaaa"));
+    }
+
+    @Test
+    void testResourceAdd() {
+        resourceMapper.updateReadById(100, 1);
     }
 }

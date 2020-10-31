@@ -38,7 +38,7 @@ public class RedisUtil {
      */
     public static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
-    public static final String RESOURCE_READ_PREFIX = "resource:read:";
+    public static final String RESOURCE_READ_KEY = "resource:read";
 
     // =============================common============================
 

@@ -55,11 +55,20 @@ public class ResourceController {
      * 获取oss上传签名的接口，上传后的资源的读写权限均为私有
      */
     @RequiresLogin(requireSignContract = true)
-    @GetMapping("/sign/upload")
-    public ResponseBean signUploadFile(HttpServletRequest request) {
+    @GetMapping("/sign/upload/private")
+    public ResponseBean signUploadPrivateFile(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         String phone = JWTUtil.getPayload(token).getAccount();
-        OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone, true);
+        OssPolicyBean ossPolicyBean = ossService.signUpload(phone, true);
+        return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin(requireSignContract = true)
+    @GetMapping("/sign/upload/public")
+    public ResponseBean signUploadPublicFile(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        String phone = JWTUtil.getPayload(token).getAccount();
+        OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone, false);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -129,8 +138,10 @@ public class ResourceController {
     @RequiresLogin
     @GetMapping("/info/{id}")
     public ResponseBean getResourceInfoById(@PathVariable("id") int id) {
-        addReadByResourceId(id);
         ResourceInfo resourceInfo = resourceInfoService.getResourceInfoByResourceId(id);
+        if (resourceInfo != null) {
+            addReadByResourceId(id);
+        }
         return new ResponseBean(200, "succ", resourceInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -147,6 +158,6 @@ public class ResourceController {
     }
 
     private void addReadByResourceId(int resourceId) {
-        redisUtil.incr(RedisUtil.RESOURCE_READ_PREFIX + resourceId, 1);
+        redisUtil.hincr(RedisUtil.RESOURCE_READ_KEY, Integer.toString(resourceId), 1);
     }
 }

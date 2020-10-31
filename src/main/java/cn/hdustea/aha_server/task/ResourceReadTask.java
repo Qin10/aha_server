@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 资源浏览量每日定时入库的任务类
@@ -28,13 +29,17 @@ public class ResourceReadTask {
     public void updateResourceRead() {
         List<Integer> resourceIds = resourceMapper.selectId();
         log.info("Resource Read Task is Running");
-        for (int id : resourceIds) {
-            Integer read = (Integer) redisUtil.get(RedisUtil.RESOURCE_READ_PREFIX + id);
+        Map<Object, Object> resourceReadMap = redisUtil.hmget(RedisUtil.RESOURCE_READ_KEY);
+        for (Map.Entry<Object, Object> entry : resourceReadMap.entrySet()) {
+            Integer resourceId = Integer.parseInt((String) entry.getKey());
+            Integer read = (Integer) entry.getValue();
             if (read != null && read > 0) {
-                Resource resource = resourceMapper.selectByPrimaryKey(id);
-                int updatedRead = resource.getRead() + read;
-                resourceMapper.updateReadById(updatedRead, id);
-                redisUtil.del(RedisUtil.RESOURCE_READ_PREFIX + id);
+                Resource resource = resourceMapper.selectByPrimaryKey(resourceId);
+                if (resource != null) {
+                    int updatedRead = resource.getRead() + read;
+                    resourceMapper.updateReadById(updatedRead, resourceId);
+                }
+                redisUtil.hdel(RedisUtil.RESOURCE_READ_KEY, Integer.toString(resourceId));
             }
         }
     }
