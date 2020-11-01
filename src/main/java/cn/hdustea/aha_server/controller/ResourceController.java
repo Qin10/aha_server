@@ -100,9 +100,8 @@ public class ResourceController {
      */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/{id}")
-    public ResponseBean updateResourceById(HttpServletRequest request, @RequestBody Resource resource, @PathVariable("id") int id) throws UpdateException, PermissionDeniedException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean updateResourceById(@RequestBody Resource resource, @PathVariable("id") int id) throws UpdateException, PermissionDeniedException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
         }
@@ -120,9 +119,8 @@ public class ResourceController {
      */
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/{id}")
-    public ResponseBean deleteResourceById(HttpServletRequest request, @PathVariable("id") int id) throws PermissionDeniedException, DeleteException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean deleteResourceById(@PathVariable("id") int id) throws PermissionDeniedException, DeleteException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
         }
@@ -136,7 +134,7 @@ public class ResourceController {
         String url = resourceService.signDownloadResourceByid(id);
         HashMap<String, String> responseMap = new HashMap<>();
         responseMap.put("url", url);
-        log.info(userOperationLogConfig.getFormat(),MODULE_NAME,"下载资源", "id=" + id);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + id);
         return new ResponseBean(200, "succ", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -147,15 +145,14 @@ public class ResourceController {
         if (resourceInfo != null) {
             addReadByResourceId(id);
         }
-        log.info(userOperationLogConfig.getFormat(),MODULE_NAME,"查看资源", "id=" + id);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "查看资源", "id=" + id);
         return new ResponseBean(200, "succ", resourceInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
     @RequiresLogin
     @PutMapping("/info/{id}")
-    public ResponseBean updateResourceInfoById(HttpServletRequest request, @RequestBody ResourceInfo resourceInfo, @PathVariable("id") int id) throws PermissionDeniedException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean updateResourceInfoById(@RequestBody ResourceInfo resourceInfo, @PathVariable("id") int id) throws PermissionDeniedException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
         }
