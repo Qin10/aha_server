@@ -8,6 +8,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException
 import cn.hdustea.aha_server.service.ResumeService;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,9 +49,8 @@ public class ResumeController {
      */
     @RequiresLogin
     @PostMapping()
-    public ResponseBean saveResume(HttpServletRequest request, @RequestBody Resume resume) throws UpdateException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean saveResume(@RequestBody Resume resume) throws UpdateException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         Resume savedResume = resumeService.saveResume(resume);
         userInfoService.updateResumeIdByPhone(savedResume.getId().toString(), phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
@@ -64,9 +64,8 @@ public class ResumeController {
      */
     @RequiresLogin
     @PutMapping()
-    public ResponseBean updateResume(HttpServletRequest request, @RequestBody Resume resume) throws UpdateException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean updateResume(@RequestBody Resume resume) throws UpdateException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         resumeService.updateResumeByPhone(resume, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }

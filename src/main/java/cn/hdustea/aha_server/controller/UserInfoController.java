@@ -4,17 +4,15 @@ import cn.hdustea.aha_server.bean.OssPolicyBean;
 import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
-import cn.hdustea.aha_server.userOperationLog.annotation.LogUserOperation;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.service.UserInfoService;
-import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.Map;
 
@@ -34,12 +32,10 @@ public class UserInfoController {
     /**
      * 获取已登录用户信息（包括全部公有信息和部分私有信息）的接口
      */
-    @LogUserOperation("获取登录用户信息")
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/me")
-    public ResponseBean getPersonalUserInfo(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean getPersonalUserInfo() {
+        String phone = ThreadLocalUtil.getCurrentUser();
         PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(phone);
         return new ResponseBean(200, "succ", personalUserInfo, TimeUtil.getFormattedTime(new Date()));
     }
@@ -52,9 +48,8 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
-    public ResponseBean updatePersonalUserInfo(HttpServletRequest request, @RequestBody UserInfo userInfo) throws UpdateException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean updatePersonalUserInfo(@RequestBody UserInfo userInfo) throws UpdateException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         userInfoService.updateUserInfoByPhone(userInfo, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
@@ -64,7 +59,6 @@ public class UserInfoController {
      *
      * @param phone 手机号
      */
-    @LogUserOperation("获取某个用户信息")
     @RequiresLogin
     @GetMapping("/{phone}")
     public ResponseBean getUserInfoByPhone(@PathVariable("phone") String phone) {
@@ -77,9 +71,8 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
-    public ResponseBean signUpdateUserAvatar(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean signUpdateUserAvatar() {
+        String phone = ThreadLocalUtil.getCurrentUser();
         OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone, false);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
@@ -92,9 +85,8 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/avatar")
-    public ResponseBean updateUserAvatar(HttpServletRequest request, @RequestBody Map<String, String> requestMap) throws UpdateException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean updateUserAvatar(@RequestBody Map<String, String> requestMap) throws UpdateException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         String fileUrl = requestMap.get("fileUrl");
         userInfoService.updateAvatarUrlByPhone(fileUrl, phone);
         return new ResponseBean(200, "succ", null, "修改成功！");

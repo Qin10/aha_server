@@ -14,8 +14,11 @@ import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException
 import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.util.FileUtil;
+import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.security.auth.login.AccountNotFoundException;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Date;
 import java.sql.Timestamp;
@@ -54,6 +58,8 @@ public class AuthService {
     private FileUploadPathConfig fileUploadPathConfig;
     @Resource
     private ContractService contractService;
+    @Autowired
+    private HttpServletRequest request;
 
     public AuthService() {
         this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -72,6 +78,8 @@ public class AuthService {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
                 String token = signToken(user);
                 PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
+                MDC.put("phone",loginUser.getPhone());
+                MDC.put("ip", IpUtil.getIpAddr(request));
                 return new TokenAndPersonalUserInfoBean(token, personalUserInfo);
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");

@@ -2,12 +2,15 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.*;
+import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,10 +28,13 @@ import java.util.HashMap;
  * @author STEA_YY
  **/
 @RestController
-
+@Slf4j(topic = "userOperationLog")
 public class AuthController {
+    private static final String MODULE_NAME = "注册登录模块";
     @Resource
     private AuthService authService;
+    @Resource
+    private UserOperationLogConfig userOperationLogConfig;
 
     /**
      * 用户通过账号密码方式登录的接口
@@ -39,6 +45,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseBean login(@RequestBody @Validated LoginUser loginUser) throws Exception {
         TokenAndPersonalUserInfoBean tokenAndPersonalUserInfoBean = authService.login(loginUser);
+        log.info(userOperationLogConfig.getFormat(),MODULE_NAME,"用户登录","");
         return new ResponseBean(200, "登录成功", tokenAndPersonalUserInfoBean, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -53,6 +60,7 @@ public class AuthController {
         authService.register(registerUser);
         LoginUser loginUser = new LoginUser(registerUser.getPhone(), registerUser.getPassword());
         TokenAndPersonalUserInfoBean tokenAndPersonalUserInfoBean = authService.login(loginUser);
+        log.info(userOperationLogConfig.getFormat(),MODULE_NAME,"用户注册","");
         return new ResponseBean(200, "注册成功", tokenAndPersonalUserInfoBean, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -77,9 +85,8 @@ public class AuthController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/sign/notice")
-    public ResponseBean signNotice(HttpServletRequest request) throws AccountNotFoundException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean signNotice() throws AccountNotFoundException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signNotice(phone);
         HashMap<String, String> responseMap = new HashMap<>();
         responseMap.put("token", updatedToken);
@@ -88,9 +95,8 @@ public class AuthController {
 
     @RequiresLogin
     @PostMapping("/sign/contract")
-    public ResponseBean signContract(HttpServletRequest request, MultipartFile file, @Validated Contract contract) throws IOException, AccountNotFoundException, UpdateException {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean signContract(MultipartFile file, @Validated Contract contract) throws IOException, AccountNotFoundException, UpdateException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signContract(phone, file, contract);
         HashMap<String, String> responseMap = new HashMap<>();
         responseMap.put("token", updatedToken);
@@ -102,9 +108,8 @@ public class AuthController {
      */
     @RequiresLogin
     @GetMapping("/logout")
-    public ResponseBean logout(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean logout() {
+        String phone = ThreadLocalUtil.getCurrentUser();
         authService.logout(phone);
         return new ResponseBean(200, "登出成功", null, TimeUtil.getFormattedTime(new Date()));
     }

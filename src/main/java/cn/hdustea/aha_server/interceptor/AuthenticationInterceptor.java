@@ -6,9 +6,12 @@ import cn.hdustea.aha_server.bean.JwtPayloadBean;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.*;
+import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import org.slf4j.MDC;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.HandlerMethod;
@@ -86,10 +89,19 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                         throw new ContractNotSignedException();
                     }
                 }
+                ThreadLocalUtil.setCurrentUser(jwtPayloadBean.getAccount());
+                MDC.put("phone", jwtPayloadBean.getAccount());
+                MDC.put("ip", IpUtil.getIpAddr(request));
                 return true;
             }
         }
         return true;
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        ThreadLocalUtil.removeCurrentUser();
+        MDC.clear();
     }
 
     /**

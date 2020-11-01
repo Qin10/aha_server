@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.OssPolicyBean;
 import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.entity.Resource;
 import cn.hdustea.aha_server.entity.ResourceInfo;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
@@ -14,7 +15,9 @@ import cn.hdustea.aha_server.service.ResourceInfoService;
 import cn.hdustea.aha_server.service.ResourceService;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +30,11 @@ import java.util.HashMap;
  *
  * @author STEA_YY
  **/
+@Slf4j(topic = "userOperationLog")
 @RestController
 @RequestMapping("/resource")
 public class ResourceController {
+    private static final String MODULE_NAME = "注册登录模块";
     @javax.annotation.Resource
     private ResourceService resourceService;
     @javax.annotation.Resource
@@ -38,6 +43,8 @@ public class ResourceController {
     private OssService ossService;
     @javax.annotation.Resource
     private RedisUtil redisUtil;
+    @javax.annotation.Resource
+    private UserOperationLogConfig userOperationLogConfig;
 
     /**
      * 根据id获取资源的接口
@@ -56,18 +63,16 @@ public class ResourceController {
      */
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload/private")
-    public ResponseBean signUploadPrivateFile(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean signUploadPrivateFile() {
+        String phone = ThreadLocalUtil.getCurrentUser();
         OssPolicyBean ossPolicyBean = ossService.signUpload(phone, true);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload/public")
-    public ResponseBean signUploadPublicFile(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean signUploadPublicFile() {
+        String phone = ThreadLocalUtil.getCurrentUser();
         OssPolicyBean ossPolicyBean = ossService.signUpload("resource/" + phone, false);
         return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
@@ -79,9 +84,8 @@ public class ResourceController {
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
-    public ResponseBean saveResource(HttpServletRequest request, @RequestBody @Validated Resource resource) {
-        String token = request.getHeader("Authorization");
-        String phone = JWTUtil.getPayload(token).getAccount();
+    public ResponseBean saveResource(@RequestBody @Validated Resource resource) {
+        String phone = ThreadLocalUtil.getCurrentUser();
         resourceService.saveResourceAndAuthor(resource, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
@@ -128,10 +132,11 @@ public class ResourceController {
 
     @RequiresLogin
     @GetMapping("/sign/download/{id}")
-    public ResponseBean signDownloadResourceByid(HttpServletRequest request, @PathVariable("id") int id) throws SelectException {
+    public ResponseBean signDownloadResourceByid(@PathVariable("id") int id) throws SelectException {
         String url = resourceService.signDownloadResourceByid(id);
         HashMap<String, String> responseMap = new HashMap<>();
         responseMap.put("url", url);
+        log.info(userOperationLogConfig.getFormat(),MODULE_NAME,"下载资源", "id=" + id);
         return new ResponseBean(200, "succ", responseMap, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -142,6 +147,7 @@ public class ResourceController {
         if (resourceInfo != null) {
             addReadByResourceId(id);
         }
+        log.info(userOperationLogConfig.getFormat(),MODULE_NAME,"查看资源", "id=" + id);
         return new ResponseBean(200, "succ", resourceInfo, TimeUtil.getFormattedTime(new Date()));
     }
 

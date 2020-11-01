@@ -35,3 +35,5 @@ aliyun-oss:
   privateBucketName: aha-resource
   expireTime: 6000
   maxSize: 500
+user-operation-log:
+  format: '[{}][{}][{}]'

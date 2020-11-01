@@ -1,6 +1,5 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.userOperationLog.annotation.LogUserOperation;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.util.TimeUtil;
@@ -18,7 +17,6 @@ import java.util.Date;
 
 @RestController
 public class TestController {
-    @LogUserOperation("测试")
     @RequiresLogin
     @GetMapping("/hello")
     public String helloWorld() {
