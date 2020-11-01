@@ -19,7 +19,7 @@ public class ResourceInfo {
     /**
      * 资源表id（外键）
      */
-    @NotNull(message = "资源id不能为空！")
+    @JsonIgnore
     private Integer resId;
 
     /**
