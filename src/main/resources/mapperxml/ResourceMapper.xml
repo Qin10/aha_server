@@ -69,15 +69,6 @@
             <if test="date != null">
                 `date`,
             </if>
-            <if test="read != null">
-                `read`,
-            </if>
-            <if test="collect != null">
-                `collect`,
-            </if>
-            <if test="meaning != null">
-                meaning,
-            </if>
             <if test="avatarUrl != null">
                 avatar_url,
             </if>
@@ -104,15 +95,6 @@
             <if test="date != null">
                 #{date},
             </if>
-            <if test="read != null">
-                #{read},
-            </if>
-            <if test="collect != null">
-                #{collect},
-            </if>
-            <if test="meaning != null">
-                #{meaning},
-            </if>
             <if test="avatarUrl != null">
                 #{avatarUrl},
             </if>
@@ -122,9 +104,6 @@
         <!--@mbg.generated-->
         update `resource`
         <set>
-            <if test="authorPhone != null">
-                author_phone = #{authorPhone},
-            </if>
             <if test="name != null">
                 `name` = #{name},
             </if>
@@ -142,15 +121,6 @@
             </if>
             <if test="date != null">
                 `date` = #{date},
-            </if>
-            <if test="read != null">
-                `read` = #{read},
-            </if>
-            <if test="collect != null">
-                `collect` = #{collect},
-            </if>
-            <if test="meaning != null">
-                meaning = #{meaning},
             </if>
             <if test="avatarUrl != null">
                 avatar_url = #{avatarUrl},

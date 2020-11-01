@@ -156,9 +156,6 @@
     <!--@mbg.generated-->
     update user_info
     <set>
-      <if test="userId != null">
-        user_id = #{userId},
-      </if>
       <if test="nickname != null">
         nickname = #{nickname},
       </if>
@@ -200,9 +197,6 @@
       </if>
       <if test="compTags != null">
         comp_tags = #{compTags},
-      </if>
-      <if test="resumeId != null">
-        resume_id = #{resumeId},
       </if>
     </set>
     where id = #{id}
@@ -255,12 +249,6 @@
   <update id="updateByUserId">
     update user_info
     <set>
-      <if test="updated.id != null">
-        id = #{updated.id},
-      </if>
-      <if test="updated.userId != null">
-        user_id = #{updated.userId},
-      </if>
       <if test="updated.nickname != null">
         nickname = #{updated.nickname},
       </if>
@@ -302,9 +290,6 @@
       </if>
       <if test="updated.compTags != null">
         comp_tags = #{updated.compTags},
-      </if>
-      <if test="updated.resumeId != null">
-        resume_id = #{updated.resumeId},
       </if>
     </set>
     where user_id=#{userId}

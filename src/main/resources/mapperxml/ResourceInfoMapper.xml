@@ -84,9 +84,6 @@
         <!--@mbg.generated-->
         update resource_info
         <set>
-            <if test="resId != null">
-                res_id = #{resId},
-            </if>
             <if test="introPicUrl != null">
                 intro_pic_url = #{introPicUrl},
             </if>
