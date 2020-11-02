@@ -2,8 +2,6 @@ package cn.hdustea.aha_server.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -13,7 +11,6 @@ import lombok.Data;
  **/
 @Data
 public class User {
-    @JsonIgnore
     private Integer id;
 
     /**
@@ -24,7 +21,6 @@ public class User {
     /**
      * 用户密码
      */
-    @JsonIgnore
     private String password;
 
     /**
@@ -55,7 +51,6 @@ public class User {
     /**
      * 角色id(外键)
      */
-    @JsonIgnore
     private Integer roleId;
 
     private Role role;

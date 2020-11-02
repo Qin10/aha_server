@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.entity;
 import lombok.Data;
 
 /**
- * 用户角色的实体类
+ * ${description}
  *
  * @author STEA_YY
  **/

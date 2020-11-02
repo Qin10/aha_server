@@ -4,48 +4,48 @@
   <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.Contract">
     <!--@mbg.generated-->
     <!--@Table contract-->
-    <id column="id" property="id" />
-    <result column="user_id" property="userId" />
-    <result column="name" property="name" />
-    <result column="signature_filename" property="signatureFilename" />
-    <result column="sign_time" property="signTime" />
+    <id column="con_id" property="id" />
+    <result column="con_user_id" property="userId" />
+    <result column="con_name" property="name" />
+    <result column="con_signature_filename" property="signatureFilename" />
+    <result column="con_sign_time" property="signTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, `name`, signature_filename, sign_time
+    con_id, con_user_id, con_name, con_signature_filename, con_sign_time
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
     from contract
-    where id = #{id}
+    where con_id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
     delete from contract
-    where id = #{id}
+    where con_id = #{id}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Contract" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="con_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Contract" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into contract (user_id, `name`, signature_filename, sign_time)
+    insert into contract (con_user_id, con_name, con_signature_filename, con_sign_time)
     values (#{userId}, #{name}, #{signatureFilename}, #{signTime})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Contract" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="con_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Contract" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into contract
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
-        user_id,
+        con_user_id,
       </if>
       <if test="name != null">
-        `name`,
+        con_name,
       </if>
       <if test="signatureFilename != null">
-        signature_filename,
+        con_signature_filename,
       </if>
       <if test="signTime != null">
-        sign_time,
+        con_sign_time,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -68,27 +68,27 @@
     update contract
     <set>
       <if test="userId != null">
-        user_id = #{userId},
+        con_user_id = #{userId},
       </if>
       <if test="name != null">
-        `name` = #{name},
+        con_name = #{name},
       </if>
       <if test="signatureFilename != null">
-        signature_filename = #{signatureFilename},
+        con_signature_filename = #{signatureFilename},
       </if>
       <if test="signTime != null">
-        sign_time = #{signTime},
+        con_sign_time = #{signTime},
       </if>
     </set>
-    where id = #{id}
+    where con_id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Contract">
     <!--@mbg.generated-->
     update contract
-    set user_id = #{userId},
-      `name` = #{name},
-      signature_filename = #{signatureFilename},
-      sign_time = #{signTime}
-    where id = #{id}
+    set con_user_id = #{userId},
+      con_name = #{name},
+      con_signature_filename = #{signatureFilename},
+      con_sign_time = #{signTime}
+    where con_id = #{id}
   </update>
 </mapper>

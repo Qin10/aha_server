@@ -1,11 +1,9 @@
 package cn.hdustea.aha_server.mapper;
 
-import java.util.List;
-
-import cn.hdustea.aha_server.entity.Competition;
+import cn.hdustea.aha_server.entity.Competition;import java.util.List;
 
 /**
- * 竞赛信息的数据库操作接口
+ * ${description}
  *
  * @author STEA_YY
  **/
@@ -18,9 +16,9 @@ public interface CompetitionMapper {
 
     Competition selectByPrimaryKey(Integer id);
 
-    List<Competition> selectAll();
-
     int updateByPrimaryKeySelective(Competition record);
 
     int updateByPrimaryKey(Competition record);
+
+    List<Competition> selectAll();
 }

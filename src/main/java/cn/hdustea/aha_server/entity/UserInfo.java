@@ -1,24 +1,18 @@
 package cn.hdustea.aha_server.entity;
 
 import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
- * 用户公共信息的实体类
+ * ${description}
  *
  * @author STEA_YY
  **/
 @Data
 public class UserInfo {
-    @JsonIgnore
-    private Integer id;
-
     /**
      * 用户主键(外键)
      */
-    @JsonIgnore
     private Integer userId;
 
     /**
@@ -94,6 +88,5 @@ public class UserInfo {
     /**
      * 用户简历id（MongoDB）
      */
-    @JsonIgnore
     private String resumeId;
 }

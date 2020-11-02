@@ -1,4 +1,5 @@
 package cn.hdustea.aha_server.mapper;
+import java.util.List;
 
 import cn.hdustea.aha_server.entity.User;import org.apache.ibatis.annotations.Param;
 
@@ -20,12 +21,11 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    User selectByPhone(@Param("phone") String phone);
+    User selectByPhone(@Param("phone")String phone);
 
-    int updatePasswordByPhone(@Param("updatedPassword") String updatedPassword, @Param("phone") String phone);
+    int updatePasswordByPhone(@Param("updatedPassword")String updatedPassword,@Param("phone")String phone);
 
-    int updateSignedNoticeByPhone(@Param("updatedSignedNotice") Boolean updatedSignedNotice, @Param("phone") String phone);
-
+    int updateSignedNoticeByPhone(@Param("updatedSignedNotice")Boolean updatedSignedNotice,@Param("phone")String phone);
     int updateSignedContractByPhone(@Param("updatedSignedContract")Boolean updatedSignedContract,@Param("phone")String phone);
 
 

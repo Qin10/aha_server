@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

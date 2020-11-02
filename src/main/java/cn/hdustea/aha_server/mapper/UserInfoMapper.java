@@ -1,28 +1,29 @@
 package cn.hdustea.aha_server.mapper;
 
-import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.hdustea.aha_server.entity.UserInfo;
+import org.apache.ibatis.annotations.Param;
 
 /**
- * 用户公共信息
+ * ${description}
  *
  * @author STEA_YY
  **/
 public interface UserInfoMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(Integer userId);
 
     int insert(UserInfo record);
 
     int insertSelective(UserInfo record);
 
-    UserInfo selectByPrimaryKey(Integer id);
-
-    UserInfo selectByUserId(@Param("userId") Integer userId);
+    UserInfo selectByPrimaryKey(Integer userId);
 
     int updateByPrimaryKeySelective(UserInfo record);
 
     int updateByPrimaryKey(UserInfo record);
+
+    UserInfo selectByUserId(@Param("userId") Integer userId);
 
     int updateByUserId(@Param("updated") UserInfo updated, @Param("userId") Integer userId);
 

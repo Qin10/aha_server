@@ -4,72 +4,72 @@
     <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.User">
         <!--@mbg.generated-->
         <!--@Table `user`-->
-        <id column="id" property="id"/>
-        <result column="phone" property="phone"/>
-        <result column="password" property="password"/>
-        <result column="created_time" property="createdTime"/>
-        <result column="student_rec_filename" property="studentRecFilename"/>
-        <result column="contrib_point" property="contribPoint"/>
-        <result column="signed_notice" property="signedNotice"/>
-        <result column="signed_contract" property="signedContract"/>
-        <result column="role_id" property="roleId"/>
-        <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="role_id"
+        <id column="u_id" property="id"/>
+        <result column="u_phone" property="phone"/>
+        <result column="u_password" property="password"/>
+        <result column="u_created_time" property="createdTime"/>
+        <result column="u_student_rec_filename" property="studentRecFilename"/>
+        <result column="u_contrib_point" property="contribPoint"/>
+        <result column="u_signed_notice" property="signedNotice"/>
+        <result column="u_signed_contract" property="signedContract"/>
+        <result column="u_role_id" property="roleId"/>
+        <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
                      select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, phone, `password`, created_time, student_rec_filename, contrib_point, signed_notice,
-        signed_contract, role_id
+        u_id, u_phone, u_password, u_created_time, u_student_rec_filename, u_contrib_point,
+        u_signed_notice, u_signed_contract, u_role_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
         from `user`
-        where id = #{id}
+        where u_id = #{id}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete
         from `user`
-        where id = #{id}
+        where u_id = #{id}
     </delete>
-    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
+    <insert id="insert" keyColumn="u_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into `user` (phone, `password`, created_time, student_rec_filename, contrib_point,
-                            signed_notice, signed_contract, role_id)
+        insert into `user` (u_phone, u_password, u_created_time, u_student_rec_filename, u_contrib_point,
+                            u_signed_notice, u_signed_contract, u_role_id)
         values (#{phone}, #{password}, #{createdTime}, #{studentRecFilename}, #{contribPoint},
                 #{signedNotice}, #{signedContract}, #{roleId})
     </insert>
-    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
+    <insert id="insertSelective" keyColumn="u_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into `user`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="phone != null">
-                phone,
+                u_phone,
             </if>
             <if test="password != null">
-                `password`,
+                u_password,
             </if>
             <if test="createdTime != null">
-                created_time,
+                u_created_time,
             </if>
             <if test="studentRecFilename != null">
-                student_rec_filename,
+                u_student_rec_filename,
             </if>
             <if test="contribPoint != null">
-                contrib_point,
+                u_contrib_point,
             </if>
             <if test="signedNotice != null">
-                signed_notice,
+                u_signed_notice,
             </if>
             <if test="signedContract != null">
-                signed_contract,
+                u_signed_contract,
             </if>
             <if test="roleId != null">
-                role_id,
+                u_role_id,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -104,72 +104,73 @@
         update `user`
         <set>
             <if test="phone != null">
-                phone = #{phone},
+                u_phone = #{phone},
             </if>
             <if test="password != null">
-                `password` = #{password},
+                u_password = #{password},
             </if>
             <if test="createdTime != null">
-                created_time = #{createdTime},
+                u_created_time = #{createdTime},
             </if>
             <if test="studentRecFilename != null">
-                student_rec_filename = #{studentRecFilename},
+                u_student_rec_filename = #{studentRecFilename},
             </if>
             <if test="contribPoint != null">
-                contrib_point = #{contribPoint},
+                u_contrib_point = #{contribPoint},
             </if>
             <if test="signedNotice != null">
-                signed_notice = #{signedNotice},
+                u_signed_notice = #{signedNotice},
             </if>
             <if test="signedContract != null">
-                signed_contract = #{signedContract},
+                u_signed_contract = #{signedContract},
             </if>
             <if test="roleId != null">
-                role_id = #{roleId},
+                u_role_id = #{roleId},
             </if>
         </set>
-        where id = #{id}
+        where u_id = #{id}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.User">
         <!--@mbg.generated-->
         update `user`
-        set phone                = #{phone},
-            `password`           = #{password},
-            created_time         = #{createdTime},
-            student_rec_filename = #{studentRecFilename},
-            contrib_point        = #{contribPoint},
-            signed_notice        = #{signedNotice},
-            signed_contract      = #{signedContract},
-            role_id              = #{roleId}
-        where id = #{id}
+        set u_phone                = #{phone},
+            u_password             = #{password},
+            u_created_time         = #{createdTime},
+            u_student_rec_filename = #{studentRecFilename},
+            u_contrib_point        = #{contribPoint},
+            u_signed_notice        = #{signedNotice},
+            u_signed_contract      = #{signedContract},
+            u_role_id              = #{roleId}
+        where u_id = #{id}
     </update>
 
-    <!--auto generated by MybatisCodeHelper on 2020-10-24-->
+
+    <!--auto generated by MybatisCodeHelper on 2020-11-02-->
     <select id="selectByPhone" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from `user`
-        where phone = #{phone}
+        where u_phone = #{phone}
     </select>
 
-    <!--auto generated by MybatisCodeHelper on 2020-10-24-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-02-->
     <update id="updatePasswordByPhone">
         update `user`
-        set `password`=#{updatedPassword}
-        where phone = #{phone}
+        set u_password=#{updatedPassword}
+        where u_phone = #{phone}
     </update>
 
-    <!--auto generated by MybatisCodeHelper on 2020-10-27-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-02-->
     <update id="updateSignedNoticeByPhone">
         update `user`
-        set signed_notice=#{updatedSignedNotice}
-        where phone = #{phone}
+        set u_signed_notice=#{updatedSignedNotice}
+        where u_phone = #{phone}
     </update>
 
-<!--auto generated by MybatisCodeHelper on 2020-10-29-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-02-->
     <update id="updateSignedContractByPhone">
         update `user`
-        set signed_contract=#{updatedSignedContract}
-        where phone=#{phone}
+        set u_signed_contract=#{updatedSignedContract}
+        where u_phone = #{phone}
     </update>
 </mapper>

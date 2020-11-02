@@ -18,7 +18,6 @@ import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.slf4j.MDC;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,7 +57,7 @@ public class AuthService {
     private FileUploadPathConfig fileUploadPathConfig;
     @Resource
     private ContractService contractService;
-    @Autowired
+    @Resource
     private HttpServletRequest request;
 
     public AuthService() {
@@ -116,10 +115,6 @@ public class AuthService {
             Resume resume = new Resume();
             resumeService.saveResume(resume);
             userInfo.setResumeId(resume.getId().toString());
-            UserInfo possibleUserInfo = userInfoService.getUserInfoByUserId(user.getId());
-            if (possibleUserInfo != null) {
-                userInfoService.deleteUserInfoById(possibleUserInfo.getId());
-            }
             userInfoService.saveUserInfo(userInfo);
         } else {
             throw new AccountExistedException();

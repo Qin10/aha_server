@@ -1,5 +1,7 @@
 package cn.hdustea.aha_server;
 
+import cn.hdustea.aha_server.entity.ResourceInfo;
+import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
 import cn.hdustea.aha_server.mapper.ResourceMapper;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.ResourceService;
@@ -21,6 +23,8 @@ class AhaServerApplicationTests {
     private RedisUtil redisUtil;
     @Resource
     private ResourceMapper resourceMapper;
+    @Resource
+    private ResourceInfoMapper resourceInfoMapper;
 
     @Test
     void contextLoads() {
@@ -50,5 +54,10 @@ class AhaServerApplicationTests {
     @Test
     void testResourceAdd() {
         resourceMapper.updateReadById(100, 1);
+    }
+
+    @Test
+    void testResourceMapper() {
+        System.out.println(resourceInfoMapper.selectByResId(4));
     }
 }

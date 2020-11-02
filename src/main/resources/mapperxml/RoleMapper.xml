@@ -4,36 +4,36 @@
   <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.Role">
     <!--@mbg.generated-->
     <!--@Table `role`-->
-    <id column="id" property="id" />
-    <result column="name" property="name" />
+    <id column="r_id" property="id" />
+    <result column="r_name" property="name" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, `name`
+    r_id, r_name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
     from `role`
-    where id = #{id}
+    where r_id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
     delete from `role`
-    where id = #{id}
+    where r_id = #{id}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Role" useGeneratedKeys="true">
+  <insert id="insert" keyColumn="r_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Role" useGeneratedKeys="true">
     <!--@mbg.generated-->
-    insert into `role` (`name`)
+    insert into `role` (r_name)
     values (#{name})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Role" useGeneratedKeys="true">
+  <insert id="insertSelective" keyColumn="r_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Role" useGeneratedKeys="true">
     <!--@mbg.generated-->
     insert into `role`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="name != null">
-        `name`,
+        r_name,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -47,15 +47,15 @@
     update `role`
     <set>
       <if test="name != null">
-        `name` = #{name},
+        r_name = #{name},
       </if>
     </set>
-    where id = #{id}
+    where r_id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Role">
     <!--@mbg.generated-->
     update `role`
-    set `name` = #{name}
-    where id = #{id}
+    set r_name = #{name}
+    where r_id = #{id}
   </update>
 </mapper>

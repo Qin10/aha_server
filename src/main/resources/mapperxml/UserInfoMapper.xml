@@ -4,101 +4,101 @@
   <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.UserInfo">
     <!--@mbg.generated-->
     <!--@Table user_info-->
-    <id column="id" property="id" />
-    <result column="user_id" property="userId" />
-    <result column="nickname" property="nickname" />
-    <result column="gender" property="gender" />
-    <result column="birthday" property="birthday" />
-    <result column="type_id" property="typeId" />
-    <result column="signature" property="signature" />
-    <result column="avatar_url" property="avatarUrl" />
-    <result column="school" property="school" />
-    <result column="academy" property="academy" />
-    <result column="major" property="major" />
-    <result column="grade" property="grade" />
-    <result column="intro" property="intro" />
-    <result column="specialty_tags" property="specialtyTags" />
-    <result column="true_name" property="trueName" />
-    <result column="comp_tags" property="compTags" />
-    <result column="resume_id" property="resumeId" />
+    <id column="ui_user_id" property="userId" />
+    <result column="ui_nickname" property="nickname" />
+    <result column="ui_gender" property="gender" />
+    <result column="ui_birthday" property="birthday" />
+    <result column="ui_type_id" property="typeId" />
+    <result column="ui_signature" property="signature" />
+    <result column="ui_avatar_url" property="avatarUrl" />
+    <result column="ui_school" property="school" />
+    <result column="ui_academy" property="academy" />
+    <result column="ui_major" property="major" />
+    <result column="ui_grade" property="grade" />
+    <result column="ui_intro" property="intro" />
+    <result column="ui_specialty_tags" property="specialtyTags" />
+    <result column="ui_true_name" property="trueName" />
+    <result column="ui_comp_tags" property="compTags" />
+    <result column="ui_resume_id" property="resumeId" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, user_id, nickname, gender, birthday, type_id, signature, avatar_url, school, 
-    academy, major, grade, intro, specialty_tags, true_name, comp_tags, resume_id
+    ui_user_id, ui_nickname, ui_gender, ui_birthday, ui_type_id, ui_signature, ui_avatar_url, 
+    ui_school, ui_academy, ui_major, ui_grade, ui_intro, ui_specialty_tags, ui_true_name, 
+    ui_comp_tags, ui_resume_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
     select 
     <include refid="Base_Column_List" />
     from user_info
-    where id = #{id}
+    where ui_user_id = #{userId}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     <!--@mbg.generated-->
     delete from user_info
-    where id = #{id}
+    where ui_user_id = #{userId}
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.UserInfo" useGeneratedKeys="true">
+  <insert id="insert" parameterType="cn.hdustea.aha_server.entity.UserInfo">
     <!--@mbg.generated-->
-    insert into user_info (user_id, nickname, gender, birthday, type_id, signature, 
-      avatar_url, school, academy, major, grade, intro, specialty_tags, 
-      true_name, comp_tags, resume_id)
+    insert into user_info (ui_user_id, ui_nickname, ui_gender, ui_birthday, ui_type_id, ui_signature, 
+      ui_avatar_url, ui_school, ui_academy, ui_major, ui_grade, ui_intro, ui_specialty_tags, 
+      ui_true_name, ui_comp_tags, ui_resume_id)
     values (#{userId}, #{nickname}, #{gender}, #{birthday}, #{typeId}, #{signature}, 
       #{avatarUrl}, #{school}, #{academy}, #{major}, #{grade}, #{intro}, #{specialtyTags}, 
       #{trueName}, #{compTags}, #{resumeId})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.UserInfo" useGeneratedKeys="true">
+  <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.UserInfo">
     <!--@mbg.generated-->
     insert into user_info
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="userId != null">
-        user_id,
+        ui_user_id,
       </if>
       <if test="nickname != null">
-        nickname,
+        ui_nickname,
       </if>
       <if test="gender != null">
-        gender,
+        ui_gender,
       </if>
       <if test="birthday != null">
-        birthday,
+        ui_birthday,
       </if>
       <if test="typeId != null">
-        type_id,
+        ui_type_id,
       </if>
       <if test="signature != null">
-        signature,
+        ui_signature,
       </if>
       <if test="avatarUrl != null">
-        avatar_url,
+        ui_avatar_url,
       </if>
       <if test="school != null">
-        school,
+        ui_school,
       </if>
       <if test="academy != null">
-        academy,
+        ui_academy,
       </if>
       <if test="major != null">
-        major,
+        ui_major,
       </if>
       <if test="grade != null">
-        grade,
+        ui_grade,
       </if>
       <if test="intro != null">
-        intro,
+        ui_intro,
       </if>
       <if test="specialtyTags != null">
-        specialty_tags,
+        ui_specialty_tags,
       </if>
       <if test="trueName != null">
-        true_name,
+        ui_true_name,
       </if>
       <if test="compTags != null">
-        comp_tags,
+        ui_comp_tags,
       </if>
       <if test="resumeId != null">
-        resume_id,
+        ui_resume_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -157,141 +157,149 @@
     update user_info
     <set>
       <if test="nickname != null">
-        nickname = #{nickname},
+        ui_nickname = #{nickname},
       </if>
       <if test="gender != null">
-        gender = #{gender},
+        ui_gender = #{gender},
       </if>
       <if test="birthday != null">
-        birthday = #{birthday},
+        ui_birthday = #{birthday},
       </if>
       <if test="typeId != null">
-        type_id = #{typeId},
+        ui_type_id = #{typeId},
       </if>
       <if test="signature != null">
-        signature = #{signature},
+        ui_signature = #{signature},
       </if>
       <if test="avatarUrl != null">
-        avatar_url = #{avatarUrl},
+        ui_avatar_url = #{avatarUrl},
       </if>
       <if test="school != null">
-        school = #{school},
+        ui_school = #{school},
       </if>
       <if test="academy != null">
-        academy = #{academy},
+        ui_academy = #{academy},
       </if>
       <if test="major != null">
-        major = #{major},
+        ui_major = #{major},
       </if>
       <if test="grade != null">
-        grade = #{grade},
+        ui_grade = #{grade},
       </if>
       <if test="intro != null">
-        intro = #{intro},
+        ui_intro = #{intro},
       </if>
       <if test="specialtyTags != null">
-        specialty_tags = #{specialtyTags},
+        ui_specialty_tags = #{specialtyTags},
       </if>
       <if test="trueName != null">
-        true_name = #{trueName},
+        ui_true_name = #{trueName},
       </if>
       <if test="compTags != null">
-        comp_tags = #{compTags},
+        ui_comp_tags = #{compTags},
+      </if>
+      <if test="resumeId != null">
+        ui_resume_id = #{resumeId},
       </if>
     </set>
-    where id = #{id}
+    where ui_user_id = #{userId}
   </update>
   <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.UserInfo">
     <!--@mbg.generated-->
     update user_info
-    set user_id = #{userId},
-      nickname = #{nickname},
-      gender = #{gender},
-      birthday = #{birthday},
-      type_id = #{typeId},
-      signature = #{signature},
-      avatar_url = #{avatarUrl},
-      school = #{school},
-      academy = #{academy},
-      major = #{major},
-      grade = #{grade},
-      intro = #{intro},
-      specialty_tags = #{specialtyTags},
-      true_name = #{trueName},
-      comp_tags = #{compTags},
-      resume_id = #{resumeId}
-    where id = #{id}
+    set ui_nickname = #{nickname},
+      ui_gender = #{gender},
+      ui_birthday = #{birthday},
+      ui_type_id = #{typeId},
+      ui_signature = #{signature},
+      ui_avatar_url = #{avatarUrl},
+      ui_school = #{school},
+      ui_academy = #{academy},
+      ui_major = #{major},
+      ui_grade = #{grade},
+      ui_intro = #{intro},
+      ui_specialty_tags = #{specialtyTags},
+      ui_true_name = #{trueName},
+      ui_comp_tags = #{compTags},
+      ui_resume_id = #{resumeId}
+    where ui_user_id = #{userId}
   </update>
 
-<!--auto generated by MybatisCodeHelper on 2020-10-24-->
+  <!--auto generated by MybatisCodeHelper on 2020-11-02-->
+  <update id="updateByUserId">
+    update user_info
+    <set>
+      <if test="updated.userId != null">
+        ui_user_id = #{updated.userId},
+      </if>
+      <if test="updated.nickname != null">
+        ui_nickname = #{updated.nickname},
+      </if>
+      <if test="updated.gender != null">
+        ui_gender = #{updated.gender},
+      </if>
+      <if test="updated.birthday != null">
+        ui_birthday = #{updated.birthday},
+      </if>
+      <if test="updated.typeId != null">
+        ui_type_id = #{updated.typeId},
+      </if>
+      <if test="updated.signature != null">
+        ui_signature = #{updated.signature},
+      </if>
+      <if test="updated.avatarUrl != null">
+        ui_avatar_url = #{updated.avatarUrl},
+      </if>
+      <if test="updated.school != null">
+        ui_school = #{updated.school},
+      </if>
+      <if test="updated.academy != null">
+        ui_academy = #{updated.academy},
+      </if>
+      <if test="updated.major != null">
+        ui_major = #{updated.major},
+      </if>
+      <if test="updated.grade != null">
+        ui_grade = #{updated.grade},
+      </if>
+      <if test="updated.intro != null">
+        ui_intro = #{updated.intro},
+      </if>
+      <if test="updated.specialtyTags != null">
+        ui_specialty_tags = #{updated.specialtyTags},
+      </if>
+      <if test="updated.trueName != null">
+        ui_true_name = #{updated.trueName},
+      </if>
+      <if test="updated.compTags != null">
+        ui_comp_tags = #{updated.compTags},
+      </if>
+      <if test="updated.resumeId != null">
+        ui_resume_id = #{updated.resumeId},
+      </if>
+    </set>
+    where ui_user_id=#{userId}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-11-02-->
+  <update id="updateAvatarUrlByUserId">
+    update user_info
+    set ui_avatar_url=#{updatedAvatarUrl}
+    where ui_user_id=#{userId}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-11-02-->
+  <update id="updateResumeIdByUserId">
+    update user_info
+    set ui_resume_id=#{updatedResumeId}
+    where ui_user_id=#{userId}
+  </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-11-02-->
   <select id="selectByUserId" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List"/>
     from user_info
-    where user_id=#{userId}
+    where ui_user_id=#{userId}
   </select>
-
-<!--auto generated by MybatisCodeHelper on 2020-10-24-->
-  <update id="updateAvatarUrlByUserId">
-    update user_info
-    set avatar_url=#{updatedAvatarUrl}
-    where user_id=#{userId}
-  </update>
-
-<!--auto generated by MybatisCodeHelper on 2020-10-24-->
-  <update id="updateResumeIdByUserId">
-        update user_info
-        set resume_id=#{updatedResumeId}
-        where user_id=#{userId}
-    </update>
-
-<!--auto generated by MybatisCodeHelper on 2020-10-27-->
-  <update id="updateByUserId">
-    update user_info
-    <set>
-      <if test="updated.nickname != null">
-        nickname = #{updated.nickname},
-      </if>
-      <if test="updated.gender != null">
-        gender = #{updated.gender},
-      </if>
-      <if test="updated.birthday != null">
-        birthday = #{updated.birthday},
-      </if>
-      <if test="updated.typeId != null">
-        type_id = #{updated.typeId},
-      </if>
-      <if test="updated.signature != null">
-        signature = #{updated.signature},
-      </if>
-      <if test="updated.avatarUrl != null">
-        avatar_url = #{updated.avatarUrl},
-      </if>
-      <if test="updated.school != null">
-        school = #{updated.school},
-      </if>
-      <if test="updated.academy != null">
-        academy = #{updated.academy},
-      </if>
-      <if test="updated.major != null">
-        major = #{updated.major},
-      </if>
-      <if test="updated.grade != null">
-        grade = #{updated.grade},
-      </if>
-      <if test="updated.intro != null">
-        intro = #{updated.intro},
-      </if>
-      <if test="updated.specialtyTags != null">
-        specialty_tags = #{updated.specialtyTags},
-      </if>
-      <if test="updated.trueName != null">
-        true_name = #{updated.trueName},
-      </if>
-      <if test="updated.compTags != null">
-        comp_tags = #{updated.compTags},
-      </if>
-    </set>
-    where user_id=#{userId}
-  </update>
 </mapper>

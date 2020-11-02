@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.Role;
 
 /**
- * 用户角色的数据库操作接口
+ * ${description}
  *
  * @author STEA_YY
  **/
