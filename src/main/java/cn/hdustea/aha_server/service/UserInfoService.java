@@ -120,16 +120,4 @@ public class UserInfoService {
         User user = userService.getUserByPhone(phone);
         userInfoMapper.updateAvatarUrlByUserId(fileUrl, user.getId());
     }
-
-    /**
-     * 根据手机号修改用户简历id
-     *
-     * @param resumeId 简历id（MongoDB ObjectId）
-     * @param phone    用户手机号
-     * @throws SelectException 用户不存在
-     */
-    public void updateResumeIdByPhone(String resumeId, String phone) throws SelectException {
-        User user = userService.getUserByPhone(phone);
-        userInfoMapper.updateResumeIdByUserId(resumeId, user.getId());
-    }
 }

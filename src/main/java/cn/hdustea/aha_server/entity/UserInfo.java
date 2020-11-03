@@ -1,8 +1,6 @@
 package cn.hdustea.aha_server.entity;
 
 import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -15,7 +13,6 @@ public class UserInfo {
     /**
      * 用户主键(外键)
      */
-    @JsonIgnore
     private Integer userId;
 
     /**
@@ -87,9 +84,4 @@ public class UserInfo {
      * 用户参与过比赛标签
      */
     private String compTags;
-
-    /**
-     * 用户简历id（MongoDB）
-     */
-    private String resumeId;
 }

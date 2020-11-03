@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.dao.ResumeDao;
 import cn.hdustea.aha_server.entity.Resume;
+import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
@@ -21,6 +22,8 @@ public class ResumeService {
     private ResumeDao resumeDao;
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private UserService userService;
 
     /**
      * 根据id查询简历
@@ -40,11 +43,8 @@ public class ResumeService {
      * @throws SelectException 查询失败异常
      */
     public Resume getResumeByPhone(String phone) throws SelectException {
-        UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
-        if (userInfo == null || userInfo.getResumeId() == null) {
-            throw new SelectException();
-        }
-        return resumeDao.findById(new ObjectId(userInfo.getResumeId())).get();
+        User user = userService.getUserByPhone(phone);
+        return resumeDao.findByUserId(user.getId());
     }
 
     /**
@@ -75,22 +75,21 @@ public class ResumeService {
      * @throws UpdateException 修改失败异常
      */
     public void updateResumeByPhone(Resume resume, String phone) throws SelectException {
-        UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
-        if (userInfo.getResumeId() == null) {
-            Resume savedResume = saveResume(resume);
-            userInfoService.updateResumeIdByPhone(savedResume.getId().toString(), phone);
-        } else {
-            resume.setId(new ObjectId(userInfo.getResumeId()));
-            updateResume(resume);
+        User user = userService.getUserByPhone(phone);
+        resume.setUserId(user.getId());
+        Resume possibleResume = resumeDao.findByUserId(user.getId());
+        if (possibleResume != null) {
+            resume.setId(possibleResume.getId());
         }
+        resumeDao.save(resume);
     }
 
     /**
-     * 根据id删除简历
+     * 根据用户id删除简历
      *
-     * @param id 简历id
+     * @param userId 用户id
      */
-    public void deleteResumeById(ObjectId id) {
-        resumeDao.deleteById(id);
+    public void deleteResumeByUserId(int userId) {
+        resumeDao.deleteByUserId(userId);
     }
 }

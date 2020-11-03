@@ -113,10 +113,9 @@ public class AuthService {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
             userInfo.setNickname(registerUser.getNickname());
-            Resume resume = new Resume();
-            resumeService.saveResume(resume);
-            userInfo.setResumeId(resume.getId().toString());
             userInfoService.saveUserInfo(userInfo);
+            Resume resume = new Resume();
+            resumeService.updateResumeByPhone(resume,user.getPhone());
         } else {
             throw new AccountExistedException();
         }
