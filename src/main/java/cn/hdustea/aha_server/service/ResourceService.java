@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.UserCollection;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
 import cn.hdustea.aha_server.mapper.ResourceMapper;
 import cn.hdustea.aha_server.entity.ResourceInfo;
@@ -9,6 +10,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.mapper.UserCollectionMapper;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import cn.hdustea.aha_server.entity.Resource;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,7 +136,10 @@ public class ResourceService {
         userCollection.setResId(resId);
         userCollection.setUserId(user.getId());
         userCollection.setTimestamp(new Date());
-        userCollectionMapper.insert(userCollection);
+        try {
+            userCollectionMapper.insert(userCollection);
+        } catch (DuplicateKeyException ignored) {
+        }
     }
 
     public void deleteCollection(int resId, String phone) throws SelectException {

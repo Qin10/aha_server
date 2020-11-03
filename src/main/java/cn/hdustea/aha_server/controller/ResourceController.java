@@ -10,6 +10,7 @@ import cn.hdustea.aha_server.entity.ResourceMember;
 import cn.hdustea.aha_server.entity.UserCollection;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
@@ -172,7 +173,7 @@ public class ResourceController {
 
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/info/member/{id}")
-    public ResponseBean saveResourceMemberById(@RequestBody @Validated ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
+    public ResponseBean saveResourceMemberById(@RequestBody @Validated ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException, InsertException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
@@ -203,6 +204,7 @@ public class ResourceController {
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    @RequiresLogin
     @GetMapping("/collection")
     public ResponseBean getAllCollection() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
@@ -210,6 +212,7 @@ public class ResourceController {
         return new ResponseBean(200, "succ", collections, TimeUtil.getFormattedTime(new Date()));
     }
 
+    @RequiresLogin
     @PostMapping("/collection/{resId}")
     public ResponseBean collectResource(@PathVariable("resId") int resId) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
@@ -218,6 +221,7 @@ public class ResourceController {
         return new ResponseBean(200, "收藏成功！", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    @RequiresLogin
     @DeleteMapping("/collection/{resId}")
     public ResponseBean cancelCollection(@PathVariable("resId") int resId) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();

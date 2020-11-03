@@ -1,9 +1,11 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.ResourceMember;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
 import cn.hdustea.aha_server.entity.ResourceInfo;
 import cn.hdustea.aha_server.mapper.ResourceMemberMapper;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -37,9 +39,13 @@ public class ResourceInfoService {
         resourceMemberMapper.insertList(resourceMembers, resourceId);
     }
 
-    public void saveResourceMemberByResId(ResourceMember resourceMember, int resourceId) {
+    public void saveResourceMemberByResId(ResourceMember resourceMember, int resourceId) throws InsertException {
         resourceMember.setResId(resourceId);
-        resourceMemberMapper.insert(resourceMember);
+        try {
+            resourceMemberMapper.insert(resourceMember);
+        } catch (DuplicateKeyException e){
+            throw new InsertException("该队员已经存在！");
+        }
     }
 
     public void deleteResourceMember(int resourceId, String phone) {
