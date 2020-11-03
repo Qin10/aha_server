@@ -29,8 +29,17 @@ public class ResourceInfoService {
         resourceInfoMapper.updateByResId(resourceInfo, resourceId);
     }
 
+    public List<ResourceMember> getAllResourceMemberByResId(int resourceId) {
+        return resourceMemberMapper.selectAllByResId(resourceId);
+    }
+
     public void saveResourceMembersByResId(List<ResourceMember> resourceMembers, int resourceId) {
         resourceMemberMapper.insertList(resourceMembers, resourceId);
+    }
+
+    public void saveResourceMemberByResId(ResourceMember resourceMember, int resourceId) {
+        resourceMember.setResId(resourceId);
+        resourceMemberMapper.insert(resourceMember);
     }
 
     public void deleteResourceMember(int resourceId, String phone) {

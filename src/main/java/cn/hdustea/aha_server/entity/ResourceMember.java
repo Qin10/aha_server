@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -12,6 +13,7 @@ public class ResourceMember {
     /**
      * 资源id(外键)
      */
+    @JsonIgnore
     private Integer resId;
 
     /**
@@ -20,6 +22,8 @@ public class ResourceMember {
     private String memberPhone;
 
     private String trueName;
+    private String school;
+    private String major;
     private String avatarUrl;
     /**
      * 成员职务

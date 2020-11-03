@@ -6,6 +6,7 @@ import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.entity.Resource;
 import cn.hdustea.aha_server.entity.ResourceInfo;
+import cn.hdustea.aha_server.entity.ResourceMember;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
@@ -157,6 +158,39 @@ public class ResourceController {
             throw new PermissionDeniedException();
         }
         resourceInfoService.updateResourceInfoByResourceId(resourceInfo, id);
+        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin(requireSignContract = true)
+    @PostMapping("/info/member/{id}")
+    public ResponseBean saveResourceMemberById(@RequestBody ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        if (!resourceService.hasPermission(phone, id)) {
+            throw new PermissionDeniedException();
+        }
+        resourceInfoService.saveResourceMemberByResId(resourceMember, id);
+        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin(requireSignContract = true)
+    @PutMapping("/info/member/{id}")
+    public ResponseBean updateResourceMemberById(@RequestBody ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        if (!resourceService.hasPermission(phone, id)) {
+            throw new PermissionDeniedException();
+        }
+        resourceInfoService.updateMemberJob(resourceMember.getJob(), id, resourceMember.getMemberPhone());
+        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @DeleteMapping("/info/member/{id}/{phone}")
+    public ResponseBean deleteResourceMember(@PathVariable("id") int id, @PathVariable("phone") String deletedPhone) throws PermissionDeniedException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        if (!resourceService.hasPermission(phone, id)) {
+            throw new PermissionDeniedException();
+        }
+        resourceInfoService.deleteResourceMember(id, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
