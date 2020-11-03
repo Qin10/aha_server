@@ -1,6 +1,9 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
+import cn.hdustea.aha_server.entity.UserCollection;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
+import cn.hdustea.aha_server.mapper.UserCollectionMapper;
 import cn.hdustea.aha_server.mapper.UserInfoMapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
@@ -11,6 +14,9 @@ import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 用户公有信息服务类
@@ -40,11 +46,8 @@ public class UserInfoService {
      * @param phone 用户手机号
      * @return 用户公有信息实体类
      */
-    public UserInfo getUserInfoByPhone(String phone) {
+    public UserInfo getUserInfoByPhone(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            return null;
-        }
         return userInfoMapper.selectByUserId(user.getId());
     }
 
@@ -54,11 +57,8 @@ public class UserInfoService {
      * @param phone 用户手机号
      * @return 用户个人详细信息
      */
-    public PersonalUserInfoBean getPersonalUserInfo(String phone) {
+    public PersonalUserInfoBean getPersonalUserInfo(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            return null;
-        }
         UserInfo userInfo = userInfoMapper.selectByUserId(user.getId());
         PersonalUserInfoBean personalUserInfoBean = new PersonalUserInfoBean();
         personalUserInfoBean.setPhone(user.getPhone());
@@ -73,15 +73,9 @@ public class UserInfoService {
      * 保存用户公有信息
      *
      * @param userInfo 用户公有信息实体类
-     * @throws InsertException 插入失败异常
      */
-    public void saveUserInfo(UserInfo userInfo) throws InsertException {
-        UserInfo possibleUserInfo = userInfoMapper.selectByUserId(userInfo.getUserId());
-        if (possibleUserInfo == null) {
-            userInfoMapper.insertSelective(userInfo);
-        } else {
-            throw new InsertException("用户详情已存在，无法插入！");
-        }
+    public void saveUserInfo(UserInfo userInfo) {
+        userInfoMapper.insertSelective(userInfo);
     }
 
     public void updateUserInfo(UserInfo userInfo) {
@@ -93,13 +87,10 @@ public class UserInfoService {
      *
      * @param userInfo 用户公有信息实体类
      * @param phone    用户手机号
-     * @throws UpdateException 修改失败异常
+     * @throws SelectException 用户不存在
      */
-    public void updateUserInfoByPhone(UserInfo userInfo, String phone) throws UpdateException {
+    public void updateUserInfoByPhone(UserInfo userInfo, String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            throw new UpdateException("用户不存在，修改失败！");
-        }
         userInfoMapper.updateByUserId(userInfo, user.getId());
     }
 
@@ -123,13 +114,10 @@ public class UserInfoService {
      *
      * @param fileUrl 图片路径
      * @param phone   手机号
-     * @throws UpdateException 更新失败异常
+     * @throws SelectException 用户不存在
      */
-    public void updateAvatarUrlByPhone(String fileUrl, String phone) throws UpdateException {
+    public void updateAvatarUrlByPhone(String fileUrl, String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            throw new UpdateException("用户不存在，修改失败！");
-        }
         userInfoMapper.updateAvatarUrlByUserId(fileUrl, user.getId());
     }
 
@@ -138,13 +126,10 @@ public class UserInfoService {
      *
      * @param resumeId 简历id（MongoDB ObjectId）
      * @param phone    用户手机号
-     * @throws UpdateException 修改失败异常
+     * @throws SelectException 用户不存在
      */
-    public void updateResumeIdByPhone(String resumeId, String phone) throws UpdateException {
+    public void updateResumeIdByPhone(String resumeId, String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            throw new UpdateException("用户不存在，修改失败！");
-        }
         userInfoMapper.updateResumeIdByUserId(resumeId, user.getId());
     }
 }

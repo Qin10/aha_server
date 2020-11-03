@@ -1,7 +1,9 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.UserMapper;
 import cn.hdustea.aha_server.entity.User;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,8 +28,13 @@ public class UserService {
      * @param phone 手机号
      * @return 用户实体类
      */
-    public User getUserByPhone(String phone) {
-        return userMapper.selectByPhone(phone);
+    public User getUserByPhone(String phone) throws SelectException {
+        User user = userMapper.selectByPhone(phone);
+        if (user == null) {
+            throw new SelectException("用户不存在！");
+        } else {
+            return user;
+        }
     }
 
     /**

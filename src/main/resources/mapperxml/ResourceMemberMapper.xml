@@ -7,6 +7,7 @@
         <id column="rem_res_id" property="resId"/>
         <id column="rem_member_phone" property="memberPhone"/>
         <result column="rem_job" property="job"/>
+        <result column="ui_nickname" property="nickname"/>
         <result column="ui_true_name" property="trueName"/>
         <result column="ui_avatar_url" property="avatarUrl"/>
         <result column="ui_school" property="school"/>

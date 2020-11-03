@@ -1,10 +1,12 @@
 package cn.hdustea.aha_server;
 
 import cn.hdustea.aha_server.entity.ResourceInfo;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
 import cn.hdustea.aha_server.mapper.ResourceMapper;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.ResourceService;
+import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.junit.jupiter.api.Test;
@@ -20,18 +22,22 @@ class AhaServerApplicationTests {
     @Resource
     private UserService userService;
     @Resource
+    private UserInfoService userInfoService;
+    @Resource
     private RedisUtil redisUtil;
     @Resource
     private ResourceMapper resourceMapper;
     @Resource
     private ResourceInfoMapper resourceInfoMapper;
+    @Resource
+    private ResourceService resourceService;
 
     @Test
     void contextLoads() {
     }
 
     @Test
-    void testGetUser() {
+    void testGetUser() throws SelectException {
         System.out.println(userService.getUserByPhone("15382355341"));
     }
 
@@ -59,5 +65,9 @@ class AhaServerApplicationTests {
     @Test
     void testResourceMapper() {
         System.out.println(resourceInfoMapper.selectByResId(4));
+    }
+    @Test
+    void testCollect() throws SelectException {
+        System.out.println(resourceService.getAllCollectionByPhone("15382355341"));
     }
 }

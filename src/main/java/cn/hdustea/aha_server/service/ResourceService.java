@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.entity.UserCollection;
 import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
 import cn.hdustea.aha_server.mapper.ResourceMapper;
 import cn.hdustea.aha_server.entity.ResourceInfo;
@@ -7,11 +8,14 @@ import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
+import cn.hdustea.aha_server.mapper.UserCollectionMapper;
 import org.springframework.stereotype.Service;
 import cn.hdustea.aha_server.entity.Resource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URL;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 竞赛资源的服务类
@@ -24,6 +28,8 @@ public class ResourceService {
     private ResourceMapper resourceMapper;
     @javax.annotation.Resource
     private ResourceInfoMapper resourceInfoMapper;
+    @javax.annotation.Resource
+    private UserCollectionMapper userCollectionMapper;
     @javax.annotation.Resource
     private UserService userService;
     @javax.annotation.Resource
@@ -111,5 +117,23 @@ public class ResourceService {
         }
         URL url = ossService.signDownload(resource.getFilename());
         return url.toString();
+    }
+    public List<UserCollection> getAllCollectionByPhone(String phone) throws SelectException {
+        User user = userService.getUserByPhone(phone);
+        return userCollectionMapper.selectAllByUserId(user.getId());
+    }
+
+    public void saveCollection(int resId, String phone) throws SelectException {
+        User user = userService.getUserByPhone(phone);
+        UserCollection userCollection = new UserCollection();
+        userCollection.setResId(resId);
+        userCollection.setUserId(user.getId());
+        userCollection.setTimestamp(new Date());
+        userCollectionMapper.insert(userCollection);
+    }
+
+    public void deleteCollection(int resId, String phone) throws SelectException {
+        User user = userService.getUserByPhone(phone);
+        userCollectionMapper.deleteByPrimaryKey(user.getId(), resId);
     }
 }

@@ -3,6 +3,8 @@ package cn.hdustea.aha_server.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 /**
  * ${description}
  *
@@ -19,8 +21,9 @@ public class ResourceMember {
     /**
      * 成员手机号(外键)
      */
+    @NotEmpty(message = "成员手机号不能为空！")
     private String memberPhone;
-
+    private String nickname;
     private String trueName;
     private String school;
     private String major;
@@ -28,5 +31,6 @@ public class ResourceMember {
     /**
      * 成员职务
      */
+    @NotEmpty(message = "成员职务不能为空！")
     private String job;
 }

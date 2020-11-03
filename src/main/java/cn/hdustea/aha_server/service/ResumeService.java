@@ -74,11 +74,8 @@ public class ResumeService {
      * @param phone  用户手机号
      * @throws UpdateException 修改失败异常
      */
-    public void updateResumeByPhone(Resume resume, String phone) throws UpdateException {
+    public void updateResumeByPhone(Resume resume, String phone) throws SelectException {
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
-        if (userInfo == null) {
-            throw new UpdateException("用户不存在！");
-        }
         if (userInfo.getResumeId() == null) {
             Resume savedResume = saveResume(resume);
             userInfoService.updateResumeIdByPhone(savedResume.getId().toString(), phone);

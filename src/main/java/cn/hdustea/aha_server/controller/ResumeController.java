@@ -49,7 +49,7 @@ public class ResumeController {
      */
     @RequiresLogin
     @PostMapping()
-    public ResponseBean saveResume(@RequestBody Resume resume) throws UpdateException {
+    public ResponseBean saveResume(@RequestBody Resume resume) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         Resume savedResume = resumeService.saveResume(resume);
         userInfoService.updateResumeIdByPhone(savedResume.getId().toString(), phone);
@@ -64,7 +64,7 @@ public class ResumeController {
      */
     @RequiresLogin
     @PutMapping()
-    public ResponseBean updateResume(@RequestBody Resume resume) throws UpdateException {
+    public ResponseBean updateResume(@RequestBody Resume resume) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         resumeService.updateResumeByPhone(resume, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));

@@ -10,6 +10,7 @@ import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
@@ -77,7 +78,7 @@ public class AuthService {
             if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
                 String token = signToken(user);
                 PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
-                MDC.put("phone",loginUser.getPhone());
+                MDC.put("phone", loginUser.getPhone());
                 MDC.put("ip", IpUtil.getIpAddr(request));
                 return new TokenAndPersonalUserInfoBean(token, personalUserInfo);
             } else {
@@ -128,15 +129,12 @@ public class AuthService {
      * @throws MessageCheckException    短信验证码校验异常
      * @throws AccountNotFoundException 账号未找到异常
      */
-    public void changePassword(ChangePasswordBean changePasswordBean, String phone) throws MessageCheckException, AccountNotFoundException {
+    public void changePassword(ChangePasswordBean changePasswordBean, String phone) throws MessageCheckException, SelectException {
         boolean SmsVerifyResult = smsService.verifySmsCode(phone, changePasswordBean.getCode(), SmsService.CHANGE_PASSWORD_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            throw new AccountNotFoundException();
-        }
         String encodedPassword = bCryptPasswordEncoder.encode(changePasswordBean.getNewPassword());
         userService.updatePassword(phone, encodedPassword);
     }
@@ -148,22 +146,16 @@ public class AuthService {
      * @return 新的token令牌
      * @throws AccountNotFoundException 用户不存在异常
      */
-    public String signNotice(String phone) throws AccountNotFoundException {
+    public String signNotice(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            throw new AccountNotFoundException();
-        }
         userService.updatesignedNotice(phone, true);
         user.setSignedNotice(true);
         return signToken(user);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, AccountNotFoundException, UpdateException {
+    public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, UpdateException, SelectException {
         User user = userService.getUserByPhone(phone);
-        if (user == null) {
-            throw new AccountNotFoundException();
-        }
         if (user.getSignedContract()) {
             throw new UpdateException("已经签署过合同！");
         }

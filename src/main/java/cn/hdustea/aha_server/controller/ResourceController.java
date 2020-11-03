@@ -7,6 +7,7 @@ import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.entity.Resource;
 import cn.hdustea.aha_server.entity.ResourceInfo;
 import cn.hdustea.aha_server.entity.ResourceMember;
+import cn.hdustea.aha_server.entity.UserCollection;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 竞赛资源的控制类
@@ -35,7 +37,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/resource")
 public class ResourceController {
-    private static final String MODULE_NAME = "注册登录模块";
+    protected static final String MODULE_NAME = "注册登录模块";
     @javax.annotation.Resource
     private ResourceService resourceService;
     @javax.annotation.Resource
@@ -163,7 +165,7 @@ public class ResourceController {
 
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/info/member/{id}")
-    public ResponseBean saveResourceMemberById(@RequestBody ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
+    public ResponseBean saveResourceMemberById(@RequestBody @Validated ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
@@ -174,7 +176,7 @@ public class ResourceController {
 
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/info/member/{id}")
-    public ResponseBean updateResourceMemberById(@RequestBody ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
+    public ResponseBean updateResourceMemberById(@RequestBody @Validated ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
@@ -192,6 +194,29 @@ public class ResourceController {
         }
         resourceInfoService.deleteResourceMember(id, phone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @GetMapping("/collection")
+    public ResponseBean getAllCollection() throws SelectException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        List<UserCollection> collections = resourceService.getAllCollectionByPhone(phone);
+        return new ResponseBean(200, "succ", collections, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @PostMapping("/collection/{resId}")
+    public ResponseBean collectResource(@PathVariable("resId") int resId) throws SelectException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        resourceService.saveCollection(resId, phone);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "收藏资源", "id=" + resId);
+        return new ResponseBean(200, "收藏成功！", null, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @DeleteMapping("/collection/{resId}")
+    public ResponseBean cancelCollection(@PathVariable("resId") int resId) throws SelectException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        resourceService.deleteCollection(resId, phone);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "取消收藏资源", "id=" + resId);
+        return new ResponseBean(200, "取消收藏成功！", null, TimeUtil.getFormattedTime(new Date()));
     }
 
     private void addReadByResourceId(int resourceId) {

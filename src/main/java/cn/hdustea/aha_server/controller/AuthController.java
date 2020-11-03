@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.*;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.entity.Contract;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
@@ -30,7 +31,7 @@ import java.util.HashMap;
 @RestController
 @Slf4j(topic = "userOperationLog")
 public class AuthController {
-    private static final String MODULE_NAME = "注册登录模块";
+    protected static final String MODULE_NAME = "注册登录模块";
     @Resource
     private AuthService authService;
     @Resource
@@ -73,7 +74,7 @@ public class AuthController {
      * @throws AccountNotFoundException 账号未找到异常
      */
     @PostMapping("/changePassword/{phone}")
-    public ResponseBean changePassword(@RequestBody @Validated ChangePasswordBean changePasswordBean, @PathVariable("phone") String phone) throws MessageCheckException, AccountNotFoundException {
+    public ResponseBean changePassword(@RequestBody @Validated ChangePasswordBean changePasswordBean, @PathVariable("phone") String phone) throws MessageCheckException, SelectException {
         authService.changePassword(changePasswordBean, phone);
         return new ResponseBean(200, "密码修改成功！", null, TimeUtil.getFormattedTime(new Date()));
     }
@@ -85,7 +86,7 @@ public class AuthController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/sign/notice")
-    public ResponseBean signNotice() throws AccountNotFoundException {
+    public ResponseBean signNotice() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signNotice(phone);
         HashMap<String, String> responseMap = new HashMap<>();
@@ -95,7 +96,7 @@ public class AuthController {
 
     @RequiresLogin
     @PostMapping("/sign/contract")
-    public ResponseBean signContract(MultipartFile file, @Validated Contract contract) throws IOException, AccountNotFoundException, UpdateException {
+    public ResponseBean signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signContract(phone, file, contract);
         HashMap<String, String> responseMap = new HashMap<>();
