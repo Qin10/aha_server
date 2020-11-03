@@ -35,6 +35,10 @@ public class ResourceService {
     @javax.annotation.Resource
     private OssService ossService;
 
+    public List<Resource> getAllResource() {
+        return resourceMapper.selectAll();
+    }
+
     /**
      * 根据id获取资源
      *
@@ -118,6 +122,7 @@ public class ResourceService {
         URL url = ossService.signDownload(resource.getFilename());
         return url.toString();
     }
+
     public List<UserCollection> getAllCollectionByPhone(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
         return userCollectionMapper.selectAllByUserId(user.getId());

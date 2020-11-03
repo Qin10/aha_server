@@ -49,6 +49,13 @@ public class ResourceController {
     @javax.annotation.Resource
     private UserOperationLogConfig userOperationLogConfig;
 
+    @RequiresLogin
+    @GetMapping()
+    public ResponseBean getAllResource(){
+        List<Resource> resources = resourceService.getAllResource();
+        return new ResponseBean(200, "succ", resources, TimeUtil.getFormattedTime(new Date()));
+    }
+
     /**
      * 根据id获取资源的接口
      *

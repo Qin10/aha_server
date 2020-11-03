@@ -23,6 +23,10 @@ public interface ResourceMapper {
 
     int updateByPrimaryKey(Resource record);
 
+    List<Resource> selectAll();
+
+
+
     String selectAuthorPhoneById(@Param("id") Integer id);
 
     List<Integer> selectId();
