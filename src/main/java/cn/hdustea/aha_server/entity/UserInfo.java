@@ -1,6 +1,8 @@
 package cn.hdustea.aha_server.entity;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -13,6 +15,7 @@ public class UserInfo {
     /**
      * 用户主键(外键)
      */
+    @JsonIgnore
     private Integer userId;
 
     /**

@@ -263,9 +263,6 @@
       <if test="updated.compTags != null">
         ui_comp_tags = #{updated.compTags},
       </if>
-      <if test="updated.resumeId != null">
-        ui_resume_id = #{updated.resumeId},
-      </if>
     </set>
     where ui_user_id=#{userId}
   </update>

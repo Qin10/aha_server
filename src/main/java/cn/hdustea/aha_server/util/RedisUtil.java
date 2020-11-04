@@ -1,12 +1,15 @@
 package cn.hdustea.aha_server.util;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import cn.hdustea.aha_server.entity.UserContribPoint;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
@@ -39,6 +42,7 @@ public class RedisUtil {
     public static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
     public static final String RESOURCE_READ_KEY = "resource:read";
+    public static final String CONTRIB_RANK_KEY = "contrib:rank";
 
     // =============================common============================
 
@@ -446,6 +450,18 @@ public class RedisUtil {
         }
     }
 
+    public Set<ZSetOperations.TypedTuple<Object>> zSGetTuple(String key, long start, long end) {
+        return redisTemplate.opsForZSet().reverseRangeWithScores(key, start, end);
+    }
+
+    public Long zSGetRank(String key, Object value) {
+        return redisTemplate.opsForZSet().reverseRank(key, value);
+    }
+
+    public Double zSGetScore(String key, Object value) {
+        return redisTemplate.opsForZSet().score(key, value);
+    }
+
     /**
      * 根据value从一个set中查询,是否存在
      *
@@ -464,7 +480,7 @@ public class RedisUtil {
 
     public Boolean zSSet(String key, Object value, double score) {
         try {
-            return redisTemplate.opsForZSet().add(key, value, 2);
+            return redisTemplate.opsForZSet().add(key, value, score);
         } catch (Exception e) {
             log.error(key, e);
             return false;
@@ -682,5 +698,18 @@ public class RedisUtil {
         }
     }
 
+    public List<UserContribPoint> tupleToUserContribPoint(Set<ZSetOperations.TypedTuple<Object>> tuples) {
+        List<UserContribPoint> userContribPoints = new ArrayList<>();
+        long currentRank = 1;
+        for (ZSetOperations.TypedTuple<Object> tuple : tuples) {
+            UserContribPoint userContribPoint = new UserContribPoint();
+            userContribPoint.setPhone((String) tuple.getValue());
+            userContribPoint.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
+            userContribPoint.setRank(currentRank);
+            currentRank++;
+            userContribPoints.add(userContribPoint);
+        }
+        return userContribPoints;
+    }
 }
 

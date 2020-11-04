@@ -1,19 +1,20 @@
 package cn.hdustea.aha_server;
 
 import cn.hdustea.aha_server.entity.ResourceInfo;
+import cn.hdustea.aha_server.entity.UserContribPoint;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ResourceInfoMapper;
 import cn.hdustea.aha_server.mapper.ResourceMapper;
-import cn.hdustea.aha_server.service.OssService;
-import cn.hdustea.aha_server.service.ResourceService;
-import cn.hdustea.aha_server.service.UserInfoService;
-import cn.hdustea.aha_server.service.UserService;
+import cn.hdustea.aha_server.service.*;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.List;
+import java.util.Set;
 
 @SpringBootTest
 class AhaServerApplicationTests {
@@ -31,6 +32,8 @@ class AhaServerApplicationTests {
     private ResourceInfoMapper resourceInfoMapper;
     @Resource
     private ResourceService resourceService;
+    @Resource
+    private ContribRankService contribRankService;
 
     @Test
     void contextLoads() {
@@ -69,5 +72,14 @@ class AhaServerApplicationTests {
     @Test
     void testCollect() throws SelectException {
         System.out.println(resourceService.getAllCollectionByPhone("15382355341"));
+    }
+    @Test
+    void testRank(){
+        System.out.println(contribRankService.getRankList());
+    }
+
+    @Test
+    void testCRank() throws SelectException {
+        System.out.println(contribRankService.getUserContribPointByPhone("15382355341"));
     }
 }
