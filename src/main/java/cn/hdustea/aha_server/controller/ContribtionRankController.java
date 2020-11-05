@@ -4,7 +4,7 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.bean.ResponseBean;
 import cn.hdustea.aha_server.entity.UserContribPoint;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.service.ContribRankService;
+import cn.hdustea.aha_server.service.ContributionRankService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,14 +22,14 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/rank")
-public class ContribRankController {
+public class ContribtionRankController {
     @Resource
-    private ContribRankService contribRankService;
+    private ContributionRankService contributionRankService;
 
     @RequiresLogin
     @GetMapping()
     public ResponseBean getRankList() {
-        List<UserContribPoint> rankList = contribRankService.getRankList();
+        List<UserContribPoint> rankList = contributionRankService.getRankList();
         return new ResponseBean(200, "succ", rankList, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -37,7 +37,7 @@ public class ContribRankController {
     @GetMapping("/me")
     public ResponseBean getMyRank() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
-        UserContribPoint userContribPoint = contribRankService.getUserContribPointByPhone(phone);
+        UserContribPoint userContribPoint = contributionRankService.getUserContribPointByPhone(phone);
         return new ResponseBean(200, "succ", userContribPoint, TimeUtil.getFormattedTime(new Date()));
     }
 }

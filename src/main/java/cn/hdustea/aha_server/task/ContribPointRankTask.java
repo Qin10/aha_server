@@ -25,11 +25,11 @@ public class ContribPointRankTask {
 
     @Scheduled(cron = "0 0 * * * ?")
     public void getRank() {
-        log.info("Contrib Rank Task is Running");
+        log.debug("Contrib Rank Task is Running");
         List<UserContribPoint> userContribPoints = userMapper.selectPhoneAndContribPoint();
-        redisUtil.del(RedisUtil.CONTRIB_RANK_KEY);
+        redisUtil.del(RedisUtil.CONTRIBUTION_RANK_KEY);
         for (UserContribPoint userContribPoint : userContribPoints) {
-            redisUtil.zSSet(RedisUtil.CONTRIB_RANK_KEY, userContribPoint.getPhone(), userContribPoint.getContribPoint().doubleValue());
+            redisUtil.zSSet(RedisUtil.CONTRIBUTION_RANK_KEY, userContribPoint.getPhone(), userContribPoint.getContribPoint().doubleValue());
         }
     }
 }

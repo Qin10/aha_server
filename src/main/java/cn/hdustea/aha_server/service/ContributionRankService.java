@@ -18,19 +18,19 @@ import java.util.Set;
  * @author STEA_YY
  **/
 @Service
-public class ContribRankService {
+public class ContributionRankService {
     @Resource
     private RedisUtil redisUtil;
     @Resource
     private UserService userService;
 
     public List<UserContribPoint> getRankList() {
-        Set<ZSetOperations.TypedTuple<Object>> tuples = redisUtil.zSGetTuple(RedisUtil.CONTRIB_RANK_KEY, 0, 99);
+        Set<ZSetOperations.TypedTuple<Object>> tuples = redisUtil.zSGetTuple(RedisUtil.CONTRIBUTION_RANK_KEY, 0, 99);
         return redisUtil.tupleToUserContribPoint(tuples);
     }
 
     public long getRankByPhone(String phone) throws SelectException {
-        Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIB_RANK_KEY, phone);
+        Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIBUTION_RANK_KEY, phone);
         if (rank == null) {
             throw new SelectException("未查询到排名!");
         }
@@ -39,7 +39,7 @@ public class ContribRankService {
 
     public UserContribPoint getUserContribPointByPhone(String phone) throws SelectException {
         long rank = getRankByPhone(phone);
-        Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIB_RANK_KEY, phone);
+        Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, phone);
         User user = userService.getUserByPhone(phone);
         UserContribPoint userContribPoint = new UserContribPoint();
         userContribPoint.setPhone(user.getPhone());

@@ -42,7 +42,7 @@ public class RedisUtil {
     public static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
     public static final String RESOURCE_READ_KEY = "resource:read";
-    public static final String CONTRIB_RANK_KEY = "contrib:rank";
+    public static final String CONTRIBUTION_RANK_KEY = "contribution:rank";
 
     // =============================common============================
 
