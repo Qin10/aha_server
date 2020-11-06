@@ -1,5 +1,7 @@
 package cn.hdustea.aha_server.entity;
 
+import cn.hdustea.aha_server.entity.valid.InsertGroup;
+import cn.hdustea.aha_server.entity.valid.UpdateGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -21,7 +23,7 @@ public class ResourceMember {
     /**
      * 成员手机号(外键)
      */
-    @NotEmpty(message = "成员手机号不能为空！")
+    @NotEmpty(message = "成员手机号不能为空！", groups = {InsertGroup.class})
     private String memberPhone;
     private String nickname;
     private String trueName;
@@ -31,6 +33,6 @@ public class ResourceMember {
     /**
      * 成员职务
      */
-    @NotEmpty(message = "成员职务不能为空！")
+    @NotEmpty(message = "成员职务不能为空！", groups = {InsertGroup.class, UpdateGroup.class})
     private String job;
 }

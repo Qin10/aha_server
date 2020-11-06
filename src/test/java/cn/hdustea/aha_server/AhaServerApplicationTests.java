@@ -33,7 +33,7 @@ class AhaServerApplicationTests {
     @Resource
     private ResourceService resourceService;
     @Resource
-    private ContribRankService contribRankService;
+    private ContributionRankService contributionRankService;
 
     @Test
     void contextLoads() {
@@ -75,11 +75,11 @@ class AhaServerApplicationTests {
     }
     @Test
     void testRank(){
-        System.out.println(contribRankService.getRankList());
+        System.out.println(contributionRankService.getRankList());
     }
 
     @Test
     void testCRank() throws SelectException {
-        System.out.println(contribRankService.getUserContribPointByPhone("15382355341"));
+        System.out.println(contributionRankService.getUserContribPointByPhone("15382355341"));
     }
 }

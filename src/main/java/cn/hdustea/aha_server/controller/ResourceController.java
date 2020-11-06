@@ -8,6 +8,8 @@ import cn.hdustea.aha_server.entity.Resource;
 import cn.hdustea.aha_server.entity.ResourceInfo;
 import cn.hdustea.aha_server.entity.ResourceMember;
 import cn.hdustea.aha_server.entity.UserCollection;
+import cn.hdustea.aha_server.entity.valid.InsertGroup;
+import cn.hdustea.aha_server.entity.valid.UpdateGroup;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
@@ -38,7 +40,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/resource")
 public class ResourceController {
-    protected static final String MODULE_NAME = "注册登录模块";
+    protected static final String MODULE_NAME = "资源模块";
     @javax.annotation.Resource
     private ResourceService resourceService;
     @javax.annotation.Resource
@@ -52,7 +54,7 @@ public class ResourceController {
 
     @RequiresLogin
     @GetMapping()
-    public ResponseBean getAllResource(){
+    public ResponseBean getAllResource() {
         List<Resource> resources = resourceService.getAllResource();
         return new ResponseBean(200, "succ", resources, TimeUtil.getFormattedTime(new Date()));
     }
@@ -173,7 +175,7 @@ public class ResourceController {
 
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/info/member/{id}")
-    public ResponseBean saveResourceMemberById(@RequestBody @Validated ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException, InsertException {
+    public ResponseBean saveResourceMemberById(@RequestBody @Validated(InsertGroup.class) ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException, InsertException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
@@ -183,24 +185,24 @@ public class ResourceController {
     }
 
     @RequiresLogin(requireSignContract = true)
-    @PutMapping("/info/member/{id}")
-    public ResponseBean updateResourceMemberById(@RequestBody @Validated ResourceMember resourceMember, @PathVariable("id") int id) throws PermissionDeniedException {
+    @PutMapping("/info/member/{id}/{memberPhone}")
+    public ResponseBean updateResourceMemberById(@RequestBody @Validated(UpdateGroup.class) ResourceMember resourceMember, @PathVariable("id") int id, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
         }
-        resourceInfoService.updateMemberJob(resourceMember.getJob(), id, resourceMember.getMemberPhone());
+        resourceInfoService.updateMemberJob(resourceMember.getJob(), id, memberPhone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
     @RequiresLogin
-    @DeleteMapping("/info/member/{id}/{phone}")
-    public ResponseBean deleteResourceMember(@PathVariable("id") int id, @PathVariable("phone") String deletedPhone) throws PermissionDeniedException {
+    @DeleteMapping("/info/member/{id}/{memberPhone}")
+    public ResponseBean deleteResourceMember(@PathVariable("id") int id, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!resourceService.hasPermission(phone, id)) {
             throw new PermissionDeniedException();
         }
-        resourceInfoService.deleteResourceMember(id, phone);
+        resourceInfoService.deleteResourceMember(id, memberPhone);
         return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
