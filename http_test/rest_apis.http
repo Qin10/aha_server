@@ -1,17 +1,57 @@
+###发送注册验证短信
+GET http://{{host}}/sms/sendCode/register/18557517547
+
+###发送修改密码验证短信
+GET http://{{host}}/sms/sendCode/changePassword/13819154341
+
+###用户注册
+POST http://{{host}}/register
+Content-Type: application/json
+
+{
+  "phone": "18557517547",
+  "password": "114514",
+  "nickname": "GZY",
+  "code": "1234"
+}
+
 ###用户登录
 POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": {{phone}},
-  "password": {{password}}
+  "phone": "15382355341",
+  "password": "114514"
 }
 
 > {% client.global.set("auth_token",response.body.data.token);%}
 
+###用户修改密码
+POST http://{{host}}/changePassword/13819154341
+Content-Type: application/json
+
+{
+  "newPassword": "123456",
+  "code": "1234"
+}
+
 ###获取用户个人信息
 GET http://{{host}}/userInfo/me
 Authorization:{{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###用户修改个人信息
+PUT http://{{host}}/userInfo/me
+Authorization:{{auth_token}}
+Content-Type: application/json
+
+{
+  "trueName": "姚懿",
+  "signature": "咕咕咕咕咕咕"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取用户简历信息
 GET http://{{host}}/resume/15382355341
@@ -83,8 +123,8 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
-###获取资源信息
-GET http://{{host}}/resource/info/5
+###获取资源详细信息
+GET http://{{host}}/resource/info/6
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -104,6 +144,78 @@ Authorization: {{auth_token}}
 ###取消收藏资源
 DELETE http://{{host}}/resource/collection/5
 Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###新建资源
+POST http://{{host}}/resource
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "name": "\"城市鹰眼\"智慧交通大数据挖掘系统-需求分析文档",
+  "compId": 1,
+  "level": "校一等奖",
+  "type": 2
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###修改资源基本信息
+PUT http://{{host}}/resource/6
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "name": "\"城市鹰眼\"智慧交通大数据挖掘系统-项目详细文档"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###删除资源
+DELETE http://{{host}}/resource/7
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###修改资源详细信息
+PUT http://{{host}}/resource/info/6
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "intro": "比赛项目的详细实现文档"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###添加项目成员
+POST http://{{host}}/resource/info/member/6
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "memberPhone": "15382355341",
+  "job": "队长"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###修改项目成员职务
+PUT http://{{host}}/resource/info/member/6/15382355341
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "job": "队员"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###删除项目成员
+DELETE http://{{host}}/resource/info/member/6/15382355341
+Authorization: {{auth_token}}
+Content-Type: application/json
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 

@@ -108,16 +108,17 @@ public class AuthService {
         user.setSignedNotice(registerUser.isSignedNotice());
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
-        if (userService.getUserByPhone(user.getPhone()) == null) {
+        try {
+            userService.getUserByPhone(user.getPhone());
+            throw new AccountExistedException();
+        } catch (SelectException e) {
             userService.saveUser(user);
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
             userInfo.setNickname(registerUser.getNickname());
             userInfoService.saveUserInfo(userInfo);
             Resume resume = new Resume();
-            resumeService.updateResumeByPhone(resume,user.getPhone());
-        } else {
-            throw new AccountExistedException();
+            resumeService.updateResumeByPhone(resume, user.getPhone());
         }
     }
 
