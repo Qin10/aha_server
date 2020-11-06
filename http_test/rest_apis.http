@@ -1,0 +1,121 @@
+###用户登录
+POST http://{{host}}/login
+Content-Type: application/json
+
+{
+  "phone": {{phone}},
+  "password": {{password}}
+}
+
+> {% client.global.set("auth_token",response.body.data.token);%}
+
+###获取用户个人信息
+GET http://{{host}}/userInfo/me
+Authorization:{{auth_token}}
+
+###获取用户简历信息
+GET http://{{host}}/resume/15382355341
+Authorization:{{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###修改用户简历
+PUT http://{{host}}/resume
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "name": "姚懿",
+  "phone": "15382355341",
+  "email": "269294523@qq.com",
+  "gender": "男",
+  "birth": "2000-6",
+  "highestDegree": "本科",
+  "identity": "学生",
+  "currentGrade": "大三",
+  "workPlace": "杭州",
+  "profession": "web后端开发工程师",
+  "eduExperiences": [
+    {
+      "degree": "本科",
+      "school": "杭州电子科技大学",
+      "specialty": "计算机科学与技术",
+      "grade": "20%-50%",
+      "startTime": "2018-09",
+      "endTime": "2022-06"
+    }
+  ],
+  "schoolExperiences": [
+    {
+      "organization": "杭州电子科技大学焦点摄影工作室",
+      "post": "部长",
+      "startTime": "2019-5",
+      "endTime": "2020-5",
+      "description": "负责咕叽咕叽咕叽咕叽咕叽"
+    }
+  ],
+  "projectExperiences": [
+    {
+      "name": "\"城市鹰眼\"智慧交通大数据挖掘系统",
+      "content": "项目经理，架构师，后端开发工程师，大数据开发工程师",
+      "startTime": "2020-1",
+      "endTime": "2020-6",
+      "description": "一款咕叽咕叽咕叽咕叽咕叽"
+    }
+  ],
+  "practiceExperiences": [],
+  "honors": [
+    {
+      "name": "杭州电子科技大学校服务外包创新创业竞赛校一等奖",
+      "time": "2020-5",
+      "description": "咕叽咕叽咕叽咕叽咕叽咕叽"
+    }
+  ],
+  "projectSkill": "摸鱼",
+  "intro": "咕叽咕叽咕叽咕叽咕叽"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取资源列表
+GET http://{{host}}/resource
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取资源信息
+GET http://{{host}}/resource/info/5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###查看收藏资源列表
+GET http://{{host}}/resource/collection
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###收藏资源
+POST http://{{host}}/resource/collection/5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###取消收藏资源
+DELETE http://{{host}}/resource/collection/5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取贡献点排行榜总表
+GET http://{{host}}/rank
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取贡献点排行榜个人排名
+GET http://{{host}}/rank/me
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
