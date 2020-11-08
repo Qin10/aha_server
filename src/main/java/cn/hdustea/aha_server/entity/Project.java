@@ -2,8 +2,12 @@ package cn.hdustea.aha_server.entity;
 
 import java.math.BigDecimal;
 
+import cn.hdustea.aha_server.entity.valid.InsertGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 /**
  * ${description}
@@ -26,6 +30,7 @@ public class Project {
     /**
      * 团队名称
      */
+    @NotEmpty(message = "项目名称不能为空")
     private String name;
 
     /**
@@ -52,5 +57,6 @@ public class Project {
     /**
      * 项目是否通过审核，公开共享
      */
+    @JsonIgnore
     private Boolean passed;
 }

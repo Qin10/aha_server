@@ -132,7 +132,7 @@ public class ProjectController {
 
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/member/{projectId}")
-    public ResponseBean saveProjectMemberById(@RequestBody @Validated(InsertGroup.class) ProjectMember projectMember, @PathVariable("projectId") int projectId) throws PermissionDeniedException, InsertException {
+    public ResponseBean saveProjectMemberById(@RequestBody @Validated ProjectMember projectMember, @PathVariable("projectId") int projectId) throws PermissionDeniedException, InsertException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
@@ -143,7 +143,7 @@ public class ProjectController {
 
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/member/{projectId}/{memberPhone}")
-    public ResponseBean updateResourceMemberById(@RequestBody @Validated(UpdateGroup.class) ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
+    public ResponseBean updateResourceMemberById(@RequestBody ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
@@ -184,7 +184,7 @@ public class ProjectController {
 
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
-    public ResponseBean saveProjectResourceByProjectId(@RequestBody ProjectResource projectResource, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean saveProjectResourceByProjectId(@RequestBody @Validated ProjectResource projectResource, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
