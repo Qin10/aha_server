@@ -17,6 +17,16 @@ public class Competition {
     private Integer compTagId;
 
     /**
+     * 赛事名称
+     */
+    private String name;
+
+    /**
+     * 赛事简介
+     */
+    private String intro;
+
+    /**
      * 赛事图片保存路径
      */
     private Integer picUrl;

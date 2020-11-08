@@ -1,14 +1,13 @@
 package cn.hdustea.aha_server.task;
 
-import cn.hdustea.aha_server.mapper.ResourceMapper;
-import cn.hdustea.aha_server.entity.Resource;
+import cn.hdustea.aha_server.entity.Project;
+import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,23 +21,21 @@ public class ResourceReadTask {
     @javax.annotation.Resource
     private RedisUtil redisUtil;
     @javax.annotation.Resource
-    private ResourceMapper resourceMapper;
+    private ProjectMapper projectMapper;
 
     @Scheduled(cron = "0 0 6,23 * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourceRead() {
-        log.debug("Resource Read Task is Running");
-        Map<Object, Object> resourceReadMap = redisUtil.hmget(RedisUtil.RESOURCE_READ_KEY);
-        for (Map.Entry<Object, Object> entry : resourceReadMap.entrySet()) {
-            Integer resourceId = Integer.parseInt((String) entry.getKey());
+        log.debug("Project Read Task is Running");
+        Map<Object, Object> projectReadMap = redisUtil.hmget(RedisUtil.RESOURCE_READ_KEY);
+        for (Map.Entry<Object, Object> entry : projectReadMap.entrySet()) {
+            Integer projectId = Integer.parseInt((String) entry.getKey());
             Integer read = (Integer) entry.getValue();
             if (read != null && read > 0) {
-                Resource resource = resourceMapper.selectByPrimaryKey(resourceId);
-                if (resource != null) {
-                    int updatedRead = resource.getRead() + read;
-                    resourceMapper.updateReadById(updatedRead, resourceId);
-                }
-                redisUtil.hdel(RedisUtil.RESOURCE_READ_KEY, Integer.toString(resourceId));
+                Project project = projectMapper.selectByPrimaryKey(projectId);
+                int updatedRead = project.getRead() + read;
+                projectMapper.updateReadById(updatedRead, projectId);
+                redisUtil.hdel(RedisUtil.RESOURCE_READ_KEY, Integer.toString(projectId));
             }
         }
     }

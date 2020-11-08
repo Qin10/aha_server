@@ -6,11 +6,13 @@
     <!--@Table competition-->
     <id column="co_id" property="id" />
     <result column="co_comp_tag_id" property="compTagId" />
+    <result column="co_name" property="name" />
+    <result column="co_intro" property="intro" />
     <result column="co_pic_url" property="picUrl" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    co_id, co_comp_tag_id, co_pic_url
+    co_id, co_comp_tag_id, co_name, co_intro, co_pic_url
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     <!--@mbg.generated-->
@@ -26,8 +28,8 @@
   </delete>
   <insert id="insert" parameterType="cn.hdustea.aha_server.entity.Competition">
     <!--@mbg.generated-->
-    insert into competition (co_id, co_comp_tag_id, co_pic_url)
-    values (#{id}, #{compTagId}, #{picUrl})
+    insert into competition (co_id, co_comp_tag_id, co_name, co_intro, co_pic_url)
+    values (#{id}, #{compTagId}, #{name}, #{intro}, #{picUrl})
   </insert>
   <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.Competition">
     <!--@mbg.generated-->
@@ -39,6 +41,12 @@
       <if test="compTagId != null">
         co_comp_tag_id,
       </if>
+      <if test="name != null">
+        co_name,
+      </if>
+      <if test="intro != null">
+        co_intro,
+      </if>
       <if test="picUrl != null">
         co_pic_url,
       </if>
@@ -49,6 +57,12 @@
       </if>
       <if test="compTagId != null">
         #{compTagId},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="intro != null">
+        #{intro},
       </if>
       <if test="picUrl != null">
         #{picUrl},
@@ -62,6 +76,12 @@
       <if test="compTagId != null">
         co_comp_tag_id = #{compTagId},
       </if>
+      <if test="name != null">
+        co_name = #{name},
+      </if>
+      <if test="intro != null">
+        co_intro = #{intro},
+      </if>
       <if test="picUrl != null">
         co_pic_url = #{picUrl},
       </if>
@@ -72,6 +92,8 @@
     <!--@mbg.generated-->
     update competition
     set co_comp_tag_id = #{compTagId},
+      co_name = #{name},
+      co_intro = #{intro},
       co_pic_url = #{picUrl}
     where co_id = #{id}
   </update>

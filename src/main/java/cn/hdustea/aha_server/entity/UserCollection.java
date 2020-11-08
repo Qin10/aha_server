@@ -2,10 +2,7 @@ package cn.hdustea.aha_server.entity;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
 
 /**
  * ${description}
@@ -17,16 +14,14 @@ public class UserCollection {
     /**
      * 收藏用户id
      */
-    @JsonIgnore
     private Integer userId;
 
     /**
      * 收藏资源id
      */
-    @JsonIgnore
-    private Integer resId;
+    private Integer projectId;
 
-    private Resource resource;
+    private Project project;
 
     /**
      * 收藏时间戳

@@ -162,7 +162,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改资源基本信息
-PUT http://{{host}}/resource/6
+PUT http://{{host}}/resource/9
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -179,7 +179,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改资源详细信息
-PUT http://{{host}}/resource/info/6
+PUT http://{{host}}/resource/info/9
 Authorization: {{auth_token}}
 Content-Type: application/json
 
