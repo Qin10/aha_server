@@ -10,7 +10,6 @@
         <result column="pi_award_level" property="awardLevel"/>
         <result column="pi_award_time" property="awardTime"/>
         <result column="pi_award_prove_url" property="awardProveUrl"/>
-        <result column="pi_passed" property="passed"/>
         <result column="pi_intro" property="intro"/>
         <association property="competition" javaType="cn.hdustea.aha_server.entity.Competition" column="pi_comp_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionMapper.selectByPrimaryKey"/>
@@ -22,7 +21,7 @@
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         pi_project_id, pi_comp_id, pi_award_name, pi_award_level, pi_award_time, pi_award_prove_url,
-        pi_passed, pi_intro
+        pi_intro
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -41,9 +40,9 @@
         <!--@mbg.generated-->
         insert into project_info (pi_project_id, pi_comp_id, pi_award_name, pi_award_level, pi_award_time,
                                   pi_award_prove_url,
-                                  pi_passed, pi_intro)
+                                  pi_intro)
         values (#{projectId}, #{compId}, #{awardName}, #{awardLevel}, #{awardTime}, #{awardProveUrl},
-                #{passed}, #{intro})
+                #{intro})
     </insert>
     <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.ProjectInfo">
         <!--@mbg.generated-->
@@ -67,9 +66,6 @@
             <if test="awardProveUrl != null">
                 pi_award_prove_url,
             </if>
-            <if test="passed != null">
-                pi_passed,
-            </if>
             <if test="intro != null">
                 pi_intro,
             </if>
@@ -92,9 +88,6 @@
             </if>
             <if test="awardProveUrl != null">
                 #{awardProveUrl},
-            </if>
-            <if test="passed != null">
-                #{passed},
             </if>
             <if test="intro != null">
                 #{intro},
@@ -120,9 +113,6 @@
             <if test="awardProveUrl != null">
                 pi_award_prove_url = #{awardProveUrl},
             </if>
-            <if test="passed != null">
-                pi_passed = #{passed},
-            </if>
             <if test="intro != null">
                 pi_intro = #{intro},
             </if>
@@ -137,7 +127,6 @@
             pi_award_level     = #{awardLevel},
             pi_award_time      = #{awardTime},
             pi_award_prove_url = #{awardProveUrl},
-            pi_passed          = #{passed},
             pi_intro           = #{intro}
         where pi_project_id = #{projectId}
     </update>

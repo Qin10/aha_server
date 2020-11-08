@@ -48,12 +48,6 @@ public class ProjectInfo {
     private String awardProveUrl;
 
     /**
-     * 项目是否通过审核，公开共享
-     */
-    @JsonIgnore
-    private Boolean passed;
-
-    /**
      * 团队介绍(富文本)
      */
     private String intro;
