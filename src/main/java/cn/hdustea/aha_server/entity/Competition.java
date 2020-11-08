@@ -16,6 +16,8 @@ public class Competition {
      */
     private Integer compTagId;
 
+    private CompetitionTag competitionTag;
+
     /**
      * 赛事名称
      */

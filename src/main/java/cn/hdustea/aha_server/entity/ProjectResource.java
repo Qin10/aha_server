@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -17,6 +18,7 @@ public class ProjectResource {
     /**
     * 团队id(外键)
     */
+    @JsonIgnore
     private Integer projectId;
 
     /**

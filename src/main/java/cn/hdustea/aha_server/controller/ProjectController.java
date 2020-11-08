@@ -183,7 +183,7 @@ public class ProjectController {
     }
 
     @RequiresLogin(requireSignContract = true)
-    @PostMapping("/{projectId}/resource")
+    @PostMapping("/resource/{projectId}")
     public ResponseBean saveProjectResourceByProjectId(@RequestBody ProjectResource projectResource, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {

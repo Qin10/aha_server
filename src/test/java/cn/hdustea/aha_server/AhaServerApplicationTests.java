@@ -1,5 +1,7 @@
 package cn.hdustea.aha_server;
 
+import cn.hdustea.aha_server.entity.Project;
+import cn.hdustea.aha_server.entity.ProjectInfo;
 import cn.hdustea.aha_server.entity.UserContribPoint;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.*;
@@ -10,6 +12,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -23,6 +26,12 @@ class AhaServerApplicationTests {
     private UserInfoService userInfoService;
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private ProjectService projectService;
+    @Resource
+    private ProjectInfoService projectInfoService;
+    @Resource
+    private ProjectResourceService projectResourceService;
     @Resource
     private ContributionRankService contributionRankService;
 
@@ -50,13 +59,21 @@ class AhaServerApplicationTests {
         redisUtil.incr("testaaaa", 1);
         System.out.println(redisUtil.get("testaaaa"));
     }
+
     @Test
-    void testRank(){
+    void testRank() {
         System.out.println(contributionRankService.getRankList());
     }
 
     @Test
     void testCRank() throws SelectException {
         System.out.println(contributionRankService.getUserContribPointByPhone("15382355341"));
+    }
+
+    @Test
+    void testProject() {
+        ProjectInfo projectInfo = new ProjectInfo();
+        projectInfo.setCompId(1);
+        projectInfo.setAwardName("杭州电子科技大学服务外包创新创业大赛-校一等奖");
     }
 }
