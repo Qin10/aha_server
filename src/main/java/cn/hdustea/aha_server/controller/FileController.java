@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 /**
- * 文件下载相关的控制类
+ * 文件下载相关请求
  *
  * @author STEA_YY
  **/
@@ -26,6 +26,11 @@ public class FileController {
     @Resource
     private OssService ossService;
 
+    /**
+     * 获取oss签名，已弃用
+     *
+     * @param filename 文件名
+     */
     @RequiresLogin
     @GetMapping("/{filename}")
     public ResponseBean<UrlBean> signDownload(@PathVariable("filename") String filename) {

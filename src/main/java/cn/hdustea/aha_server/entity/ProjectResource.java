@@ -17,6 +17,10 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class ProjectResource {
+
+    /**
+     * 项目资源id
+     */
     private Integer id;
 
     /**

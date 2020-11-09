@@ -9,6 +9,9 @@ import lombok.Data;
  **/
 @Data
 public class Competition {
+    /**
+     * 竞赛id
+     */
     private Integer id;
 
     /**

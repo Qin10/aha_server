@@ -13,6 +13,9 @@ import lombok.Data;
  **/
 @Data
 public class Contract {
+    /**
+     * 合同id
+     */
     private Integer id;
 
     /**

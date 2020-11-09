@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.Date;
 
 /**
- * 统一异常处理控制器
+ * 统一异常处理
  *
  * @author STEA_YY
  **/

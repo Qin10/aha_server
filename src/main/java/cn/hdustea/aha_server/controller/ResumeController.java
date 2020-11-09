@@ -25,10 +25,10 @@ public class ResumeController {
     private ResumeService resumeService;
 
     /**
-     * 根据用户手机号查看用户简历的接口
+     * 根据手机号查看用户简历
      *
-     * @param phone 查询的用户手机号
-     * @throws SelectException 查询失败异常
+     * @param phone 手机号
+     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin
     @GetMapping("/{phone}")
@@ -37,6 +37,11 @@ public class ResumeController {
         return new ResponseBean<>(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 查看当前用户简历
+     *
+     * @throws SelectException 用户不存在异常
+     */
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean<Resume> getPersonalResume() throws SelectException {
@@ -46,10 +51,10 @@ public class ResumeController {
     }
 
     /**
-     * 修改登录用户简历的接口
+     * 修改当前用户简历
      *
-     * @param resume 简历的实体类
-     * @throws UpdateException 修改失败异常
+     * @param resume 用户简历
+     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin
     @PutMapping()

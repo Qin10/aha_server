@@ -22,11 +22,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * 项目控制类
+ * 项目相关请求
  *
  * @author STEA_YY
  **/
@@ -48,6 +47,9 @@ public class ProjectController {
     @Resource
     private UserOperationLogConfig userOperationLogConfig;
 
+    /**
+     * 获取全部项目粗略信息
+     */
     @RequiresLogin
     @GetMapping
     public ResponseBean<List<Project>> getAllProject() {
@@ -55,6 +57,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", projects, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 根据项目id获取项目粗略信息
+     *
+     * @param projectId 项目id
+     */
     @RequiresLogin
     @GetMapping("/{projectId}")
     public ResponseBean<Project> getProjectById(@PathVariable("projectId") int projectId) {
@@ -62,6 +69,9 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", project, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 获取oss公开资源上传签名(用于上传项目头像)
+     */
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload/public")
     public ResponseBean<OssPolicyBean> signUploadPublicFile() {
@@ -70,6 +80,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 新增项目
+     *
+     * @param project 项目粗略信息
+     */
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
     public ResponseBean<Object> saveProject(@RequestBody @Validated Project project) {
@@ -78,6 +93,13 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 修改项目粗略信息
+     *
+     * @param project   修改的项目粗略信息
+     * @param projectId 项目id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/{projectId}")
     public ResponseBean<Object> updateProjectById(@RequestBody Project project, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
@@ -89,6 +111,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 删除项目
+     *
+     * @param projectId 项目id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/{projectId}")
     public ResponseBean<Object> deleteProjectById(@PathVariable("projectId") int projectId) throws PermissionDeniedException {
@@ -100,6 +128,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 根据项目id获取项目详细信息
+     *
+     * @param projectId 项目id
+     */
     @RequiresLogin
     @GetMapping("/{projectId}/info")
     public ResponseBean<ProjectInfo> getProjectInfoById(@PathVariable("projectId") int projectId) {
@@ -111,6 +144,13 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", projectInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 修改项目详细信息
+     *
+     * @param projectInfo 修改的项目详细信息
+     * @param projectId   项目id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin
     @PutMapping("/info/{projectId}")
     public ResponseBean<Object> updateProjectInfoById(@RequestBody ProjectInfo projectInfo, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
@@ -122,6 +162,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 根据项目id获取所有项目成员
+     *
+     * @param projectId 项目id
+     */
     @RequiresLogin()
     @GetMapping("/{projectId}/member")
     public ResponseBean<List<ProjectMember>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) {
@@ -129,6 +174,14 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", projectMembers, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 新增项目成员
+     *
+     * @param projectMember 项目成员
+     * @param projectId     项目id
+     * @throws PermissionDeniedException 无操作权限异常
+     * @throws InsertException           插入异常
+     */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/member/{projectId}")
     public ResponseBean<Object> saveProjectMemberById(@RequestBody @Validated ProjectMember projectMember, @PathVariable("projectId") int projectId) throws PermissionDeniedException, InsertException {
@@ -140,6 +193,14 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 修改项目成员信息
+     *
+     * @param projectMember 修改的项目成员
+     * @param projectId     项目id
+     * @param memberPhone   成员手机号
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/member/{projectId}/{memberPhone}")
     public ResponseBean<Object> updateResourceMemberById(@RequestBody ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
@@ -151,6 +212,13 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 删除项目成员
+     *
+     * @param projectId   项目id
+     * @param memberPhone 成员手机号
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin
     @DeleteMapping("/member/{projectId}/{memberPhone}")
     public ResponseBean<Object> deleteProjectMember(@PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
@@ -162,6 +230,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 根据项目id获取所有项目资源
+     *
+     * @param projectId 项目id
+     */
     @RequiresLogin()
     @GetMapping("/{projectId}/resource")
     public ResponseBean<List<ProjectResource>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) {
@@ -169,6 +242,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", projectResources, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 获取oss私有资源上传签名(用于上传资源文件)
+     *
+     * @param projectId 项目id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/{projectId}/resource/sign/upload/private")
     public ResponseBean<OssPolicyBean> signUploadPrivateFile(@PathVariable("projectId") int projectId) throws PermissionDeniedException {
@@ -181,6 +260,13 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 新增项目资源
+     *
+     * @param projectResource 项目资源
+     * @param projectId       项目id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
     public ResponseBean<Object> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResource projectResource, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
@@ -192,6 +278,13 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 修改项目资源
+     *
+     * @param projectResource   修改的项目资源
+     * @param projectResourceId 项目资源id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/resource/{projectResourceId}")
     public ResponseBean<Object> updateProjectResourceById(@RequestBody ProjectResource projectResource, @PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
@@ -204,6 +297,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 删除项目资源
+     *
+     * @param projectResourceId 项目资源id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/resource/{projectResourceId}")
     public ResponseBean<Object> deleteProjectResourceById(@PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
@@ -216,6 +315,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 获取项目资源文件oss下载签名
+     *
+     * @param projectResourceId 项目资源id
+     * @throws SelectException 资源不存在异常
+     */
     @RequiresLogin
     @GetMapping("/resource/{projectResourceId}/sign/download")
     public ResponseBean<UrlBean> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
@@ -226,6 +331,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", urlBean, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 获取用户收藏项目列表
+     *
+     * @throws SelectException 用户不存在异常
+     */
     @RequiresLogin
     @GetMapping("/collection")
     public ResponseBean<List<UserCollection>> getAllCollection() throws SelectException {
@@ -234,6 +344,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", collections, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 收藏项目
+     *
+     * @param projectId 项目id
+     * @throws SelectException 用户不存在异常
+     */
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
     public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws SelectException {
@@ -243,6 +359,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "收藏成功！", null, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 取消收藏
+     *
+     * @param projectId 项目id
+     * @throws SelectException 用户不存在异常
+     */
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
     public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws SelectException {

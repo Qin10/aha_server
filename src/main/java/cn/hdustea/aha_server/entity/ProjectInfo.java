@@ -17,6 +17,9 @@ import lombok.Data;
  */
 @Data
 public class ProjectInfo {
+    /**
+     * 项目id(外键)
+     */
     private Integer projectId;
 
     /**

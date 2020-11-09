@@ -24,10 +24,10 @@ public class SmsController {
     private SmsService smsService;
 
     /**
-     * 向目标手机号发送注册短信验证码的接口
+     * 发送注册短信验证码
      *
      * @param phone 手机号
-     * @throws MessageSendException 验证短信发送失败异常类
+     * @throws MessageSendException 验证短信发送失败异常
      */
     @GetMapping("/sendCode/register/{phone}")
     public ResponseBean<Object> sendRegisterSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
@@ -40,10 +40,10 @@ public class SmsController {
     }
 
     /**
-     * 向目标手机号发送重置密码短信验证码的接口
+     * 发送重置密码短信验证码
      *
      * @param phone 手机号
-     * @throws MessageSendException 短信发送异常
+     * @throws MessageSendException 验证短信发送失败异常
      */
     @GetMapping("/sendCode/changePassword/{phone}")
     public ResponseBean<Object> sendSmsCode(@PathVariable("phone") String phone) throws MessageSendException {

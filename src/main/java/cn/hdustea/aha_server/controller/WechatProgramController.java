@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * 微信小程序授权/鉴权控制器
@@ -24,7 +23,7 @@ public class WechatProgramController {
     private WechatProgramService wechatProgramService;
 
     /**
-     * 通过微信小程序授权登录的接口
+     * 通过微信小程序授权登录
      *
      * @param code 小程序请求码
      * @throws Exception 向上抛出异常

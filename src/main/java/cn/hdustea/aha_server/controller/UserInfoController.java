@@ -1,17 +1,15 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.OssPolicyBean;
 import cn.hdustea.aha_server.dto.PersonalUserInfoBean;
-import cn.hdustea.aha_server.config.UserOperationLogConfig;
-import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
-import cn.hdustea.aha_server.service.OssService;
-import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.entity.UserInfo;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
+import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +30,9 @@ public class UserInfoController {
     private UserInfoService userInfoService;
     @Resource
     private OssService ossService;
-    @Resource
-    private UserOperationLogConfig userOperationLogConfig;
 
     /**
-     * 获取已登录用户信息（包括全部公有信息和部分私有信息）的接口
+     * 获取当前用户信息（包括全部详细信息和部分私有信息）
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/me")
@@ -47,10 +43,10 @@ public class UserInfoController {
     }
 
     /**
-     * 修改已登录用户公共信息的接口
+     * 修改当前用户详细信息
      *
      * @param userInfo 用户公共信息的实体类
-     * @throws UpdateException 修改失败异常
+     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
@@ -61,7 +57,7 @@ public class UserInfoController {
     }
 
     /**
-     * 通过手机号查询用户信息的接口
+     * 通过手机号查询用户详细信息
      *
      * @param phone 手机号
      */
@@ -73,7 +69,7 @@ public class UserInfoController {
     }
 
     /**
-     * 签名向OSS上传用户头像的请求的接口，上传后的文件为公共读私有写
+     * 获取向OSS上传公共文件签名，用于上传用户头像
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
@@ -84,10 +80,10 @@ public class UserInfoController {
     }
 
     /**
-     * 修改用户头像文件名的接口
+     * 修改用户头像文件名
      *
      * @param requestMap 包含了修改后头像文件名的Map对象
-     * @throws UpdateException 修改失败异常
+     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/avatar")

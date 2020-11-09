@@ -21,6 +21,9 @@ public class UserCollection {
      */
     private Integer projectId;
 
+    /**
+     * 资源粗略信息
+     */
     private Project project;
 
     /**

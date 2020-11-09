@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 竞赛信息的控制类
+ * 竞赛信息和竞赛标签相关请求
  *
  * @author STEA_YY
  **/
@@ -25,7 +25,7 @@ public class CompetitionController {
     private CompetitionService competitionService;
 
     /**
-     * 根据id获取竞赛信息的接口
+     * 根据id获取竞赛信息
      *
      * @param id 竞赛信息id
      */
@@ -37,7 +37,7 @@ public class CompetitionController {
     }
 
     /**
-     * 获取所有竞赛信息（列表）的接口
+     * 获取所有竞赛信息
      */
     @RequiresLogin
     @GetMapping()
@@ -47,7 +47,7 @@ public class CompetitionController {
     }
 
     /**
-     * 根据id获取竞赛标签信息的接口
+     * 根据id获取竞赛标签
      *
      * @param id 竞赛标签id
      */
@@ -59,7 +59,7 @@ public class CompetitionController {
     }
 
     /**
-     * 获取所有竞赛标签（列表）的接口
+     * 获取所有竞赛标签
      */
     @RequiresLogin
     @GetMapping("/tag")
@@ -69,9 +69,9 @@ public class CompetitionController {
     }
 
     /**
-     * 保存竞赛信息的接口
+     * 保存竞赛信息
      *
-     * @param competition 竞赛信息的实体类
+     * @param competition 竞赛信息
      */
     @RequiresLogin
     @PostMapping()
@@ -81,9 +81,9 @@ public class CompetitionController {
     }
 
     /**
-     * 保存竞赛标签的接口
+     * 保存竞赛标签
      *
-     * @param competitionTag 竞赛标签的实体类
+     * @param competitionTag 竞赛标签
      */
     @RequiresLogin
     @PostMapping("/tag")

@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -11,6 +12,9 @@ import lombok.Data;
  **/
 @Data
 public class User {
+    /**
+     * 用户id
+     */
     private Integer id;
 
     /**
@@ -53,5 +57,8 @@ public class User {
      */
     private Integer roleId;
 
+    /**
+     * 角色信息
+     */
     private Role role;
 }

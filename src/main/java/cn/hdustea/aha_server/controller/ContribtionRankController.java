@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * 贡献点排名控制类
+ * 贡献点排名相关请求
  *
  * @author STEA_YY
  **/
@@ -26,6 +26,11 @@ public class ContribtionRankController {
     @Resource
     private ContributionRankService contributionRankService;
 
+    /**
+     * 获取贡献点总排行榜
+     *
+     * @return 排行榜
+     */
     @RequiresLogin
     @GetMapping()
     public ResponseBean<List<UserContribPoint>> getRankList() {
@@ -33,6 +38,12 @@ public class ContribtionRankController {
         return new ResponseBean<>(200, "succ", rankList, TimeUtil.getFormattedTime(new Date()));
     }
 
+    /**
+     * 获取用户个人排名
+     *
+     * @return 用户个人排名和贡献点
+     * @throws SelectException 用户不存在异常
+     */
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean<UserContribPoint> getMyRank() throws SelectException {

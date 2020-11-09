@@ -6,7 +6,16 @@ import java.math.BigDecimal;
 
 @Data
 public class UserContribPoint {
+    /**
+     * 手机号
+     */
     private String phone;
+    /**
+     * 贡献点
+     */
     private BigDecimal contribPoint;
+    /**
+     * 排名
+     */
     private long rank;
 }

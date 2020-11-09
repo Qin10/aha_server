@@ -21,6 +21,9 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class Project {
+    /**
+     * 项目id
+     */
     private Integer id;
 
     /**

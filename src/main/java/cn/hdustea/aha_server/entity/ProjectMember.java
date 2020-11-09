@@ -19,6 +19,9 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class ProjectMember {
+    /**
+     * 项目id(外键)
+     */
     @JsonIgnore
     private Integer projectId;
 
