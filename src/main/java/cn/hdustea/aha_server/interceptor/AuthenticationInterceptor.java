@@ -2,7 +2,7 @@ package cn.hdustea.aha_server.interceptor;
 
 import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.bean.JwtPayloadBean;
+import cn.hdustea.aha_server.dto.JwtPayloadBean;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.*;

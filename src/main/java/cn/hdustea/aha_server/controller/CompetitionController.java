@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.CompetitionTag;
 import cn.hdustea.aha_server.service.CompetitionService;
@@ -31,9 +31,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @GetMapping("/{id}")
-    public ResponseBean getCompetitionById(@PathVariable("id") int id) {
+    public ResponseBean<Competition> getCompetitionById(@PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
-        return new ResponseBean(200, "succ", competition, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competition, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -41,9 +41,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @GetMapping()
-    public ResponseBean getAllCompetition() {
+    public ResponseBean<List<Competition>> getAllCompetition() {
         List<Competition> competitions = competitionService.getAllCompetition();
-        return new ResponseBean(200, "succ", competitions, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competitions, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -53,9 +53,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @GetMapping("/tag/{id}")
-    public ResponseBean getCompetitionTagById(@PathVariable("id") int id) {
+    public ResponseBean<CompetitionTag> getCompetitionTagById(@PathVariable("id") int id) {
         CompetitionTag competitionTag = competitionService.getCompetitionTagById(id);
-        return new ResponseBean(200, "succ", competitionTag, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competitionTag, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -63,9 +63,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @GetMapping("/tag")
-    public ResponseBean getAllCompetitionTag() {
+    public ResponseBean<List<CompetitionTag>> getAllCompetitionTag() {
         List<CompetitionTag> competitionTags = competitionService.getAllCompetitionTag();
-        return new ResponseBean(200, "succ", competitionTags, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competitionTags, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -75,9 +75,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @PostMapping()
-    public ResponseBean saveCompetition(@RequestBody Competition competition) {
+    public ResponseBean<Object> saveCompetition(@RequestBody Competition competition) {
         competitionService.saveCompetition(competition);
-        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -87,8 +87,8 @@ public class CompetitionController {
      */
     @RequiresLogin
     @PostMapping("/tag")
-    public ResponseBean saveCompetitionTag(@RequestBody @Validated CompetitionTag competitionTag) {
+    public ResponseBean<Object> saveCompetitionTag(@RequestBody @Validated CompetitionTag competitionTag) {
         competitionService.saveCompetitionTag(competitionTag);
-        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 }

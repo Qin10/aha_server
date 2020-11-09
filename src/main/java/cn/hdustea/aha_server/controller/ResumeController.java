@@ -1,19 +1,16 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.ResumeService;
-import cn.hdustea.aha_server.service.UserInfoService;
-import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 /**
@@ -35,17 +32,17 @@ public class ResumeController {
      */
     @RequiresLogin
     @GetMapping("/{phone}")
-    public ResponseBean getResumeByPhone(@PathVariable("phone") String phone) throws SelectException {
+    public ResponseBean<Resume> getResumeByPhone(@PathVariable("phone") String phone) throws SelectException {
         Resume resume = resumeService.getResumeByPhone(phone);
-        return new ResponseBean(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
     }
 
     @RequiresLogin
     @GetMapping("/me")
-    public ResponseBean getPersonalResume() throws SelectException {
+    public ResponseBean<Resume> getPersonalResume() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         Resume resume = resumeService.getResumeByPhone(phone);
-        return new ResponseBean(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -56,9 +53,9 @@ public class ResumeController {
      */
     @RequiresLogin
     @PutMapping()
-    public ResponseBean updateResume(@RequestBody Resume resume) throws SelectException {
+    public ResponseBean<Object> updateResume(@RequestBody Resume resume) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         resumeService.updateResumeByPhone(resume, phone);
-        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 }

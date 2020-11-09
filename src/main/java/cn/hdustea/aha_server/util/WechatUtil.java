@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.util;
 
-import cn.hdustea.aha_server.bean.WechatBean;
+import cn.hdustea.aha_server.dto.WechatBean;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;

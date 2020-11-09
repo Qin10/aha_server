@@ -1,22 +1,15 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
-import cn.hdustea.aha_server.entity.UserCollection;
+import cn.hdustea.aha_server.dto.PersonalUserInfoBean;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.mapper.UserCollectionMapper;
 import cn.hdustea.aha_server.mapper.UserInfoMapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
-import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
-import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 用户公有信息服务类

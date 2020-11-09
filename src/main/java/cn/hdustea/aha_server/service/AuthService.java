@@ -1,8 +1,10 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.bean.*;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.dto.JwtPayloadBean;
+import cn.hdustea.aha_server.dto.PersonalUserInfoBean;
+import cn.hdustea.aha_server.dto.TokenAndPersonalUserInfoBean;
 import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.entity.User;
@@ -18,6 +20,7 @@ import cn.hdustea.aha_server.util.FileUtil;
 import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.vo.*;
 import org.slf4j.MDC;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -144,7 +147,7 @@ public class AuthService {
      *
      * @param phone 手机号
      * @return 新的token令牌
-     * @throws AccountNotFoundException 用户不存在异常
+     * @throws SelectException 用户不存在异常
      */
     public String signNotice(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);

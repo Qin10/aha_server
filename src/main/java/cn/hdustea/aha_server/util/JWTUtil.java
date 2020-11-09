@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.util;
 
-import cn.hdustea.aha_server.bean.JwtPayloadBean;
+import cn.hdustea.aha_server.dto.JwtPayloadBean;
 import cn.hdustea.aha_server.entity.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;

@@ -1,14 +1,13 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.bean.OssPolicyBean;
-import cn.hdustea.aha_server.bean.PersonalUserInfoBean;
+import cn.hdustea.aha_server.dto.OssPolicyBean;
+import cn.hdustea.aha_server.dto.PersonalUserInfoBean;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
-import cn.hdustea.aha_server.entity.UserCollection;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,10 +40,10 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/me")
-    public ResponseBean getPersonalUserInfo() throws SelectException {
+    public ResponseBean<PersonalUserInfoBean> getPersonalUserInfo() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(phone);
-        return new ResponseBean(200, "succ", personalUserInfo, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", personalUserInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -56,10 +54,10 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
-    public ResponseBean updatePersonalUserInfo(@RequestBody UserInfo userInfo) throws SelectException {
+    public ResponseBean<Object> updatePersonalUserInfo(@RequestBody UserInfo userInfo) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         userInfoService.updateUserInfoByPhone(userInfo, phone);
-        return new ResponseBean(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -69,9 +67,9 @@ public class UserInfoController {
      */
     @RequiresLogin
     @GetMapping("/{phone}")
-    public ResponseBean getUserInfoByPhone(@PathVariable("phone") String phone) throws SelectException {
+    public ResponseBean<UserInfo> getUserInfoByPhone(@PathVariable("phone") String phone) throws SelectException {
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
-        return new ResponseBean(200, "succ", userInfo, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", userInfo, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -79,10 +77,10 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
-    public ResponseBean signUpdateUserAvatar() {
+    public ResponseBean<OssPolicyBean> signUpdateUserAvatar() {
         String phone = ThreadLocalUtil.getCurrentUser();
         OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone, false);
-        return new ResponseBean(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
     }
 
     /**
@@ -93,10 +91,10 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/avatar")
-    public ResponseBean updateUserAvatar(@RequestBody Map<String, String> requestMap) throws SelectException {
+    public ResponseBean<Object> updateUserAvatar(@RequestBody Map<String, String> requestMap) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         String fileUrl = requestMap.get("fileUrl");
         userInfoService.updateAvatarUrlByPhone(fileUrl, phone);
-        return new ResponseBean(200, "修改成功！", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "修改成功！", null, TimeUtil.getFormattedTime(new Date()));
     }
 }

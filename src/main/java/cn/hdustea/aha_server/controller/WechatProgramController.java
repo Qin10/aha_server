@@ -1,8 +1,9 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.service.WechatProgramService;
 import cn.hdustea.aha_server.util.TimeUtil;
+import cn.hdustea.aha_server.vo.TokenBean;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,10 +30,10 @@ public class WechatProgramController {
      * @throws Exception 向上抛出异常
      */
     @PostMapping("/wxLogin")
-    public ResponseBean wechatLogin(@RequestParam("code") String code) throws Exception {
+    public ResponseBean<TokenBean> wechatLogin(@RequestParam("code") String code) throws Exception {
         String token = wechatProgramService.wechatLogin(code);
-        HashMap<String, String> responseMap = new HashMap<>();
-        responseMap.put("token", token);
-        return new ResponseBean(200, "登录成功", responseMap, TimeUtil.getFormattedTime(new Date()));
+        TokenBean tokenBean = new TokenBean();
+        tokenBean.setToken(token);
+        return new ResponseBean<>(200, "登录成功", tokenBean, TimeUtil.getFormattedTime(new Date()));
     }
 }

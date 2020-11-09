@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.bean;
+package cn.hdustea.aha_server.dto;
 
 import lombok.Data;
 

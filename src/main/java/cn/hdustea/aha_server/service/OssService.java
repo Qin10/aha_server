@@ -1,24 +1,15 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.bean.OssPolicyBean;
+import cn.hdustea.aha_server.dto.OssPolicyBean;
 import cn.hdustea.aha_server.config.AliyunOSSConfig;
 import cn.hdustea.aha_server.util.JacksonUtil;
-import cn.hdustea.aha_server.util.RestTemplateUtil;
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.aliyun.oss.common.utils.BinaryUtil;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.net.URL;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.Date;
 
 /**

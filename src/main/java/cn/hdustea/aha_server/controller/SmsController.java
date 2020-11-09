@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageSendException;
 import cn.hdustea.aha_server.service.SmsService;
 import cn.hdustea.aha_server.util.TimeUtil;
@@ -30,10 +30,10 @@ public class SmsController {
      * @throws MessageSendException 验证短信发送失败异常类
      */
     @GetMapping("/sendCode/register/{phone}")
-    public ResponseBean sendRegisterSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
+    public ResponseBean<Object> sendRegisterSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(phone, SmsService.REGISTER_MESSAGE);
         if (isSent) {
-            return new ResponseBean(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
+            return new ResponseBean<>(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
         } else {
             throw new MessageSendException();
         }
@@ -46,10 +46,10 @@ public class SmsController {
      * @throws MessageSendException 短信发送异常
      */
     @GetMapping("/sendCode/changePassword/{phone}")
-    public ResponseBean sendSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
+    public ResponseBean<Object> sendSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(phone, SmsService.CHANGE_PASSWORD_MESSAGE);
         if (isSent) {
-            return new ResponseBean(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
+            return new ResponseBean<>(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
         } else {
             throw new MessageSendException();
         }

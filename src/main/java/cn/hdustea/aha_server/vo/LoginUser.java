@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.bean;
+package cn.hdustea.aha_server.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,8 +16,14 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginUser {
+    /**
+     * 手机号
+     */
     @NotEmpty(message = "手机号不能为空！")
     private String phone;
+    /**
+     * 密码
+     */
     @NotEmpty(message = "密码不能为空！")
     private String password;
 }

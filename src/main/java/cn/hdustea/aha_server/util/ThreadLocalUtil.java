@@ -1,7 +1,5 @@
 package cn.hdustea.aha_server.util;
 
-import cn.hdustea.aha_server.bean.JwtPayloadBean;
-
 /**
  * 线程隔离变量相关工具类
  *

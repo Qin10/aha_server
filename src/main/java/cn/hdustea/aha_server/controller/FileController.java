@@ -1,9 +1,10 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.bean.ResponseBean;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.util.TimeUtil;
+import cn.hdustea.aha_server.vo.UrlBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +28,10 @@ public class FileController {
 
     @RequiresLogin
     @GetMapping("/{filename}")
-    public ResponseBean signDownload(@PathVariable("filename") String filename) {
+    public ResponseBean<UrlBean> signDownload(@PathVariable("filename") String filename) {
         URL url = ossService.signDownload(filename);
-        HashMap<String, String> responseMap = new HashMap<>();
-        responseMap.put("url", url.toString());
-        return new ResponseBean(200, "succ", responseMap, TimeUtil.getFormattedTime(new Date()));
+        UrlBean urlBean = new UrlBean();
+        urlBean.setUrl(url.toString());
+        return new ResponseBean<>(200, "succ", urlBean, TimeUtil.getFormattedTime(new Date()));
     }
 }

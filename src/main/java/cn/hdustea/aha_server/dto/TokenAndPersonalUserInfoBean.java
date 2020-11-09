@@ -1,6 +1,5 @@
-package cn.hdustea.aha_server.bean;
+package cn.hdustea.aha_server.dto;
 
-import cn.hdustea.aha_server.entity.UserInfo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
