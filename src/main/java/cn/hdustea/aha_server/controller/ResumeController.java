@@ -33,8 +33,17 @@ public class ResumeController {
      * @param phone 查询的用户手机号
      * @throws SelectException 查询失败异常
      */
+    @RequiresLogin
     @GetMapping("/{phone}")
     public ResponseBean getResumeByPhone(@PathVariable("phone") String phone) throws SelectException {
+        Resume resume = resumeService.getResumeByPhone(phone);
+        return new ResponseBean(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
+    }
+
+    @RequiresLogin
+    @GetMapping("/me")
+    public ResponseBean getPersonalResume() throws SelectException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         Resume resume = resumeService.getResumeByPhone(phone);
         return new ResponseBean(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
     }
