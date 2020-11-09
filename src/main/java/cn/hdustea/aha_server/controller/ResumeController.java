@@ -14,7 +14,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
- * 用户简历的控制器
+ * 用户简历相关请求
  *
  * @author STEA_YY
  **/

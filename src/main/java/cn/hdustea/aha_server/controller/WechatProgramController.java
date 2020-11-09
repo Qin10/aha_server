@@ -12,11 +12,10 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
- * 微信小程序授权/鉴权控制器
+ * 微信小程序授权/鉴权相关请求
  *
  * @author STEA_YY
  **/
-
 @RestController
 public class WechatProgramController {
     @Resource

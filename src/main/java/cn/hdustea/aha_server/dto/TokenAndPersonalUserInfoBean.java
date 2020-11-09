@@ -11,6 +11,12 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TokenAndPersonalUserInfoBean {
+    /**
+     * token令牌
+     */
     private String token;
+    /**
+     * 用户信息
+     */
     private PersonalUserInfoBean personalUserInfo;
 }

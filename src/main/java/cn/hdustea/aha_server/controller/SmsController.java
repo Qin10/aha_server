@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 /**
- * 短信业务控制器
+ * 短信业务相关请求
  *
  * @author STEA_YY
  **/

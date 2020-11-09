@@ -18,7 +18,7 @@ import java.util.Date;
 import java.util.Map;
 
 /**
- * 用户信息控制类
+ * 用户信息相关请求
  *
  * @author STEA_YY
  **/
