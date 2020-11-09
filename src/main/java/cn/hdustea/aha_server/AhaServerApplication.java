@@ -23,9 +23,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @MapperScan(basePackages = "cn.hdustea.aha_server.mapper")
 @EnableScheduling
 public class AhaServerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(AhaServerApplication.class, args);
     }
-
 }
