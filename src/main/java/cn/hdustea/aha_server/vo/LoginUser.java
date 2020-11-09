@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 用户登录数据的Javabean
+ * 登录请求vo
  *
  * @author STEA_YY
  **/

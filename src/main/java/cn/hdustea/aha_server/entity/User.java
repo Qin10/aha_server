@@ -6,7 +6,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * ${description}
+ * 用户私人信息实体类
  *
  * @author STEA_YY
  **/

@@ -6,7 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
- * 登录用户获取个人信息的封装Javabean
+ * 登录用户获取个人信息DTO
  *
  * @author STEA_YY
  **/

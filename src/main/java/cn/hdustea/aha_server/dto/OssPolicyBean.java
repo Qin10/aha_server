@@ -4,7 +4,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
- * 上传服务端签名和回调封装Javabean
+ * 上传服务端签名和回调DTO
  *
  * @author STEA_YY
  **/

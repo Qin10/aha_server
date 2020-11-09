@@ -7,14 +7,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * ${description}
+ * 项目资源实体类
  *
  * @author STEA_YY
  **/
 
-/**
- * 团队资源表，一个团队对应多个资源，资源表包括了资源文件名称，类别，阅读量等
- */
 @Data
 public class ProjectResource {
 

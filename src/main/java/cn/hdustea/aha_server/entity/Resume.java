@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.List;
 
 /**
- * 用户简历的实体类
+ * 用户简历实体类
  *
  * @author STEA_YY
  **/

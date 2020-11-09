@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.vo;
 import lombok.Data;
 
 /**
- * token封装类
+ * token封装vo
  *
  * @author STEA_YY
  **/

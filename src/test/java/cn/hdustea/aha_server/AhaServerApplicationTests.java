@@ -1,20 +1,13 @@
 package cn.hdustea.aha_server;
 
-import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.entity.ProjectInfo;
-import cn.hdustea.aha_server.entity.UserContribPoint;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.*;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
 @SpringBootTest
 class AhaServerApplicationTests {

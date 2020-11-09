@@ -1,11 +1,14 @@
-package cn.hdustea.aha_server.entity;
+package cn.hdustea.aha_server.dto;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 
+/**
+ * 用户贡献点及排名DTO
+ */
 @Data
-public class UserContribPoint {
+public class UserContribPointBean {
     /**
      * 手机号
      */

@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 修改密码使用的Javabean
+ * 修改密码请求vo
  *
  * @author STEA_YY
  **/

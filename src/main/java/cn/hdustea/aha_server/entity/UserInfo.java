@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
- * ${description}
+ * 用户详细信息实体类
  *
  * @author STEA_YY
  **/

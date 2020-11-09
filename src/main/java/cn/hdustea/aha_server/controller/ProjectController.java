@@ -375,6 +375,6 @@ public class ProjectController {
     }
 
     private void addReadByProjectId(int projectId) {
-        redisUtil.hincr(RedisUtil.RESOURCE_READ_KEY, Integer.toString(projectId), 1);
+        redisUtil.hincr(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId), 1);
     }
 }

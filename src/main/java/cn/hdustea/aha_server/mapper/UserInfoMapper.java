@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.UserInfo;import org.apache.ibatis.annotations.Param;
 
 /**
- * ${description}
+ * 用户详细信息表mapper
  *
  * @author STEA_YY
  **/

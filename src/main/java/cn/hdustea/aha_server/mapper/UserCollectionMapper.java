@@ -4,7 +4,7 @@ import cn.hdustea.aha_server.entity.UserCollection;
 import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
- * ${description}
+ * 用户收藏表mapper
  *
  * @author STEA_YY
  **/

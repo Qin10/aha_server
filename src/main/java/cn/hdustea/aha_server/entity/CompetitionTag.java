@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.entity;
 import lombok.Data;
 
 /**
- * ${description}
+ * 竞赛标签实体类
  *
  * @author STEA_YY
  **/

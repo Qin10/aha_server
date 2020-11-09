@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.dto;
 import lombok.Data;
 
 /**
- * 微信小程序鉴权相关JavaBean
+ * 微信小程序鉴权相关DTO
  *
  * @author STEA_YY
  **/

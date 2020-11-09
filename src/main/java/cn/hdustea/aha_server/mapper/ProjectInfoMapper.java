@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.ProjectInfo;
 
 /**
- * ${description}
+ * 项目详细信息表mapper
  *
  * @author STEA_YY
  **/

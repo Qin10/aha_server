@@ -1,5 +1,5 @@
 package cn.hdustea.aha_server.mapper;
-import cn.hdustea.aha_server.entity.UserContribPoint;
+import cn.hdustea.aha_server.dto.UserContribPointBean;
 
 import java.util.List;
 
@@ -7,7 +7,7 @@ import cn.hdustea.aha_server.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * ${description}
+ * 用户表mapper
  *
  * @author STEA_YY
  **/
@@ -32,5 +32,5 @@ public interface UserMapper {
 
     int updateSignedContractByPhone(@Param("updatedSignedContract") Boolean updatedSignedContract, @Param("phone") String phone);
 
-    List<UserContribPoint> selectPhoneAndContribPoint();
+    List<UserContribPointBean> selectPhoneAndContribPoint();
 }

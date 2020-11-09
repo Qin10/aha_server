@@ -27,7 +27,7 @@ public class ResourceReadTask {
     @Transactional(rollbackFor = Exception.class)
     public void updateResourceRead() {
         log.debug("Project Read Task is Running");
-        Map<Object, Object> projectReadMap = redisUtil.hmget(RedisUtil.RESOURCE_READ_KEY);
+        Map<Object, Object> projectReadMap = redisUtil.hmget(RedisUtil.PROJECT_READ_KEY);
         for (Map.Entry<Object, Object> entry : projectReadMap.entrySet()) {
             Integer projectId = Integer.parseInt((String) entry.getKey());
             Integer read = (Integer) entry.getValue();
@@ -35,7 +35,7 @@ public class ResourceReadTask {
                 Project project = projectMapper.selectByPrimaryKey(projectId);
                 int updatedRead = project.getRead() + read;
                 projectMapper.updateReadById(updatedRead, projectId);
-                redisUtil.hdel(RedisUtil.RESOURCE_READ_KEY, Integer.toString(projectId));
+                redisUtil.hdel(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId));
             }
         }
     }

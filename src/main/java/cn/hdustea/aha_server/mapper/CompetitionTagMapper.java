@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.CompetitionTag;import java.util.List;
 
 /**
- * ${description}
+ * 竞赛标签表mapper
  *
  * @author STEA_YY
  **/

@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 注册时使用的Javabean
+ * 注册请求vo
  *
  * @author STEA_YY
  **/

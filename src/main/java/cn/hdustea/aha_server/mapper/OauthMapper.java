@@ -6,7 +6,7 @@ import cn.hdustea.aha_server.entity.Oauth;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * ${description}
+ * 第三方登录凭证表mapper
  *
  * @author STEA_YY
  **/

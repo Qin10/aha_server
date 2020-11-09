@@ -5,7 +5,7 @@ import java.util.List;
 import cn.hdustea.aha_server.entity.ProjectResource;
 
 /**
-* ${description}
+* 项目资源表mapper
 *
 * @author STEA_YY
 **/

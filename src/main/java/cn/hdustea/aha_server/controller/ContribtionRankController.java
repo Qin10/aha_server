@@ -2,7 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.vo.ResponseBean;
-import cn.hdustea.aha_server.entity.UserContribPoint;
+import cn.hdustea.aha_server.dto.UserContribPointBean;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.ContributionRankService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
@@ -33,8 +33,8 @@ public class ContribtionRankController {
      */
     @RequiresLogin
     @GetMapping()
-    public ResponseBean<List<UserContribPoint>> getRankList() {
-        List<UserContribPoint> rankList = contributionRankService.getRankList();
+    public ResponseBean<List<UserContribPointBean>> getRankList() {
+        List<UserContribPointBean> rankList = contributionRankService.getRankList();
         return new ResponseBean<>(200, "succ", rankList, TimeUtil.getFormattedTime(new Date()));
     }
 
@@ -46,9 +46,9 @@ public class ContribtionRankController {
      */
     @RequiresLogin
     @GetMapping("/me")
-    public ResponseBean<UserContribPoint> getMyRank() throws SelectException {
+    public ResponseBean<UserContribPointBean> getMyRank() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
-        UserContribPoint userContribPoint = contributionRankService.getUserContribPointByPhone(phone);
-        return new ResponseBean<>(200, "succ", userContribPoint, TimeUtil.getFormattedTime(new Date()));
+        UserContribPointBean userContribPointBean = contributionRankService.getUserContribPointByPhone(phone);
+        return new ResponseBean<>(200, "succ", userContribPointBean, TimeUtil.getFormattedTime(new Date()));
     }
 }

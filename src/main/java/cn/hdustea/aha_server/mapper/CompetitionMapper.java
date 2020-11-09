@@ -1,9 +1,11 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.Competition;import java.util.List;
+import cn.hdustea.aha_server.entity.Competition;
+
+import java.util.List;
 
 /**
- * ${description}
+ * 竞赛表mapper
  *
  * @author STEA_YY
  **/

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import cn.hdustea.aha_server.entity.UserContribPoint;
+import cn.hdustea.aha_server.dto.UserContribPointBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
@@ -41,7 +41,7 @@ public class RedisUtil {
      */
     public static final String REFRESH_TOKEN_PREFIX = "user:token:";
 
-    public static final String RESOURCE_READ_KEY = "resource:read";
+    public static final String PROJECT_READ_KEY = "project:read";
     public static final String CONTRIBUTION_RANK_KEY = "contribution:rank";
 
     // =============================common============================
@@ -698,18 +698,18 @@ public class RedisUtil {
         }
     }
 
-    public List<UserContribPoint> tupleToUserContribPoint(Set<ZSetOperations.TypedTuple<Object>> tuples) {
-        List<UserContribPoint> userContribPoints = new ArrayList<>();
+    public List<UserContribPointBean> tupleToUserContribPoint(Set<ZSetOperations.TypedTuple<Object>> tuples) {
+        List<UserContribPointBean> userContribPointBeans = new ArrayList<>();
         long currentRank = 1;
         for (ZSetOperations.TypedTuple<Object> tuple : tuples) {
-            UserContribPoint userContribPoint = new UserContribPoint();
-            userContribPoint.setPhone((String) tuple.getValue());
-            userContribPoint.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
-            userContribPoint.setRank(currentRank);
+            UserContribPointBean userContribPointBean = new UserContribPointBean();
+            userContribPointBean.setPhone((String) tuple.getValue());
+            userContribPointBean.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
+            userContribPointBean.setRank(currentRank);
             currentRank++;
-            userContribPoints.add(userContribPoint);
+            userContribPointBeans.add(userContribPointBean);
         }
-        return userContribPoints;
+        return userContribPointBeans;
     }
 }
 

@@ -6,7 +6,7 @@ import cn.hdustea.aha_server.entity.ProjectMember;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * ${description}
+ * 项目成员表mapper
  *
  * @author STEA_YY
  **/

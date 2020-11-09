@@ -7,7 +7,7 @@ import io.github.yedaxia.apidocs.Ignore;
 import lombok.Data;
 
 /**
- * ${description}
+ * 合同实体类
  *
  * @author STEA_YY
  **/

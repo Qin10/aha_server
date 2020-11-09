@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.vo;
 import lombok.Data;
 
 /**
- * 包裹响应数据的Javabean
+ * 响应数据封装vo
  *
  * @author STEA_YY
  **/

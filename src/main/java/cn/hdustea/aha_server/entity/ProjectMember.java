@@ -9,14 +9,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * ${description}
+ * 项目成员实体类
  *
  * @author STEA_YY
  **/
 
-/**
- * 团队成员表，一个团队对应多个成员，包括成员的手机号、顺位、角色、职位等信息
- */
 @Data
 public class ProjectMember {
     /**

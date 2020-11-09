@@ -11,14 +11,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 /**
- * ${description}
+ * 项目粗略信息实体类
  *
  * @author STEA_YY
  **/
 
-/**
- * 团队表
- */
 @Data
 public class Project {
     /**

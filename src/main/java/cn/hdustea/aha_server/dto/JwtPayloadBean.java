@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.dto;
 import lombok.Data;
 
 /**
- * jwt token payload字段的封装实体类
+ * jwt token payload字段DTO
  *
  * @author STEA_YY
  **/
