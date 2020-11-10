@@ -1,6 +1,9 @@
 package cn.hdustea.aha_server.vo;
 
+import cn.hdustea.aha_server.util.TimeUtil;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 响应数据封装vo
@@ -31,5 +34,9 @@ public class ResponseBean<T> {
         this.msg = msg;
         this.data = data;
         this.time = time;
+    }
+
+    public ResponseBean(int code, String msg, T data) {
+        this(code, msg, data, TimeUtil.getFormattedTime(new Date()));
     }
 }

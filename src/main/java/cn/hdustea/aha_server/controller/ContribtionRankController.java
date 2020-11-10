@@ -35,7 +35,7 @@ public class ContribtionRankController {
     @GetMapping()
     public ResponseBean<List<UserContribPointBean>> getRankList() {
         List<UserContribPointBean> rankList = contributionRankService.getRankList();
-        return new ResponseBean<>(200, "succ", rankList, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", rankList);
     }
 
     /**
@@ -49,6 +49,6 @@ public class ContribtionRankController {
     public ResponseBean<UserContribPointBean> getMyRank() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         UserContribPointBean userContribPointBean = contributionRankService.getUserContribPointByPhone(phone);
-        return new ResponseBean<>(200, "succ", userContribPointBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", userContribPointBean);
     }
 }

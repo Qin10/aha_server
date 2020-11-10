@@ -22,14 +22,33 @@ public class ProjectResourceService {
     @Resource
     private OssService ossService;
 
+    /**
+     * 根据项目id获取全部项目资源
+     *
+     * @param projectId 项目id
+     * @return 项目资源列表
+     */
     public List<ProjectResource> getAllProjectResourceByProjectId(int projectId) {
         return projectResourceMapper.selectAllByProjectId(projectId);
     }
 
+    /**
+     * 根据项目资源id获取项目资源
+     *
+     * @param id 项目资源id
+     * @return 项目资源
+     */
     public ProjectResource getProjectResourceById(int id) {
         return projectResourceMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * 根据项目资源id获取下载url
+     *
+     * @param id 项目资源id
+     * @return 下载url
+     * @throws SelectException 查询异常
+     */
     public String signDownloadProjectResourceByid(int id) throws SelectException {
         ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(id);
         if (projectResource == null) {
@@ -42,16 +61,33 @@ public class ProjectResourceService {
         return url.toString();
     }
 
+    /**
+     * 新增项目资源
+     *
+     * @param projectResource 项目资源
+     * @param projectId       项目id
+     */
     public void saveProjectResourceByProjectId(ProjectResource projectResource, int projectId) {
         projectResource.setProjectId(projectId);
         projectResourceMapper.insertSelective(projectResource);
     }
 
+    /**
+     * 根据项目资源id更新项目资源
+     *
+     * @param projectResource 更新的项目资源
+     * @param id              项目资源id
+     */
     public void updateProjectResourceById(ProjectResource projectResource, int id) {
         projectResource.setId(id);
         projectResourceMapper.updateByPrimaryKeySelective(projectResource);
     }
 
+    /**
+     * 根据项目资源id删除项目资源
+     *
+     * @param id 项目资源id
+     */
     public void deleteProjectResourceById(int id) {
         projectResourceMapper.deleteByPrimaryKey(id);
     }

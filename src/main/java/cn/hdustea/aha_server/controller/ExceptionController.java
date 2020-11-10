@@ -32,7 +32,7 @@ public class ExceptionController {
     @ExceptionHandler(AuthenticationException.class)
     public ResponseBean<Object> handleShiroException(AuthenticationException e) {
 //        e.printStackTrace();
-        return new ResponseBean<>(e.getCode(), e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(e.getCode(), e.getMessage(), null);
     }
 
     /**
@@ -44,7 +44,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(ForbiddenException.class)
     public ResponseBean<Object> handleForbiddenException(ForbiddenException e) {
-        return new ResponseBean<>(e.getCode(), e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(e.getCode(), e.getMessage(), null);
     }
 
     /**
@@ -56,7 +56,7 @@ public class ExceptionController {
     @ExceptionHandler(ApiException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean<Object> handleApiException(ApiException e) {
-        return new ResponseBean<>(e.getCode(), e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(e.getCode(), e.getMessage(), null);
     }
 
     /**
@@ -68,7 +68,7 @@ public class ExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return new ResponseBean<>(ApiExceptionCode.ARGUMENTS_VALID_FAIL.getValue(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(ApiExceptionCode.ARGUMENTS_VALID_FAIL.getValue(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), null);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean<Object> globalException(Exception e) {
         e.printStackTrace();
-        return new ResponseBean<>(500, e.getMessage(), null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(500, e.getMessage(), null);
     }
 
 }

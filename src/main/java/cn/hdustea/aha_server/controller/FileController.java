@@ -37,6 +37,6 @@ public class FileController {
         URL url = ossService.signDownload(filename);
         UrlBean urlBean = new UrlBean();
         urlBean.setUrl(url.toString());
-        return new ResponseBean<>(200, "succ", urlBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", urlBean);
     }
 }

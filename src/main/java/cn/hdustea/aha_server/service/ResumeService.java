@@ -72,7 +72,7 @@ public class ResumeService {
      *
      * @param resume 简历实体类
      * @param phone  用户手机号
-     * @throws UpdateException 修改失败异常
+     * @throws SelectException 用户不存在异常
      */
     public void updateResumeByPhone(Resume resume, String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);

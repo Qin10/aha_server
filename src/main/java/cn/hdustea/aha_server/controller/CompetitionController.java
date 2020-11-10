@@ -33,7 +33,7 @@ public class CompetitionController {
     @GetMapping("/{id}")
     public ResponseBean<Competition> getCompetitionById(@PathVariable("id") int id) {
         Competition competition = competitionService.getCompetitionById(id);
-        return new ResponseBean<>(200, "succ", competition, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competition);
     }
 
     /**
@@ -43,7 +43,7 @@ public class CompetitionController {
     @GetMapping()
     public ResponseBean<List<Competition>> getAllCompetition() {
         List<Competition> competitions = competitionService.getAllCompetition();
-        return new ResponseBean<>(200, "succ", competitions, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competitions);
     }
 
     /**
@@ -55,7 +55,7 @@ public class CompetitionController {
     @GetMapping("/tag/{id}")
     public ResponseBean<CompetitionTag> getCompetitionTagById(@PathVariable("id") int id) {
         CompetitionTag competitionTag = competitionService.getCompetitionTagById(id);
-        return new ResponseBean<>(200, "succ", competitionTag, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competitionTag);
     }
 
     /**
@@ -65,7 +65,7 @@ public class CompetitionController {
     @GetMapping("/tag")
     public ResponseBean<List<CompetitionTag>> getAllCompetitionTag() {
         List<CompetitionTag> competitionTags = competitionService.getAllCompetitionTag();
-        return new ResponseBean<>(200, "succ", competitionTags, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", competitionTags);
     }
 
     /**
@@ -77,7 +77,20 @@ public class CompetitionController {
     @PostMapping()
     public ResponseBean<Object> saveCompetition(@RequestBody Competition competition) {
         competitionService.saveCompetition(competition);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 根据竞赛id更新竞赛信息
+     *
+     * @param id          竞赛id
+     * @param competition 更新的竞赛信息
+     */
+    @RequiresLogin
+    @PutMapping("/{id}")
+    public ResponseBean<Object> updateCompetition(@PathVariable("id") int id, @RequestBody Competition competition) {
+        competitionService.updateCompetitionById(competition, id);
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -89,6 +102,19 @@ public class CompetitionController {
     @PostMapping("/tag")
     public ResponseBean<Object> saveCompetitionTag(@RequestBody @Validated CompetitionTag competitionTag) {
         competitionService.saveCompetitionTag(competitionTag);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 根据竞赛标签id更新竞赛标签
+     *
+     * @param id             竞赛标签id
+     * @param competitionTag 更新的竞赛标签
+     */
+    @RequiresLogin
+    @PutMapping("/tag/{id}")
+    public ResponseBean<Object> updateCompetitionTag(@PathVariable("id") int id, @RequestBody CompetitionTag competitionTag) {
+        competitionService.updateCompetitionTagById(competitionTag, id);
+        return new ResponseBean<>(200, "succ", null);
     }
 }

@@ -66,6 +66,12 @@ public class UserService {
         userMapper.updateSignedNoticeByPhone(signedNotice, phone);
     }
 
+    /**
+     * 修改是否签署合同标识
+     *
+     * @param phone          手机号
+     * @param signedContract 是否签署合同
+     */
     public void updateSignedContract(String phone, boolean signedContract) {
         userMapper.updateSignedContractByPhone(signedContract, phone);
     }

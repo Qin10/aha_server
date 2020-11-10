@@ -16,6 +16,11 @@ public class ContractService {
     @Resource
     private ContractMapper contractMapper;
 
+    /**
+     * 保存合同
+     *
+     * @param contract 合同信息
+     */
     public void saveContract(Contract contract) {
         contractMapper.insert(contract);
     }

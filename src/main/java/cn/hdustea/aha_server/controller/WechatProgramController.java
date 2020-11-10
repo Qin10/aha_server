@@ -32,6 +32,6 @@ public class WechatProgramController {
         String token = wechatProgramService.wechatLogin(code);
         TokenBean tokenBean = new TokenBean();
         tokenBean.setToken(token);
-        return new ResponseBean<>(200, "登录成功", tokenBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "登录成功", tokenBean);
     }
 }

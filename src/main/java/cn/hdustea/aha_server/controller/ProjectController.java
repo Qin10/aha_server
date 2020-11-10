@@ -54,7 +54,7 @@ public class ProjectController {
     @GetMapping
     public ResponseBean<List<Project>> getAllProject() {
         List<Project> projects = projectService.getAllProject();
-        return new ResponseBean<>(200, "succ", projects, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", projects);
     }
 
     /**
@@ -66,7 +66,7 @@ public class ProjectController {
     @GetMapping("/{projectId}")
     public ResponseBean<Project> getProjectById(@PathVariable("projectId") int projectId) {
         Project project = projectService.getProjectById(projectId);
-        return new ResponseBean<>(200, "succ", project, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", project);
     }
 
     /**
@@ -77,7 +77,7 @@ public class ProjectController {
     public ResponseBean<OssPolicyBean> signUploadPublicFile() {
         String phone = ThreadLocalUtil.getCurrentUser();
         OssPolicyBean ossPolicyBean = ossService.signUpload("resource_avatar/" + phone, false);
-        return new ResponseBean<>(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", ossPolicyBean);
     }
 
     /**
@@ -90,7 +90,7 @@ public class ProjectController {
     public ResponseBean<Object> saveProject(@RequestBody @Validated Project project) {
         String phone = ThreadLocalUtil.getCurrentUser();
         projectService.saveProjectAndAuthor(project, phone);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -108,7 +108,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectService.updateProjectByProjectId(project, projectId);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -125,7 +125,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectService.deleteProjectById(projectId);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -141,7 +141,7 @@ public class ProjectController {
             addReadByProjectId(projectId);
             log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "查看项目", "id=" + projectId);
         }
-        return new ResponseBean<>(200, "succ", projectInfo, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", projectInfo);
     }
 
     /**
@@ -159,7 +159,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectInfoService.updateProjectInfoByProjectId(projectInfo, projectId);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -171,7 +171,7 @@ public class ProjectController {
     @GetMapping("/{projectId}/member")
     public ResponseBean<List<ProjectMember>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) {
         List<ProjectMember> projectMembers = projectInfoService.getAllProjectMemberByProjectId(projectId);
-        return new ResponseBean<>(200, "succ", projectMembers, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", projectMembers);
     }
 
     /**
@@ -190,7 +190,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectInfoService.saveProjectMemberByProjectId(projectMember, projectId);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -209,7 +209,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectInfoService.updateProjectMember(projectMember, projectId, memberPhone);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -227,7 +227,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectInfoService.deleteProjectMember(projectId, memberPhone);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -239,7 +239,7 @@ public class ProjectController {
     @GetMapping("/{projectId}/resource")
     public ResponseBean<List<ProjectResource>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) {
         List<ProjectResource> projectResources = projectResourceService.getAllProjectResourceByProjectId(projectId);
-        return new ResponseBean<>(200, "succ", projectResources, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", projectResources);
     }
 
     /**
@@ -257,7 +257,7 @@ public class ProjectController {
         }
         Project project = projectService.getProjectById(projectId);
         OssPolicyBean ossPolicyBean = ossService.signUpload(project.getName() + "/", true);
-        return new ResponseBean<>(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", ossPolicyBean);
     }
 
     /**
@@ -275,7 +275,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectResourceService.saveProjectResourceByProjectId(projectResource, projectId);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -294,7 +294,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectResourceService.updateProjectResourceById(projectResource, projectResourceId);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -312,7 +312,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectResourceService.deleteProjectResourceById(projectResourceId);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -328,7 +328,7 @@ public class ProjectController {
         UrlBean urlBean = new UrlBean();
         urlBean.setUrl(url);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
-        return new ResponseBean<>(200, "succ", urlBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", urlBean);
     }
 
     /**
@@ -341,7 +341,7 @@ public class ProjectController {
     public ResponseBean<List<UserCollection>> getAllCollection() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         List<UserCollection> collections = projectService.getAllCollectionByPhone(phone);
-        return new ResponseBean<>(200, "succ", collections, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", collections);
     }
 
     /**
@@ -356,7 +356,7 @@ public class ProjectController {
         String phone = ThreadLocalUtil.getCurrentUser();
         projectService.saveCollection(projectId, phone);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "收藏资源", "id=" + projectId);
-        return new ResponseBean<>(200, "收藏成功！", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "收藏成功！", null);
     }
 
     /**
@@ -371,7 +371,7 @@ public class ProjectController {
         String phone = ThreadLocalUtil.getCurrentUser();
         projectService.deleteCollection(projectId, phone);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "取消收藏资源", "id=" + projectId);
-        return new ResponseBean<>(200, "取消收藏成功！", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "取消收藏成功！", null);
     }
 
     private void addReadByProjectId(int projectId) {

@@ -20,7 +20,9 @@ import cn.hdustea.aha_server.util.FileUtil;
 import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
-import cn.hdustea.aha_server.vo.*;
+import cn.hdustea.aha_server.vo.ChangePasswordBean;
+import cn.hdustea.aha_server.vo.LoginUser;
+import cn.hdustea.aha_server.vo.RegisterUser;
 import org.slf4j.MDC;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,11 +30,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.security.auth.login.AccountNotFoundException;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Date;
 import java.sql.Timestamp;
+import java.util.Date;
 
 import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 
@@ -54,7 +55,6 @@ public class AuthService {
     @Resource
     private SmsService smsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    //    private static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
     @Resource
     private JWTConfig jwtConfig;
     @Resource
@@ -129,15 +129,15 @@ public class AuthService {
      * 处理用户修改密码的请求
      *
      * @param changePasswordBean 存放修改密码相关信息的实体类
-     * @throws MessageCheckException    短信验证码校验异常
-     * @throws AccountNotFoundException 账号未找到异常
+     * @throws MessageCheckException 短信验证码校验异常
+     * @throws SelectException       用户不存在异常
      */
     public void changePassword(ChangePasswordBean changePasswordBean, String phone) throws MessageCheckException, SelectException {
         boolean SmsVerifyResult = smsService.verifySmsCode(phone, changePasswordBean.getCode(), SmsService.CHANGE_PASSWORD_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
-        User user = userService.getUserByPhone(phone);
+        userService.getUserByPhone(phone);
         String encodedPassword = bCryptPasswordEncoder.encode(changePasswordBean.getNewPassword());
         userService.updatePassword(phone, encodedPassword);
     }
@@ -156,6 +156,17 @@ public class AuthService {
         return signToken(user);
     }
 
+    /**
+     * 处理用户签署合同的接口，合同表内新增字段，并将用户表相应字段置为true，并返回新的token
+     *
+     * @param phone    手机号
+     * @param file     合同签字文件
+     * @param contract 合同信息
+     * @return 新的token令牌
+     * @throws IOException     文件IO异常
+     * @throws UpdateException 更新异常
+     * @throws SelectException 用户不存在异常
+     */
     @Transactional(rollbackFor = Exception.class)
     public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, UpdateException, SelectException {
         User user = userService.getUserByPhone(phone);
@@ -181,6 +192,12 @@ public class AuthService {
         redisUtil.del(phone);
     }
 
+    /**
+     * 签署token令牌
+     *
+     * @param user 用户私有信息
+     * @return token令牌
+     */
     private String signToken(User user) {
         JwtPayloadBean jwtPayloadBean = JWTUtil.packagePayload(user);
         String token = JWTUtil.sign(jwtPayloadBean, jwtConfig.getSecret(), jwtConfig.getExpireTime());

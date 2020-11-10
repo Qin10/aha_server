@@ -66,6 +66,12 @@ public class OssService {
         return oss.generatePresignedUrl(aliyunOSSConfig.getPrivateBucketName(), filename, expiration);
     }
 
+    /**
+     * 构建下载url
+     *
+     * @param filename oss内文件名
+     * @return 下载url
+     */
     public String buildPublicDownloadUrl(String filename) {
         return "https://" +
                 aliyunOSSConfig.getPublicBucketName() +

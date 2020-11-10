@@ -1,9 +1,7 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.*;
-import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.mapper.ProjectInfoMapper;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectMemberMapper;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -35,18 +32,40 @@ public class ProjectService {
     @Resource
     private UserService userService;
 
+    /**
+     * 获取所有项目粗略信息
+     *
+     * @return 项目粗略信息列表
+     */
     public List<Project> getAllProject() {
         return projectMapper.selectAll();
     }
 
+    /**
+     * 根据项目id获取粗略信息
+     *
+     * @param id 项目id
+     * @return 项目粗略信息
+     */
     public Project getProjectById(int id) {
         return projectMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * 新增项目
+     *
+     * @param project 项目粗略信息
+     */
     public void saveProject(Project project) {
         projectMapper.insertSelective(project);
     }
 
+    /**
+     * 新增项目并记录作者
+     *
+     * @param project 项目粗略信息
+     * @param phone   手机号
+     */
     @Transactional(rollbackFor = Exception.class)
     public void saveProjectAndAuthor(Project project, String phone) {
         project.setCreatorPhone(phone);
@@ -56,11 +75,24 @@ public class ProjectService {
         projectInfoMapper.insertSelective(projectInfo);
     }
 
+    /**
+     * 根据项目id修改项目粗略信息
+     *
+     * @param project   更新的项目粗略信息
+     * @param projectId 项目id
+     */
     public void updateProjectByProjectId(Project project, int projectId) {
         project.setId(projectId);
         projectMapper.updateByPrimaryKeySelective(project);
     }
 
+    /**
+     * 检查用户是否有项目修改权限
+     *
+     * @param phone 手机号
+     * @param id    项目id
+     * @return 是否有修改权限
+     */
     public boolean hasPermission(String phone, int id) {
         Project project = projectMapper.selectByPrimaryKey(id);
         if (project != null && project.getCreatorPhone().equals(phone)) {
@@ -71,27 +103,34 @@ public class ProjectService {
         }
     }
 
+    /**
+     * 删除项目
+     *
+     * @param id 项目id
+     */
     public void deleteProjectById(int id) {
         projectMapper.deleteByPrimaryKey(id);
     }
 
-//    public String signDownloadResourceByid(int id) throws SelectException {
-//        Resource resource = resourceMapper.selectByPrimaryKey(id);
-//        if (resource == null) {
-//            throw new SelectException("不存在对应记录！");
-//        }
-//        if (resource.getFilename() == null) {
-//            throw new SelectException("资源文件为空！");
-//        }
-//        URL url = ossService.signDownload(resource.getFilename());
-//        return url.toString();
-//    }
-
+    /**
+     * 获取全部用户收藏项目
+     *
+     * @param phone 手机号
+     * @return 用户收藏列表
+     * @throws SelectException 用户不存在异常
+     */
     public List<UserCollection> getAllCollectionByPhone(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
         return userCollectionMapper.selectAllByUserId(user.getId());
     }
 
+    /**
+     * 收藏项目
+     *
+     * @param projectId 项目id
+     * @param phone     手机号
+     * @throws SelectException 用户不存在异常
+     */
     public void saveCollection(int projectId, String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
         UserCollection userCollection = new UserCollection();
@@ -104,6 +143,13 @@ public class ProjectService {
         }
     }
 
+    /**
+     * 取消收藏
+     *
+     * @param projectId 项目id
+     * @param phone     手机号
+     * @throws SelectException 用户不存在异常
+     */
     public void deleteCollection(int projectId, String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
         userCollectionMapper.deleteByPrimaryKey(user.getId(), projectId);

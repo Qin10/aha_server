@@ -24,11 +24,23 @@ public class ContributionRankService {
     @Resource
     private UserService userService;
 
+    /**
+     * 获取排行榜
+     *
+     * @return 排行榜列表
+     */
     public List<UserContribPointBean> getRankList() {
         Set<ZSetOperations.TypedTuple<Object>> tuples = redisUtil.zSGetTuple(RedisUtil.CONTRIBUTION_RANK_KEY, 0, 99);
         return redisUtil.tupleToUserContribPoint(tuples);
     }
 
+    /**
+     * 获取用户个人排名
+     *
+     * @param phone 手机号
+     * @return 用户排名
+     * @throws SelectException 用户不存在异常
+     */
     public long getRankByPhone(String phone) throws SelectException {
         Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIBUTION_RANK_KEY, phone);
         if (rank == null) {
@@ -37,6 +49,13 @@ public class ContributionRankService {
         return rank + 1;
     }
 
+    /**
+     * 获取用户个人排名和贡献点
+     *
+     * @param phone 手机号
+     * @return 用户个人排名和贡献点
+     * @throws SelectException 用户不存在异常
+     */
     public UserContribPointBean getUserContribPointByPhone(String phone) throws SelectException {
         long rank = getRankByPhone(phone);
         Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, phone);

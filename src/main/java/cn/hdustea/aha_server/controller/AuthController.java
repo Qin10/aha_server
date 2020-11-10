@@ -46,7 +46,7 @@ public class AuthController {
     public ResponseBean<TokenAndPersonalUserInfoBean> login(@RequestBody @Validated LoginUser loginUser) throws Exception {
         TokenAndPersonalUserInfoBean tokenAndPersonalUserInfoBean = authService.login(loginUser);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户登录", "");
-        return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoBean);
     }
 
     /**
@@ -61,7 +61,7 @@ public class AuthController {
         LoginUser loginUser = new LoginUser(registerUser.getPhone(), registerUser.getPassword());
         TokenAndPersonalUserInfoBean tokenAndPersonalUserInfoBean = authService.login(loginUser);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户注册", "");
-        return new ResponseBean<>(200, "注册成功", tokenAndPersonalUserInfoBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "注册成功", tokenAndPersonalUserInfoBean);
     }
 
     /**
@@ -75,7 +75,7 @@ public class AuthController {
     @PostMapping("/changePassword/{phone}")
     public ResponseBean<Object> changePassword(@RequestBody @Validated ChangePasswordBean changePasswordBean, @PathVariable("phone") String phone) throws MessageCheckException, SelectException {
         authService.changePassword(changePasswordBean, phone);
-        return new ResponseBean<>(200, "密码修改成功！", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "密码修改成功！", null);
     }
 
     /**
@@ -90,7 +90,7 @@ public class AuthController {
         String updatedToken = authService.signNotice(phone);
         TokenBean tokenBean = new TokenBean();
         tokenBean.setToken(updatedToken);
-        return new ResponseBean<>(200, "已同意用户协议", tokenBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "已同意用户协议", tokenBean);
     }
 
     /**
@@ -109,7 +109,7 @@ public class AuthController {
         String updatedToken = authService.signContract(phone, file, contract);
         TokenBean tokenBean = new TokenBean();
         tokenBean.setToken(updatedToken);
-        return new ResponseBean<>(200, "已签署合同", tokenBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "已签署合同", tokenBean);
     }
 
     /**
@@ -120,6 +120,6 @@ public class AuthController {
     public ResponseBean<Object> logout() {
         String phone = ThreadLocalUtil.getCurrentUser();
         authService.logout(phone);
-        return new ResponseBean<>(200, "登出成功", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "登出成功", null);
     }
 }

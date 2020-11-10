@@ -34,7 +34,7 @@ public class ResumeController {
     @GetMapping("/{phone}")
     public ResponseBean<Resume> getResumeByPhone(@PathVariable("phone") String phone) throws SelectException {
         Resume resume = resumeService.getResumeByPhone(phone);
-        return new ResponseBean<>(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", resume);
     }
 
     /**
@@ -47,7 +47,7 @@ public class ResumeController {
     public ResponseBean<Resume> getPersonalResume() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         Resume resume = resumeService.getResumeByPhone(phone);
-        return new ResponseBean<>(200, "succ", resume, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", resume);
     }
 
     /**
@@ -61,6 +61,6 @@ public class ResumeController {
     public ResponseBean<Object> updateResume(@RequestBody Resume resume) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         resumeService.updateResumeByPhone(resume, phone);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 }

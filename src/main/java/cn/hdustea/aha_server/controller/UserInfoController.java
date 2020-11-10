@@ -39,7 +39,7 @@ public class UserInfoController {
     public ResponseBean<PersonalUserInfoBean> getPersonalUserInfo() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(phone);
-        return new ResponseBean<>(200, "succ", personalUserInfo, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", personalUserInfo);
     }
 
     /**
@@ -53,7 +53,7 @@ public class UserInfoController {
     public ResponseBean<Object> updatePersonalUserInfo(@RequestBody UserInfo userInfo) throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         userInfoService.updateUserInfoByPhone(userInfo, phone);
-        return new ResponseBean<>(200, "succ", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**
@@ -65,7 +65,7 @@ public class UserInfoController {
     @GetMapping("/{phone}")
     public ResponseBean<UserInfo> getUserInfoByPhone(@PathVariable("phone") String phone) throws SelectException {
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
-        return new ResponseBean<>(200, "succ", userInfo, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", userInfo);
     }
 
     /**
@@ -76,7 +76,7 @@ public class UserInfoController {
     public ResponseBean<OssPolicyBean> signUpdateUserAvatar() {
         String phone = ThreadLocalUtil.getCurrentUser();
         OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone, false);
-        return new ResponseBean<>(200, "succ", ossPolicyBean, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "succ", ossPolicyBean);
     }
 
     /**
@@ -91,6 +91,6 @@ public class UserInfoController {
         String phone = ThreadLocalUtil.getCurrentUser();
         String fileUrl = requestMap.get("fileUrl");
         userInfoService.updateAvatarUrlByPhone(fileUrl, phone);
-        return new ResponseBean<>(200, "修改成功！", null, TimeUtil.getFormattedTime(new Date()));
+        return new ResponseBean<>(200, "修改成功！", null);
     }
 }

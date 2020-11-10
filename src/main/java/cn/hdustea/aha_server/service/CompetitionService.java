@@ -38,12 +38,10 @@ public class CompetitionService {
      * 修改竞赛信息
      *
      * @param competition 竞赛信息的实体类
-     * @throws UpdateException 修改失败异常
+     * @param id          竞赛id
      */
-    public void updateCompetition(Competition competition) throws UpdateException {
-        if (competitionMapper.selectByPrimaryKey(competition.getId()) == null) {
-            throw new UpdateException();
-        }
+    public void updateCompetitionById(Competition competition, int id) {
+        competition.setId(id);
         competitionMapper.updateByPrimaryKeySelective(competition);
     }
 
@@ -79,12 +77,10 @@ public class CompetitionService {
      * 修改竞赛标签
      *
      * @param competitionTag 竞赛标签实体类
-     * @throws UpdateException 修改失败异常
+     * @param id             竞赛标签id
      */
-    public void updateCompetitionTag(CompetitionTag competitionTag) throws UpdateException {
-        if (competitionTagMapper.selectByPrimaryKey(competitionTag.getId()) == null) {
-            throw new UpdateException();
-        }
+    public void updateCompetitionTagById(CompetitionTag competitionTag, int id) {
+        competitionTag.setId(id);
         competitionTagMapper.updateByPrimaryKeySelective(competitionTag);
     }
 

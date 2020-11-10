@@ -33,7 +33,7 @@ public class SmsController {
     public ResponseBean<Object> sendRegisterSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(phone, SmsService.REGISTER_MESSAGE);
         if (isSent) {
-            return new ResponseBean<>(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
+            return new ResponseBean<>(200, "验证码发送成功！", null);
         } else {
             throw new MessageSendException();
         }
@@ -49,7 +49,7 @@ public class SmsController {
     public ResponseBean<Object> sendSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(phone, SmsService.CHANGE_PASSWORD_MESSAGE);
         if (isSent) {
-            return new ResponseBean<>(200, "验证码发送成功！", null, TimeUtil.getFormattedTime(new Date()));
+            return new ResponseBean<>(200, "验证码发送成功！", null);
         } else {
             throw new MessageSendException();
         }
