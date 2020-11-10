@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 import cn.hdustea.aha_server.entity.valid.InsertGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.yedaxia.apidocs.Ignore;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

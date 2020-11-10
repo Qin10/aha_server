@@ -3,7 +3,6 @@ package cn.hdustea.aha_server.entity;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import io.github.yedaxia.apidocs.Ignore;
 import lombok.Data;
 
 /**
