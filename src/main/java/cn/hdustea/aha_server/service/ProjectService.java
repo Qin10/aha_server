@@ -6,6 +6,7 @@ import cn.hdustea.aha_server.mapper.ProjectInfoMapper;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectMemberMapper;
 import cn.hdustea.aha_server.mapper.UserCollectionMapper;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,6 +109,7 @@ public class ProjectService {
      *
      * @param id 项目id
      */
+    @CacheEvict(value = "project", key = "#id")
     public void deleteProjectById(int id) {
         projectMapper.deleteByPrimaryKey(id);
     }

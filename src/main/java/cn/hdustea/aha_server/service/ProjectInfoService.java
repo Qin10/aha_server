@@ -2,9 +2,13 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.ProjectInfo;
 import cn.hdustea.aha_server.entity.ProjectMember;
+import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.mapper.ProjectInfoMapper;
 import cn.hdustea.aha_server.mapper.ProjectMemberMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
@@ -42,16 +46,6 @@ public class ProjectInfoService {
     public void updateProjectInfoByProjectId(ProjectInfo projectInfo, int projectId) {
         projectInfo.setProjectId(projectId);
         projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
-    }
-
-    /**
-     * 根据项目id获取全部项目成员
-     *
-     * @param projectId 项目id
-     * @return 项目成员列表
-     */
-    public List<ProjectMember> getAllProjectMemberByProjectId(int projectId) {
-        return projectMemberMapper.selectAllByProjectId(projectId);
     }
 
     /**

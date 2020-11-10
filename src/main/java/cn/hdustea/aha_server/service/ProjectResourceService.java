@@ -3,7 +3,11 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
+import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -23,16 +27,6 @@ public class ProjectResourceService {
     private OssService ossService;
 
     /**
-     * 根据项目id获取全部项目资源
-     *
-     * @param projectId 项目id
-     * @return 项目资源列表
-     */
-    public List<ProjectResource> getAllProjectResourceByProjectId(int projectId) {
-        return projectResourceMapper.selectAllByProjectId(projectId);
-    }
-
-    /**
      * 根据项目资源id获取项目资源
      *
      * @param id 项目资源id
@@ -50,7 +44,7 @@ public class ProjectResourceService {
      * @throws SelectException 查询异常
      */
     public String signDownloadProjectResourceByid(int id) throws SelectException {
-        ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(id);
+        ProjectResource projectResource = getProjectResourceById(id);
         if (projectResource == null) {
             throw new SelectException("不存在对应记录！");
         }
@@ -78,7 +72,7 @@ public class ProjectResourceService {
      * @param projectResource 更新的项目资源
      * @param id              项目资源id
      */
-    public void updateProjectResourceById(ProjectResource projectResource, int id) {
+    public void updateProjectResourceById(ProjectResource projectResource, int id, int projectId) {
         projectResource.setId(id);
         projectResourceMapper.updateByPrimaryKeySelective(projectResource);
     }
@@ -88,7 +82,7 @@ public class ProjectResourceService {
      *
      * @param id 项目资源id
      */
-    public void deleteProjectResourceById(int id) {
+    public void deleteProjectResourceById(int id, int projectId) {
         projectResourceMapper.deleteByPrimaryKey(id);
     }
 }

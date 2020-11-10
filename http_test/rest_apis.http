@@ -20,7 +20,7 @@ POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": "13819154341",
+  "phone": "15382355341",
   "password": "114514"
 }
 
@@ -130,13 +130,13 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有成员信息
-GET http://{{host}}/project/1/member
+GET http://{{host}}/project/4/member
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有资源信息
-GET http://{{host}}/project/1/resource
+GET http://{{host}}/project/4/resource
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -203,7 +203,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目成员
-POST http://{{host}}/project/member/4
+POST http://{{host}}/project/member/1
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -242,12 +242,12 @@ Content-Type: application/json
 
 {
   "type": 1,
-  "name": "项目申报书",
+  "name": "项目申报书3",
   "filename": "aaa.doc"
 }
 
 ###修改项目资源
-PUT http://{{host}}/project/resource/2
+PUT http://{{host}}/project/resource/3
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -258,7 +258,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###删除项目资源
-DELETE http://{{host}}/project/resource/2
+DELETE http://{{host}}/project/resource/3
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

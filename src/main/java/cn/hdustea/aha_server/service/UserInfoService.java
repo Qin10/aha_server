@@ -7,6 +7,9 @@ import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -52,7 +55,7 @@ public class UserInfoService {
      */
     public PersonalUserInfoBean getPersonalUserInfo(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        UserInfo userInfo = userInfoMapper.selectByUserId(user.getId());
+        UserInfo userInfo = getUserInfoByPhone(phone);
         PersonalUserInfoBean personalUserInfoBean = new PersonalUserInfoBean();
         personalUserInfoBean.setPhone(user.getPhone());
         personalUserInfoBean.setContribPoint(user.getContribPoint());

@@ -37,3 +37,9 @@ aliyun-oss:
   maxSize: 500
 user-operation-log:
   format: '[{}][{}][{}]'
+logging:
+  level:
+    cn:
+      hdustea:
+        aha_server:
+          mapper: debug

@@ -3,9 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.dao.ResumeDao;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 

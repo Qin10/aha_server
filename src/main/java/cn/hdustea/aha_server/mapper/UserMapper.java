@@ -5,6 +5,7 @@ import java.util.List;
 
 import cn.hdustea.aha_server.entity.User;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.cache.annotation.CacheConfig;
 
 /**
  * 用户表mapper

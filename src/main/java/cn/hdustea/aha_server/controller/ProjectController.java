@@ -170,7 +170,7 @@ public class ProjectController {
     @RequiresLogin()
     @GetMapping("/{projectId}/member")
     public ResponseBean<List<ProjectMember>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) {
-        List<ProjectMember> projectMembers = projectInfoService.getAllProjectMemberByProjectId(projectId);
+        List<ProjectMember> projectMembers = projectInfoService.getProjectInfoByProjectId(projectId).getMembers();
         return new ResponseBean<>(200, "succ", projectMembers);
     }
 
@@ -238,7 +238,7 @@ public class ProjectController {
     @RequiresLogin()
     @GetMapping("/{projectId}/resource")
     public ResponseBean<List<ProjectResource>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) {
-        List<ProjectResource> projectResources = projectResourceService.getAllProjectResourceByProjectId(projectId);
+        List<ProjectResource> projectResources = projectInfoService.getProjectInfoByProjectId(projectId).getResources();
         return new ResponseBean<>(200, "succ", projectResources);
     }
 
@@ -293,7 +293,7 @@ public class ProjectController {
         if (possibleProjectResource == null || !projectService.hasPermission(phone, possibleProjectResource.getProjectId())) {
             throw new PermissionDeniedException();
         }
-        projectResourceService.updateProjectResourceById(projectResource, projectResourceId);
+        projectResourceService.updateProjectResourceById(projectResource, projectResourceId,possibleProjectResource.getProjectId());
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -311,7 +311,7 @@ public class ProjectController {
         if (possibleProjectResource == null || !projectService.hasPermission(phone, possibleProjectResource.getProjectId())) {
             throw new PermissionDeniedException();
         }
-        projectResourceService.deleteProjectResourceById(projectResourceId);
+        projectResourceService.deleteProjectResourceById(projectResourceId, possibleProjectResource.getProjectId());
         return new ResponseBean<>(200, "succ", null);
     }
 
