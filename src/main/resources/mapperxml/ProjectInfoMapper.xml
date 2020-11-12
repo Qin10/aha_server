@@ -11,6 +11,8 @@
         <result column="pi_award_time" property="awardTime"/>
         <result column="pi_award_prove_url" property="awardProveUrl"/>
         <result column="pi_intro" property="intro"/>
+        <association property="project" javaType="cn.hdustea.aha_server.entity.Project" column="pi_project_id"
+                     select="cn.hdustea.aha_server.mapper.ProjectMapper.selectByPrimaryKey"/>
         <association property="competition" javaType="cn.hdustea.aha_server.entity.Competition" column="pi_comp_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionMapper.selectByPrimaryKey"/>
         <collection property="members" ofType="cn.hdustea.aha_server.entity.ProjectMember" column="pi_project_id"

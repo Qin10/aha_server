@@ -6,6 +6,8 @@ import cn.hdustea.aha_server.mapper.ProjectInfoMapper;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectMemberMapper;
 import cn.hdustea.aha_server.mapper.UserCollectionMapper;
+import cn.hdustea.aha_server.vo.ProjectAndInfoBean;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -64,16 +66,20 @@ public class ProjectService {
     /**
      * 新增项目并记录作者
      *
-     * @param project 项目粗略信息
-     * @param phone   手机号
+     * @param projectAndInfoBean 项目创建信息封装
+     * @param phone              手机号
      */
     @Transactional(rollbackFor = Exception.class)
-    public void saveProjectAndAuthor(Project project, String phone) {
+    public Integer saveProjectAndAuthor(ProjectAndInfoBean projectAndInfoBean, String phone) {
+        Project project = new Project();
+        ProjectInfo projectInfo = new ProjectInfo();
+        BeanUtils.copyProperties(projectAndInfoBean, project);
         project.setCreatorPhone(phone);
         projectMapper.insertSelective(project);
-        ProjectInfo projectInfo = new ProjectInfo();
+        BeanUtils.copyProperties(projectAndInfoBean, projectInfo);
         projectInfo.setProjectId(project.getId());
         projectInfoMapper.insertSelective(projectInfo);
+        return project.getId();
     }
 
     /**

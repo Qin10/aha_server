@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.OssPolicyBean;
+import cn.hdustea.aha_server.vo.ProjectAndInfoBean;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.entity.*;
@@ -83,14 +84,15 @@ public class ProjectController {
     /**
      * 新增项目
      *
-     * @param project 项目粗略信息
+     * @param projectAndInfoBean 项目创建信息封装
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
-    public ResponseBean<Object> saveProject(@RequestBody @Validated Project project) {
+    public ResponseBean<ProjectInfo> saveProject(@RequestBody @Validated ProjectAndInfoBean projectAndInfoBean) {
         String phone = ThreadLocalUtil.getCurrentUser();
-        projectService.saveProjectAndAuthor(project, phone);
-        return new ResponseBean<>(200, "succ", null);
+        Integer projectId = projectService.saveProjectAndAuthor(projectAndInfoBean, phone);
+        ProjectInfo projectInfo = projectInfoService.getProjectInfoByProjectId(projectId);
+        return new ResponseBean<>(200, "succ", projectInfo);
     }
 
     /**
@@ -293,7 +295,7 @@ public class ProjectController {
         if (possibleProjectResource == null || !projectService.hasPermission(phone, possibleProjectResource.getProjectId())) {
             throw new PermissionDeniedException();
         }
-        projectResourceService.updateProjectResourceById(projectResource, projectResourceId,possibleProjectResource.getProjectId());
+        projectResourceService.updateProjectResourceById(projectResource, projectResourceId, possibleProjectResource.getProjectId());
         return new ResponseBean<>(200, "succ", null);
     }
 

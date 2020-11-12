@@ -165,7 +165,9 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "基于大数据的博鸽诱捕系统"
+  "name": "基于大数据的叽咕诱捕系统",
+  "compId": 1,
+  "intro": "叽咕叽咕"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

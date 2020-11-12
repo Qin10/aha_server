@@ -22,6 +22,8 @@ public class ProjectInfo {
      */
     private Integer projectId;
 
+    private Project project;
+
     /**
      * 赛事id(外键)
      */
