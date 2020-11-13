@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.vo;
 
+import cn.hdustea.aha_server.entity.Project;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
