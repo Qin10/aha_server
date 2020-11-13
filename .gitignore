@@ -34,3 +34,6 @@ build/
 
 ### API Doc ###
 api_doc/
+
+###Spring Boot Properties###
+/src/main/resources/*.yml
