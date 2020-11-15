@@ -545,7 +545,7 @@ filename|string|否|文件名
 	"time":"string //响应时间"
 }
 ```
-## 根据项目id获取项目粗略信息
+## 根据项目id获取项目详细信息
 
 *作者: STEA_YY*
 
@@ -683,7 +683,7 @@ projectId|int|否|项目id
 }
 ```
 
-## 修改项目粗略信息
+## 修改项目信息
 
 *作者: STEA_YY*
 
@@ -740,108 +740,14 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
-## 根据项目id获取项目详细信息
 
-*作者: STEA_YY*
-
-**请求URL**
-
-/project/{projectId}/info `GET` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-projectId|int|否|项目id
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"projectId":"int //项目id(外键)",
-		"compId":"int //赛事id(外键)",
-		"competition":{
-			"id":"int //竞赛id",
-			"compTagId":"int //所属赛事标签（外键）",
-			"competitionTag":{
-				"id":"int //竞赛标签id",
-				"name":"string //竞赛标签名称"
-			},
-			"name":"string //赛事名称",
-			"intro":"string //赛事简介",
-			"picUrl":"int //赛事图片保存路径"
-		},
-		"awardName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
-		"awardLevel":"int //项目获奖级别",
-		"awardTime":"date //项目获奖时间",
-		"intro":"string //团队介绍(富文本)",
-		"members":[{
-			"memberPhone":"string //团队成员手机号",
-			"nickname":"string",
-			"trueName":"string",
-			"avatarUrl":"string",
-			"school":"string",
-			"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
-			"job":"string //团队成员职务",
-			"editable":"boolean //成员是否可编辑项目信息"
-		}],
-		"resources":[{
-			"id":"int //项目资源id",
-			"type":"int //资源文件类别",
-			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-			"filename":"string //保存在oss里的资源文件名(包括前缀)",
-			"download":"int //资源文件下载量"
-		}]
-	},
-	"time":"string //响应时间"
-}
-```
-## 修改项目详细信息
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/project/info/{projectId} `PUT` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-projectId|int|否|项目id
-
-**请求体**
-
-```json
-{
-	"compId":"int //赛事id(外键)",
-	"awardName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
-	"awardLevel":"int //项目获奖级别",
-	"awardTime":"date //项目获奖时间",
-	"intro":"string //团队介绍(富文本)"
-}
-```
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
 ## 根据项目id获取所有项目成员
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project/{projectId}/member `GET` 
+/project/{projectId}/members `GET` 
 
 **请求参数**
 
@@ -999,7 +905,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/{projectId}/resource/sign/upload/private `GET` 
+/project/{projectId}/resources/sign/upload/private `GET` 
 
 **请求参数**
 
