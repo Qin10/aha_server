@@ -3,14 +3,14 @@ package cn.hdustea.aha_server.vo;
 import lombok.Data;
 
 /**
- * url封装vo
+ * token封装vo
  *
  * @author STEA_YY
  **/
 @Data
-public class UrlBean {
+public class TokenVo {
     /**
-     * url字符串
+     * token令牌
      */
-    private String url;
+    private String token;
 }

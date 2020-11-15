@@ -26,5 +26,4 @@ public interface ProjectMemberMapper {
     List<ProjectMember> selectAllByProjectId(@Param("projectId") Integer projectId);
 
     ProjectMember selectByProjectIdAndMemberPhoneAndEditable(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone, @Param("editable") Boolean editable);
-
 }

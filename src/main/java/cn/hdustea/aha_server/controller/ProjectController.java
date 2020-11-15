@@ -1,28 +1,23 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.dto.OssPolicyBean;
-import cn.hdustea.aha_server.vo.ProjectAndInfoBean;
-import cn.hdustea.aha_server.vo.ResponseBean;
+import cn.hdustea.aha_server.vo.*;
+import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.OssService;
-import cn.hdustea.aha_server.service.ProjectInfoService;
 import cn.hdustea.aha_server.service.ProjectResourceService;
 import cn.hdustea.aha_server.service.ProjectService;
 import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.util.TimeUtil;
-import cn.hdustea.aha_server.vo.UrlBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,8 +33,6 @@ public class ProjectController {
     @Resource
     private ProjectService projectService;
     @Resource
-    private ProjectInfoService projectInfoService;
-    @Resource
     private ProjectResourceService projectResourceService;
     @Resource
     private OssService ossService;
@@ -53,63 +46,65 @@ public class ProjectController {
      */
     @RequiresLogin
     @GetMapping
-    public ResponseBean<List<Project>> getAllProject() {
-        List<Project> projects = projectService.getAllProject();
-        return new ResponseBean<>(200, "succ", projects);
+    public ResponseBean<List<ProjectRoughVo>> getAllProject() {
+        List<ProjectRoughVo> projectRoughVos = projectService.getAllProjectRoughInfo();
+        return new ResponseBean<>(200, "succ", projectRoughVos);
     }
 
     /**
-     * 根据项目id获取项目粗略信息
+     * 根据项目id获取项目信息
      *
      * @param projectId 项目id
      */
     @RequiresLogin
     @GetMapping("/{projectId}")
-    public ResponseBean<Project> getProjectById(@PathVariable("projectId") int projectId) {
-        Project project = projectService.getProjectById(projectId);
-        return new ResponseBean<>(200, "succ", project);
+    public ResponseBean<ProjectDetailVo> getProjectById(@PathVariable("projectId") int projectId) {
+        ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "查看项目", "id=" + projectId);
+        addReadByProjectId(projectId);
+        return new ResponseBean<>(200, "succ", projectDetailVo);
     }
 
     /**
-     * 获取oss公开资源上传签名(用于上传项目头像)
+     * 获取oss公开资源上传签名(用于上传项目头像和获奖证明材料)
      */
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload/public")
-    public ResponseBean<OssPolicyBean> signUploadPublicFile() {
+    public ResponseBean<OssPolicyVo> signUploadPublicFile() {
         String phone = ThreadLocalUtil.getCurrentUser();
-        OssPolicyBean ossPolicyBean = ossService.signUpload("resource_avatar/" + phone, false);
-        return new ResponseBean<>(200, "succ", ossPolicyBean);
+        OssPolicyVo ossPolicyVo = ossService.signUpload("resource/" + phone, false);
+        return new ResponseBean<>(200, "succ", ossPolicyVo);
     }
 
     /**
      * 新增项目
      *
-     * @param projectAndInfoBean 项目创建信息封装
+     * @param projectDto 项目信息
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
-    public ResponseBean<ProjectInfo> saveProject(@RequestBody @Validated ProjectAndInfoBean projectAndInfoBean) {
+    public ResponseBean<ProjectDetailVo> saveProject(@RequestBody @Validated ProjectDto projectDto) {
         String phone = ThreadLocalUtil.getCurrentUser();
-        Integer projectId = projectService.saveProjectAndAuthor(projectAndInfoBean, phone);
-        ProjectInfo projectInfo = projectInfoService.getProjectInfoByProjectId(projectId);
-        return new ResponseBean<>(200, "succ", projectInfo);
+        Integer projectId = projectService.saveProjectAndAuthor(projectDto, phone);
+        ProjectDetailVo insertedProjectDetailVo = projectService.getProjectDetailById(projectId);
+        return new ResponseBean<>(200, "succ", insertedProjectDetailVo);
     }
 
     /**
-     * 修改项目粗略信息
+     * 修改项目信息
      *
-     * @param project   修改的项目粗略信息
+     * @param projectDto   修改的项目信息
      * @param projectId 项目id
      * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/{projectId}")
-    public ResponseBean<Object> updateProjectById(@RequestBody Project project, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean<Object> updateProjectById(@RequestBody ProjectDto projectDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectService.updateProjectByProjectId(project, projectId);
+        projectService.updateProjectByProjectId(projectDto, projectId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -131,48 +126,14 @@ public class ProjectController {
     }
 
     /**
-     * 根据项目id获取项目详细信息
-     *
-     * @param projectId 项目id
-     */
-    @RequiresLogin
-    @GetMapping("/{projectId}/info")
-    public ResponseBean<ProjectInfo> getProjectInfoById(@PathVariable("projectId") int projectId) {
-        ProjectInfo projectInfo = projectInfoService.getProjectInfoByProjectId(projectId);
-        if (projectInfo != null) {
-            addReadByProjectId(projectId);
-            log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "查看项目", "id=" + projectId);
-        }
-        return new ResponseBean<>(200, "succ", projectInfo);
-    }
-
-    /**
-     * 修改项目详细信息
-     *
-     * @param projectInfo 修改的项目详细信息
-     * @param projectId   项目id
-     * @throws PermissionDeniedException 无操作权限异常
-     */
-    @RequiresLogin
-    @PutMapping("/info/{projectId}")
-    public ResponseBean<Object> updateProjectInfoById(@RequestBody ProjectInfo projectInfo, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
-            throw new PermissionDeniedException();
-        }
-        projectInfoService.updateProjectInfoByProjectId(projectInfo, projectId);
-        return new ResponseBean<>(200, "succ", null);
-    }
-
-    /**
      * 根据项目id获取所有项目成员
      *
      * @param projectId 项目id
      */
     @RequiresLogin()
-    @GetMapping("/{projectId}/member")
+    @GetMapping("/{projectId}/members")
     public ResponseBean<List<ProjectMember>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) {
-        List<ProjectMember> projectMembers = projectInfoService.getProjectInfoByProjectId(projectId).getMembers();
+        List<ProjectMember> projectMembers = projectService.getProjectDetailById(projectId).getMembers();
         return new ResponseBean<>(200, "succ", projectMembers);
     }
 
@@ -191,7 +152,7 @@ public class ProjectController {
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectInfoService.saveProjectMemberByProjectId(projectMember, projectId);
+        projectService.saveProjectMemberByProjectId(projectMember, projectId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -210,7 +171,25 @@ public class ProjectController {
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectInfoService.updateProjectMember(projectMember, projectId, memberPhone);
+        projectService.updateProjectMember(projectMember, projectId, memberPhone);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 修改多个项目成员信息
+     *
+     * @param projectMembers 修改的多个项目成员
+     * @param projectId      项目id
+     * @throws PermissionDeniedException 无操作权限异常
+     */
+    @RequiresLogin(requireSignContract = true)
+    @PutMapping("/members/{projectId}")
+    public ResponseBean<Object> updateResourceMemberById(@RequestBody List<ProjectMember> projectMembers, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(phone, projectId)) {
+            throw new PermissionDeniedException();
+        }
+        projectService.updateProjectMembers(projectMembers, projectId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -228,7 +207,7 @@ public class ProjectController {
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectInfoService.deleteProjectMember(projectId, memberPhone);
+        projectService.deleteProjectMember(projectId, memberPhone);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -238,9 +217,9 @@ public class ProjectController {
      * @param projectId 项目id
      */
     @RequiresLogin()
-    @GetMapping("/{projectId}/resource")
+    @GetMapping("/{projectId}/resources")
     public ResponseBean<List<ProjectResource>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) {
-        List<ProjectResource> projectResources = projectInfoService.getProjectInfoByProjectId(projectId).getResources();
+        List<ProjectResource> projectResources = projectService.getProjectDetailById(projectId).getResources();
         return new ResponseBean<>(200, "succ", projectResources);
     }
 
@@ -251,15 +230,15 @@ public class ProjectController {
      * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
-    @GetMapping("/{projectId}/resource/sign/upload/private")
-    public ResponseBean<OssPolicyBean> signUploadPrivateFile(@PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    @GetMapping("/{projectId}/resources/sign/upload/private")
+    public ResponseBean<OssPolicyVo> signUploadPrivateFile(@PathVariable("projectId") int projectId) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        Project project = projectService.getProjectById(projectId);
-        OssPolicyBean ossPolicyBean = ossService.signUpload(project.getName() + "/", true);
-        return new ResponseBean<>(200, "succ", ossPolicyBean);
+        ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
+        OssPolicyVo ossPolicyVo = ossService.signUpload(projectDetailVo.getName() + "/", true);
+        return new ResponseBean<>(200, "succ", ossPolicyVo);
     }
 
     /**
@@ -325,12 +304,12 @@ public class ProjectController {
      */
     @RequiresLogin
     @GetMapping("/resource/{projectResourceId}/sign/download")
-    public ResponseBean<UrlBean> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
+    public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
         String url = projectResourceService.signDownloadProjectResourceByid(projectResourceId);
-        UrlBean urlBean = new UrlBean();
-        urlBean.setUrl(url);
+        UrlVo urlVo = new UrlVo();
+        urlVo.setUrl(url);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
-        return new ResponseBean<>(200, "succ", urlBean);
+        return new ResponseBean<>(200, "succ", urlVo);
     }
 
     /**

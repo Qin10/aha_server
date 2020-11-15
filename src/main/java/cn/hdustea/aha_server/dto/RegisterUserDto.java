@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.vo;
+package cn.hdustea.aha_server.dto;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
  * @author STEA_YY
  **/
 @Data
-public class RegisterUser {
+public class RegisterUserDto {
     /**
      * 手机号
      */

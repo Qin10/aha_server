@@ -7,15 +7,66 @@
         <id column="p_id" property="id"/>
         <result column="p_creator_phone" property="creatorPhone"/>
         <result column="p_name" property="name"/>
+        <result column="p_avatar_url" property="avatarUrl"/>
+        <result column="p_intro" property="intro"/>
         <result column="p_read" property="read"/>
         <result column="p_collect" property="collect"/>
+        <result column="p_comp_id" property="compId"/>
+        <result column="p_award_name" property="awardName"/>
+        <result column="p_award_level" property="awardLevel"/>
+        <result column="p_award_time" property="awardTime"/>
+        <result column="p_award_prove_url" property="awardProveUrl"/>
         <result column="p_meaning" property="meaning"/>
-        <result column="p_avatar_url" property="avatarUrl"/>
         <result column="p_passed" property="passed"/>
+    </resultMap>
+    <resultMap id="RoughInfoMap" type="cn.hdustea.aha_server.vo.ProjectRoughVo">
+        <!--@mbg.generated-->
+        <!--@Table project-->
+        <id column="p_id" property="id"/>
+        <result column="p_creator_phone" property="creatorPhone"/>
+        <result column="p_name" property="name"/>
+        <result column="p_avatar_url" property="avatarUrl"/>
+        <result column="p_read" property="read"/>
+        <result column="p_collect" property="collect"/>
+        <result column="p_comp_id" property="compId"/>
+        <result column="p_award_level" property="awardLevel"/>
+        <result column="p_award_time" property="awardTime"/>
+    </resultMap>
+    <resultMap id="DetailResultMap" type="cn.hdustea.aha_server.vo.ProjectDetailVo">
+        <!--@mbg.generated-->
+        <!--@Table project-->
+        <id column="p_id" property="id"/>
+        <result column="p_creator_phone" property="creatorPhone"/>
+        <result column="p_name" property="name"/>
+        <result column="p_avatar_url" property="avatarUrl"/>
+        <result column="p_intro" property="intro"/>
+        <result column="p_read" property="read"/>
+        <result column="p_collect" property="collect"/>
+        <result column="p_comp_id" property="compId"/>
+        <result column="p_award_name" property="awardName"/>
+        <result column="p_award_level" property="awardLevel"/>
+        <result column="p_award_time" property="awardTime"/>
+        <association property="competition" javaType="cn.hdustea.aha_server.entity.Competition" column="p_comp_id"
+                     select="cn.hdustea.aha_server.mapper.CompetitionMapper.selectByPrimaryKey"/>
+        <collection property="members" ofType="cn.hdustea.aha_server.entity.ProjectMember" column="p_id"
+                    select="cn.hdustea.aha_server.mapper.ProjectMemberMapper.selectAllByProjectId"/>
+        <collection property="resources" ofType="cn.hdustea.aha_server.entity.ProjectResource" column="p_id"
+                    select="cn.hdustea.aha_server.mapper.ProjectResourceMapper.selectAllByProjectId"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        p_id, p_creator_phone, p_name, p_read, p_collect, p_meaning, p_avatar_url, p_passed
+        p_id, p_creator_phone, p_name, p_avatar_url, p_intro, p_read, p_collect, p_comp_id,
+        p_award_name, p_award_level, p_award_time, p_award_prove_url, p_meaning, p_passed
+    </sql>
+    <sql id="Rough_Column_List">
+        <!--@mbg.generated-->
+        p_id, p_creator_phone, p_name, p_avatar_url, p_read, p_collect, p_comp_id,
+        p_award_level, p_award_time
+    </sql>
+    <sql id="Detail_Column_List">
+        <!--@mbg.generated-->
+        p_id, p_creator_phone, p_name, p_avatar_url, p_intro, p_read, p_collect, p_comp_id,
+        p_award_name, p_award_level, p_award_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -33,8 +84,10 @@
     <insert id="insert" keyColumn="p_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Project"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into project (p_creator_phone, p_name, p_avatar_url)
-        values (#{creatorPhone}, #{name}, #{avatarUrl})
+        insert into project (p_creator_phone, p_name, p_avatar_url, p_intro, p_comp_id,
+                             p_award_name, p_award_level, p_award_time, p_award_prove_url)
+        values (#{creatorPhone}, #{name}, #{avatarUrl}, #{intro}, #{compId},
+                #{awardName}, #{awardLevel}, #{awardTime}, #{awardProveUrl})
     </insert>
     <insert id="insertSelective" keyColumn="p_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Project"
             useGeneratedKeys="true">
@@ -50,6 +103,24 @@
             <if test="avatarUrl != null">
                 p_avatar_url,
             </if>
+            <if test="intro != null">
+                p_intro,
+            </if>
+            <if test="compId != null">
+                p_comp_id,
+            </if>
+            <if test="awardName != null">
+                p_award_name,
+            </if>
+            <if test="awardLevel != null">
+                p_award_level,
+            </if>
+            <if test="awardTime != null">
+                p_award_time,
+            </if>
+            <if test="awardProveUrl != null">
+                p_award_prove_url,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="creatorPhone != null">
@@ -61,20 +132,53 @@
             <if test="avatarUrl != null">
                 #{avatarUrl},
             </if>
+            <if test="intro != null">
+                #{intro},
+            </if>
+            <if test="compId != null">
+                #{compId},
+            </if>
+            <if test="awardName != null">
+                #{awardName},
+            </if>
+            <if test="awardLevel != null">
+                #{awardLevel},
+            </if>
+            <if test="awardTime != null">
+                #{awardTime},
+            </if>
+            <if test="awardProveUrl != null">
+                #{awardProveUrl},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.Project">
         <!--@mbg.generated-->
         update project
         <set>
-            <if test="creatorPhone != null">
-                p_creator_phone = #{creatorPhone},
-            </if>
             <if test="name != null">
                 p_name = #{name},
             </if>
             <if test="avatarUrl != null">
                 p_avatar_url = #{avatarUrl},
+            </if>
+            <if test="intro != null">
+                p_intro = #{intro},
+            </if>
+            <if test="compId != null">
+                p_comp_id = #{compId},
+            </if>
+            <if test="awardName != null">
+                p_award_name = #{awardName},
+            </if>
+            <if test="awardLevel != null">
+                p_award_level = #{awardLevel},
+            </if>
+            <if test="awardTime != null">
+                p_award_time = #{awardTime},
+            </if>
+            <if test="awardProveUrl != null">
+                p_award_prove_url = #{awardProveUrl},
             </if>
         </set>
         where p_id = #{id}
@@ -82,9 +186,14 @@
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Project">
         <!--@mbg.generated-->
         update project
-        set p_creator_phone = #{creatorPhone},
-            p_name          = #{name},
-            p_avatar_url    = #{avatarUrl}
+        set p_name            = #{name},
+            p_avatar_url      = #{avatarUrl},
+            p_intro           = #{intro},
+            p_comp_id         = #{compId},
+            p_award_name      = #{awardName},
+            p_award_level     = #{awardLevel},
+            p_award_time      = #{awardTime},
+            p_award_prove_url = #{awardProveUrl}
         where p_id = #{id}
     </update>
 
@@ -93,6 +202,18 @@
         select
         <include refid="Base_Column_List"/>
         from project
+    </select>
+
+    <select id="selectAllRough" resultMap="RoughInfoMap">
+        select
+        <include refid="Rough_Column_List"/>
+        from project
+    </select>
+
+    <select id="selectDetailByPrimaryKey" resultMap="DetailResultMap">
+        select
+        <include refid="Detail_Column_List"/>
+        from project where p_id = #{id}
     </select>
 
     <!--auto generated by MybatisCodeHelper on 2020-11-08-->

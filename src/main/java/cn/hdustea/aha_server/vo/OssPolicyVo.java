@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.dto;
+package cn.hdustea.aha_server.vo;
 
 import lombok.Data;
 import lombok.ToString;
@@ -9,7 +9,7 @@ import lombok.ToString;
  * @author STEA_YY
  **/
 @Data
-public class OssPolicyBean {
+public class OssPolicyVo {
     /**
      * 阿里云accessid
      */

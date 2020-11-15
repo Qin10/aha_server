@@ -2,14 +2,12 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.service.WechatProgramService;
-import cn.hdustea.aha_server.util.TimeUtil;
-import cn.hdustea.aha_server.vo.TokenBean;
+import cn.hdustea.aha_server.vo.TokenVo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * 微信小程序授权/鉴权相关请求
@@ -28,10 +26,10 @@ public class WechatProgramController {
      * @throws Exception 向上抛出异常
      */
     @PostMapping("/wxLogin")
-    public ResponseBean<TokenBean> wechatLogin(@RequestParam("code") String code) throws Exception {
+    public ResponseBean<TokenVo> wechatLogin(@RequestParam("code") String code) throws Exception {
         String token = wechatProgramService.wechatLogin(code);
-        TokenBean tokenBean = new TokenBean();
-        tokenBean.setToken(token);
-        return new ResponseBean<>(200, "登录成功", tokenBean);
+        TokenVo tokenVo = new TokenVo();
+        tokenVo.setToken(token);
+        return new ResponseBean<>(200, "登录成功", tokenVo);
     }
 }

@@ -2,9 +2,9 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
-import cn.hdustea.aha_server.dto.JwtPayloadBean;
-import cn.hdustea.aha_server.dto.PersonalUserInfoBean;
-import cn.hdustea.aha_server.dto.TokenAndPersonalUserInfoBean;
+import cn.hdustea.aha_server.dto.JwtPayloadDto;
+import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
+import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
 import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.entity.User;
@@ -20,9 +20,9 @@ import cn.hdustea.aha_server.util.FileUtil;
 import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JWTUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
-import cn.hdustea.aha_server.vo.ChangePasswordBean;
-import cn.hdustea.aha_server.vo.LoginUser;
-import cn.hdustea.aha_server.vo.RegisterUser;
+import cn.hdustea.aha_server.dto.ChangePasswordDto;
+import cn.hdustea.aha_server.dto.LoginUserDto;
+import cn.hdustea.aha_server.dto.RegisterUserDto;
 import org.slf4j.MDC;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -71,19 +71,19 @@ public class AuthService {
     /**
      * 传入手机号+密码完成登录校验并获取令牌
      *
-     * @param loginUser 登录信息实体类
+     * @param loginUserDto 登录信息实体类
      * @return token令牌和用户部分信息
      * @throws Exception 向上抛出异常
      */
-    public TokenAndPersonalUserInfoBean login(LoginUser loginUser) throws Exception {
-        User user = userService.getUserByPhone(loginUser.getPhone());
+    public TokenAndPersonalUserInfoVo login(LoginUserDto loginUserDto) throws Exception {
+        User user = userService.getUserByPhone(loginUserDto.getPhone());
         if (user != null) {
-            if (bCryptPasswordEncoder.matches(loginUser.getPassword(), user.getPassword())) {
+            if (bCryptPasswordEncoder.matches(loginUserDto.getPassword(), user.getPassword())) {
                 String token = signToken(user);
-                PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
-                MDC.put("phone", loginUser.getPhone());
+                PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
+                MDC.put("phone", loginUserDto.getPhone());
                 MDC.put("ip", IpUtil.getIpAddr(request));
-                return new TokenAndPersonalUserInfoBean(token, personalUserInfo);
+                return new TokenAndPersonalUserInfoVo(token, personalUserInfo);
             } else {
                 throw new InvalidPasswordException("用户名或密码错误！");
             }
@@ -95,20 +95,20 @@ public class AuthService {
     /**
      * 传入注册信息和短信验证码，完成验证码校验并处理注册请求
      *
-     * @param registerUser 包含注册信息的实体
+     * @param registerUserDto 包含注册信息的实体
      * @throws DaoException          数据库操作异常
      * @throws MessageCheckException 短信验证码校验异常
      */
     @Transactional(rollbackFor = Exception.class)
-    public void register(RegisterUser registerUser) throws DaoException, MessageCheckException {
-        boolean SmsVerifyResult = smsService.verifySmsCode(registerUser.getPhone(), registerUser.getCode(), SmsService.REGISTER_MESSAGE);
+    public void register(RegisterUserDto registerUserDto) throws DaoException, MessageCheckException {
+        boolean SmsVerifyResult = smsService.verifySmsCode(registerUserDto.getPhone(), registerUserDto.getCode(), SmsService.REGISTER_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
         User user = new User();
-        user.setPhone(registerUser.getPhone());
-        user.setPassword(bCryptPasswordEncoder.encode(registerUser.getPassword()));
-        user.setSignedNotice(registerUser.isSignedNotice());
+        user.setPhone(registerUserDto.getPhone());
+        user.setPassword(bCryptPasswordEncoder.encode(registerUserDto.getPassword()));
+        user.setSignedNotice(registerUserDto.isSignedNotice());
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
         try {
@@ -118,7 +118,7 @@ public class AuthService {
             userService.saveUser(user);
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
-            userInfo.setNickname(registerUser.getNickname());
+            userInfo.setNickname(registerUserDto.getNickname());
             userInfoService.saveUserInfo(userInfo);
             Resume resume = new Resume();
             resumeService.updateResumeByPhone(resume, user.getPhone());
@@ -128,17 +128,17 @@ public class AuthService {
     /**
      * 处理用户修改密码的请求
      *
-     * @param changePasswordBean 存放修改密码相关信息的实体类
+     * @param changePasswordDto 存放修改密码相关信息的实体类
      * @throws MessageCheckException 短信验证码校验异常
      * @throws SelectException       用户不存在异常
      */
-    public void changePassword(ChangePasswordBean changePasswordBean, String phone) throws MessageCheckException, SelectException {
-        boolean SmsVerifyResult = smsService.verifySmsCode(phone, changePasswordBean.getCode(), SmsService.CHANGE_PASSWORD_MESSAGE);
+    public void changePassword(ChangePasswordDto changePasswordDto, String phone) throws MessageCheckException, SelectException {
+        boolean SmsVerifyResult = smsService.verifySmsCode(phone, changePasswordDto.getCode(), SmsService.CHANGE_PASSWORD_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
         userService.getUserByPhone(phone);
-        String encodedPassword = bCryptPasswordEncoder.encode(changePasswordBean.getNewPassword());
+        String encodedPassword = bCryptPasswordEncoder.encode(changePasswordDto.getNewPassword());
         userService.updatePassword(phone, encodedPassword);
     }
 
@@ -199,8 +199,8 @@ public class AuthService {
      * @return token令牌
      */
     private String signToken(User user) {
-        JwtPayloadBean jwtPayloadBean = JWTUtil.packagePayload(user);
-        String token = JWTUtil.sign(jwtPayloadBean, jwtConfig.getSecret(), jwtConfig.getExpireTime());
+        JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(user);
+        String token = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
         redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
         return token;
     }

@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.dto;
+package cn.hdustea.aha_server.vo;
 
 import cn.hdustea.aha_server.entity.UserInfo;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @author STEA_YY
  **/
 @Data
-public class PersonalUserInfoBean {
+public class PersonalUserInfoVo {
     /**
      * 手机号
      */

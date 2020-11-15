@@ -1,20 +1,18 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.dto.OssPolicyBean;
-import cn.hdustea.aha_server.dto.PersonalUserInfoBean;
+import cn.hdustea.aha_server.vo.OssPolicyVo;
+import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.util.TimeUtil;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -36,9 +34,9 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/me")
-    public ResponseBean<PersonalUserInfoBean> getPersonalUserInfo() throws SelectException {
+    public ResponseBean<PersonalUserInfoVo> getPersonalUserInfo() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
-        PersonalUserInfoBean personalUserInfo = userInfoService.getPersonalUserInfo(phone);
+        PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(phone);
         return new ResponseBean<>(200, "succ", personalUserInfo);
     }
 
@@ -73,10 +71,10 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
-    public ResponseBean<OssPolicyBean> signUpdateUserAvatar() {
+    public ResponseBean<OssPolicyVo> signUpdateUserAvatar() {
         String phone = ThreadLocalUtil.getCurrentUser();
-        OssPolicyBean ossPolicyBean = ossService.signUpload("avatar/" + phone, false);
-        return new ResponseBean<>(200, "succ", ossPolicyBean);
+        OssPolicyVo ossPolicyVo = ossService.signUpload("avatar/" + phone, false);
+        return new ResponseBean<>(200, "succ", ossPolicyVo);
     }
 
     /**

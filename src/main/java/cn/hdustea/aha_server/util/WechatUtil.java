@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.util;
 
-import cn.hdustea.aha_server.dto.WechatBean;
+import cn.hdustea.aha_server.dto.WechatDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -20,7 +20,7 @@ public class WechatUtil {
      * @param code 微信请求code
      * @return 包含了各种校验信息的Map
      */
-    public static WechatBean getWxInfo(String code) {
+    public static WechatDto getWxInfo(String code) {
         ObjectMapper objectMapper = new ObjectMapper();
         String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
         Map<String, String> requestUrlParam = new HashMap<>();
@@ -37,11 +37,11 @@ public class WechatUtil {
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity(requestUrl, requestUrlParam, Map.class);
         Map<String, String> responseBody = mapResponseEntity.getBody();
-        WechatBean wechatBean = new WechatBean();
-        wechatBean.setOpenId(responseBody != null ? responseBody.get("openid") : null);
-        wechatBean.setSessionKey(responseBody != null ? responseBody.get("session_key") : null);
-        wechatBean.setUnionid(responseBody != null ? responseBody.get("unionid") : null);
-        return wechatBean;
+        WechatDto wechatDto = new WechatDto();
+        wechatDto.setOpenId(responseBody != null ? responseBody.get("openid") : null);
+        wechatDto.setSessionKey(responseBody != null ? responseBody.get("session_key") : null);
+        wechatDto.setUnionid(responseBody != null ? responseBody.get("unionid") : null);
+        return wechatDto;
 //        String response = HttpClientUtil.doPost(requestUrl, requestUrlParam);
 //        ObjectMapper mapper = new ObjectMapper();
 //        Map<String, String> wechatMap = mapper.readValue(response, Map.class);

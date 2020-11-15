@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dto.JwtPayloadBean;
+import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.entity.Oauth;
 import cn.hdustea.aha_server.entity.User;
@@ -46,8 +46,8 @@ public class WechatProgramService {
         } else {
             Integer userId = wechatOauth.getUserId();
             User user = userService.getUserById(userId);
-            JwtPayloadBean jwtPayloadBean = JWTUtil.packagePayload(user);
-            String token = JWTUtil.sign(jwtPayloadBean, jwtConfig.getSecret(), jwtConfig.getExpireTime());
+            JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(user);
+            String token = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
             redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());
             return token;
         }

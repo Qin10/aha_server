@@ -1,35 +1,36 @@
-package cn.hdustea.aha_server.entity;
+package cn.hdustea.aha_server.dto;
 
-import java.util.Date;
-import java.util.List;
-
+import cn.hdustea.aha_server.entity.Project;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+
 /**
- * 项目详细信息实体类
+ * 创建项目时提供的粗略和详细信息封装
  *
  * @author STEA_YY
  **/
-
-/**
- * 团队的详细信息（其实主要是富文本介绍）
- */
 @Data
-public class ProjectInfo {
+public class ProjectDto {
     /**
-     * 项目id(外键)
+     * 团队名称
      */
-    private Integer projectId;
+    @NotEmpty(message = "项目名称不能为空")
+    private String name;
 
-    private Project project;
+    /**
+     * 团队头像url
+     */
+    private String avatarUrl;
 
     /**
      * 赛事id(外键)
      */
+    @NotNull(message = "竞赛id不能为空")
     private Integer compId;
-
-    private Competition competition;
 
     /**
      * 比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)
@@ -49,14 +50,10 @@ public class ProjectInfo {
     /**
      * 获奖证明文件url
      */
-    @JsonIgnore
     private String awardProveUrl;
 
     /**
      * 团队介绍(富文本)
      */
     private String intro;
-
-    private List<ProjectMember> members;
-    private List<ProjectResource> resources;
 }

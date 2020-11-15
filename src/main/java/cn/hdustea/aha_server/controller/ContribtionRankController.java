@@ -2,17 +2,15 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.vo.ResponseBean;
-import cn.hdustea.aha_server.dto.UserContribPointBean;
+import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.ContributionRankService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.util.TimeUtil;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,8 +31,8 @@ public class ContribtionRankController {
      */
     @RequiresLogin
     @GetMapping()
-    public ResponseBean<List<UserContribPointBean>> getRankList() {
-        List<UserContribPointBean> rankList = contributionRankService.getRankList();
+    public ResponseBean<List<UserContribPointVo>> getRankList() {
+        List<UserContribPointVo> rankList = contributionRankService.getRankList();
         return new ResponseBean<>(200, "succ", rankList);
     }
 
@@ -46,9 +44,9 @@ public class ContribtionRankController {
      */
     @RequiresLogin
     @GetMapping("/me")
-    public ResponseBean<UserContribPointBean> getMyRank() throws SelectException {
+    public ResponseBean<UserContribPointVo> getMyRank() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
-        UserContribPointBean userContribPointBean = contributionRankService.getUserContribPointByPhone(phone);
-        return new ResponseBean<>(200, "succ", userContribPointBean);
+        UserContribPointVo userContribPointVo = contributionRankService.getUserContribPointByPhone(phone);
+        return new ResponseBean<>(200, "succ", userContribPointVo);
     }
 }

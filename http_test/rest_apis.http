@@ -124,13 +124,13 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET http://{{host}}/project/4/info
+GET http://{{host}}/project/6
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有成员信息
-GET http://{{host}}/project/4/member
+GET http://{{host}}/project/4/members
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -165,20 +165,11 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "基于大数据的叽咕诱捕系统",
+  "name": "基于大数据的叽咕叽咕诱捕系统",
   "compId": 1,
-  "intro": "叽咕叽咕"
-}
-
-> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
-
-###修改项目基本信息
-PUT http://{{host}}/project/4
-Authorization: {{auth_token}}
-Content-Type: application/json
-
-{
-  "name": "基于大数据的博鸽诱捕系统"
+  "intro": "叽咕叽咕叽咕",
+  "awardLevel": 11,
+  "awardTime": "2019-06-01"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -189,13 +180,13 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
-###修改项目详细信息
-PUT http://{{host}}/project/info/4
+###修改项目信息
+PUT http://{{host}}/project/4
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "compId": 1,
+  "compId": 6,
   "awardName": "浙江省大学生服务外包创新创业大赛一等奖",
   "awardLevel": 22,
   "awardTime": "2020-06-01",

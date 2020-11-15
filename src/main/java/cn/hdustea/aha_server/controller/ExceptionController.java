@@ -1,18 +1,15 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.enums.ApiExceptionCode;
 import cn.hdustea.aha_server.exception.ApiException;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
-import cn.hdustea.aha_server.util.TimeUtil;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Date;
 
 /**
  * 统一异常处理
@@ -81,7 +78,6 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean<Object> globalException(Exception e) {
         e.printStackTrace();
-        return new ResponseBean<>(500, e.getMessage(), null);
+        return new ResponseBean<>(500, "服务器内部错误", null);
     }
-
 }

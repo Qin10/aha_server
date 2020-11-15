@@ -1,11 +1,10 @@
 package cn.hdustea.aha_server.mapper;
-import cn.hdustea.aha_server.dto.UserContribPointBean;
+import cn.hdustea.aha_server.vo.UserContribPointVo;
 
 import java.util.List;
 
 import cn.hdustea.aha_server.entity.User;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.cache.annotation.CacheConfig;
 
 /**
  * 用户表mapper
@@ -33,5 +32,5 @@ public interface UserMapper {
 
     int updateSignedContractByPhone(@Param("updatedSignedContract") Boolean updatedSignedContract, @Param("phone") String phone);
 
-    List<UserContribPointBean> selectPhoneAndContribPoint();
+    List<UserContribPointVo> selectPhoneAndContribPoint();
 }

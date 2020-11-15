@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dto.OssPolicyBean;
+import cn.hdustea.aha_server.vo.OssPolicyVo;
 import cn.hdustea.aha_server.config.AliyunOSSConfig;
 import cn.hdustea.aha_server.util.JacksonUtil;
 import com.aliyun.oss.OSS;
@@ -31,7 +31,7 @@ public class OssService {
      * @param isPrivate 该资源是否为私有
      * @return oss相关信息
      */
-    public OssPolicyBean signUpload(String dir, boolean isPrivate) {
+    public OssPolicyVo signUpload(String dir, boolean isPrivate) {
         String bucketName;
         if (isPrivate) {
             bucketName = aliyunOSSConfig.getPrivateBucketName();
@@ -45,14 +45,14 @@ public class OssService {
         String policyStr = oss.generatePostPolicy(expiration, policyConditions);
         String policyBase64 = JacksonUtil.toBase64String(policyStr.getBytes());
         String signature = oss.calculatePostSignature(policyStr);
-        OssPolicyBean ossPolicyBean = new OssPolicyBean();
-        ossPolicyBean.setHost(host);
-        ossPolicyBean.setAccessid(aliyunOSSConfig.getAccessKeyId());
-        ossPolicyBean.setPolicy(policyBase64);
-        ossPolicyBean.setDir(dir);
-        ossPolicyBean.setSignature(signature);
-        ossPolicyBean.setExpire(expiration.getTime());
-        return ossPolicyBean;
+        OssPolicyVo ossPolicyVo = new OssPolicyVo();
+        ossPolicyVo.setHost(host);
+        ossPolicyVo.setAccessid(aliyunOSSConfig.getAccessKeyId());
+        ossPolicyVo.setPolicy(policyBase64);
+        ossPolicyVo.setDir(dir);
+        ossPolicyVo.setSignature(signature);
+        ossPolicyVo.setExpire(expiration.getTime());
+        return ossPolicyVo;
     }
 
     /**

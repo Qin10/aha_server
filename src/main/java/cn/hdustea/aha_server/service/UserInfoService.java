@@ -1,15 +1,12 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dto.PersonalUserInfoBean;
+import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.UserInfoMapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -53,16 +50,16 @@ public class UserInfoService {
      * @param phone 用户手机号
      * @return 用户个人详细信息
      */
-    public PersonalUserInfoBean getPersonalUserInfo(String phone) throws SelectException {
+    public PersonalUserInfoVo getPersonalUserInfo(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
         UserInfo userInfo = getUserInfoByPhone(phone);
-        PersonalUserInfoBean personalUserInfoBean = new PersonalUserInfoBean();
-        personalUserInfoBean.setPhone(user.getPhone());
-        personalUserInfoBean.setContribPoint(user.getContribPoint());
-        personalUserInfoBean.setSignedNotice(user.getSignedNotice());
-        personalUserInfoBean.setSignedContract(user.getSignedContract());
-        personalUserInfoBean.setUserInfo(userInfo);
-        return personalUserInfoBean;
+        PersonalUserInfoVo personalUserInfoVo = new PersonalUserInfoVo();
+        personalUserInfoVo.setPhone(user.getPhone());
+        personalUserInfoVo.setContribPoint(user.getContribPoint());
+        personalUserInfoVo.setSignedNotice(user.getSignedNotice());
+        personalUserInfoVo.setSignedContract(user.getSignedContract());
+        personalUserInfoVo.setUserInfo(userInfo);
+        return personalUserInfoVo;
     }
 
     /**

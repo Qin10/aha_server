@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.vo;
+package cn.hdustea.aha_server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginUser {
+public class LoginUserDto {
     /**
      * 手机号
      */

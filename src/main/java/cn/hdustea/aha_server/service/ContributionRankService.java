@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.dto.UserContribPointBean;
+import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -29,7 +29,7 @@ public class ContributionRankService {
      *
      * @return 排行榜列表
      */
-    public List<UserContribPointBean> getRankList() {
+    public List<UserContribPointVo> getRankList() {
         Set<ZSetOperations.TypedTuple<Object>> tuples = redisUtil.zSGetTuple(RedisUtil.CONTRIBUTION_RANK_KEY, 0, 99);
         return redisUtil.tupleToUserContribPoint(tuples);
     }
@@ -56,14 +56,14 @@ public class ContributionRankService {
      * @return 用户个人排名和贡献点
      * @throws SelectException 用户不存在异常
      */
-    public UserContribPointBean getUserContribPointByPhone(String phone) throws SelectException {
+    public UserContribPointVo getUserContribPointByPhone(String phone) throws SelectException {
         long rank = getRankByPhone(phone);
         Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, phone);
         User user = userService.getUserByPhone(phone);
-        UserContribPointBean userContribPointBean = new UserContribPointBean();
-        userContribPointBean.setPhone(user.getPhone());
-        userContribPointBean.setContribPoint(BigDecimal.valueOf(contribPoint));
-        userContribPointBean.setRank(rank);
-        return userContribPointBean;
+        UserContribPointVo userContribPointVo = new UserContribPointVo();
+        userContribPointVo.setPhone(user.getPhone());
+        userContribPointVo.setContribPoint(BigDecimal.valueOf(contribPoint));
+        userContribPointVo.setRank(rank);
+        return userContribPointVo;
     }
 }

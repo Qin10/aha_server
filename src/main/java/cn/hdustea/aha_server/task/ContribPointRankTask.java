@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.task;
 
-import cn.hdustea.aha_server.dto.UserContribPointBean;
+import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.mapper.UserMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +26,10 @@ public class ContribPointRankTask {
     @Scheduled(cron = "0 0 * * * ?")
     public void getRank() {
         log.debug("Contrib Rank Task is Running");
-        List<UserContribPointBean> userContribPointBeans = userMapper.selectPhoneAndContribPoint();
+        List<UserContribPointVo> userContribPointVos = userMapper.selectPhoneAndContribPoint();
         redisUtil.del(RedisUtil.CONTRIBUTION_RANK_KEY);
-        for (UserContribPointBean userContribPointBean : userContribPointBeans) {
-            redisUtil.zSSet(RedisUtil.CONTRIBUTION_RANK_KEY, userContribPointBean.getPhone(), userContribPointBean.getContribPoint().doubleValue());
+        for (UserContribPointVo userContribPointVo : userContribPointVos) {
+            redisUtil.zSSet(RedisUtil.CONTRIBUTION_RANK_KEY, userContribPointVo.getPhone(), userContribPointVo.getContribPoint().doubleValue());
         }
     }
 }

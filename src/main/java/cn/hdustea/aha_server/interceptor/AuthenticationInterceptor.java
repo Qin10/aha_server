@@ -2,7 +2,7 @@ package cn.hdustea.aha_server.interceptor;
 
 import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.dto.JwtPayloadBean;
+import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.*;
@@ -68,29 +68,29 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 if (token == null) {
                     throw new TokenNotFoundException("无token，请重新登录");
                 }
-                JwtPayloadBean jwtPayloadBean = JWTUtil.getPayload(token);
+                JwtPayloadDto jwtPayloadDto = JWTUtil.getPayload(token);
                 try {
-                    boolean verify = JWTUtil.verify(token, jwtPayloadBean, jwtConfig.getSecret());
+                    boolean verify = JWTUtil.verify(token, jwtPayloadDto, jwtConfig.getSecret());
                     if (!verify) {
                         throw new TokenCheckException();
                     }
                 } catch (TokenExpiredException e) {
-                    if (!refreshToken(token, jwtPayloadBean)) {
+                    if (!refreshToken(token, jwtPayloadDto)) {
                         throw new JwtExpiredException();
                     }
                 }
                 if (requiresLogin.requireSignNotice()) {
-                    if (!jwtPayloadBean.isSignedNotice()) {
+                    if (!jwtPayloadDto.isSignedNotice()) {
                         throw new NoticeNotSignedException();
                     }
                 }
                 if (requiresLogin.requireSignContract()) {
-                    if (!jwtPayloadBean.isSignedContract()) {
+                    if (!jwtPayloadDto.isSignedContract()) {
                         throw new ContractNotSignedException();
                     }
                 }
-                ThreadLocalUtil.setCurrentUser(jwtPayloadBean.getAccount());
-                MDC.put("phone", jwtPayloadBean.getAccount());
+                ThreadLocalUtil.setCurrentUser(jwtPayloadDto.getAccount());
+                MDC.put("phone", jwtPayloadDto.getAccount());
                 MDC.put("ip", IpUtil.getIpAddr(request));
                 return true;
             }
@@ -108,14 +108,14 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
      * 尝试刷新用户token
      *
      * @param token          过期token
-     * @param jwtPayloadBean 当前用户的payload
+     * @param jwtPayloadDto 当前用户的payload
      * @return 是否刷新成功
      */
-    protected boolean refreshToken(String token, JwtPayloadBean jwtPayloadBean) {
-        String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + jwtPayloadBean.getAccount());
+    protected boolean refreshToken(String token, JwtPayloadDto jwtPayloadDto) {
+        String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount());
         if (possibleToken != null && possibleToken.equals(token)) {
-            String newToken = JWTUtil.sign(jwtPayloadBean, jwtConfig.getSecret(), jwtConfig.getExpireTime());
-            redisUtil.set(REFRESH_TOKEN_PREFIX + jwtPayloadBean.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
+            String newToken = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
+            redisUtil.set(REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletResponse response;
             if (requestAttributes != null) {

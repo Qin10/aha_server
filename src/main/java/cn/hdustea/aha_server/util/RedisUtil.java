@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import cn.hdustea.aha_server.dto.UserContribPointBean;
+import cn.hdustea.aha_server.vo.UserContribPointVo;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
@@ -698,18 +698,18 @@ public class RedisUtil {
         }
     }
 
-    public List<UserContribPointBean> tupleToUserContribPoint(Set<ZSetOperations.TypedTuple<Object>> tuples) {
-        List<UserContribPointBean> userContribPointBeans = new ArrayList<>();
+    public List<UserContribPointVo> tupleToUserContribPoint(Set<ZSetOperations.TypedTuple<Object>> tuples) {
+        List<UserContribPointVo> userContribPointVos = new ArrayList<>();
         long currentRank = 1;
         for (ZSetOperations.TypedTuple<Object> tuple : tuples) {
-            UserContribPointBean userContribPointBean = new UserContribPointBean();
-            userContribPointBean.setPhone((String) tuple.getValue());
-            userContribPointBean.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
-            userContribPointBean.setRank(currentRank);
+            UserContribPointVo userContribPointVo = new UserContribPointVo();
+            userContribPointVo.setPhone((String) tuple.getValue());
+            userContribPointVo.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
+            userContribPointVo.setRank(currentRank);
             currentRank++;
-            userContribPointBeans.add(userContribPointBean);
+            userContribPointVos.add(userContribPointVo);
         }
-        return userContribPointBeans;
+        return userContribPointVos;
     }
 }
 

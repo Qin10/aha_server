@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.dto;
+package cn.hdustea.aha_server.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.Data;
  **/
 @Data
 @AllArgsConstructor
-public class TokenAndPersonalUserInfoBean {
+public class TokenAndPersonalUserInfoVo {
     /**
      * token令牌
      */
@@ -18,5 +18,5 @@ public class TokenAndPersonalUserInfoBean {
     /**
      * 用户信息
      */
-    private PersonalUserInfoBean personalUserInfo;
+    private PersonalUserInfoVo personalUserInfo;
 }

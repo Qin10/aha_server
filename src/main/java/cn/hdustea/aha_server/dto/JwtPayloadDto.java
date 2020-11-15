@@ -8,7 +8,7 @@ import lombok.Data;
  * @author STEA_YY
  **/
 @Data
-public class JwtPayloadBean {
+public class JwtPayloadDto {
     /**
      * 账号
      */

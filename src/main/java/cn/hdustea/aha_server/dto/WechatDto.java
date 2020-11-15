@@ -8,7 +8,7 @@ import lombok.Data;
  * @author STEA_YY
  **/
 @Data
-public class WechatBean {
+public class WechatDto {
     /**
      * 用户openId
      */
