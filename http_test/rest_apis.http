@@ -181,16 +181,12 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改项目信息
-PUT http://{{host}}/project/4
+PUT http://{{host}}/project/6
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "compId": 6,
-  "awardName": "浙江省大学生服务外包创新创业大赛一等奖",
-  "awardLevel": 22,
-  "awardTime": "2020-06-01",
-  "intro": "咕叽咕叽咕叽"
+  "tags": "服务外包 创新创业"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

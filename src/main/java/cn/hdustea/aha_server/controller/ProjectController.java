@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.vo.*;
 import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
@@ -52,7 +53,7 @@ public class ProjectController {
     }
 
     /**
-     * 根据项目id获取项目信息
+     * 根据项目id获取项目详细信息
      *
      * @param projectId 项目id
      */
@@ -244,37 +245,37 @@ public class ProjectController {
     /**
      * 新增项目资源
      *
-     * @param projectResource 项目资源
+     * @param projectResourceDto 项目资源
      * @param projectId       项目id
      * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
-    public ResponseBean<Object> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResource projectResource, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean<Object> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectResourceService.saveProjectResourceByProjectId(projectResource, projectId);
+        projectResourceService.saveProjectResourceByProjectId(projectResourceDto, projectId);
         return new ResponseBean<>(200, "succ", null);
     }
 
     /**
      * 修改项目资源
      *
-     * @param projectResource   修改的项目资源
+     * @param projectResourceDto   修改的项目资源
      * @param projectResourceId 项目资源id
      * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/resource/{projectResourceId}")
-    public ResponseBean<Object> updateProjectResourceById(@RequestBody ProjectResource projectResource, @PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
+    public ResponseBean<Object> updateProjectResourceById(@RequestBody ProjectResourceDto projectResourceDto, @PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         ProjectResource possibleProjectResource = projectResourceService.getProjectResourceById(projectResourceId);
         if (possibleProjectResource == null || !projectService.hasPermission(phone, possibleProjectResource.getProjectId())) {
             throw new PermissionDeniedException();
         }
-        projectResourceService.updateProjectResourceById(projectResource, projectResourceId, possibleProjectResource.getProjectId());
+        projectResourceService.updateProjectResourceById(projectResourceDto, projectResourceId, possibleProjectResource.getProjectId());
         return new ResponseBean<>(200, "succ", null);
     }
 

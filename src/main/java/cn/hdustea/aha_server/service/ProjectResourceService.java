@@ -1,13 +1,16 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -58,10 +61,12 @@ public class ProjectResourceService {
     /**
      * 新增项目资源
      *
-     * @param projectResource 项目资源
-     * @param projectId       项目id
+     * @param projectResourceDto 项目资源
+     * @param projectId          项目id
      */
-    public void saveProjectResourceByProjectId(ProjectResource projectResource, int projectId) {
+    public void saveProjectResourceByProjectId(ProjectResourceDto projectResourceDto, int projectId) {
+        ProjectResource projectResource = new ProjectResource();
+        BeanUtils.copyProperties(projectResourceDto, projectResource);
         projectResource.setProjectId(projectId);
         projectResourceMapper.insertSelective(projectResource);
     }
@@ -69,10 +74,12 @@ public class ProjectResourceService {
     /**
      * 根据项目资源id更新项目资源
      *
-     * @param projectResource 更新的项目资源
-     * @param id              项目资源id
+     * @param projectResourceDto 更新的项目资源
+     * @param id                 项目资源id
      */
-    public void updateProjectResourceById(ProjectResource projectResource, int id, int projectId) {
+    public void updateProjectResourceById(ProjectResourceDto projectResourceDto, int id, int projectId) {
+        ProjectResource projectResource = new ProjectResource();
+        BeanUtils.copyProperties(projectResourceDto, projectResource);
         projectResource.setId(id);
         projectResourceMapper.updateByPrimaryKeySelective(projectResource);
     }
