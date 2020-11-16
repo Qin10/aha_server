@@ -43,6 +43,11 @@ public class ProjectDto {
     private Integer awardLevel;
 
     /**
+     * 项目标签
+     */
+    private String tags;
+
+    /**
      * 项目获奖时间
      */
     private Date awardTime;

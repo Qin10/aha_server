@@ -46,6 +46,11 @@ public class ProjectRoughVo {
     private String avatarUrl;
 
     /**
+     * 项目标签
+     */
+    private String tags;
+
+    /**
      * 赛事id(外键)
      */
     private Integer compId;

@@ -36,6 +36,11 @@ public class Project {
     private String avatarUrl;
 
     /**
+     * 项目标签
+     */
+    private String tags;
+
+    /**
      * 团队介绍(富文本)
      */
     private String intro;
