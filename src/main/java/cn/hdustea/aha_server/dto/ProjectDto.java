@@ -1,7 +1,5 @@
 package cn.hdustea.aha_server.dto;
 
-import cn.hdustea.aha_server.entity.Project;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

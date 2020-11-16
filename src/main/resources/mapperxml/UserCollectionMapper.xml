@@ -7,8 +7,8 @@
         <id column="coll_user_id" property="userId"/>
         <id column="coll_project_id" property="projectId"/>
         <result column="coll_timestamp" property="timestamp"/>
-        <association property="project" javaType="cn.hdustea.aha_server.entity.Project" column="coll_project_id"
-                     select="cn.hdustea.aha_server.mapper.ProjectMapper.selectByPrimaryKey"/>
+        <association property="project" javaType="cn.hdustea.aha_server.vo.ProjectRoughVo" column="coll_project_id"
+                     select="cn.hdustea.aha_server.mapper.ProjectMapper.selectRoughByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

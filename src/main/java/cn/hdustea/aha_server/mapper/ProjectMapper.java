@@ -29,6 +29,8 @@ public interface ProjectMapper {
 
     List<ProjectRoughVo> selectAllRough();
 
+    ProjectRoughVo selectRoughByPrimaryKey(Integer id);
+
     ProjectDetailVo selectDetailByPrimaryKey(Integer id);
 
     int updateReadById(@Param("updatedRead") Integer updatedRead, @Param("id") Integer id);

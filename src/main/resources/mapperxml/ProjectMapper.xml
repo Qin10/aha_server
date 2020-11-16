@@ -223,6 +223,13 @@
         from project
     </select>
 
+    <select id="selectRoughByPrimaryKey" resultMap="RoughInfoMap">
+        select
+        <include refid="Rough_Column_List"/>
+        from project
+        where p_id = #{id}
+    </select>
+
     <select id="selectDetailByPrimaryKey" resultMap="DetailResultMap">
         select
         <include refid="Detail_Column_List"/>
