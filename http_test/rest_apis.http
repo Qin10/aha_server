@@ -47,8 +47,7 @@ Authorization:{{auth_token}}
 Content-Type: application/json
 
 {
-  "trueName": "姚懿",
-  "signature": "咕咕咕咕咕咕"
+  "avatarUrl": "https://www.baidu.com"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -124,7 +123,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET http://{{host}}/project/6
+GET http://{{host}}/project/5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -165,17 +164,17 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "基于大数据的叽咕叽咕诱捕系统",
+  "name": "基于大数据的叽咕叽咕叽咕诱捕系统",
   "compId": 1,
   "intro": "叽咕叽咕叽咕",
   "awardLevel": 11,
-  "awardTime": "2019-06-01"
+  "awardTime": "2019-06"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###删除项目
-DELETE http://{{host}}/project/4
+DELETE http://{{host}}/project/15
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -192,7 +191,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目成员
-POST http://{{host}}/project/member/1
+POST http://{{host}}/project/member/222
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -225,7 +224,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST http://{{host}}/project/resource/4
+POST http://{{host}}/project/resource/22
 Authorization: {{auth_token}}
 Content-Type: application/json
 

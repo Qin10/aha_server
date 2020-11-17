@@ -11,9 +11,22 @@
         <result column="pr_filename" property="filename"/>
         <result column="pr_download" property="download"/>
     </resultMap>
+    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.ProjectResourceVo">
+        <!--@mbg.generated-->
+        <!--@Table project_resource-->
+        <id column="pr_id" property="id"/>
+        <result column="pr_type" property="type"/>
+        <result column="pr_name" property="name"/>
+        <result column="pr_filename" property="filename"/>
+        <result column="pr_download" property="download"/>
+    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         pr_id, pr_project_id, pr_type, pr_name, pr_filename, pr_download
+    </sql>
+    <sql id="Vo_Column_List">
+        <!--@mbg.generated-->
+        pr_id, pr_type, pr_name, pr_filename, pr_download
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -100,6 +113,21 @@
     <select id="selectAllByProjectId" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
+        from project_resource
+        where pr_project_id = #{projectId}
+    </select>
+
+    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Vo_Column_List"/>
+        from project_resource
+        where pr_id = #{id}
+    </select>
+
+    <select id="selectAllVoByProjectId" resultMap="VoResultMap">
+        select
+        <include refid="Vo_Column_List"/>
         from project_resource
         where pr_project_id = #{projectId}
     </select>

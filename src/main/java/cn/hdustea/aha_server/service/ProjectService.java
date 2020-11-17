@@ -9,6 +9,7 @@ import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectMemberMapper;
 import cn.hdustea.aha_server.mapper.UserCollectionMapper;
 import cn.hdustea.aha_server.dto.ProjectDto;
+import cn.hdustea.aha_server.vo.UserCollectionVo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -75,11 +76,11 @@ public class ProjectService {
      * 新增项目并记录作者
      *
      * @param projectDto 项目信息
-     * @param phone   手机号
+     * @param phone      手机号
      */
     public Integer saveProjectAndAuthor(ProjectDto projectDto, String phone) {
         Project project = new Project();
-        BeanUtils.copyProperties(projectDto,project);
+        BeanUtils.copyProperties(projectDto, project);
         project.setCreatorPhone(phone);
         projectMapper.insertSelective(project);
         return project.getId();
@@ -88,12 +89,12 @@ public class ProjectService {
     /**
      * 根据项目id修改项目信息
      *
-     * @param projectDto   更新的项目信息
-     * @param projectId 项目id
+     * @param projectDto 更新的项目信息
+     * @param projectId  项目id
      */
     public void updateProjectByProjectId(ProjectDto projectDto, int projectId) {
         Project project = new Project();
-        BeanUtils.copyProperties(projectDto,project);
+        BeanUtils.copyProperties(projectDto, project);
         project.setId(projectId);
         projectMapper.updateByPrimaryKeySelective(project);
     }
@@ -178,9 +179,9 @@ public class ProjectService {
      * @return 用户收藏列表
      * @throws SelectException 用户不存在异常
      */
-    public List<UserCollection> getAllCollectionByPhone(String phone) throws SelectException {
+    public List<UserCollectionVo> getAllCollectionByPhone(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        return userCollectionMapper.selectAllByUserId(user.getId());
+        return userCollectionMapper.selectAllVoByUserId(user.getId());
     }
 
     /**

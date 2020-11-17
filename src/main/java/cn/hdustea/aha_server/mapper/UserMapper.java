@@ -1,4 +1,6 @@
 package cn.hdustea.aha_server.mapper;
+
+import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
 
 import java.util.List;
@@ -33,4 +35,6 @@ public interface UserMapper {
     int updateSignedContractByPhone(@Param("updatedSignedContract") Boolean updatedSignedContract, @Param("phone") String phone);
 
     List<UserContribPointVo> selectPhoneAndContribPoint();
+
+    PersonalUserInfoVo selectPersonalVoByPhone(@Param("phone") String phone);
 }

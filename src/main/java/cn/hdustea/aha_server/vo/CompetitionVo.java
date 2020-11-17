@@ -1,14 +1,15 @@
-package cn.hdustea.aha_server.entity;
+package cn.hdustea.aha_server.vo;
 
+import cn.hdustea.aha_server.entity.CompetitionTag;
 import lombok.Data;
 
 /**
- * 竞赛信息实体类
+ * 竞赛信息Vo
  *
  * @author STEA_YY
  **/
 @Data
-public class Competition {
+public class CompetitionVo {
     /**
      * 竞赛id
      */
@@ -18,6 +19,8 @@ public class Competition {
      * 所属赛事标签（外键）
      */
     private Integer compTagId;
+
+    private CompetitionTag competitionTag;
 
     /**
      * 赛事名称

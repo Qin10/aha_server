@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.vo;
 
 import cn.hdustea.aha_server.entity.Competition;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
@@ -63,5 +64,6 @@ public class ProjectRoughVo {
     /**
      * 项目获奖时间
      */
+    @JsonFormat(pattern = "yyyy-MM")
     private Date awardTime;
 }

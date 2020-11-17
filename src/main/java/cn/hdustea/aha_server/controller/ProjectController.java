@@ -84,18 +84,17 @@ public class ProjectController {
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
-    public ResponseBean<ProjectDetailVo> saveProject(@RequestBody @Validated ProjectDto projectDto) {
+    public ResponseBean<InsertedIdVo> saveProject(@RequestBody @Validated ProjectDto projectDto) {
         String phone = ThreadLocalUtil.getCurrentUser();
         Integer projectId = projectService.saveProjectAndAuthor(projectDto, phone);
-        ProjectDetailVo insertedProjectDetailVo = projectService.getProjectDetailById(projectId);
-        return new ResponseBean<>(200, "succ", insertedProjectDetailVo);
+        return new ResponseBean<>(200, "succ", new InsertedIdVo(projectId));
     }
 
     /**
      * 修改项目信息
      *
-     * @param projectDto   修改的项目信息
-     * @param projectId 项目id
+     * @param projectDto 修改的项目信息
+     * @param projectId  项目id
      * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
@@ -133,9 +132,9 @@ public class ProjectController {
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/members")
-    public ResponseBean<List<ProjectMember>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) {
-        List<ProjectMember> projectMembers = projectService.getProjectDetailById(projectId).getMembers();
-        return new ResponseBean<>(200, "succ", projectMembers);
+    public ResponseBean<List<ProjectMemberVo>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) {
+        List<ProjectMemberVo> projectMemberVos = projectService.getProjectDetailById(projectId).getMembers();
+        return new ResponseBean<>(200, "succ", projectMemberVos);
     }
 
     /**
@@ -219,9 +218,9 @@ public class ProjectController {
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/resources")
-    public ResponseBean<List<ProjectResource>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) {
-        List<ProjectResource> projectResources = projectService.getProjectDetailById(projectId).getResources();
-        return new ResponseBean<>(200, "succ", projectResources);
+    public ResponseBean<List<ProjectResourceVo>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) {
+        List<ProjectResourceVo> projectResourceVos = projectService.getProjectDetailById(projectId).getResources();
+        return new ResponseBean<>(200, "succ", projectResourceVos);
     }
 
     /**
@@ -246,25 +245,25 @@ public class ProjectController {
      * 新增项目资源
      *
      * @param projectResourceDto 项目资源
-     * @param projectId       项目id
+     * @param projectId          项目id
      * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
-    public ResponseBean<Object> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean<InsertedIdVo> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectResourceService.saveProjectResourceByProjectId(projectResourceDto, projectId);
-        return new ResponseBean<>(200, "succ", null);
+        Integer projectResourceId = projectResourceService.saveProjectResourceByProjectId(projectResourceDto, projectId);
+        return new ResponseBean<>(200, "succ", new InsertedIdVo(projectResourceId));
     }
 
     /**
      * 修改项目资源
      *
-     * @param projectResourceDto   修改的项目资源
-     * @param projectResourceId 项目资源id
+     * @param projectResourceDto 修改的项目资源
+     * @param projectResourceId  项目资源id
      * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
@@ -320,10 +319,10 @@ public class ProjectController {
      */
     @RequiresLogin
     @GetMapping("/collection")
-    public ResponseBean<List<UserCollection>> getAllCollection() throws SelectException {
+    public ResponseBean<List<UserCollectionVo>> getAllCollection() throws SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
-        List<UserCollection> collections = projectService.getAllCollectionByPhone(phone);
-        return new ResponseBean<>(200, "succ", collections);
+        List<UserCollectionVo> collectionVos = projectService.getAllCollectionByPhone(phone);
+        return new ResponseBean<>(200, "succ", collectionVos);
     }
 
     /**

@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.Competition;
+import cn.hdustea.aha_server.vo.CompetitionVo;
 
 import java.util.List;
 
@@ -23,4 +24,8 @@ public interface CompetitionMapper {
     int updateByPrimaryKey(Competition record);
 
     List<Competition> selectAll();
+
+    List<CompetitionVo> selectAllVo();
+
+    CompetitionVo selectVoByPrimaryKey(Integer id);
 }

@@ -51,10 +51,10 @@
         <result column="p_award_time" property="awardTime"/>
         <association property="competition" javaType="cn.hdustea.aha_server.entity.Competition" column="p_comp_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionMapper.selectByPrimaryKey"/>
-        <collection property="members" ofType="cn.hdustea.aha_server.entity.ProjectMember" column="p_id"
-                    select="cn.hdustea.aha_server.mapper.ProjectMemberMapper.selectAllByProjectId"/>
-        <collection property="resources" ofType="cn.hdustea.aha_server.entity.ProjectResource" column="p_id"
-                    select="cn.hdustea.aha_server.mapper.ProjectResourceMapper.selectAllByProjectId"/>
+        <collection property="members" ofType="cn.hdustea.aha_server.vo.ProjectMemberVo" column="p_id"
+                    select="cn.hdustea.aha_server.mapper.ProjectMemberMapper.selectAllVoByProjectId"/>
+        <collection property="resources" ofType="cn.hdustea.aha_server.vo.ProjectResourceVo" column="p_id"
+                    select="cn.hdustea.aha_server.mapper.ProjectResourceMapper.selectAllVoByProjectId"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

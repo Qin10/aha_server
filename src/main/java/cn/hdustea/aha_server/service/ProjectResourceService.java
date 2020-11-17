@@ -64,11 +64,12 @@ public class ProjectResourceService {
      * @param projectResourceDto 项目资源
      * @param projectId          项目id
      */
-    public void saveProjectResourceByProjectId(ProjectResourceDto projectResourceDto, int projectId) {
+    public Integer saveProjectResourceByProjectId(ProjectResourceDto projectResourceDto, int projectId) {
         ProjectResource projectResource = new ProjectResource();
         BeanUtils.copyProperties(projectResourceDto, projectResource);
         projectResource.setProjectId(projectId);
         projectResourceMapper.insertSelective(projectResource);
+        return projectResource.getId();
     }
 
     /**

@@ -16,19 +16,12 @@ public class UserCollection {
     /**
      * 收藏用户id
      */
-    @JsonIgnore
     private Integer userId;
 
     /**
      * 收藏资源id
      */
-    @JsonIgnore
     private Integer projectId;
-
-    /**
-     * 资源粗略信息
-     */
-    private ProjectRoughVo project;
 
     /**
      * 收藏时间戳

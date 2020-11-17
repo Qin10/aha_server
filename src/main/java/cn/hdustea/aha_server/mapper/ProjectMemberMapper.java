@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.mapper;
 import java.util.List;
 
 import cn.hdustea.aha_server.entity.ProjectMember;
+import cn.hdustea.aha_server.vo.ProjectMemberVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -26,4 +27,8 @@ public interface ProjectMemberMapper {
     List<ProjectMember> selectAllByProjectId(@Param("projectId") Integer projectId);
 
     ProjectMember selectByProjectIdAndMemberPhoneAndEditable(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone, @Param("editable") Boolean editable);
+
+    ProjectMemberVo selectVoByPrimaryKey(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone);
+
+    List<ProjectMemberVo> selectAllVoByProjectId(@Param("projectId") Integer projectId);
 }

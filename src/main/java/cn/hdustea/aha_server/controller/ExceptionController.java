@@ -78,6 +78,6 @@ public class ExceptionController {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean<Object> globalException(Exception e) {
         e.printStackTrace();
-        return new ResponseBean<>(500, "服务器内部错误", null);
+        return new ResponseBean<>(500, e.getMessage(), null);
     }
 }

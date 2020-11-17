@@ -9,6 +9,15 @@
         <result column="co_name" property="name"/>
         <result column="co_intro" property="intro"/>
         <result column="co_pic_url" property="picUrl"/>
+    </resultMap>
+    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.CompetitionVo">
+        <!--@mbg.generated-->
+        <!--@Table competition-->
+        <id column="co_id" property="id"/>
+        <result column="co_comp_tag_id" property="compTagId"/>
+        <result column="co_name" property="name"/>
+        <result column="co_intro" property="intro"/>
+        <result column="co_pic_url" property="picUrl"/>
         <association property="competitionTag" javaType="cn.hdustea.aha_server.entity.CompetitionTag"
                      column="co_comp_tag_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionTagMapper.selectByPrimaryKey"/>
@@ -107,5 +116,19 @@
         select
         <include refid="Base_Column_List"/>
         from competition
+    </select>
+
+    <select id="selectAllVo" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from competition
+    </select>
+
+    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from competition
+        where co_id = #{id}
     </select>
 </mapper>

@@ -3,8 +3,10 @@ package cn.hdustea.aha_server.vo;
 import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.ProjectMember;
 import cn.hdustea.aha_server.entity.ProjectResource;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -78,8 +80,9 @@ public class ProjectDetailVo {
     /**
      * 项目获奖时间
      */
+    @JsonFormat(pattern = "yyyy-MM")
     private Date awardTime;
 
-    private List<ProjectMember> members;
-    private List<ProjectResource> resources;
+    private List<ProjectMemberVo> members;
+    private List<ProjectResourceVo> resources;
 }
