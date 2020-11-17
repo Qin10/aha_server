@@ -123,19 +123,19 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET http://{{host}}/project/5
+GET http://{{host}}/project/1
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有成员信息
-GET http://{{host}}/project/4/members
+GET http://{{host}}/project/1/members
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有资源信息
-GET http://{{host}}/project/4/resource
+GET http://{{host}}/project/1/resources
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -147,7 +147,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###收藏资源
-POST http://{{host}}/project/collection/1
+POST http://{{host}}/project/collection/4
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -205,7 +205,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改项目成员信息
-PUT http://{{host}}/project/member/4/15382355341
+PUT http://{{host}}/project/member/1/15382355341
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -213,6 +213,24 @@ Content-Type: application/json
   "job": "队长",
   "rank": 4
 }
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###批量修改项目成员信息
+PUT http://{{host}}/project/members/1
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+[
+  {
+    "memberPhone": "15382355341",
+    "rank": 2
+  },
+  {
+    "memberPhone": "13819154341",
+    "rank": 1
+  }
+]
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
@@ -224,14 +242,14 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST http://{{host}}/project/resource/22
+POST http://{{host}}/project/resource/1
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
   "type": 1,
-  "name": "项目申报书3",
-  "filename": "aaa.doc"
+  "name": "项目咕叽书",
+  "filename": "aaab.doc"
 }
 
 ###修改项目资源

@@ -63,7 +63,7 @@ public class Project {
     /**
      * 比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)
      */
-    private String awardName;
+    private String compName;
 
     /**
      * 项目获奖级别

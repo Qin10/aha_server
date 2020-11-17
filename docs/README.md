@@ -564,7 +564,7 @@ id|int|否|竞赛标签id
 			"intro":"string //赛事简介",
 			"picUrl":"int //赛事图片保存路径"
 		},
-		"awardName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
+		"compName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
 		"awardLevel":"int //项目获奖级别",
 		"awardTime":"date //项目获奖时间",
 		"members":[{
@@ -633,7 +633,7 @@ id|int|否|竞赛标签id
 	"name":"string //团队名称【必须】",
 	"avatarUrl":"string //团队头像url",
 	"compId":"int //赛事id(外键)【必须】",
-	"awardName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
+	"compName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
 	"awardLevel":"int //项目获奖级别",
 	"tags":"string //项目标签",
 	"awardTime":"date //项目获奖时间",
@@ -669,7 +669,7 @@ id|int|否|竞赛标签id
 			"intro":"string //赛事简介",
 			"picUrl":"int //赛事图片保存路径"
 		},
-		"awardName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
+		"compName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
 		"awardLevel":"int //项目获奖级别",
 		"awardTime":"date //项目获奖时间",
 		"members":[{
@@ -717,7 +717,7 @@ id|int|否|竞赛标签id
 	"name":"string //团队名称【必须】",
 	"avatarUrl":"string //团队头像url",
 	"compId":"int //赛事id(外键)【必须】",
-	"awardName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
+	"compName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
 	"awardLevel":"int //项目获奖级别",
 	"tags":"string //项目标签",
 	"awardTime":"date //项目获奖时间",
