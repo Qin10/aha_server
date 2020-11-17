@@ -42,7 +42,8 @@ public class ResumeService {
      */
     public Resume getResumeByPhone(String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
-        return resumeDao.findByUserId(user.getId());
+        Resume resume = resumeDao.findByUserId(user.getId());
+        return resume == null ? new Resume() : resume;
     }
 
     /**

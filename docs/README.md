@@ -498,7 +498,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/project/getAllProjectPageable `GET` 
+/project `GET` 
 
 **请求参数**
 
@@ -625,7 +625,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/saveProject `POST` 
+/project `POST` 
 
 **请求体**
 
