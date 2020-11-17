@@ -26,27 +26,6 @@ public class ProjectMember {
      */
     @NotEmpty(message = "成员手机号不能为空")
     private String memberPhone;
-
-    /**
-     * 成员昵称
-     */
-    private String nickname;
-
-    /**
-     * 成员真实姓名
-     */
-    private String trueName;
-
-    /**
-     * 成员头像url
-     */
-    private String avatarUrl;
-
-    /**
-     * 成员所在学校
-     */
-    private String school;
-
     /**
      * 团队成员顺位(决定显示顺序，1为队长)
      */

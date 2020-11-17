@@ -42,13 +42,26 @@ public class ProjectController {
     @Resource
     private UserOperationLogConfig userOperationLogConfig;
 
+//    /**
+//     * 获取全部项目粗略信息
+//     */
+//    @RequiresLogin
+//    @GetMapping
+//    public ResponseBean<List<ProjectRoughVo>> getAllProject() {
+//        List<ProjectRoughVo> projectRoughVos = projectService.getAllProjectRoughInfo();
+//        return new ResponseBean<>(200, "succ", projectRoughVos);
+//    }
+
     /**
-     * 获取全部项目粗略信息
+     * 分页获取所有项目粗略信息
+     *
+     * @param pageNum  页码
+     * @param pageSize 页面大小
      */
     @RequiresLogin
     @GetMapping
-    public ResponseBean<List<ProjectRoughVo>> getAllProject() {
-        List<ProjectRoughVo> projectRoughVos = projectService.getAllProjectRoughInfo();
+    public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam("pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
+        PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize);
         return new ResponseBean<>(200, "succ", projectRoughVos);
     }
 

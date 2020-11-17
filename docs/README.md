@@ -492,14 +492,20 @@ id|int|否|竞赛标签id
 }
 ```
 # 项目相关请求
-
-## 获取全部项目粗略信息
+## 分页获取所有项目粗略信息
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project `GET` 
+/project/getAllProjectPageable `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|页面大小
 
 **返回结果**
 
@@ -507,22 +513,25 @@ id|int|否|竞赛标签id
 {
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
-	"data":[{
-		"id":"int //项目id",
-		"creatorPhone":"string //团队创建者手机号",
-		"name":"string //项目名称",
-		"read":"int //点击率",
-		"collect":"int //收藏数量",
-		"avatarUrl":"string //团队头像url",
-		"tags":"string //项目标签",
-		"compId":"int //赛事id(外键)",
-		"awardLevel":"int //项目获奖级别",
-		"awardTime":"date //项目获奖时间"
-	}],
+	"data":{
+		"pageNum":"int",
+		"pageSize":"int",
+		"pageData":[{
+			"id":"int //项目id",
+			"creatorPhone":"string //团队创建者手机号",
+			"name":"string //项目名称",
+			"read":"int //点击率",
+			"collect":"int //收藏数量",
+			"avatarUrl":"string //团队头像url",
+			"tags":"string //项目标签",
+			"compId":"int //赛事id(外键)",
+			"awardLevel":"int //项目获奖级别",
+			"awardTime":"date //项目获奖时间"
+		}]
+	},
 	"time":"string //响应时间"
 }
 ```
-
 ## 根据项目id获取项目详细信息
 
 *作者: STEA_YY*
@@ -533,9 +542,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 
 **返回结果**
 
@@ -556,10 +565,6 @@ id|int|否|竞赛标签id
 		"competition":{
 			"id":"int //竞赛id",
 			"compTagId":"int //所属赛事标签（外键）",
-			"competitionTag":{
-				"id":"int //竞赛标签id",
-				"name":"string //竞赛标签名称"
-			},
 			"name":"string //赛事名称",
 			"intro":"string //赛事简介",
 			"picUrl":"int //赛事图片保存路径"
@@ -568,7 +573,6 @@ id|int|否|竞赛标签id
 		"awardLevel":"int //项目获奖级别",
 		"awardTime":"date //项目获奖时间",
 		"members":[{
-			"projectId":"int //项目id(外键)",
 			"memberPhone":"string //团队成员手机号",
 			"nickname":"string //成员昵称",
 			"trueName":"string //成员真实姓名",
@@ -580,7 +584,6 @@ id|int|否|竞赛标签id
 		}],
 		"resources":[{
 			"id":"int //项目资源id",
-			"projectId":"int //团队id(外键)",
 			"type":"int //资源文件类别",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
@@ -590,7 +593,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 获取oss公开资源上传签名(用于上传项目头像和获奖证明材料)
 
 *作者: STEA_YY*
@@ -617,14 +619,13 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 新增项目
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project `POST` 
+/project/saveProject `POST` 
 
 **请求体**
 
@@ -649,53 +650,11 @@ id|int|否|竞赛标签id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"id":"int //项目id",
-		"creatorPhone":"string //团队创建者手机号",
-		"name":"string //团队名称",
-		"avatarUrl":"string //团队头像url",
-		"tags":"string //项目标签",
-		"intro":"string //团队介绍(富文本)",
-		"read":"int //点击率",
-		"collect":"int //收藏数量",
-		"compId":"int //赛事id(外键)",
-		"competition":{
-			"id":"int //竞赛id",
-			"compTagId":"int //所属赛事标签（外键）",
-			"competitionTag":{
-				"id":"int //竞赛标签id",
-				"name":"string //竞赛标签名称"
-			},
-			"name":"string //赛事名称",
-			"intro":"string //赛事简介",
-			"picUrl":"int //赛事图片保存路径"
-		},
-		"compName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
-		"awardLevel":"int //项目获奖级别",
-		"awardTime":"date //项目获奖时间",
-		"members":[{
-			"projectId":"int //项目id(外键)",
-			"memberPhone":"string //团队成员手机号",
-			"nickname":"string //成员昵称",
-			"trueName":"string //成员真实姓名",
-			"avatarUrl":"string //成员头像url",
-			"school":"string //成员所在学校",
-			"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
-			"job":"string //团队成员职务",
-			"editable":"boolean //成员是否可编辑项目信息"
-		}],
-		"resources":[{
-			"id":"int //项目资源id",
-			"projectId":"int //团队id(外键)",
-			"type":"int //资源文件类别",
-			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-			"filename":"string //保存在oss里的资源文件名(包括前缀)",
-			"download":"int //资源文件下载量"
-		}]
+		"id":"int"
 	},
 	"time":"string //响应时间"
 }
 ```
-
 ## 修改项目信息
 
 *作者: STEA_YY*
@@ -706,10 +665,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
-
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 **请求体**
 
 ```json
@@ -736,7 +694,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 删除项目
 
 *作者: STEA_YY*
@@ -747,9 +704,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 
 **返回结果**
 
@@ -761,7 +718,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 根据项目id获取所有项目成员
 
 *作者: STEA_YY*
@@ -772,9 +728,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 
 **返回结果**
 
@@ -783,7 +739,6 @@ id|int|否|竞赛标签id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":[{
-		"projectId":"int //项目id(外键)",
 		"memberPhone":"string //团队成员手机号",
 		"nickname":"string //成员昵称",
 		"trueName":"string //成员真实姓名",
@@ -796,7 +751,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 新增项目成员
 
 *作者: STEA_YY*
@@ -807,20 +761,14 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
-
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 **请求体**
 
 ```json
 {
-	"projectId":"int //项目id(外键)",
 	"memberPhone":"string //团队成员手机号【必须】",
-	"nickname":"string //成员昵称",
-	"trueName":"string //成员真实姓名",
-	"avatarUrl":"string //成员头像url",
-	"school":"string //成员所在学校",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
 	"job":"string //团队成员职务【必须】",
 	"editable":"boolean //成员是否可编辑项目信息【必须】"
@@ -837,7 +785,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 修改项目成员信息
 
 *作者: STEA_YY*
@@ -848,11 +795,10 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|      参数名 |  类型  | 必须 | 描述       |
-| ----------: | :----: | :--: | :--------- |
-|   projectId |  int   |  否  | 项目id     |
-| memberPhone | string |  否  | 成员手机号 |
-
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+memberPhone|string|否|成员手机号
 **请求体**
 
 ```json
@@ -873,7 +819,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 修改多个项目成员信息
 
 *作者: STEA_YY*
@@ -884,18 +829,17 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
-
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 **请求体**
 
 ```json
 [{
-	"memberPhone":"string //团队成员手机号【必须】",
-	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
-	"job":"string //团队成员职务【必须】",
-	"editable":"boolean //成员是否可编辑项目信息【必须】"
+	"memberPhone":"string //团队成员手机号(修改依据)",
+	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
+	"job":"string //团队成员职务",
+	"editable":"boolean //成员是否可编辑项目信息"
 }]
 ```
 
@@ -909,7 +853,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 删除项目成员
 
 *作者: STEA_YY*
@@ -920,10 +863,10 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|      参数名 |  类型  | 必须 | 描述       |
-| ----------: | :----: | :--: | :--------- |
-|   projectId |  int   |  否  | 项目id     |
-| memberPhone | string |  否  | 成员手机号 |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+memberPhone|string|否|成员手机号
 
 **返回结果**
 
@@ -935,7 +878,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 根据项目id获取所有项目资源
 
 *作者: STEA_YY*
@@ -946,9 +888,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 
 **返回结果**
 
@@ -966,7 +908,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 获取oss私有资源上传签名(用于上传资源文件)
 
 *作者: STEA_YY*
@@ -977,9 +918,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 
 **返回结果**
 
@@ -998,7 +939,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 新增项目资源
 
 *作者: STEA_YY*
@@ -1009,17 +949,16 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
-
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 **请求体**
 
 ```json
 {
 	"type":"int //资源文件类别【必须】",
 	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)【必须】",
-	"filename":"string //保存在oss里的资源文件名(包括前缀)"
+	"filename":"string //保存在oss里的资源文件名(包括前缀)【必须】"
 }
 ```
 
@@ -1029,11 +968,12 @@ id|int|否|竞赛标签id
 {
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
-	"data":"object //响应数据",
+	"data":{
+		"id":"int"
+	},
 	"time":"string //响应时间"
 }
 ```
-
 ## 修改项目资源
 
 *作者: STEA_YY*
@@ -1044,17 +984,16 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|            参数名 | 类型 | 必须 | 描述       |
-| ----------------: | :--: | :--: | :--------- |
-| projectResourceId | int  |  否  | 项目资源id |
-
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
 **请求体**
 
 ```json
 {
 	"type":"int //资源文件类别【必须】",
 	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)【必须】",
-	"filename":"string //保存在oss里的资源文件名(包括前缀)"
+	"filename":"string //保存在oss里的资源文件名(包括前缀)【必须】"
 }
 ```
 
@@ -1068,7 +1007,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 删除项目资源
 
 *作者: STEA_YY*
@@ -1079,9 +1017,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|            参数名 | 类型 | 必须 | 描述       |
-| ----------------: | :--: | :--: | :--------- |
-| projectResourceId | int  |  否  | 项目资源id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
 
 **返回结果**
 
@@ -1093,7 +1031,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 获取项目资源文件oss下载签名
 
 *作者: STEA_YY*
@@ -1104,9 +1041,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|            参数名 | 类型 | 必须 | 描述       |
-| ----------------: | :--: | :--: | :--------- |
-| projectResourceId | int  |  否  | 项目资源id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
 
 **返回结果**
 
@@ -1120,7 +1057,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 获取用户收藏项目列表
 
 *作者: STEA_YY*
@@ -1154,7 +1090,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 收藏项目
 
 *作者: STEA_YY*
@@ -1165,9 +1100,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 
 **返回结果**
 
@@ -1179,7 +1114,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 取消收藏
 
 *作者: STEA_YY*
@@ -1190,9 +1124,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-|    参数名 | 类型 | 必须 | 描述   |
-| --------: | :--: | :--: | :----- |
-| projectId | int  |  否  | 项目id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
 
 **返回结果**
 
@@ -1201,35 +1135,6 @@ id|int|否|竞赛标签id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
-
-# 文件下载相关请求
-
-## 获取oss签名，已弃用
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/file/{filename} `GET` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-filename|string|否|文件名
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"url":"string //url字符串"
-	},
 	"time":"string //响应时间"
 }
 ```

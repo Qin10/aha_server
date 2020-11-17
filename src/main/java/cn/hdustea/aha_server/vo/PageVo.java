@@ -5,17 +5,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 插入后id封装VO
+ * 分页封装VO
  *
  * @author STEA_YY
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class InsertedIdVo {
+public class PageVo<T> {
+    /**
+     * 页码
+     */
+    private int pageNum;
 
     /**
-     * 插入后的id
+     * 分页大小
      */
-    private Integer id;
+    private int pageSize;
+
+    /**
+     * 内容
+     */
+    private T pageData;
 }

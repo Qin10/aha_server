@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.ProjectDetailVo;
 import cn.hdustea.aha_server.vo.ProjectRoughVo;
 import cn.hdustea.aha_server.entity.*;
@@ -10,6 +11,8 @@ import cn.hdustea.aha_server.mapper.ProjectMemberMapper;
 import cn.hdustea.aha_server.mapper.UserCollectionMapper;
 import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.vo.UserCollectionVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
@@ -51,6 +54,20 @@ public class ProjectService {
      */
     public List<ProjectRoughVo> getAllProjectRoughInfo() {
         return projectMapper.selectAllRough();
+    }
+
+    /**
+     * 分页获取所有项目粗略信息
+     *
+     * @param pageNum  页码
+     * @param pageSize 页面大小
+     * @return 项目粗略信息分页列表
+     */
+    public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<ProjectRoughVo> projectRoughVos = projectMapper.selectAllRough();
+        PageInfo<ProjectRoughVo> pageInfo = new PageInfo<>(projectRoughVos);
+        return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
     /**
