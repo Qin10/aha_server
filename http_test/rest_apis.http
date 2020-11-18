@@ -20,9 +20,15 @@ POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": "15382355341",
+  "phone": "18557517547",
   "password": "114514"
 }
+
+> {% client.global.set("auth_token",response.body.data.token);%}
+
+###签署服务协议
+GET http://{{host}}/sign/notice
+Authorization:{{auth_token}}
 
 > {% client.global.set("auth_token",response.body.data.token);%}
 

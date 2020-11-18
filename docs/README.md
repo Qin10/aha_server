@@ -584,7 +584,6 @@ projectId|int|否|项目id
 		}],
 		"resources":[{
 			"id":"int //项目资源id",
-			"type":"int //资源文件类别",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"download":"int //资源文件下载量"
@@ -904,7 +903,6 @@ projectId|int|否|项目id
 	"msg":"string //响应消息",
 	"data":[{
 		"id":"int //项目资源id",
-		"type":"int //资源文件类别",
 		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
 		"filename":"string //保存在oss里的资源文件名(包括前缀)",
 		"download":"int //资源文件下载量"
@@ -961,7 +959,6 @@ projectId|int|否|项目id
 
 ```json
 {
-	"type":"int //资源文件类别【必须】",
 	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)【必须】",
 	"filename":"string //保存在oss里的资源文件名(包括前缀)【必须】"
 }
@@ -997,7 +994,6 @@ projectResourceId|int|否|项目资源id
 
 ```json
 {
-	"type":"int //资源文件类别【必须】",
 	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)【必须】",
 	"filename":"string //保存在oss里的资源文件名(包括前缀)【必须】"
 }

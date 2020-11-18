@@ -15,12 +15,6 @@ import javax.validation.constraints.NotNull;
 public class ProjectResourceDto {
 
     /**
-     * 资源文件类别
-     */
-    @NotNull(message = "资源类别不能为空")
-    private Integer type;
-
-    /**
      * 资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)
      */
     @NotEmpty(message = "资源名称不能为空")

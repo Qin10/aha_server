@@ -6,7 +6,6 @@
         <!--@Table project_resource-->
         <id column="pr_id" property="id"/>
         <result column="pr_project_id" property="projectId"/>
-        <result column="pr_type" property="type"/>
         <result column="pr_name" property="name"/>
         <result column="pr_filename" property="filename"/>
         <result column="pr_download" property="download"/>
@@ -15,18 +14,17 @@
         <!--@mbg.generated-->
         <!--@Table project_resource-->
         <id column="pr_id" property="id"/>
-        <result column="pr_type" property="type"/>
         <result column="pr_name" property="name"/>
         <result column="pr_filename" property="filename"/>
         <result column="pr_download" property="download"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        pr_id, pr_project_id, pr_type, pr_name, pr_filename, pr_download
+        pr_id, pr_project_id, pr_name, pr_filename, pr_download
     </sql>
     <sql id="Vo_Column_List">
         <!--@mbg.generated-->
-        pr_id, pr_type, pr_name, pr_filename, pr_download
+        pr_id, pr_name, pr_filename, pr_download
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -44,8 +42,8 @@
     <insert id="insert" keyColumn="pr_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ProjectResource"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into project_resource (pr_project_id, pr_type, pr_name, pr_filename)
-        values (#{projectId}, #{type}, #{name}, #{filename})
+        insert into project_resource (pr_project_id, pr_name, pr_filename)
+        values (#{projectId}, #{name}, #{filename})
     </insert>
     <insert id="insertSelective" keyColumn="pr_id" keyProperty="id"
             parameterType="cn.hdustea.aha_server.entity.ProjectResource" useGeneratedKeys="true">
@@ -54,9 +52,6 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="projectId != null">
                 pr_project_id,
-            </if>
-            <if test="type != null">
-                pr_type,
             </if>
             <if test="name != null">
                 pr_name,
@@ -68,9 +63,6 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">
                 #{projectId},
-            </if>
-            <if test="type != null">
-                #{type},
             </if>
             <if test="name != null">
                 #{name},
@@ -87,9 +79,6 @@
             <if test="projectId != null">
                 pr_project_id = #{projectId},
             </if>
-            <if test="type != null">
-                pr_type = #{type},
-            </if>
             <if test="name != null">
                 pr_name = #{name},
             </if>
@@ -103,7 +92,6 @@
         <!--@mbg.generated-->
         update project_resource
         set pr_project_id = #{projectId},
-            pr_type       = #{type},
             pr_name       = #{name},
             pr_filename   = #{filename}
         where pr_id = #{id}
