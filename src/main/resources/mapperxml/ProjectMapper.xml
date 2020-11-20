@@ -49,6 +49,7 @@
         <result column="p_comp_name" property="compName"/>
         <result column="p_award_level" property="awardLevel"/>
         <result column="p_award_time" property="awardTime"/>
+        <result column="p_award_prove_url" property="awardProveUrl"/>
         <association property="competition" javaType="cn.hdustea.aha_server.entity.Competition" column="p_comp_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionMapper.selectByPrimaryKey"/>
         <collection property="members" ofType="cn.hdustea.aha_server.vo.ProjectMemberVo" column="p_id"
@@ -69,7 +70,7 @@
     <sql id="Detail_Column_List">
         <!--@mbg.generated-->
         p_id, p_creator_phone, p_name, p_avatar_url, p_tags, p_intro, p_read, p_collect, p_comp_id,
-        p_comp_name, p_award_level, p_award_time
+        p_comp_name, p_award_level, p_award_time, p_award_prove_url
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->

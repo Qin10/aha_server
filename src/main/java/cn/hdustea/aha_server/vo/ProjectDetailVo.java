@@ -83,6 +83,11 @@ public class ProjectDetailVo {
     @JsonFormat(pattern = "yyyy-MM")
     private Date awardTime;
 
+    /**
+     * 获奖证明文件url
+     */
+    private String awardProveUrl;
+
     private List<ProjectMemberVo> members;
     private List<ProjectResourceVo> resources;
 }

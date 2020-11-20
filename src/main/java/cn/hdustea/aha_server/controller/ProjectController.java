@@ -60,7 +60,7 @@ public class ProjectController {
      */
     @RequiresLogin
     @GetMapping
-    public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam("pageNum") int pageNum, @RequestParam("pageSize") int pageSize) {
+    public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize) {
         PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize);
         return new ResponseBean<>(200, "succ", projectRoughVos);
     }
