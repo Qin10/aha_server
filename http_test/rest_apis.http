@@ -20,7 +20,7 @@ POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": "18557517547",
+  "phone": "15382355341",
   "password": "114514"
 }
 
@@ -41,8 +41,16 @@ Content-Type: application/json
   "code": "1234"
 }
 
+> {% client.global.set("auth_token",response.body.data.token);%}
+
 ###获取用户个人信息
-GET http://{{host}}/userInfo/me
+GET http://{{host}}/userInfo/15382355341
+Authorization:{{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###搜索用户个人信息
+GET http://{{host}}/userInfo/search?nickname=YY
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -123,7 +131,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目列表
-GET http://{{host}}/project?pageNum=1&pageSize=4
+GET http://{{host}}/project?pageNum=1&pageSize=6
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

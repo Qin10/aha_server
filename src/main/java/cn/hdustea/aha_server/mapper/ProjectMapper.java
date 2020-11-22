@@ -34,4 +34,6 @@ public interface ProjectMapper {
     ProjectDetailVo selectDetailByPrimaryKey(Integer id);
 
     int updateReadById(@Param("updatedRead") Integer updatedRead, @Param("id") Integer id);
+
+    List<ProjectRoughVo> selectAllRoughByConditions(@Param("phone") String phone, @Param("compId") Integer compId, @Param("awardLevel") Integer awardLevel, @Param("sortBy") String sortBy, @Param("orderBy") String orderBy, @Param("passed") Boolean passed);
 }

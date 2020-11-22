@@ -88,6 +88,16 @@ public class ProjectDetailVo {
      */
     private String awardProveUrl;
 
+    /**
+     * 项目资源完整程度，决定贡献点
+     */
+    private BigDecimal meaning;
+
+    /**
+     * 是否通过审核
+     */
+    private Boolean passed;
+
     private List<ProjectMemberVo> members;
     private List<ProjectResourceVo> resources;
 }

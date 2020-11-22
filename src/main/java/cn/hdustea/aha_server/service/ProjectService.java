@@ -63,9 +63,50 @@ public class ProjectService {
      * @param pageSize 页面大小
      * @return 项目粗略信息分页列表
      */
-    public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize) {
+    public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize, String phone, Integer compId, Integer awardLevel, String sortBy, String orderBy, Boolean passed) {
+        List<ProjectRoughVo> projectRoughVos;
+        String currentSortBy = "p_id";
+        String currentOrderBy = "desc";
+        if (sortBy != null) {
+            switch (sortBy) {
+                case "time": {
+                    currentSortBy = "p_id";
+                    break;
+                }
+                case "collect": {
+                    currentSortBy = "p_collect";
+                    break;
+                }
+                case "read": {
+                    currentSortBy = "p_read";
+                    break;
+                }
+                case "awardLevel": {
+                    currentSortBy = "p_award_level";
+                    break;
+                }
+                default: {
+                    currentSortBy = "p_id";
+                }
+            }
+        }
+        if (orderBy != null) {
+            switch (orderBy) {
+                case "desc": {
+                    currentOrderBy = "desc";
+                    break;
+                }
+                case "asc": {
+                    currentOrderBy = "asc";
+                    break;
+                }
+                default: {
+                    currentOrderBy = "desc";
+                }
+            }
+        }
         PageHelper.startPage(pageNum, pageSize);
-        List<ProjectRoughVo> projectRoughVos = projectMapper.selectAllRough();
+        projectRoughVos = projectMapper.selectAllRoughByConditions(phone, compId, awardLevel, currentSortBy, currentOrderBy, passed);
         PageInfo<ProjectRoughVo> pageInfo = new PageInfo<>(projectRoughVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
