@@ -174,11 +174,7 @@ phone|string|否|手机号
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 file|file|否|合同签名文件
-id|int|否|合同id
-userId|int|否|用户id(外键)
 name|string|否|联系人
-signatureFilename|string|否|签名文件名
-signTime|date|否|合同签名时间
 
 **返回结果**
 
@@ -248,7 +244,7 @@ id|int|否|竞赛信息id
 
 **请求URL**
 
-/competition/getAllCompetition `GET` 
+/competition `GET` 
 
 
 **返回结果**
@@ -322,7 +318,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/competition/saveCompetition `POST` 
+/competition `POST` 
 
 **请求体**
 
@@ -445,7 +441,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/rank/getRankList `GET` 
+/rank `GET` 
 
 
 **返回结果**
@@ -519,7 +515,7 @@ filename|string|否|文件名
 
 **请求URL**
 
-/project/getAllProjectPageable `GET` 
+/project `GET` 
 
 **请求参数**
 
@@ -653,7 +649,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/saveProject `POST` 
+/project `POST` 
 
 **请求体**
 
@@ -1338,7 +1334,7 @@ phone|string|否|手机号
 
 **请求URL**
 
-/resume/updateResume `PUT` 
+/resume `PUT` 
 
 **请求体**
 
