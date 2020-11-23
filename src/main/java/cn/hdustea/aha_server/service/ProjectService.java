@@ -224,6 +224,12 @@ public class ProjectService {
         projectMemberMapper.updateByPrimaryKeySelective(projectMember);
     }
 
+    /**
+     * 批量更新项目成员
+     *
+     * @param projectMembers 更新的项目多个成员
+     * @param projectId      项目id
+     */
     @Transactional(rollbackFor = {Exception.class})
     public void updateProjectMembers(List<ProjectMember> projectMembers, int projectId) {
         for (ProjectMember projectMember : projectMembers) {
@@ -281,16 +287,34 @@ public class ProjectService {
         }
     }
 
+    /**
+     * 判断项目是否被收藏
+     *
+     * @param projectId 项目id
+     * @param phone     手机号
+     * @return 项目是否被收藏
+     * @throws SelectException 用户不存在异常
+     */
     public boolean hasCollected(int projectId, String phone) throws SelectException {
         User user = userService.getUserByPhone(phone);
         UserCollection userCollection = userCollectionMapper.selectByPrimaryKey(user.getId(), projectId);
         return userCollection != null;
     }
 
+    /**
+     * 项目收藏数量递增
+     *
+     * @param projectId 项目id
+     */
     public void incrCollectByProjectId(int projectId) {
         projectMapper.updateIncCollectById(projectId);
     }
 
+    /**
+     * 项目收藏数量递减
+     *
+     * @param projectId 项目id
+     */
     public void descCollectByProjectId(int projectId) {
         projectMapper.updateDecCollectById(projectId);
     }

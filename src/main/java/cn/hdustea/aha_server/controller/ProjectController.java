@@ -56,8 +56,13 @@ public class ProjectController {
     /**
      * 分页获取所有项目粗略信息
      *
-     * @param pageNum  页码
-     * @param pageSize 页面大小
+     * @param pageNum    页码
+     * @param pageSize   分页大小
+     * @param phone      手机号
+     * @param compId     竞赛id
+     * @param awardLevel 获奖级别
+     * @param sortBy     排序关键字
+     * @param orderBy    排序方式
      */
     @RequiresLogin
     @GetMapping
@@ -345,6 +350,7 @@ public class ProjectController {
      *
      * @param projectId 项目id
      * @throws SelectException 用户不存在异常
+     * @throws InsertException 插入失败异常
      */
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
@@ -361,6 +367,7 @@ public class ProjectController {
      *
      * @param projectId 项目id
      * @throws SelectException 用户不存在异常
+     * @throws DeleteException 删除失败异常
      */
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
@@ -372,6 +379,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "取消收藏成功！", null);
     }
 
+    /**
+     * 判断项目是否被收藏
+     *
+     * @param projectId 项目id
+     * @throws SelectException 用户不存在异常
+     */
     @RequiresLogin
     @GetMapping("/collection/{projectId}")
     public ResponseBean<Boolean> getCollectedByProjectId(@PathVariable("projectId") int projectId) throws SelectException {
@@ -380,6 +393,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", result);
     }
 
+    /**
+     * 增加项目阅读数
+     *
+     * @param projectId 项目id
+     */
     private void incrReadByProjectId(int projectId) {
         redisUtil.hincr(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId), 1);
     }

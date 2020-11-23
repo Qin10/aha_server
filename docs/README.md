@@ -31,6 +31,7 @@
 			"signedContract":"boolean //是否签署合同",
 			"contribPoint":"double //贡献点",
 			"userInfo":{
+				"userId":"int //用户主键(外键)",
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"birthday":"date //用户出生日期",
@@ -85,6 +86,7 @@
 			"signedContract":"boolean //是否签署合同",
 			"contribPoint":"double //贡献点",
 			"userInfo":{
+				"userId":"int //用户主键(外键)",
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"birthday":"date //用户出生日期",
@@ -172,8 +174,11 @@ phone|string|否|手机号
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 file|file|否|合同签名文件
+id|int|否|合同id
+userId|int|否|用户id(外键)
 name|string|否|联系人
 signatureFilename|string|否|签名文件名
+signTime|date|否|合同签名时间
 
 **返回结果**
 
@@ -230,10 +235,6 @@ id|int|否|竞赛信息id
 	"data":{
 		"id":"int //竞赛id",
 		"compTagId":"int //所属赛事标签（外键）",
-		"competitionTag":{
-			"id":"int //竞赛标签id",
-			"name":"string //竞赛标签名称"
-		},
 		"name":"string //赛事名称",
 		"intro":"string //赛事简介",
 		"picUrl":"int //赛事图片保存路径"
@@ -247,7 +248,7 @@ id|int|否|竞赛信息id
 
 **请求URL**
 
-/competition `GET` 
+/competition/getAllCompetition `GET` 
 
 
 **返回结果**
@@ -259,10 +260,6 @@ id|int|否|竞赛信息id
 	"data":[{
 		"id":"int //竞赛id",
 		"compTagId":"int //所属赛事标签（外键）",
-		"competitionTag":{
-			"id":"int //竞赛标签id",
-			"name":"string //竞赛标签名称"
-		},
 		"name":"string //赛事名称",
 		"intro":"string //赛事简介",
 		"picUrl":"int //赛事图片保存路径"
@@ -325,7 +322,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/competition `POST` 
+/competition/saveCompetition `POST` 
 
 **请求体**
 
@@ -358,9 +355,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-| 参数名 | 类型 | 必须 | 描述   |
-| -----: | :--: | :--: | :----- |
-|     id | int  |  否  | 竞赛id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|竞赛id
 
 **请求体**
 
@@ -383,7 +380,6 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 ## 保存竞赛标签
 
 *作者: STEA_YY*
@@ -420,9 +416,9 @@ id|int|否|竞赛标签id
 
 **请求参数**
 
-| 参数名 | 类型 | 必须 | 描述       |
-| -----: | :--: | :--: | :--------- |
-|     id | int  |  否  | 竞赛标签id |
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|竞赛标签id
 
 **请求体**
 
@@ -442,16 +438,14 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-
 # 贡献点排名相关请求
-
 ## 获取贡献点总排行榜
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/rank `GET` 
+/rank/getRankList `GET` 
 
 
 **返回结果**
@@ -491,21 +485,20 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
-# 项目相关请求
-## 分页获取所有项目粗略信息
+# 文件下载相关请求
+## 获取oss签名，已弃用
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project `GET` 
+/file/{filename} `GET` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
-pageNum|int|否|页码
-pageSize|int|否|页面大小
+filename|string|否|文件名
 
 **返回结果**
 
@@ -514,8 +507,41 @@ pageSize|int|否|页面大小
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"pageNum":"int",
-		"pageSize":"int",
+		"url":"string //url字符串"
+	},
+	"time":"string //响应时间"
+}
+```
+# 项目相关请求
+## 分页获取所有项目粗略信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/getAllProjectPageable `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+phone|string|否|手机号
+compId|int|否|竞赛id
+awardLevel|int|否|获奖级别
+sortBy|string|否|排序关键字
+orderBy|string|否|排序方式
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
 		"pageData":[{
 			"id":"int //项目id",
 			"creatorPhone":"string //团队创建者手机号",
@@ -572,6 +598,9 @@ projectId|int|否|项目id
 		"compName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
 		"awardLevel":"int //项目获奖级别",
 		"awardTime":"date //项目获奖时间",
+		"awardProveUrl":"string //获奖证明文件url",
+		"meaning":"double //项目资源完整程度，决定贡献点",
+		"passed":"boolean //是否通过审核",
 		"members":[{
 			"memberPhone":"string //团队成员手机号",
 			"nickname":"string //成员昵称",
@@ -624,7 +653,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project `POST` 
+/project/saveProject `POST` 
 
 **请求体**
 
@@ -649,7 +678,7 @@ projectId|int|否|项目id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"id":"int"
+		"id":"int //插入后的id"
 	},
 	"time":"string //响应时间"
 }
@@ -805,6 +834,7 @@ memberPhone|string|否|成员手机号
 
 ```json
 {
+	"memberPhone":"string //团队成员手机号",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 	"job":"string //团队成员职务",
 	"editable":"boolean //成员是否可编辑项目信息"
@@ -839,7 +869,7 @@ projectId|int|否|项目id
 
 ```json
 [{
-	"memberPhone":"string //团队成员手机号(修改依据)",
+	"memberPhone":"string //团队成员手机号【必须】",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 	"job":"string //团队成员职务",
 	"editable":"boolean //成员是否可编辑项目信息"
@@ -971,7 +1001,7 @@ projectId|int|否|项目id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"id":"int"
+		"id":"int //插入后的id"
 	},
 	"time":"string //响应时间"
 }
@@ -1140,6 +1170,30 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
+## 判断项目是否被收藏
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/collection/{projectId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"boolean //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 用户简历相关请求
 ## 根据手机号查看用户简历
 
@@ -1284,7 +1338,7 @@ phone|string|否|手机号
 
 **请求URL**
 
-/resume `PUT` 
+/resume/updateResume `PUT` 
 
 **请求体**
 
@@ -1420,6 +1474,7 @@ phone|string|否|手机号
 		"signedContract":"boolean //是否签署合同",
 		"contribPoint":"double //贡献点",
 		"userInfo":{
+			"userId":"int //用户主键(外键)",
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"birthday":"date //用户出生日期",
