@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
+import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.vo.*;
 import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
@@ -26,7 +27,7 @@ import java.util.List;
  *
  * @author STEA_YY
  **/
-@Slf4j
+@Slf4j(topic = "userOperationLog")
 @RestController
 @RequestMapping("/project")
 public class ProjectController {
@@ -62,7 +63,6 @@ public class ProjectController {
     @GetMapping
     public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) {
         Boolean passed = null;
-        String currentPhone = ThreadLocalUtil.getCurrentUser();
         PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, phone, compId, awardLevel, sortBy, orderBy, passed);
         return new ResponseBean<>(200, "succ", projectRoughVos);
     }
@@ -77,7 +77,7 @@ public class ProjectController {
     public ResponseBean<ProjectDetailVo> getProjectById(@PathVariable("projectId") int projectId) {
         ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "查看项目", "id=" + projectId);
-        addReadByProjectId(projectId);
+        incrReadByProjectId(projectId);
         return new ResponseBean<>(200, "succ", projectDetailVo);
     }
 
@@ -348,10 +348,11 @@ public class ProjectController {
      */
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
-    public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws SelectException {
+    public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws SelectException, InsertException {
         String phone = ThreadLocalUtil.getCurrentUser();
         projectService.saveCollection(projectId, phone);
-        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "收藏资源", "id=" + projectId);
+        projectService.incrCollectByProjectId(projectId);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "收藏项目", "id=" + projectId);
         return new ResponseBean<>(200, "收藏成功！", null);
     }
 
@@ -363,14 +364,23 @@ public class ProjectController {
      */
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
-    public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws SelectException {
+    public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws SelectException, DeleteException {
         String phone = ThreadLocalUtil.getCurrentUser();
         projectService.deleteCollection(projectId, phone);
+        projectService.descCollectByProjectId(projectId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "取消收藏资源", "id=" + projectId);
         return new ResponseBean<>(200, "取消收藏成功！", null);
     }
 
-    private void addReadByProjectId(int projectId) {
+    @RequiresLogin
+    @GetMapping("/collection/{projectId}")
+    public ResponseBean<Boolean> getCollectedByProjectId(@PathVariable("projectId") int projectId) throws SelectException {
+        String phone = ThreadLocalUtil.getCurrentUser();
+        boolean result = projectService.hasCollected(projectId, phone);
+        return new ResponseBean<>(200, "succ", result);
+    }
+
+    private void incrReadByProjectId(int projectId) {
         redisUtil.hincr(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId), 1);
     }
 }

@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.ProjectDetailVo;
 import cn.hdustea.aha_server.vo.ProjectRoughVo;
@@ -14,6 +15,7 @@ import cn.hdustea.aha_server.vo.UserCollectionVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -249,7 +251,7 @@ public class ProjectService {
      * @param phone     手机号
      * @throws SelectException 用户不存在异常
      */
-    public void saveCollection(int projectId, String phone) throws SelectException {
+    public void saveCollection(int projectId, String phone) throws SelectException, InsertException {
         User user = userService.getUserByPhone(phone);
         UserCollection userCollection = new UserCollection();
         userCollection.setProjectId(projectId);
@@ -257,7 +259,10 @@ public class ProjectService {
         userCollection.setTimestamp(new Date());
         try {
             userCollectionMapper.insert(userCollection);
-        } catch (DuplicateKeyException ignored) {
+        } catch (DuplicateKeyException e) {
+            throw new InsertException("您已收藏过该项目！");
+        } catch (DataIntegrityViolationException e) {
+            throw new InsertException("项目不存在！");
         }
     }
 
@@ -268,8 +273,25 @@ public class ProjectService {
      * @param phone     手机号
      * @throws SelectException 用户不存在异常
      */
-    public void deleteCollection(int projectId, String phone) throws SelectException {
+    public void deleteCollection(int projectId, String phone) throws SelectException, DeleteException {
         User user = userService.getUserByPhone(phone);
-        userCollectionMapper.deleteByPrimaryKey(user.getId(), projectId);
+        int result = userCollectionMapper.deleteByPrimaryKey(user.getId(), projectId);
+        if (result == 0) {
+            throw new DeleteException("您未收藏过此项目！");
+        }
+    }
+
+    public boolean hasCollected(int projectId, String phone) throws SelectException {
+        User user = userService.getUserByPhone(phone);
+        UserCollection userCollection = userCollectionMapper.selectByPrimaryKey(user.getId(), projectId);
+        return userCollection != null;
+    }
+
+    public void incrCollectByProjectId(int projectId) {
+        projectMapper.updateIncCollectById(projectId);
+    }
+
+    public void descCollectByProjectId(int projectId) {
+        projectMapper.updateDecCollectById(projectId);
     }
 }

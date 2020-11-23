@@ -119,6 +119,7 @@ public class AuthService {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
             userInfo.setNickname(registerUserDto.getNickname());
+            userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
             userInfoService.saveUserInfo(userInfo);
             Resume resume = new Resume();
             resumeService.updateResumeByPhone(resume, user.getPhone());
