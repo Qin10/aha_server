@@ -33,8 +33,10 @@ public class ResourceReadTask {
             Integer read = (Integer) entry.getValue();
             if (read != null && read > 0) {
                 Project project = projectMapper.selectByPrimaryKey(projectId);
-                int updatedRead = project.getRead() + read;
-                projectMapper.updateReadById(updatedRead, projectId);
+                if (project != null) {
+                    int updatedRead = project.getRead() + read;
+                    projectMapper.updateReadById(updatedRead, projectId);
+                }
                 redisUtil.hdel(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId));
             }
         }
