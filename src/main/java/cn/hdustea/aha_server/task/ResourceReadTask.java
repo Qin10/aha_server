@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +26,7 @@ public class ResourceReadTask {
 
     @Scheduled(cron = "0 0/5 * * * ?")
     @Transactional(rollbackFor = Exception.class)
+    @Async
     public void updateResourceRead() {
         log.debug("Project Read Task is Running");
         Map<Object, Object> projectReadMap = redisUtil.hmget(RedisUtil.PROJECT_READ_KEY);

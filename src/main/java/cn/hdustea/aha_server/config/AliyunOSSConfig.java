@@ -33,7 +33,7 @@ public class AliyunOSSConfig {
 
     @Bean
     public IAcsClient iAcsClient() {
-        return new DefaultAcsClient(DefaultProfile.getProfile("cn-shenzhen", accessKeyId, accessKeySecret));
+        return new DefaultAcsClient(DefaultProfile.getProfile("cn-hangzhou", accessKeyId, accessKeySecret));
     }
 
     @Bean

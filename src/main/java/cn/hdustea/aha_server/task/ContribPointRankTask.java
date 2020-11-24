@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.mapper.UserMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class ContribPointRankTask {
     private RedisUtil redisUtil;
 
     @Scheduled(cron = "0 0 * * * ?")
+    @Async
     public void getRank() {
         log.debug("Contrib Rank Task is Running");
         List<UserContribPointVo> userContribPointVos = userMapper.selectPhoneAndContribPoint();

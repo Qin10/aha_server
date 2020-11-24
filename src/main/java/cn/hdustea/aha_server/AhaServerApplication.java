@@ -5,6 +5,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
@@ -13,9 +14,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author STEA_YY
  */
 @SpringBootApplication
-@EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class, AliyunOSSConfig.class, AliyunMNSConfig.class, UserOperationLogConfig.class})
+@EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class, AliyunOSSConfig.class, UserOperationLogConfig.class})
 @MapperScan(basePackages = "cn.hdustea.aha_server.mapper")
 @EnableScheduling
+@EnableAsync
 public class AhaServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(AhaServerApplication.class, args);

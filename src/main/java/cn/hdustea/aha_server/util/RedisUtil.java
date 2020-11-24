@@ -44,6 +44,8 @@ public class RedisUtil {
 
     public static final String PROJECT_READ_KEY = "project:read";
     public static final String CONTRIBUTION_RANK_KEY = "contribution:rank";
+    public static final String DOCUMENT_CONVERT_LIST_KEY = "document:convert:list";
+    public static final String DOCUMENT_CONVERT_RUNNING_TASK_KEY = "document:convert:running:task";
 
     // =============================common============================
 
@@ -697,6 +699,19 @@ public class RedisUtil {
             log.error(key, e);
             return 0;
         }
+    }
+
+    public boolean lPush(String key, Object value) {
+        try {
+            redisTemplate.opsForList().rightPush(key, value);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public Object lPop(String key) {
+        return redisTemplate.opsForList().leftPop(key);
     }
 
     public List<UserContribPointVo> tupleToUserContribPoint(Set<ZSetOperations.TypedTuple<Object>> tuples) {

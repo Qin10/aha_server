@@ -1,8 +1,11 @@
 package cn.hdustea.aha_server;
 
+import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.*;
+import cn.hdustea.aha_server.task.OssDocumentConvertTask;
 import cn.hdustea.aha_server.util.RedisUtil;
+import com.aliyuncs.exceptions.ClientException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,6 +27,8 @@ class AhaServerApplicationTests {
     private ProjectResourceService projectResourceService;
     @Resource
     private ContributionRankService contributionRankService;
+    @Resource
+    private OssDocumentConvertTask ossDocumentConvertTask;
 
     @Test
     void contextLoads() {
@@ -58,5 +63,12 @@ class AhaServerApplicationTests {
     @Test
     void testCRank() throws SelectException {
         System.out.println(contributionRankService.getUserContribPointByPhone("15382355341"));
+    }
+    @Test
+    void testMNS() throws ClientException {
+        DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
+        documentConvertInfoDto.setProjectResourceId(8);
+        documentConvertInfoDto.setSrcFilename("企业画像/1606217593868/DJI_20180819_082700.mp4");
+        redisUtil.lPush(RedisUtil.DOCUMENT_CONVERT_LIST_KEY,documentConvertInfoDto);
     }
 }
