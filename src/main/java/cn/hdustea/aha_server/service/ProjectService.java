@@ -118,9 +118,14 @@ public class ProjectService {
      *
      * @param id 项目id
      * @return 项目信息
+     * @throws SelectException 项目不存在异常
      */
-    public ProjectDetailVo getProjectDetailById(int id) {
-        return projectMapper.selectDetailByPrimaryKey(id);
+    public ProjectDetailVo getProjectDetailById(int id) throws SelectException {
+        ProjectDetailVo projectDetailVo = projectMapper.selectDetailByPrimaryKey(id);
+        if (projectDetailVo == null) {
+            throw new SelectException("项目不存在！");
+        }
+        return projectDetailVo;
     }
 
     /**

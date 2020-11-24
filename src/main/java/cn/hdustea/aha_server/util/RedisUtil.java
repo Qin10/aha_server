@@ -40,6 +40,7 @@ public class RedisUtil {
      * RefreshToken Redis前缀
      */
     public static final String REFRESH_TOKEN_PREFIX = "user:token:";
+    public static final String USER_PROJECT_READ_PREFIX = "user:project:read:";
 
     public static final String PROJECT_READ_KEY = "project:read";
     public static final String CONTRIBUTION_RANK_KEY = "contribution:rank";

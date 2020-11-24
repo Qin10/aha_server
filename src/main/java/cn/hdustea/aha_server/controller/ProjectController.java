@@ -76,13 +76,15 @@ public class ProjectController {
      * 根据项目id获取项目详细信息
      *
      * @param projectId 项目id
+     * @throws SelectException 项目不存在异常
      */
     @RequiresLogin
     @GetMapping("/{projectId}")
-    public ResponseBean<ProjectDetailVo> getProjectById(@PathVariable("projectId") int projectId) {
+    public ResponseBean<ProjectDetailVo> getProjectById(@PathVariable("projectId") int projectId) throws SelectException {
+        String phone = ThreadLocalUtil.getCurrentUser();
         ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "查看项目", "id=" + projectId);
-        incrReadByProjectId(projectId);
+        incrReadByProjectId(projectId, phone);
         return new ResponseBean<>(200, "succ", projectDetailVo);
     }
 
@@ -149,10 +151,11 @@ public class ProjectController {
      * 根据项目id获取所有项目成员
      *
      * @param projectId 项目id
+     * @throws SelectException 项目不存在异常
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/members")
-    public ResponseBean<List<ProjectMemberVo>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) {
+    public ResponseBean<List<ProjectMemberVo>> getAllProjectMemberByProjectId(@PathVariable("projectId") int projectId) throws SelectException {
         List<ProjectMemberVo> projectMemberVos = projectService.getProjectDetailById(projectId).getMembers();
         return new ResponseBean<>(200, "succ", projectMemberVos);
     }
@@ -235,10 +238,11 @@ public class ProjectController {
      * 根据项目id获取所有项目资源
      *
      * @param projectId 项目id
+     * @throws SelectException 项目不存在异常
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/resources")
-    public ResponseBean<List<ProjectResourceVo>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) {
+    public ResponseBean<List<ProjectResourceVo>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) throws SelectException {
         List<ProjectResourceVo> projectResourceVos = projectService.getProjectDetailById(projectId).getResources();
         return new ResponseBean<>(200, "succ", projectResourceVos);
     }
@@ -248,15 +252,16 @@ public class ProjectController {
      *
      * @param projectId 项目id
      * @throws PermissionDeniedException 无操作权限异常
+     * @throws SelectException           项目不存在异常
      */
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/{projectId}/resources/sign/upload/private")
-    public ResponseBean<OssPolicyVo> signUploadPrivateFile(@PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean<OssPolicyVo> signUploadPrivateFile(@PathVariable("projectId") int projectId) throws PermissionDeniedException, SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
+        ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
         }
-        ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
         OssPolicyVo ossPolicyVo = ossService.signUpload(projectDetailVo.getName() + "/", true);
         return new ResponseBean<>(200, "succ", ossPolicyVo);
     }
@@ -398,7 +403,10 @@ public class ProjectController {
      *
      * @param projectId 项目id
      */
-    private void incrReadByProjectId(int projectId) {
-        redisUtil.hincr(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId), 1);
+    private void incrReadByProjectId(int projectId, String phone) {
+        if (redisUtil.get(RedisUtil.USER_PROJECT_READ_PREFIX + phone + ":" + projectId) == null) {
+            redisUtil.hincr(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId), 1);
+            redisUtil.set(RedisUtil.USER_PROJECT_READ_PREFIX + phone + ":" + projectId, true, 600);
+        }
     }
 }

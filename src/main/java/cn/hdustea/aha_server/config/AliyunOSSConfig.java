@@ -2,6 +2,9 @@ package cn.hdustea.aha_server.config;
 
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
+import com.aliyuncs.DefaultAcsClient;
+import com.aliyuncs.IAcsClient;
+import com.aliyuncs.profile.DefaultProfile;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +29,11 @@ public class AliyunOSSConfig {
     @Bean
     public OSS OSS() {
         return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+    }
+
+    @Bean
+    public IAcsClient iAcsClient() {
+        return new DefaultAcsClient(DefaultProfile.getProfile("cn-shenzhen", accessKeyId, accessKeySecret));
     }
 
     @Bean

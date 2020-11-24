@@ -23,7 +23,7 @@ public class ResourceReadTask {
     @javax.annotation.Resource
     private ProjectMapper projectMapper;
 
-    @Scheduled(cron = "0 0 * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     public void updateResourceRead() {
         log.debug("Project Read Task is Running");
