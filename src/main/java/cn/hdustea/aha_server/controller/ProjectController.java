@@ -333,6 +333,7 @@ public class ProjectController {
         String url = projectResourceService.signDownloadProjectResourceByid(projectResourceId);
         UrlVo urlVo = new UrlVo();
         urlVo.setUrl(url);
+        projectResourceService.incrDownloadById(projectResourceId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
         return new ResponseBean<>(200, "succ", urlVo);
     }

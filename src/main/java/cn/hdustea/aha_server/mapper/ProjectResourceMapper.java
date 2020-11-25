@@ -32,4 +32,6 @@ public interface ProjectResourceMapper {
     List<ProjectResourceVo> selectAllVoByProjectId(@Param("projectId") Integer projectId);
 
     int updatePreviewUrlById(@Param("updatedPreviewUrl") String updatedPreviewUrl, @Param("id") Integer id);
+
+    int updateIncDownloadById(@Param("id")Integer id);
 }

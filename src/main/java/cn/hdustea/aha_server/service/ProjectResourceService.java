@@ -104,4 +104,8 @@ public class ProjectResourceService {
     public void deleteProjectResourceById(int id, int projectId) {
         projectResourceMapper.deleteByPrimaryKey(id);
     }
+
+    public void incrDownloadById(int id) {
+        projectResourceMapper.updateIncDownloadById(id);
+    }
 }
