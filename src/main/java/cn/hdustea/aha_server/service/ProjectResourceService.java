@@ -1,11 +1,13 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
+import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,6 +30,8 @@ public class ProjectResourceService {
     private ProjectResourceMapper projectResourceMapper;
     @Resource
     private OssService ossService;
+    @Resource
+    private RedisUtil redisUtil;
 
     /**
      * 根据项目资源id获取项目资源
@@ -69,7 +73,14 @@ public class ProjectResourceService {
         BeanUtils.copyProperties(projectResourceDto, projectResource);
         projectResource.setProjectId(projectId);
         projectResourceMapper.insertSelective(projectResource);
-        return projectResource.getId();
+        Integer projectResourceId = projectResource.getId();
+        if (projectResourceId != null) {
+            DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
+            documentConvertInfoDto.setProjectResourceId(projectResourceId);
+            documentConvertInfoDto.setSrcFilename(projectResourceDto.getFilename());
+            redisUtil.lPush(RedisUtil.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
+        }
+        return projectResourceId;
     }
 
     /**

@@ -37,6 +37,11 @@ public class ProjectResource {
     private String filename;
 
     /**
+     * 保存在oss里的预览文件地址
+     */
+    private String previewUrl;
+
+    /**
      * 资源文件下载量
      */
     private Integer download;

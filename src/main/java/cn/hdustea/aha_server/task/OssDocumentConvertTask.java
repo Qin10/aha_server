@@ -35,7 +35,6 @@ public class OssDocumentConvertTask {
 
     @Scheduled(cron = "* * * * * ?")
     public void runConvertTask() throws ClientException {
-        log.debug("文档转换查询任务开始执行");
         String targetPath;
         DocumentConvertInfoDto runningDocumentConvertInfoDto = (DocumentConvertInfoDto) redisUtil.get(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
         if (runningDocumentConvertInfoDto != null) {
@@ -48,14 +47,15 @@ public class OssDocumentConvertTask {
             } else {
                 redisUtil.del(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
                 if (conversionTaskResponse.getStatus().equals("Finished")) {
-                    String previewPath = "https://" +
+                    String previewUrl = "https://" +
                             aliyunOSSConfig.getPublicBucketName() +
                             "." +
                             aliyunOSSConfig.getEndpoint() +
                             "/" +
                             runningDocumentConvertInfoDto.getTargetFilePath() +
                             "1.pdf";
-                    System.out.println(previewPath);
+//                    System.out.println(previewPath);
+                    projectResourceMapper.updatePreviewUrlById(previewUrl, runningDocumentConvertInfoDto.getProjectResourceId());
                     log.info(runningDocumentConvertInfoDto.getSrcFilename() + "的转换成功");
                 } else {
                     log.warn(runningDocumentConvertInfoDto.getSrcFilename() + "的转换出错，错误代码为：" + conversionTaskResponse.getFailDetail().getCode());
@@ -88,7 +88,7 @@ public class OssDocumentConvertTask {
         taskRequest.setMaxSheetCount(1L);
         CreateOfficeConversionTaskResponse taskResponse = iAcsClient.getAcsResponse(taskRequest);
         if (taskResponse.getStatus().equals("Running")) {
-            log.info(documentConvertInfoDto.getSrcFilename() + "的转换已经开始");
+            log.info(documentConvertInfoDto.getSrcFilename() + "的转换已经开始，任务id为：" + taskResponse.getTaskId());
             documentConvertInfoDto.setTaskId(taskResponse.getTaskId());
             redisUtil.set(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY, documentConvertInfoDto);
         }
