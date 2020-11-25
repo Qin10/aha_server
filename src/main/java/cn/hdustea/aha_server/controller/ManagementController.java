@@ -2,8 +2,11 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.ProjectCheckDto;
+import cn.hdustea.aha_server.dto.UserDto;
+import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.ProjectService;
+import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.service.UserService;
 import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
@@ -25,6 +28,8 @@ public class ManagementController {
     private ProjectService projectService;
     @Resource
     private UserService userService;
+    @Resource
+    private UserInfoService userInfoService;
 
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/project/check/{projectId}")
@@ -45,5 +50,19 @@ public class ManagementController {
     public ResponseBean<UserManagementVo> getAllUserManagementVoPagable(@PathVariable("userId") int userId) {
         UserManagementVo userVo = userService.getUserManagementVoById(userId);
         return new ResponseBean<>(200, "succ", userVo);
+    }
+
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PutMapping("/user/{userId}")
+    public ResponseBean<Object> updateUser(@RequestBody UserDto userDto, @PathVariable("userId") int userId) {
+        userService.updateUserById(userDto, userId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PutMapping("/user/info/{userId}")
+    public ResponseBean<Object> updateUserInfo(@RequestBody UserInfo userInfo, @PathVariable("userId") int userId) {
+        userInfoService.updateUserInfoByUserId(userInfo, userId);
+        return new ResponseBean<>(200, "succ", null);
     }
 }

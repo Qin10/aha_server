@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.dto.UserDto;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.UserMapper;
@@ -7,6 +8,7 @@ import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.UserManagementVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -99,6 +101,13 @@ public class UserService {
      */
     public void saveUser(User user) {
         userMapper.insertSelective(user);
+    }
+
+    public void updateUserById(UserDto userDto, int id) {
+        User user = new User();
+        BeanUtils.copyProperties(userDto, user);
+        user.setId(id);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     /**

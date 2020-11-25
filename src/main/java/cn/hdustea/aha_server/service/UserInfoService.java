@@ -72,7 +72,8 @@ public class UserInfoService {
         userInfoMapper.insertSelective(userInfo);
     }
 
-    public void updateUserInfo(UserInfo userInfo) {
+    public void updateUserInfoByUserId(UserInfo userInfo, int userId) {
+        userInfo.setUserId(userId);
         userInfoMapper.updateByPrimaryKeySelective(userInfo);
     }
 
