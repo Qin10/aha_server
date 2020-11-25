@@ -33,9 +33,8 @@ public class OssDocumentConvertTask {
     @Resource
     private ProjectResourceMapper projectResourceMapper;
 
-    @Scheduled(cron = "* * * * * ?")
+    @Scheduled(fixedDelay = 1000)
     public void runConvertTask() throws ClientException {
-        String targetPath;
         DocumentConvertInfoDto runningDocumentConvertInfoDto = (DocumentConvertInfoDto) redisUtil.get(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
         if (runningDocumentConvertInfoDto != null) {
             GetOfficeConversionTaskRequest conversionTaskRequest = new GetOfficeConversionTaskRequest();
@@ -54,7 +53,6 @@ public class OssDocumentConvertTask {
                             "/" +
                             runningDocumentConvertInfoDto.getTargetFilePath() +
                             "1.pdf";
-//                    System.out.println(previewPath);
                     projectResourceMapper.updatePreviewUrlById(previewUrl, runningDocumentConvertInfoDto.getProjectResourceId());
                     log.info(runningDocumentConvertInfoDto.getSrcFilename() + "的转换成功");
                 } else {
@@ -67,6 +65,7 @@ public class OssDocumentConvertTask {
             String filename = documentConvertInfoDto.getSrcFilename();
             log.info("已收到转换请求，预备开始转换：" + filename);
             int index = filename.lastIndexOf("/");
+            String targetPath;
             if (index > 0) {
                 targetPath = "preview_files/" + filename.substring(0, index) + "/";
             } else {
