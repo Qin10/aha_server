@@ -55,7 +55,7 @@
         <association property="competition" javaType="cn.hdustea.aha_server.entity.Competition" column="p_comp_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionMapper.selectByPrimaryKey"/>
         <collection property="members" ofType="cn.hdustea.aha_server.vo.ProjectMemberVo" column="p_id"
-                    select="cn.hdustea.aha_server.mapper.ProjectMemberMapper.selectAllVoByProjectId"/>
+                    select="cn.hdustea.aha_server.mapper.ProjectMemberMapper.selectAllVoByProjectIdOrderByRank"/>
         <collection property="resources" ofType="cn.hdustea.aha_server.vo.ProjectResourceVo" column="p_id"
                     select="cn.hdustea.aha_server.mapper.ProjectResourceMapper.selectAllVoByProjectIdAndNotFreezed"/>
     </resultMap>

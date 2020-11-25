@@ -1,17 +1,14 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.ResumeService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.util.TimeUtil;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * 用户简历相关请求

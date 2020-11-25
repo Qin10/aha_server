@@ -1,10 +1,10 @@
 package cn.hdustea.aha_server.mapper;
 
-import java.util.List;
-
 import cn.hdustea.aha_server.entity.ProjectMember;
 import cn.hdustea.aha_server.vo.ProjectMemberVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 项目成员表mapper
@@ -30,5 +30,5 @@ public interface ProjectMemberMapper {
 
     ProjectMemberVo selectVoByPrimaryKey(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone);
 
-    List<ProjectMemberVo> selectAllVoByProjectId(@Param("projectId") Integer projectId);
+    List<ProjectMemberVo> selectAllVoByProjectIdOrderByRank(@Param("projectId") Integer projectId);
 }

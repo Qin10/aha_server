@@ -79,6 +79,18 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                         throw new JwtExpiredException();
                     }
                 }
+                if (requiresLogin.requiresRoles().length > 0) {
+                    boolean hasPermission = false;
+                    for (String roleName : requiresLogin.requiresRoles()) {
+                        if (roleName.equals(jwtPayloadDto.getRoleName())) {
+                            hasPermission = true;
+                            break;
+                        }
+                    }
+                    if (!hasPermission) {
+                        throw new PermissionDeniedException();
+                    }
+                }
                 if (requiresLogin.requireSignNotice()) {
                     if (!jwtPayloadDto.isSignedNotice()) {
                         throw new NoticeNotSignedException();
@@ -107,7 +119,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     /**
      * 尝试刷新用户token
      *
-     * @param token          过期token
+     * @param token         过期token
      * @param jwtPayloadDto 当前用户的payload
      * @return 是否刷新成功
      */

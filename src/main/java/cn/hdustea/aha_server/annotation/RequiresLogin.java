@@ -18,4 +18,6 @@ public @interface RequiresLogin {
     boolean requireSignNotice() default true;
 
     boolean requireSignContract() default false;
+
+    String[] requiresRoles() default {};
 }

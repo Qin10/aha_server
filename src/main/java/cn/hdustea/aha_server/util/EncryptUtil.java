@@ -21,6 +21,5 @@ public class EncryptUtil {
         }
         messageDigest.update(sourceStr.getBytes(StandardCharsets.UTF_8));
         return Hex.encodeHexString(messageDigest.digest());
-
     }
 }

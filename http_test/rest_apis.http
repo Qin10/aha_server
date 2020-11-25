@@ -20,7 +20,7 @@ POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": "15677751219",
+  "phone": "15382355341",
   "password": "114514"
 }
 
@@ -301,3 +301,8 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
+###管理员接口测试
+GET http://{{host}}/admin/test
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

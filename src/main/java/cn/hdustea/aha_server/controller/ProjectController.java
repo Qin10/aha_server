@@ -285,25 +285,6 @@ public class ProjectController {
     }
 
     /**
-     * 修改项目资源
-     *
-     * @param projectResourceDto 修改的项目资源
-     * @param projectResourceId  项目资源id
-     * @throws PermissionDeniedException 无操作权限异常
-     */
-    @RequiresLogin(requireSignContract = true)
-    @PutMapping("/resource/{projectResourceId}")
-    public ResponseBean<Object> updateProjectResourceById(@RequestBody ProjectResourceDto projectResourceDto, @PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        ProjectResource possibleProjectResource = projectResourceService.getProjectResourceById(projectResourceId);
-        if (possibleProjectResource == null || !projectService.hasPermission(phone, possibleProjectResource.getProjectId())) {
-            throw new PermissionDeniedException();
-        }
-        projectResourceService.updateProjectResourceById(projectResourceDto, projectResourceId, possibleProjectResource.getProjectId());
-        return new ResponseBean<>(200, "succ", null);
-    }
-
-    /**
      * 删除项目资源
      *
      * @param projectResourceId 项目资源id
@@ -317,7 +298,7 @@ public class ProjectController {
         if (possibleProjectResource == null || !projectService.hasPermission(phone, possibleProjectResource.getProjectId())) {
             throw new PermissionDeniedException();
         }
-        projectResourceService.deleteProjectResourceById(projectResourceId, possibleProjectResource.getProjectId());
+        projectResourceService.deleteProjectResourceById(projectResourceId);
         return new ResponseBean<>(200, "succ", null);
     }
 

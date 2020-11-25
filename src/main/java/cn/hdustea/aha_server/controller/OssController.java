@@ -1,9 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.config.AliyunOSSConfig;
 import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
 import cn.hdustea.aha_server.service.OssService;
-import cn.hdustea.aha_server.util.EncryptUtil;
 import cn.hdustea.aha_server.util.JacksonUtil;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.PostMapping;

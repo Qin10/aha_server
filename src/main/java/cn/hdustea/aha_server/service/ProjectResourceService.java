@@ -2,22 +2,16 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
-import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.net.URL;
-import java.util.List;
 
 /**
  * 项目资源服务类
@@ -90,7 +84,7 @@ public class ProjectResourceService {
      * @param projectResourceDto 更新的项目资源
      * @param id                 项目资源id
      */
-    public void updateProjectResourceById(ProjectResourceDto projectResourceDto, int id, int projectId) {
+    public void updateProjectResourceById(ProjectResourceDto projectResourceDto, int id) {
         ProjectResource projectResource = new ProjectResource();
         BeanUtils.copyProperties(projectResourceDto, projectResource);
         projectResource.setId(id);
@@ -102,7 +96,7 @@ public class ProjectResourceService {
      *
      * @param id 项目资源id
      */
-    public void deleteProjectResourceById(int id, int projectId) {
+    public void deleteProjectResourceById(int id) {
         projectResourceMapper.deleteByPrimaryKey(id);
     }
 
@@ -113,7 +107,7 @@ public class ProjectResourceService {
     public void freezeProjectResourceByFilename(String filename, boolean freezed) {
         ProjectResource projectResource = projectResourceMapper.selectByFilename(filename);
         if (projectResource != null) {
-            log.info("资源冻结状态更改为：" + freezed + "，projectId=" + projectResource.getProjectId() + ";projectResourceId=" + projectResource.getId());
+            log.info("projectId=" + projectResource.getProjectId() + ";projectResourceId=" + projectResource.getId() + "，资源冻结状态更改为：" + freezed);
             projectResourceMapper.updateFreezedByFilename(freezed, filename);
         }
     }
