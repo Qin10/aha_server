@@ -2,7 +2,7 @@
 GET http://{{host}}/sms/sendCode/register/18557517547
 
 ###发送修改密码验证短信
-GET http://{{host}}/sms/sendCode/changePassword/13819154341
+GET http://{{host}}/sms/sendCode/changePassword/15677751219
 
 ###用户注册
 POST http://{{host}}/register
@@ -20,7 +20,7 @@ POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": "15382355341",
+  "phone": "15677751219",
   "password": "114514"
 }
 
@@ -33,11 +33,11 @@ Authorization:{{auth_token}}
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###用户修改密码
-POST http://{{host}}/changePassword/13819154341
+POST http://{{host}}/changePassword/15677751219
 Content-Type: application/json
 
 {
-  "newPassword": "123456",
+  "newPassword": "114514",
   "code": "1234"
 }
 

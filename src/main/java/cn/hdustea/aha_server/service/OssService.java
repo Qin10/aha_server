@@ -8,7 +8,6 @@ import cn.hdustea.aha_server.util.JacksonUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.dto.JwtPayloadDto;
+import cn.hdustea.aha_server.util.*;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
 import cn.hdustea.aha_server.entity.Contract;
@@ -16,15 +17,10 @@ import cn.hdustea.aha_server.exception.apiException.daoException.SelectException
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.daoException.insertException.AccountExistedException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
-import cn.hdustea.aha_server.util.FileUtil;
-import cn.hdustea.aha_server.util.IpUtil;
-import cn.hdustea.aha_server.util.JWTUtil;
-import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.dto.ChangePasswordDto;
 import cn.hdustea.aha_server.dto.LoginUserDto;
 import cn.hdustea.aha_server.dto.RegisterUserDto;
 import org.slf4j.MDC;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,7 +50,6 @@ public class AuthService {
     private RedisUtil redisUtil;
     @Resource
     private SmsService smsService;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     @Resource
     private JWTConfig jwtConfig;
     @Resource
@@ -63,10 +58,6 @@ public class AuthService {
     private ContractService contractService;
     @Resource
     private HttpServletRequest request;
-
-    public AuthService() {
-        this.bCryptPasswordEncoder = new BCryptPasswordEncoder();
-    }
 
     /**
      * 传入手机号+密码完成登录校验并获取令牌
@@ -78,7 +69,7 @@ public class AuthService {
     public TokenAndPersonalUserInfoVo login(LoginUserDto loginUserDto) throws Exception {
         User user = userService.getUserByPhone(loginUserDto.getPhone());
         if (user != null) {
-            if (bCryptPasswordEncoder.matches(loginUserDto.getPassword(), user.getPassword())) {
+            if (EncryptUtil.getSHA256(loginUserDto.getPassword()).equals(user.getPassword())) {
                 String token = signToken(user);
                 PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
                 MDC.put("phone", loginUserDto.getPhone());
@@ -107,7 +98,7 @@ public class AuthService {
         }
         User user = new User();
         user.setPhone(registerUserDto.getPhone());
-        user.setPassword(bCryptPasswordEncoder.encode(registerUserDto.getPassword()));
+        user.setPassword(EncryptUtil.getSHA256((registerUserDto.getPassword())));
         user.setSignedNotice(registerUserDto.isSignedNotice());
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
@@ -139,7 +130,7 @@ public class AuthService {
             throw new MessageCheckException();
         }
         userService.getUserByPhone(phone);
-        String encodedPassword = bCryptPasswordEncoder.encode(changePasswordDto.getNewPassword());
+        String encodedPassword = EncryptUtil.getSHA256(changePasswordDto.getNewPassword());
         userService.updatePassword(phone, encodedPassword);
     }
 
