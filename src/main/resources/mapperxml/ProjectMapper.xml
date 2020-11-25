@@ -57,7 +57,7 @@
         <collection property="members" ofType="cn.hdustea.aha_server.vo.ProjectMemberVo" column="p_id"
                     select="cn.hdustea.aha_server.mapper.ProjectMemberMapper.selectAllVoByProjectId"/>
         <collection property="resources" ofType="cn.hdustea.aha_server.vo.ProjectResourceVo" column="p_id"
-                    select="cn.hdustea.aha_server.mapper.ProjectResourceMapper.selectAllVoByProjectId"/>
+                    select="cn.hdustea.aha_server.mapper.ProjectResourceMapper.selectAllVoByProjectIdAndNotFreezed"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

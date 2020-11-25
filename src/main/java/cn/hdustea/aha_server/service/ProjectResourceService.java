@@ -8,6 +8,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.SelectException
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -25,6 +26,7 @@ import java.util.List;
  * @author STEA_YY
  **/
 @Service
+@Slf4j
 public class ProjectResourceService {
     @Resource
     private ProjectResourceMapper projectResourceMapper;
@@ -107,5 +109,13 @@ public class ProjectResourceService {
 
     public void incrDownloadById(int id) {
         projectResourceMapper.updateIncDownloadById(id);
+    }
+
+    public void freezeProjectResourceByFilename(String filename, boolean freezed) {
+        ProjectResource projectResource = projectResourceMapper.selectByFilename(filename);
+        if (projectResource != null) {
+            log.info("资源冻结状态更改为：" + freezed + "，projectId=" + projectResource.getProjectId() + ";projectResourceId=" + projectResource.getId());
+            projectResourceMapper.updateFreezedByFilename(freezed, filename);
+        }
     }
 }

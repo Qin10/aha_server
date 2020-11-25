@@ -36,4 +36,5 @@ public class FileController {
         urlVo.setUrl(url.toString());
         return new ResponseBean<>(200, "succ", urlVo);
     }
+
 }

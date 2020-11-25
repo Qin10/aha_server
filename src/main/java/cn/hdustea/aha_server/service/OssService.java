@@ -1,11 +1,14 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
+import cn.hdustea.aha_server.util.EncryptUtil;
 import cn.hdustea.aha_server.vo.OssPolicyVo;
 import cn.hdustea.aha_server.config.AliyunOSSConfig;
 import cn.hdustea.aha_server.util.JacksonUtil;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.MatchMode;
 import com.aliyun.oss.model.PolicyConditions;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,6 +24,8 @@ import java.util.Date;
 public class OssService {
     @Resource
     private OSS oss;
+    @Resource
+    private ProjectResourceService projectResourceService;
     @Resource
     private AliyunOSSConfig aliyunOSSConfig;
 
@@ -79,5 +84,15 @@ public class OssService {
                 aliyunOSSConfig.getEndpoint() +
                 "/" +
                 filename;
+    }
+
+    public void freezeProjectResource(String filename, boolean freezed) {
+        projectResourceService.freezeProjectResourceByFilename(filename, freezed);
+    }
+
+    public boolean verifyOssGreenCallback(String checksum, String content) {
+        String payload = aliyunOSSConfig.getAliyunUid() + aliyunOSSConfig.getGreenCallbackSeed() + content;
+        String generatedChecksum = EncryptUtil.getSHA256(payload);
+        return generatedChecksum.equals(checksum);
     }
 }

@@ -27,11 +27,20 @@ public interface ProjectResourceMapper {
 
     List<ProjectResource> selectAllByProjectId(@Param("projectId") Integer projectId);
 
-    ProjectResourceVo selectVoByPrimaryKey(Integer id);
+    ProjectResourceVo selectVoByPrimaryKeyAndNotFreezed(@Param("id") Integer id);
 
-    List<ProjectResourceVo> selectAllVoByProjectId(@Param("projectId") Integer projectId);
+    ProjectResourceVo selectVoByPrimaryKeyAndFreezed(@Param("id") Integer id);
+
+    List<ProjectResourceVo> selectAllVoByProjectIdAndNotFreezed(@Param("projectId") Integer projectId);
+
+    List<ProjectResourceVo> selectAllVoByProjectIdAndFreezed(@Param("projectId") Integer projectId);
 
     int updatePreviewUrlById(@Param("updatedPreviewUrl") String updatedPreviewUrl, @Param("id") Integer id);
 
-    int updateIncDownloadById(@Param("id")Integer id);
+    int updateIncDownloadById(@Param("id") Integer id);
+
+    int updateFreezedByFilename(@Param("updatedFreezed") Boolean updatedFreezed, @Param("filename") String filename);
+
+    ProjectResource selectByFilename(@Param("filename") String filename);
+
 }

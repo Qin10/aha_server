@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 @ConfigurationProperties("aliyun-oss")
 @Data
 public class AliyunOSSConfig {
+    private String aliyunUid;
     private String endpoint;
     private String accessKeyId;
     private String accessKeySecret;
@@ -25,6 +26,7 @@ public class AliyunOSSConfig {
     private String privateBucketName;
     private int expireTime;
     private int maxSize;
+    private String greenCallbackSeed;
 
     @Bean
     public OSS OSS() {

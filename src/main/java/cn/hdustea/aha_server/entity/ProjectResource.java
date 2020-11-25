@@ -45,4 +45,9 @@ public class ProjectResource {
      * 资源文件下载量
      */
     private Integer download;
+
+    /**
+     * 资源是否被冻结
+     */
+    private Boolean freezed;
 }
