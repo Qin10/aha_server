@@ -1,17 +1,15 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
-import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.mapper.UserInfoMapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
-import cn.hdustea.aha_server.vo.UserRoughInfoVo;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
+import cn.hdustea.aha_server.mapper.UserInfoMapper;
+import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * 用户公有信息服务类
@@ -60,6 +58,7 @@ public class UserInfoService {
         personalUserInfoVo.setContribPoint(user.getContribPoint());
         personalUserInfoVo.setSignedNotice(user.getSignedNotice());
         personalUserInfoVo.setSignedContract(user.getSignedContract());
+        personalUserInfoVo.setRole(user.getRole());
         personalUserInfoVo.setUserInfo(userInfo);
         return personalUserInfoVo;
     }

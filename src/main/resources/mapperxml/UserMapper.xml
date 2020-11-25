@@ -20,6 +20,34 @@
         <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
                      select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
+    <resultMap id="ManagementVoResultMap" type="cn.hdustea.aha_server.vo.UserManagementVo">
+        <!--@mbg.generated-->
+        <!--@Table `user`-->
+        <id column="u_id" property="id"/>
+        <result column="u_phone" property="phone"/>
+        <result column="u_created_time" property="createdTime"/>
+        <result column="u_student_rec_filename" property="studentRecFilename"/>
+        <result column="u_contrib_point" property="contribPoint"/>
+        <result column="u_signed_notice" property="signedNotice"/>
+        <result column="u_signed_contract" property="signedContract"/>
+        <result column="u_role_id" property="roleId"/>
+        <result column="ui_nickname" property="nickname"/>
+        <result column="ui_gender" property="gender"/>
+        <result column="ui_birthday" property="birthday"/>
+        <result column="ui_type_id" property="typeId"/>
+        <result column="ui_signature" property="signature"/>
+        <result column="ui_avatar_url" property="avatarUrl"/>
+        <result column="ui_school" property="school"/>
+        <result column="ui_academy" property="academy"/>
+        <result column="ui_major" property="major"/>
+        <result column="ui_grade" property="grade"/>
+        <result column="ui_intro" property="intro"/>
+        <result column="ui_specialty_tags" property="specialtyTags"/>
+        <result column="ui_true_name" property="trueName"/>
+        <result column="ui_comp_tags" property="compTags"/>
+        <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
+                     select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
+    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         u_id, u_phone, u_password, u_created_time, u_student_rec_filename, u_contrib_point,
@@ -182,5 +210,50 @@
     <select id="selectPhoneAndContribPoint" resultMap="selectPhoneAndContribPointResult">
         select u_phone, u_contrib_point
         from `user`
+    </select>
+
+    <select id="selectManagementVoByPrimaryKey" resultMap="ManagementVoResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
+        from user u
+                     join user_info ui on ui.ui_user_id = u.u_id
+        where u_id = #{id}
+    </select>
+
+    <select id="selectAllManagementVoByConditions" resultMap="ManagementVoResultMap">
+        select
+        <include refid="Base_Column_List"/>,
+        <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
+        from user u
+                     join user_info ui on ui.ui_user_id = u.u_id
+        <where>
+            <if test="roleId != null">
+                and u_role_id = #{roleId}
+            </if>
+            <if test="signedNotice != null">
+                and u_signed_notice = #{signedNotice}
+            </if>
+            <if test="signedContract != null">
+                and u_signed_contract = #{signedContract}
+            </if>
+            <if test="typeId != null">
+                and ui_type_id = #{typeId}
+            </if>
+            <if test="phoneLike != null and phoneLike != ''">
+                and u_phone like concat('%', #{phoneLike}, '%')
+            </if>
+            <if test="nicknameLike != null and nicknameLike != ''">
+                and ui_nickname like concat('%', #{nicknameLike}, '%')
+            </if>
+            <if test="trueNameLike != null and trueNameLike != ''">
+                and ui_true_name like concat('%', #{trueNameLike}, '%')
+            </if>
+        </where>
+        <if test="sortBy != null and orderBy != null">
+            <!--@ignoreSql-->
+            order by ${sortBy} ${orderBy}
+            <!--@ignoreSql-->
+        </if>
     </select>
 </mapper>

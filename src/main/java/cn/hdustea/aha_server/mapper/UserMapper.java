@@ -1,12 +1,11 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
+import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
+import cn.hdustea.aha_server.vo.UserManagementVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
-import cn.hdustea.aha_server.entity.User;
-import org.apache.ibatis.annotations.Param;
 
 /**
  * 用户表mapper
@@ -36,5 +35,7 @@ public interface UserMapper {
 
     List<UserContribPointVo> selectPhoneAndContribPoint();
 
-    PersonalUserInfoVo selectPersonalVoByPhone(@Param("phone") String phone);
+    UserManagementVo selectManagementVoByPrimaryKey(Integer id);
+
+    List<UserManagementVo> selectAllManagementVoByConditions(@Param("roleId") Integer roleId, @Param("signedNotice") Boolean signedNotice, @Param("signedContract") Boolean signedContract, @Param("typeId") Integer typeId, @Param("phoneLike") String phoneLike, @Param("nicknameLike") String nicknameLike, @Param("trueNameLike") String trueNameLike, @Param("sortBy") String sortBy, @Param("orderBy") String orderBy);
 }

@@ -1,6 +1,8 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.dto.ProjectCheckDto;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
+import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.ProjectDetailVo;
 import cn.hdustea.aha_server.vo.ProjectRoughVo;
@@ -322,5 +324,15 @@ public class ProjectService {
      */
     public void descCollectByProjectId(int projectId) {
         projectMapper.updateDecCollectById(projectId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void checkProjectByProjectId(ProjectCheckDto projectCheckDto, int projectId) throws UpdateException {
+        Project project = projectMapper.selectByPrimaryKey(projectId);
+        if (project == null) {
+            throw new UpdateException("项目不存在！");
+        }
+        projectMapper.updateMeaningById(projectCheckDto.getMeaning(), projectId);
+        projectMapper.updatePassedById(projectCheckDto.getPassed(), projectId);
     }
 }

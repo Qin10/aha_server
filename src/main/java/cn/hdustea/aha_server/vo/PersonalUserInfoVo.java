@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.vo;
 
+import cn.hdustea.aha_server.entity.Role;
 import cn.hdustea.aha_server.entity.UserInfo;
 import lombok.Data;
 
@@ -28,6 +29,10 @@ public class PersonalUserInfoVo {
      * 贡献点
      */
     private BigDecimal contribPoint;
+    /**
+     * 用户角色
+     */
+    private Role role;
     /**
      * 用户详细信息
      */

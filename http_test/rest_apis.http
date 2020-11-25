@@ -302,7 +302,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员接口测试
-GET http://{{host}}/admin/test
+GET http://{{host}}/admin/user?pageNum=1&pageSize=10&sortBy=contribPoint&orderBy=desc&signedContract=false
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

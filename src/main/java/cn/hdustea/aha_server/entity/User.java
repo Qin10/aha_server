@@ -1,9 +1,10 @@
 package cn.hdustea.aha_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
-import lombok.Data;
 
 /**
  * 用户私人信息实体类
@@ -25,6 +26,7 @@ public class User {
     /**
      * 用户密码
      */
+    @JsonIgnore
     private String password;
 
     /**
