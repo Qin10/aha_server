@@ -1645,3 +1645,723 @@ code|string|否|小程序请求码
 	"time":"string //响应时间"
 }
 ```
+# 后台管理相关请求
+## 获取项目资源文件oss下载签名
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/resource/{projectResourceId}/sign/download `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"url":"string //url字符串"
+	},
+	"time":"string //响应时间"
+}
+```
+## 审核项目
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/check/{projectId} `POST` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+
+**请求体**
+
+```json
+{
+	"meaning":"double //项目资源完整程度，决定贡献点",
+	"passed":"boolean //是否通过审核"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 修改项目详细信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/{projectId} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+
+**请求体**
+
+```json
+{
+	"name":"string //团队名称",
+	"avatarUrl":"string //团队头像url",
+	"compId":"int //赛事id(外键)",
+	"compName":"string //比赛和获奖全名(如中国大学生服务外包创新创业大赛全国一等奖)",
+	"awardLevel":"int //项目获奖级别",
+	"tags":"string //项目标签",
+	"awardTime":"date //项目获奖时间",
+	"awardProveUrl":"string //获奖证明文件url",
+	"intro":"string //团队介绍(富文本)"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除项目
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/{projectId} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 修改项目成员信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/member/{projectId}/{memberPhone} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+memberPhone|string|否|项目成员手机号
+
+**请求体**
+
+```json
+{
+	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
+	"job":"string //团队成员职务",
+	"editable":"boolean //成员是否可编辑项目信息"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 修改多个项目成员信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/members/{projectId} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+
+**请求体**
+
+```json
+[{
+	"memberPhone":"string //团队成员手机号【必须】",
+	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
+	"job":"string //团队成员职务",
+	"editable":"boolean //成员是否可编辑项目信息"
+}]
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除项目成员
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/member/{projectId}/{memberPhone} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+memberPhone|string|否|成员手机号
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 修改项目资源信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/resource/{projectResourceId} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+
+**请求体**
+
+```json
+{
+	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+	"filename":"string //保存在oss里的资源文件名(包括前缀)",
+	"previewUrl":"string //保存在oss里的预览文件地址",
+	"download":"int //资源文件下载量",
+	"freezed":"boolean //资源是否被冻结"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除项目资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/resource/{projectResourceId} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 保存竞赛信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/competition `POST` 
+
+**请求体**
+
+```json
+{
+	"compTagId":"int //所属赛事标签（外键）",
+	"name":"string //赛事名称",
+	"intro":"string //赛事简介",
+	"picUrl":"int //赛事图片保存路径"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 根据竞赛id更新竞赛信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/competition/{id} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|竞赛id
+
+**请求体**
+
+```json
+{
+	"compTagId":"int //所属赛事标签（外键）",
+	"name":"string //赛事名称",
+	"intro":"string //赛事简介",
+	"picUrl":"int //赛事图片保存路径"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除竞赛信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/competition/{id} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|竞赛id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 保存竞赛标签
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/competition/tag `POST` 
+
+**请求体**
+
+```json
+{
+	"name":"string //竞赛标签名称"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 根据竞赛标签id更新竞赛标签
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/competition/tag/{id} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|竞赛标签id
+
+**请求体**
+
+```json
+{
+	"name":"string //竞赛标签名称"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除竞赛标签
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/competition/tag/{id} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|竞赛标签id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 分页获取所有用户信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/user `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+roleId|int|否|角色id
+signedNotice|boolean|否|是否签署服务协议
+signedContract|boolean|否|是否签署合同
+typeId|int|否|用户类型
+phoneLike|string|否|模糊手机号
+nicknameLike|string|否|模糊昵称
+trueNameLike|string|否|模糊真实姓名
+sortBy|string|否|排序关键字
+orderBy|string|否|排序方式
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //用户id",
+			"phone":"string //用户手机号",
+			"createdTime":"date //账户首次登录时间",
+			"studentRecFilename":"string //学生证图片保存路径",
+			"contribPoint":"double //贡献点",
+			"signedNotice":"boolean //是否签署服务协议",
+			"signedContract":"boolean //是否签署合同",
+			"roleId":"int //角色id(外键)",
+			"role":{
+				"id":"int //角色id",
+				"name":"string //角色名称"
+			},
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"birthday":"date //用户出生日期",
+			"typeId":"int //用户类别",
+			"signature":"string //用户个性签名",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校",
+			"academy":"string //用户学院",
+			"major":"string //用户主修专业",
+			"grade":"int //用户当前年级",
+			"intro":"string //用户自我介绍",
+			"specialtyTags":"string //用户特长标签",
+			"trueName":"string //用户真实姓名",
+			"compTags":"string //用户参与过比赛标签"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 获取用户信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/user/{userId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"id":"int //用户id",
+		"phone":"string //用户手机号",
+		"createdTime":"date //账户首次登录时间",
+		"studentRecFilename":"string //学生证图片保存路径",
+		"contribPoint":"double //贡献点",
+		"signedNotice":"boolean //是否签署服务协议",
+		"signedContract":"boolean //是否签署合同",
+		"roleId":"int //角色id(外键)",
+		"role":{
+			"id":"int //角色id",
+			"name":"string //角色名称"
+		},
+		"nickname":"string //用户昵称",
+		"gender":"boolean //用户性别",
+		"birthday":"date //用户出生日期",
+		"typeId":"int //用户类别",
+		"signature":"string //用户个性签名",
+		"avatarUrl":"string //用户头像文件保存路径",
+		"school":"string //用户学校",
+		"academy":"string //用户学院",
+		"major":"string //用户主修专业",
+		"grade":"int //用户当前年级",
+		"intro":"string //用户自我介绍",
+		"specialtyTags":"string //用户特长标签",
+		"trueName":"string //用户真实姓名",
+		"compTags":"string //用户参与过比赛标签"
+	},
+	"time":"string //响应时间"
+}
+```
+## 修改用户私有信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/user/{userId} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**请求体**
+
+```json
+{
+	"phone":"string //用户手机号",
+	"createdTime":"date //账户首次登录时间",
+	"studentRecFilename":"string //学生证图片保存路径",
+	"contribPoint":"double //贡献点",
+	"signedNotice":"boolean //是否签署服务协议",
+	"signedContract":"boolean //是否签署合同",
+	"roleId":"int //角色id(外键)"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 修改用户公开信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/user/info/{userId} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**请求体**
+
+```json
+{
+	"userId":"int //用户主键(外键)",
+	"nickname":"string //用户昵称",
+	"gender":"boolean //用户性别",
+	"birthday":"date //用户出生日期",
+	"typeId":"int //用户类别",
+	"signature":"string //用户个性签名",
+	"avatarUrl":"string //用户头像文件保存路径",
+	"school":"string //用户学校",
+	"academy":"string //用户学院",
+	"major":"string //用户主修专业",
+	"grade":"int //用户当前年级",
+	"intro":"string //用户自我介绍",
+	"specialtyTags":"string //用户特长标签",
+	"trueName":"string //用户真实姓名",
+	"compTags":"string //用户参与过比赛标签"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除用户
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/user/{userId} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 获取用户合同信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/user/contract/{userId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"id":"int //合同id",
+		"userId":"int //用户id(外键)",
+		"name":"string //联系人",
+		"signatureFilename":"string //签名文件名",
+		"signTime":"date //合同签名时间"
+	},
+	"time":"string //响应时间"
+}
+```
+## 下载用户合同签名
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/user/contract/signature/{userId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**返回结果**
+
+(二进制文件流)

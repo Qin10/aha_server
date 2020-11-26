@@ -1,6 +1,9 @@
 package cn.hdustea.aha_server;
 
-import cn.hdustea.aha_server.config.*;
+import cn.hdustea.aha_server.config.AliyunOSSConfig;
+import cn.hdustea.aha_server.config.FileUploadPathConfig;
+import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +26,7 @@ public class AhaServerApplication {
         SpringApplication.run(AhaServerApplication.class, args);
 //        buildApiDoc();
     }
-//
+
 //    private static void buildApiDoc() {
 //        DocsConfig config = new DocsConfig();
 //        config.setProjectPath("C:\\Users\\YY-PC\\IdeaProjects\\aha_server"); // 项目根目录
