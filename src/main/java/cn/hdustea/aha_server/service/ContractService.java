@@ -1,10 +1,12 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
+import cn.hdustea.aha_server.entity.Contract;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ContractMapper;
-import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.util.FileUtil;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -42,7 +44,12 @@ public class ContractService {
      *
      * @param contract 合同信息
      */
-    public void saveContract(Contract contract) {
-        contractMapper.insert(contract);
+    public void saveContract(Contract contract) throws InsertException {
+        try {
+            contractMapper.insert(contract);
+        } catch (DuplicateKeyException e) {
+            throw new InsertException("合同签署记录已存在！");
+        }
+
     }
 }

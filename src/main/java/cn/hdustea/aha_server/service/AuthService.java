@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.dto.JwtPayloadDto;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.util.*;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
@@ -160,7 +161,7 @@ public class AuthService {
      * @throws SelectException 用户不存在异常
      */
     @Transactional(rollbackFor = Exception.class)
-    public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, UpdateException, SelectException {
+    public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, UpdateException, SelectException, InsertException {
         User user = userService.getUserByPhone(phone);
         if (user.getSignedContract()) {
             throw new UpdateException("已经签署过合同！");

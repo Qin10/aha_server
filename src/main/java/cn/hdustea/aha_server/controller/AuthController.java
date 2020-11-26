@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.dto.ChangePasswordDto;
 import cn.hdustea.aha_server.dto.LoginUserDto;
 import cn.hdustea.aha_server.dto.RegisterUserDto;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
 import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
@@ -103,7 +104,7 @@ public class AuthController {
      */
     @RequiresLogin
     @PostMapping("/sign/contract")
-    public ResponseBean<TokenVo> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, SelectException {
+    public ResponseBean<TokenVo> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, SelectException, InsertException {
         String phone = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signContract(phone, file, contract);
         TokenVo tokenVo = new TokenVo();

@@ -32,8 +32,6 @@ public class FileUtil {
         return fileName;
     }
 
-
-
     /**
      * 删除文件
      *
@@ -49,12 +47,16 @@ public class FileUtil {
         }
     }
 
-    public static void download(String filePath,HttpServletResponse response) throws IOException {
+    public static void download(String filePath, HttpServletResponse response) throws IOException {
+        File file = new File(filePath);
+        if (!file.exists()) {
+            throw new FileNotFoundException("文件不存在！");
+        }
+        InputStream inStream = new FileInputStream(file);
         response.reset();
-        InputStream inStream = new FileInputStream(filePath);
         OutputStream os = response.getOutputStream();
         byte[] buff = new byte[1024];
-        int len = -1;
+        int len;
         while ((len = inStream.read(buff)) > 0) {
             os.write(buff, 0, len);
         }
