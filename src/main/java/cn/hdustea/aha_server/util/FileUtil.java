@@ -53,7 +53,7 @@ public class FileUtil {
             throw new FileNotFoundException("文件不存在！");
         }
         InputStream inStream = new FileInputStream(file);
-        response.reset();
+        response.resetBuffer();
         OutputStream os = response.getOutputStream();
         byte[] buff = new byte[1024];
         int len;

@@ -56,6 +56,13 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", urlVo);
     }
 
+    /**
+     * 审核项目
+     *
+     * @param projectId       项目id
+     * @param projectCheckDto 项目审核相关信息
+     * @throws UpdateException 项目不存在异常
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/project/check/{projectId}")
     public ResponseBean<Object> checkProject(@PathVariable("projectId") int projectId, @RequestBody ProjectCheckDto projectCheckDto) throws UpdateException {
@@ -63,6 +70,12 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 修改项目详细信息
+     *
+     * @param projectDto 项目信息
+     * @param projectId  项目id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/project/{projectId}")
     public ResponseBean<Object> updateProjectById(@RequestBody ProjectDto projectDto, @PathVariable("projectId") int projectId) {
@@ -70,6 +83,11 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 删除项目
+     *
+     * @param projectId 项目id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/project/{projectId}")
     public ResponseBean<Object> deleteProjectById(@PathVariable("projectId") int projectId) {
@@ -77,6 +95,13 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 修改项目成员信息
+     *
+     * @param projectMember 项目成员信息
+     * @param projectId     项目id
+     * @param memberPhone   项目成员手机号
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/project/member/{projectId}/{memberPhone}")
     public ResponseBean<Object> updateResourceMemberById(@RequestBody ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) {
@@ -84,6 +109,12 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 修改多个项目成员信息
+     *
+     * @param projectMembers 修改的多个项目成员
+     * @param projectId      项目id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/project/members/{projectId}")
     public ResponseBean<Object> updateResourceMemberById(@RequestBody List<ProjectMember> projectMembers, @PathVariable("projectId") int projectId) {
@@ -91,6 +122,12 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 删除项目成员
+     *
+     * @param projectId   项目id
+     * @param memberPhone 成员手机号
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/project/member/{projectId}/{memberPhone}")
     public ResponseBean<Object> deleteProjectMember(@PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) {
@@ -98,6 +135,12 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 修改项目资源信息
+     *
+     * @param projectResource   项目资源信息
+     * @param projectResourceId 项目资源id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/project/resource/{projectResourceId}")
     public ResponseBean<Object> updateProjectResourceById(@RequestBody ProjectResource projectResource, @PathVariable("projectResourceId") int projectResourceId) {
@@ -105,6 +148,11 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 删除项目资源
+     *
+     * @param projectResourceId 项目资源id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/project/resource/{projectResourceId}")
     public ResponseBean<Object> deleteProjectResourceById(@PathVariable("projectResourceId") int projectResourceId) {
@@ -137,6 +185,11 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 删除竞赛信息
+     *
+     * @param id 竞赛id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/competition/{id}")
     public ResponseBean<Object> deleteCompetition(@PathVariable("id") int id) {
@@ -169,6 +222,11 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 删除竞赛标签
+     *
+     * @param id 竞赛标签id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/competition/tag/{id}")
     public ResponseBean<Object> deleteCompetitionTag(@PathVariable("id") int id) {
@@ -176,6 +234,21 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 分页获取所有用户信息
+     *
+     * @param pageNum        页码
+     * @param pageSize       分页大小
+     * @param roleId         角色id
+     * @param signedNotice   是否签署服务协议
+     * @param signedContract 是否签署合同
+     * @param typeId         用户类型
+     * @param phoneLike      模糊手机号
+     * @param nicknameLike   模糊昵称
+     * @param trueNameLike   模糊真实姓名
+     * @param sortBy         排序关键字
+     * @param orderBy        排序方式
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/user")
     public ResponseBean<PageVo<List<UserManagementVo>>> getAllUserManagementVoPagable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "roleId", required = false) Integer roleId, @RequestParam(value = "signedNotice", required = false) Boolean signedNotice, @RequestParam(value = "signedContract", required = false) Boolean signedContract, @RequestParam(value = "typeId", required = false) Integer typeId, @RequestParam(value = "phoneLike", required = false) String phoneLike, @RequestParam(value = "nicknameLike", required = false) String nicknameLike, @RequestParam(value = "trueNameLike", required = false) String trueNameLike, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) {
@@ -183,13 +256,24 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", userVos);
     }
 
+    /**
+     * 获取用户信息
+     *
+     * @param userId 用户id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/user/{userId}")
-    public ResponseBean<UserManagementVo> getAllUserManagementVoPagable(@PathVariable("userId") int userId) {
+    public ResponseBean<UserManagementVo> getUserManagementVo(@PathVariable("userId") int userId) {
         UserManagementVo userVo = userService.getUserManagementVoById(userId);
         return new ResponseBean<>(200, "succ", userVo);
     }
 
+    /**
+     * 修改用户私有信息
+     *
+     * @param userDto 用户私有信息
+     * @param userId  用户id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/user/{userId}")
     public ResponseBean<Object> updateUser(@RequestBody UserDto userDto, @PathVariable("userId") int userId) {
@@ -197,6 +281,12 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 修改用户公开信息
+     *
+     * @param userInfo 用户公开信息
+     * @param userId   用户id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/user/info/{userId}")
     public ResponseBean<Object> updateUserInfo(@RequestBody UserInfo userInfo, @PathVariable("userId") int userId) {
@@ -204,6 +294,11 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 删除用户
+     *
+     * @param userId 用户id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/user/{userId}")
     public ResponseBean<Object> deleteUser(@PathVariable("userId") int userId) {
@@ -211,6 +306,11 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 获取用户合同信息
+     *
+     * @param userId 用户id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/user/contract/{userId}")
     public ResponseBean<Contract> getContract(@PathVariable("userId") int userId) {
@@ -218,6 +318,13 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", contract);
     }
 
+    /**
+     * 下载用户合同签名
+     *
+     * @param userId 用户id
+     * @throws IOException     IO异常
+     * @throws SelectException 合同记录不存在异常
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/user/contract/signature/{userId}")
     public ResponseBean<Contract> getContractSignatureFile(@PathVariable("userId") int userId, HttpServletResponse response) throws IOException, SelectException {
