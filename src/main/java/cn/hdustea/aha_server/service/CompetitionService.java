@@ -1,10 +1,9 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.mapper.CompetitionMapper;
-import cn.hdustea.aha_server.mapper.CompetitionTagMapper;
 import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.CompetitionTag;
-import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
+import cn.hdustea.aha_server.mapper.CompetitionMapper;
+import cn.hdustea.aha_server.mapper.CompetitionTagMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -45,6 +44,10 @@ public class CompetitionService {
         competitionMapper.updateByPrimaryKeySelective(competition);
     }
 
+    public void deleteCompetitionById(int id) {
+        competitionMapper.deleteByPrimaryKey(id);
+    }
+
     /**
      * 获取所有竞赛标签
      *
@@ -82,6 +85,10 @@ public class CompetitionService {
     public void updateCompetitionTagById(CompetitionTag competitionTag, int id) {
         competitionTag.setId(id);
         competitionTagMapper.updateByPrimaryKeySelective(competitionTag);
+    }
+
+    public void deleteCompetitionTagById(int id) {
+        competitionTagMapper.deleteByPrimaryKey(id);
     }
 
 }

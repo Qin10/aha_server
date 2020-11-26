@@ -1,16 +1,16 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.CompetitionTag;
 import cn.hdustea.aha_server.service.CompetitionService;
-import cn.hdustea.aha_server.util.TimeUtil;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import cn.hdustea.aha_server.vo.ResponseBean;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,55 +66,5 @@ public class CompetitionController {
     public ResponseBean<List<CompetitionTag>> getAllCompetitionTag() {
         List<CompetitionTag> competitionTags = competitionService.getAllCompetitionTag();
         return new ResponseBean<>(200, "succ", competitionTags);
-    }
-
-    /**
-     * 保存竞赛信息
-     *
-     * @param competition 竞赛信息
-     */
-    @RequiresLogin
-    @PostMapping()
-    public ResponseBean<Object> saveCompetition(@RequestBody Competition competition) {
-        competitionService.saveCompetition(competition);
-        return new ResponseBean<>(200, "succ", null);
-    }
-
-    /**
-     * 根据竞赛id更新竞赛信息
-     *
-     * @param id          竞赛id
-     * @param competition 更新的竞赛信息
-     */
-    @RequiresLogin
-    @PutMapping("/{id}")
-    public ResponseBean<Object> updateCompetition(@PathVariable("id") int id, @RequestBody Competition competition) {
-        competitionService.updateCompetitionById(competition, id);
-        return new ResponseBean<>(200, "succ", null);
-    }
-
-    /**
-     * 保存竞赛标签
-     *
-     * @param competitionTag 竞赛标签
-     */
-    @RequiresLogin
-    @PostMapping("/tag")
-    public ResponseBean<Object> saveCompetitionTag(@RequestBody @Validated CompetitionTag competitionTag) {
-        competitionService.saveCompetitionTag(competitionTag);
-        return new ResponseBean<>(200, "succ", null);
-    }
-
-    /**
-     * 根据竞赛标签id更新竞赛标签
-     *
-     * @param id             竞赛标签id
-     * @param competitionTag 更新的竞赛标签
-     */
-    @RequiresLogin
-    @PutMapping("/tag/{id}")
-    public ResponseBean<Object> updateCompetitionTag(@PathVariable("id") int id, @RequestBody CompetitionTag competitionTag) {
-        competitionService.updateCompetitionTagById(competitionTag, id);
-        return new ResponseBean<>(200, "succ", null);
     }
 }

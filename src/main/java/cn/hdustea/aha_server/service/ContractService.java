@@ -1,10 +1,15 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.config.FileUploadPathConfig;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ContractMapper;
 import cn.hdustea.aha_server.entity.Contract;
+import cn.hdustea.aha_server.util.FileUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 /**
  * 合同服务类
@@ -15,6 +20,22 @@ import javax.annotation.Resource;
 public class ContractService {
     @Resource
     private ContractMapper contractMapper;
+    @Resource
+    private FileUploadPathConfig fileUploadPathConfig;
+
+    public Contract getContractByUserId(int userId) {
+        return contractMapper.selectByUserId(userId);
+    }
+
+    public void getContractSignatureFile(int userId, HttpServletResponse response) throws IOException, SelectException {
+        Contract contract = contractMapper.selectByUserId(userId);
+        if (contract != null && contract.getSignatureFilename() != null) {
+            String filePath = fileUploadPathConfig.getContractSignaturePath() + contract.getSignatureFilename();
+            FileUtil.download(filePath, response);
+        } else {
+            throw new SelectException("合同文件不存在！");
+        }
+    }
 
     /**
      * 保存合同

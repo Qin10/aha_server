@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.util;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -31,6 +32,8 @@ public class FileUtil {
         return fileName;
     }
 
+
+
     /**
      * 删除文件
      *
@@ -44,5 +47,19 @@ public class FileUtil {
         } else {
             return false;
         }
+    }
+
+    public static void download(String filePath,HttpServletResponse response) throws IOException {
+        response.reset();
+        InputStream inStream = new FileInputStream(filePath);
+        OutputStream os = response.getOutputStream();
+        byte[] buff = new byte[1024];
+        int len = -1;
+        while ((len = inStream.read(buff)) > 0) {
+            os.write(buff, 0, len);
+        }
+        os.flush();
+        os.close();
+        inStream.close();
     }
 }

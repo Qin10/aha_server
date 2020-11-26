@@ -81,12 +81,10 @@ public class ProjectResourceService {
     /**
      * 根据项目资源id更新项目资源
      *
-     * @param projectResourceDto 更新的项目资源
-     * @param id                 项目资源id
+     * @param projectResource 更新的项目资源
+     * @param id              项目资源id
      */
-    public void updateProjectResourceById(ProjectResourceDto projectResourceDto, int id) {
-        ProjectResource projectResource = new ProjectResource();
-        BeanUtils.copyProperties(projectResourceDto, projectResource);
+    public void updateProjectResourceById(ProjectResource projectResource, int id) {
         projectResource.setId(id);
         projectResourceMapper.updateByPrimaryKeySelective(projectResource);
     }

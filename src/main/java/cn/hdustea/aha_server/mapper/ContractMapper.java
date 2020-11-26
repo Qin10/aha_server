@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.mapper;
-
 import cn.hdustea.aha_server.entity.Contract;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 合同表mapper
@@ -19,4 +19,6 @@ public interface ContractMapper {
     int updateByPrimaryKeySelective(Contract record);
 
     int updateByPrimaryKey(Contract record);
+
+    Contract selectByUserId(@Param("userId")Integer userId);
 }

@@ -103,6 +103,10 @@ public class UserService {
         userMapper.insertSelective(user);
     }
 
+    public void deleteUserById(int id) {
+        userMapper.deleteByPrimaryKey(id);
+    }
+
     public void updateUserById(UserDto userDto, int id) {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);
