@@ -12,6 +12,7 @@ import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.slf4j.MDC;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.HandlerMethod;
@@ -29,6 +30,7 @@ import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
  *
  * @author STEA_YY
  **/
+@Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Resource
     private RedisUtil redisUtil;
