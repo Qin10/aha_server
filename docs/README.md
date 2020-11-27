@@ -535,8 +535,6 @@ memberPhone|string|否|项目成员手机号
 
 ```json
 {
-	"projectId":"int //项目id(外键)",
-	"memberPhone":"string //团队成员手机号【必须】",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
 	"job":"string //团队成员职务【必须】",
 	"editable":"boolean //成员是否可编辑项目信息【必须】"
@@ -571,11 +569,10 @@ projectId|int|否|项目id
 
 ```json
 [{
-	"projectId":"int //项目id(外键)",
 	"memberPhone":"string //团队成员手机号【必须】",
-	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
-	"job":"string //团队成员职务【必须】",
-	"editable":"boolean //成员是否可编辑项目信息【必须】"
+	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
+	"job":"string //团队成员职务",
+	"editable":"boolean //成员是否可编辑项目信息"
 }]
 ```
 
@@ -1150,14 +1147,8 @@ content|string|否|返回实体(json)
 
 **返回结果**
 
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
+(二进制文件流)
+
 # 项目相关请求
 ## 分页获取所有项目粗略信息
 
@@ -1482,8 +1473,6 @@ memberPhone|string|否|成员手机号
 
 ```json
 {
-	"projectId":"int //项目id(外键)",
-	"memberPhone":"string //团队成员手机号【必须】",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
 	"job":"string //团队成员职务【必须】",
 	"editable":"boolean //成员是否可编辑项目信息【必须】"
@@ -1518,11 +1507,10 @@ projectId|int|否|项目id
 
 ```json
 [{
-	"projectId":"int //项目id(外键)",
 	"memberPhone":"string //团队成员手机号【必须】",
-	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
-	"job":"string //团队成员职务【必须】",
-	"editable":"boolean //成员是否可编辑项目信息【必须】"
+	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
+	"job":"string //团队成员职务",
+	"editable":"boolean //成员是否可编辑项目信息"
 }]
 ```
 

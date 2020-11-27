@@ -323,7 +323,7 @@ public class ManagementController {
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/user/contract/signature/{phone}")
-    public ResponseBean<Contract> getContractSignatureFile(@PathVariable("phone") String phone, HttpServletResponse response) throws IOException, SelectException {
+    public ResponseBean<Object> getContractSignatureFile(@PathVariable("phone") String phone, HttpServletResponse response) throws IOException, SelectException {
         contractService.getContractSignatureFile(phone, response);
         return new ResponseBean<>(200, "succ", null);
     }
