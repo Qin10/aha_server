@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * 用户信息相关请求
@@ -76,20 +75,5 @@ public class UserInfoController {
         String phone = ThreadLocalUtil.getCurrentUser();
         OssPolicyVo ossPolicyVo = ossService.signUpload("avatar/" + phone, false);
         return new ResponseBean<>(200, "succ", ossPolicyVo);
-    }
-
-    /**
-     * 修改用户头像文件名
-     *
-     * @param requestMap 包含了修改后头像文件名的Map对象
-     */
-    @RequestLimit(amount = 5, time = 120)
-    @RequiresLogin(requireSignNotice = false)
-    @PostMapping("/avatar")
-    public ResponseBean<Object> updateUserAvatar(@RequestBody Map<String, String> requestMap) {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        String fileUrl = requestMap.get("fileUrl");
-        userInfoService.updateAvatarUrlByPhone(fileUrl, phone);
-        return new ResponseBean<>(200, "修改成功！", null);
     }
 }

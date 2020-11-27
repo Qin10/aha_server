@@ -2,7 +2,7 @@
 GET http://{{host}}/sms/sendCode/register/15382355341
 
 ###发送修改密码验证短信
-GET http://{{host}}/sms/sendCode/changePassword/15382355341
+GET http://{{host}}/sms/sendCode/changePassword/123456781
 
 ###用户注册
 POST http://{{host}}/register
@@ -44,7 +44,7 @@ Content-Type: application/json
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###获取用户个人信息
-GET http://{{host}}/userInfo/13819154341
+GET http://{{host}}/userInfo/15382355342
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

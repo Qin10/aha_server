@@ -7,6 +7,7 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
 import cn.hdustea.aha_server.exception.runtimeApiException.RequestTimesExceededException;
 import cn.hdustea.aha_server.vo.ResponseBean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author STEA_YY
  **/
 @RestControllerAdvice
+@Slf4j
 public class ExceptionController {
 
     /**
@@ -29,8 +31,7 @@ public class ExceptionController {
      */
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseBean<Object> handleShiroException(AuthenticationException e) {
-//        e.printStackTrace();
+    public ResponseBean<Object> handleAuthenticationException(AuthenticationException e) {
         return new ResponseBean<>(e.getCode(), e.getMessage(), null);
     }
 

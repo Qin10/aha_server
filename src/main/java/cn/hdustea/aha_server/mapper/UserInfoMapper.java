@@ -23,10 +23,6 @@ public interface UserInfoMapper {
 
     int updateByPrimaryKey(UserInfo record);
 
-    UserInfo selectByUserPhone(@Param("userPhone") String userPhone);
-
-    int updateByUserPhone(@Param("updated") UserInfo updated, @Param("userPhone") String userPhone);
-
     int updateAvatarUrlByUserPhone(@Param("updatedAvatarUrl") String updatedAvatarUrl, @Param("userPhone") String userPhone);
 
     List<UserRoughInfoVo> selectAllByNicknameLike(@Param("likeNickname")String likeNickname);

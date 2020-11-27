@@ -29,7 +29,7 @@ public class UserInfoService {
      */
     public UserInfo getUserInfoByPhone(String phone) {
         userService.getUserByPhone(phone);
-        return userInfoMapper.selectByUserPhone(phone);
+        return userInfoMapper.selectByPrimaryKey(phone);
     }
 
     /**
@@ -73,15 +73,5 @@ public class UserInfoService {
     public void updateUserInfoByUserId(UserInfo userInfo, int userId) throws SelectException {
         User user = userService.getExistUserById(userId);
         updateUserInfoByPhone(userInfo, user.getPhone());
-    }
-
-    /**
-     * 根据手机号更新用户头像文件名
-     *
-     * @param fileUrl 图片路径
-     * @param phone   手机号
-     */
-    public void updateAvatarUrlByPhone(String fileUrl, String phone) {
-        userInfoMapper.updateAvatarUrlByUserPhone(fileUrl, phone);
     }
 }

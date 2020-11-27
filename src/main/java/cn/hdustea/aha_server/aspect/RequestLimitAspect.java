@@ -1,9 +1,7 @@
 package cn.hdustea.aha_server.aspect;
 
-import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -18,11 +16,11 @@ import javax.annotation.Resource;
 public class RequestLimitAspect {
     @Resource
     private RedisUtil redisUtil;
-
-    @Pointcut("@annotation(requestLimit)")
-    public void pointCut(RequestLimit requestLimit) {
-    }
-
+//
+//    @Pointcut("@annotation(requestLimit)")
+//    public void pointCut(RequestLimit requestLimit) {
+//    }
+//
 //    @Before(value = "pointCut(requestLimit)", argNames = "joinpoint,requestLimit")
 //    public void before(JoinPoint joinpoint, RequestLimit requestLimit) throws RequestTimesExceededException {
 //        ServletRequestAttributes attribute = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
