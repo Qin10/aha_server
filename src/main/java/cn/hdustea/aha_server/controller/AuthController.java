@@ -80,8 +80,6 @@ public class AuthController {
 
     /**
      * 签署服务协议
-     *
-     * @throws SelectException 用户不存在异常
      */
     @RequestLimit(amount = 1, time = 180)
     @RequiresLogin(requireSignNotice = false)

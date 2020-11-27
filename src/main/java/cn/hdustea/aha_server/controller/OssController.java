@@ -22,6 +22,12 @@ public class OssController {
     @Resource
     private OssService ossService;
 
+    /**
+     * 内容安全扫描异常回调(OSS端发送)
+     *
+     * @param checksum 校验信息
+     * @param content  返回实体(json)
+     */
     @PostMapping("/green/callback")
     public ResponseBean<Object> freezeProjectResource(String checksum, String content) throws Exception {
         boolean verified = ossService.verifyOssGreenCallback(checksum, content);
