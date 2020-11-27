@@ -43,7 +43,7 @@ public class RequestLimitAspect {
             if (currentAmount == null) {
                 redisUtil.set(key, 1, requestLimit.time());
             } else {
-                if (currentAmount >= requestLimit.amount()) {
+                if (currentAmount > requestLimit.amount()) {
                     throw new RequestTimesExceededException();
                 } else {
                     redisUtil.incr(key, 1);
