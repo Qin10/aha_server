@@ -4,21 +4,21 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 服务器抛出（接口）异常类
+ * 运行期间API异常类
  *
  * @author STEA_YY
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ApiException extends Exception {
+public class RuntimeApiException extends RuntimeException {
     private Integer code;
 
-    public ApiException(String message, Integer code) {
+    public RuntimeApiException(String message, Integer code) {
         super(message);
         this.code = code;
     }
 
-    public ApiException() {
+    public RuntimeApiException() {
         super();
     }
 }

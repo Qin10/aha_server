@@ -1,14 +1,14 @@
-package cn.hdustea.aha_server.exception.apiException;
+package cn.hdustea.aha_server.exception.runtimeApiException;
 
 import cn.hdustea.aha_server.enums.ApiExceptionCode;
-import cn.hdustea.aha_server.exception.ApiException;
+import cn.hdustea.aha_server.exception.RuntimeApiException;
 
 /**
  * 访问次数限制异常类
  *
  * @author STEA_YY
  **/
-public class RequestTimesExceededException extends ApiException {
+public class RequestTimesExceededException extends RuntimeApiException {
     public RequestTimesExceededException() {
         super(ApiExceptionCode.REQUEST_TIMES_EXCEEDED.getDesc(), ApiExceptionCode.REQUEST_TIMES_EXCEEDED.getValue());
     }

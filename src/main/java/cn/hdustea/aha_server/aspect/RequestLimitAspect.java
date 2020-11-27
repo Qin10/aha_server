@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.aspect;
 
 import cn.hdustea.aha_server.annotation.RequestLimit;
-import cn.hdustea.aha_server.exception.apiException.RequestTimesExceededException;
+import cn.hdustea.aha_server.exception.runtimeApiException.RequestTimesExceededException;
 import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.aspectj.lang.JoinPoint;

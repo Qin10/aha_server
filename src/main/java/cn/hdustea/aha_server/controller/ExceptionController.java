@@ -2,8 +2,10 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.enums.ApiExceptionCode;
 import cn.hdustea.aha_server.exception.ApiException;
+import cn.hdustea.aha_server.exception.RuntimeApiException;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
+import cn.hdustea.aha_server.exception.runtimeApiException.RequestTimesExceededException;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -45,6 +47,18 @@ public class ExceptionController {
     }
 
     /**
+     * 捕捉访问次数超限异常
+     *
+     * @param e 访问次数超限异常类
+     * @return 返回错误码和HTTP403
+     */
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(RequestTimesExceededException.class)
+    public ResponseBean<Object> handleRequestTimesExceededException(RequestTimesExceededException e) {
+        return new ResponseBean<>(e.getCode(), e.getMessage(), null);
+    }
+
+    /**
      * 捕获其他API异常
      *
      * @param e Api异常类
@@ -53,6 +67,18 @@ public class ExceptionController {
     @ExceptionHandler(ApiException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean<Object> handleApiException(ApiException e) {
+        return new ResponseBean<>(e.getCode(), e.getMessage(), null);
+    }
+
+    /**
+     * 捕获其他Runtime API异常
+     *
+     * @param e Runtime Api异常类
+     * @return 返回错误码和HTTP500
+     */
+    @ExceptionHandler(RuntimeApiException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseBean<Object> handleRuntimeApiException(RuntimeApiException e) {
         return new ResponseBean<>(e.getCode(), e.getMessage(), null);
     }
 
