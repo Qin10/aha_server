@@ -40,7 +40,6 @@ public class ContribtionRankController {
      * 获取用户个人排名
      *
      * @return 用户个人排名和贡献点
-     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin
     @GetMapping("/me")

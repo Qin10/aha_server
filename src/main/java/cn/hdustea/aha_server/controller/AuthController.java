@@ -41,7 +41,6 @@ public class AuthController {
      * 通过账号密码登录
      *
      * @param loginUserDto 包含账号密码的实体，从请求Json中获取
-     * @throws Exception 向上抛出异常
      */
     @RequestLimit(amount = 5, time = 300)
     @PostMapping("/login")
@@ -55,7 +54,6 @@ public class AuthController {
      * 通过手机号注册
      *
      * @param registerUserDto 包含注册信息的实体
-     * @throws Exception 向上抛出异常
      */
     @RequestLimit(amount = 1)
     @PostMapping("/register")
@@ -72,8 +70,6 @@ public class AuthController {
      *
      * @param changePasswordDto 存放修改密码相关信息的实体类
      * @param phone             手机号
-     * @throws MessageCheckException 短信验证码校验异常
-     * @throws SelectException       用户不存在异常
      */
     @RequestLimit(amount = 1)
     @PostMapping("/changePassword/{phone}")
@@ -87,10 +83,10 @@ public class AuthController {
      *
      * @throws SelectException 用户不存在异常
      */
-    @RequestLimit(amount = 1,time = 180)
+    @RequestLimit(amount = 1, time = 180)
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/sign/notice")
-    public ResponseBean<TokenVo> signNotice() throws SelectException {
+    public ResponseBean<TokenVo> signNotice() throws SelectException, UpdateException {
         String phone = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signNotice(phone);
         TokenVo tokenVo = new TokenVo();
@@ -103,11 +99,8 @@ public class AuthController {
      *
      * @param file     合同签名文件
      * @param contract 合同信息实体类
-     * @throws IOException     文件IO异常
-     * @throws UpdateException 用户表修改异常
-     * @throws SelectException 用户不存在异常
      */
-    @RequestLimit(amount = 1,time = 180)
+    @RequestLimit(amount = 1, time = 180)
     @RequiresLogin
     @PostMapping("/sign/contract")
     public ResponseBean<TokenVo> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, SelectException, InsertException {

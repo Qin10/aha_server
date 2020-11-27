@@ -36,7 +36,7 @@ class AhaServerApplicationTests {
 
     @Test
     void testGetUser() throws SelectException {
-        System.out.println(userService.getUserByPhone("15382355341"));
+        System.out.println(userService.getExistUserByPhone("15382355341"));
     }
 
     @Test

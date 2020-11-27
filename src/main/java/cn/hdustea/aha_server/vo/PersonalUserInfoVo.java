@@ -14,10 +14,6 @@ import java.math.BigDecimal;
 @Data
 public class PersonalUserInfoVo {
     /**
-     * 手机号
-     */
-    private String phone;
-    /**
      * 是否签署服务协议
      */
     private boolean signedNotice;

@@ -25,12 +25,12 @@ public class ContractService {
     @Resource
     private FileUploadPathConfig fileUploadPathConfig;
 
-    public Contract getContractByUserId(int userId) {
-        return contractMapper.selectByUserId(userId);
+    public Contract getContractByUserPhone(String userPhone) {
+        return contractMapper.selectByUserPhone(userPhone);
     }
 
-    public void getContractSignatureFile(int userId, HttpServletResponse response) throws IOException, SelectException {
-        Contract contract = contractMapper.selectByUserId(userId);
+    public void getContractSignatureFile(String userPhone, HttpServletResponse response) throws IOException, SelectException {
+        Contract contract = contractMapper.selectByUserPhone(userPhone);
         if (contract != null && contract.getSignatureFilename() != null) {
             String filePath = fileUploadPathConfig.getContractSignaturePath() + contract.getSignatureFilename();
             FileUtil.download(filePath, response);

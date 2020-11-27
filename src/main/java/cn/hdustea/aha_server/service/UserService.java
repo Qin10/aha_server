@@ -24,8 +24,13 @@ public class UserService {
     @Resource
     private UserMapper userMapper;
 
-    public User getUserById(int id) {
-        return userMapper.selectByPrimaryKey(id);
+    public User getExistUserById(int id) throws SelectException {
+        User user = userMapper.selectByPrimaryKey(id);
+        if (user == null) {
+            throw new SelectException("用户不存在！");
+        } else {
+            return user;
+        }
     }
 
     public PageVo<List<UserManagementVo>> getAllUserManagementVoPagable(int pageNum, int pageSize, Integer roleId, Boolean signedNotice, Boolean signedContract, Integer typeId, String phoneLike, String nicknameLike, String trueNameLike, String sortBy, String orderBy) {
@@ -85,13 +90,17 @@ public class UserService {
      * @param phone 手机号
      * @return 用户实体类
      */
-    public User getUserByPhone(String phone) throws SelectException {
+    public User getExistUserByPhone(String phone) throws SelectException {
         User user = userMapper.selectByPhone(phone);
         if (user == null) {
             throw new SelectException("用户不存在！");
         } else {
             return user;
         }
+    }
+
+    public User getUserByPhone(String phone) {
+        return userMapper.selectByPhone(phone);
     }
 
     /**

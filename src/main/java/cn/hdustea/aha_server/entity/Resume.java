@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -25,10 +24,9 @@ public class Resume {
     @JsonIgnore
     private ObjectId id;
     /**
-     * 用户id(业务外键)
+     * 用户手机号(业务外键)
      */
-    @JsonIgnore
-    private int userId;
+    private String userPhone;
     /**
      * 真实姓名
      */

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
  **/
 @Repository
 public interface ResumeDao extends MongoRepository<Resume, ObjectId> {
-    Resume findByUserId(int userId);
+    Resume findByUserPhone(String userPhone);
 
-    void deleteByUserId(int userId);
+    void deleteByUserPhone(String userPhone);
 }

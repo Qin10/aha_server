@@ -217,7 +217,7 @@
         <include refid="Base_Column_List"/>,
         <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
         from user u
-                     join user_info ui on ui.ui_user_id = u.u_id
+                     join user_info ui on ui.ui_user_phone = u.u_phone
         where u_id = #{id}
     </select>
 
@@ -226,7 +226,7 @@
         <include refid="Base_Column_List"/>,
         <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
         from user u
-                     join user_info ui on ui.ui_user_id = u.u_id
+                     join user_info ui on ui.ui_user_phone = u.u_phone
         <where>
             <if test="roleId != null">
                 and u_role_id = #{roleId}

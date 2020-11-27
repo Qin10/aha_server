@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.entity.Oauth;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.WechatUnauthorizedException;
@@ -44,8 +44,8 @@ public class WechatProgramService {
         if (wechatOauth == null) {
             throw new WechatUnauthorizedException();
         } else {
-            Integer userId = wechatOauth.getUserId();
-            User user = userService.getUserById(userId);
+            String userPhone = wechatOauth.getUserPhone();
+            User user = userService.getUserByPhone(userPhone);
             JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(user);
             String token = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
             redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());

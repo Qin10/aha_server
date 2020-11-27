@@ -142,7 +142,7 @@
         <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
         from project_member pm
                      join user u on u.u_phone = pm.pm_member_phone
-                     join user_info ui on ui.ui_user_id = u.u_id
+                     join user_info ui on ui.ui_user_phone = u.u_phone
         where pm_project_id = #{projectId}
           and pm_member_phone = #{memberPhone}
     </select>
@@ -153,7 +153,7 @@
         <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
         from project_member pm
                      join user u on u.u_phone = pm.pm_member_phone
-                     join user_info ui on ui.ui_user_id = u.u_id
+                     join user_info ui on ui.ui_user_phone = u.u_phone
         where pm_project_id = #{projectId}
         order by pm_rank
     </select>

@@ -1,9 +1,9 @@
 package cn.hdustea.aha_server.mapper;
-import java.util.List;
-
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.vo.UserRoughInfoVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 用户详细信息表mapper
@@ -11,23 +11,23 @@ import org.apache.ibatis.annotations.Param;
  * @author STEA_YY
  **/
 public interface UserInfoMapper {
-    int deleteByPrimaryKey(Integer userId);
+    int deleteByPrimaryKey(String userPhone);
 
     int insert(UserInfo record);
 
     int insertSelective(UserInfo record);
 
-    UserInfo selectByPrimaryKey(Integer userId);
+    UserInfo selectByPrimaryKey(String userPhone);
 
     int updateByPrimaryKeySelective(UserInfo record);
 
     int updateByPrimaryKey(UserInfo record);
 
-    UserInfo selectByUserId(@Param("userId") Integer userId);
+    UserInfo selectByUserPhone(@Param("userPhone") String userPhone);
 
-    int updateByUserId(@Param("updated") UserInfo updated, @Param("userId") Integer userId);
+    int updateByUserPhone(@Param("updated") UserInfo updated, @Param("userPhone") String userPhone);
 
-    int updateAvatarUrlByUserId(@Param("updatedAvatarUrl") String updatedAvatarUrl, @Param("userId") Integer userId);
+    int updateAvatarUrlByUserPhone(@Param("updatedAvatarUrl") String updatedAvatarUrl, @Param("userPhone") String userPhone);
 
     List<UserRoughInfoVo> selectAllByNicknameLike(@Param("likeNickname")String likeNickname);
 

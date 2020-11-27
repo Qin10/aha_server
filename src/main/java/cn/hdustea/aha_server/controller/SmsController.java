@@ -26,7 +26,6 @@ public class SmsController {
      * 发送注册短信验证码
      *
      * @param phone 手机号
-     * @throws MessageSendException 验证短信发送失败异常
      */
     @RequestLimit(amount = 5, time = 300)
     @GetMapping("/sendCode/register/{phone}")
@@ -43,7 +42,6 @@ public class SmsController {
      * 发送重置密码短信验证码
      *
      * @param phone 手机号
-     * @throws MessageSendException 验证短信发送失败异常
      */
     @RequestLimit(amount = 5, time = 300)
     @GetMapping("/sendCode/changePassword/{phone}")

@@ -2,8 +2,6 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.exception.apiException.DaoException;
-import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.UserInfoMapper;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
@@ -24,24 +22,14 @@ public class UserInfoService {
     private UserService userService;
 
     /**
-     * 根据用户id获取用户公有信息
-     *
-     * @param userId 用户id
-     * @return 用户公有信息实体类
-     */
-    public UserInfo getUserInfoByUserId(int userId) {
-        return userInfoMapper.selectByPrimaryKey(userId);
-    }
-
-    /**
      * 根据手机号获取用户公有信息
      *
      * @param phone 用户手机号
      * @return 用户公有信息实体类
      */
-    public UserInfo getUserInfoByPhone(String phone) throws SelectException {
-        User user = userService.getUserByPhone(phone);
-        return userInfoMapper.selectByUserId(user.getId());
+    public UserInfo getUserInfoByPhone(String phone) {
+        userService.getUserByPhone(phone);
+        return userInfoMapper.selectByUserPhone(phone);
     }
 
     /**
@@ -50,11 +38,10 @@ public class UserInfoService {
      * @param phone 用户手机号
      * @return 用户个人详细信息
      */
-    public PersonalUserInfoVo getPersonalUserInfo(String phone) throws SelectException {
+    public PersonalUserInfoVo getPersonalUserInfo(String phone) {
         User user = userService.getUserByPhone(phone);
         UserInfo userInfo = getUserInfoByPhone(phone);
         PersonalUserInfoVo personalUserInfoVo = new PersonalUserInfoVo();
-        personalUserInfoVo.setPhone(user.getPhone());
         personalUserInfoVo.setContribPoint(user.getContribPoint());
         personalUserInfoVo.setSignedNotice(user.getSignedNotice());
         personalUserInfoVo.setSignedContract(user.getSignedContract());
@@ -72,36 +59,20 @@ public class UserInfoService {
         userInfoMapper.insertSelective(userInfo);
     }
 
-    public void updateUserInfoByUserId(UserInfo userInfo, int userId) {
-        userInfo.setUserId(userId);
-        userInfoMapper.updateByPrimaryKeySelective(userInfo);
-    }
-
     /**
      * 根据手机号修改用户公有信息
      *
      * @param userInfo 用户公有信息实体类
      * @param phone    用户手机号
-     * @throws SelectException 用户不存在
      */
-    public void updateUserInfoByPhone(UserInfo userInfo, String phone) throws SelectException {
-        User user = userService.getUserByPhone(phone);
-        userInfoMapper.updateByUserId(userInfo, user.getId());
+    public void updateUserInfoByPhone(UserInfo userInfo, String phone) {
+        userInfo.setUserPhone(phone);
+        userInfoMapper.updateByPrimaryKeySelective(userInfo);
     }
 
-    /**
-     * 根据id删除用户公有信息
-     *
-     * @param id 用户公有信息id
-     * @throws DeleteException 删除失败异常
-     */
-    public void deleteUserInfoById(int id) throws DaoException {
-        UserInfo userInfo = userInfoMapper.selectByPrimaryKey(id);
-        if (userInfo != null) {
-            userInfoMapper.deleteByPrimaryKey(id);
-        } else {
-            throw new DeleteException("不存在对应记录，删除用户详情失败！");
-        }
+    public void updateUserInfoByUserId(UserInfo userInfo, int userId) throws SelectException {
+        User user = userService.getExistUserById(userId);
+        updateUserInfoByPhone(userInfo, user.getPhone());
     }
 
     /**
@@ -109,10 +80,8 @@ public class UserInfoService {
      *
      * @param fileUrl 图片路径
      * @param phone   手机号
-     * @throws SelectException 用户不存在
      */
-    public void updateAvatarUrlByPhone(String fileUrl, String phone) throws SelectException {
-        User user = userService.getUserByPhone(phone);
-        userInfoMapper.updateAvatarUrlByUserId(fileUrl, user.getId());
+    public void updateAvatarUrlByPhone(String fileUrl, String phone) {
+        userInfoMapper.updateAvatarUrlByUserPhone(fileUrl, phone);
     }
 }

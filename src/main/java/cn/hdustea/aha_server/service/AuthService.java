@@ -68,7 +68,7 @@ public class AuthService {
      * @throws Exception 向上抛出异常
      */
     public TokenAndPersonalUserInfoVo login(LoginUserDto loginUserDto) throws Exception {
-        User user = userService.getUserByPhone(loginUserDto.getPhone());
+        User user = userService.getExistUserByPhone(loginUserDto.getPhone());
         if (user != null) {
             if (EncryptUtil.getSHA256(loginUserDto.getPassword()).equals(user.getPassword())) {
                 String token = signToken(user);
@@ -97,25 +97,24 @@ public class AuthService {
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
+        User possibleUser = userService.getUserByPhone(registerUserDto.getPhone());
+        if (possibleUser != null) {
+            throw new AccountExistedException();
+        }
         User user = new User();
         user.setPhone(registerUserDto.getPhone());
         user.setPassword(EncryptUtil.getSHA256((registerUserDto.getPassword())));
         user.setSignedNotice(registerUserDto.isSignedNotice());
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
-        try {
-            userService.getUserByPhone(user.getPhone());
-            throw new AccountExistedException();
-        } catch (SelectException e) {
-            userService.saveUser(user);
-            UserInfo userInfo = new UserInfo();
-            userInfo.setUserId(user.getId());
-            userInfo.setNickname(registerUserDto.getNickname());
-            userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
-            userInfoService.saveUserInfo(userInfo);
-            Resume resume = new Resume();
-            resumeService.updateResumeByPhone(resume, user.getPhone());
-        }
+        userService.saveUser(user);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setUserPhone(registerUserDto.getPhone());
+        userInfo.setNickname(registerUserDto.getNickname());
+        userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
+        userInfoService.saveUserInfo(userInfo);
+        Resume resume = new Resume();
+        resumeService.updateResumeByPhone(resume, user.getPhone());
     }
 
     /**
@@ -130,7 +129,7 @@ public class AuthService {
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
-        userService.getUserByPhone(phone);
+        userService.getExistUserByPhone(phone);
         String encodedPassword = EncryptUtil.getSHA256(changePasswordDto.getNewPassword());
         userService.updatePassword(phone, encodedPassword);
     }
@@ -142,8 +141,11 @@ public class AuthService {
      * @return 新的token令牌
      * @throws SelectException 用户不存在异常
      */
-    public String signNotice(String phone) throws SelectException {
-        User user = userService.getUserByPhone(phone);
+    public String signNotice(String phone) throws SelectException, UpdateException {
+        User user = userService.getExistUserByPhone(phone);
+        if (user.getSignedNotice()) {
+            throw new UpdateException("已经签署过服务协议！");
+        }
         userService.updatesignedNotice(phone, true);
         user.setSignedNotice(true);
         return signToken(user);
@@ -162,11 +164,11 @@ public class AuthService {
      */
     @Transactional(rollbackFor = Exception.class)
     public String signContract(String phone, MultipartFile file, Contract contract) throws IOException, UpdateException, SelectException, InsertException {
-        User user = userService.getUserByPhone(phone);
+        User user = userService.getExistUserByPhone(phone);
         if (user.getSignedContract()) {
             throw new UpdateException("已经签署过合同！");
         }
-        contract.setUserId(user.getId());
+        contract.setUserPhone(phone);
         String filename = FileUtil.upload(file, fileUploadPathConfig.getContractSignaturePath());
         contract.setSignatureFilename(filename);
         contract.setSignTime(new Date());

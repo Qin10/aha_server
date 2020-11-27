@@ -5,7 +5,7 @@
         <!--@mbg.generated-->
         <!--@Table oauth-->
         <id column="oa_id" property="id"/>
-        <result column="oa_user_id" property="userId"/>
+        <result column="oa_user_phone" property="userPhone"/>
         <result column="oa_oauth_type" property="oauthType"/>
         <result column="oa_oauth_id" property="oauthId"/>
         <result column="oa_unionid" property="unionid"/>
@@ -14,7 +14,7 @@
 
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        oa_id, oa_user_id, oa_oauth_type, oa_oauth_id, oa_unionid, oa_credential
+        oa_id, oa_user_phone, oa_oauth_type, oa_oauth_id, oa_unionid, oa_credential
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -35,8 +35,8 @@
     <insert id="insert" keyColumn="oa_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Oauth"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into oauth (oa_user_id, oa_oauth_type, oa_oauth_id, oa_unionid, oa_credential)
-        values (#{userId}, #{oauthType}, #{oauthId}, #{unionid}, #{credential})
+        insert into oauth (oa_user_phone, oa_oauth_type, oa_oauth_id, oa_unionid, oa_credential)
+        values (#{userPhone}, #{oauthType}, #{oauthId}, #{unionid}, #{credential})
     </insert>
 
     <insert id="insertSelective" keyColumn="oa_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Oauth"
@@ -44,8 +44,8 @@
         <!--@mbg.generated-->
         insert into oauth
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                oa_user_id,
+            <if test="userPhone != null">
+                oa_user_phone,
             </if>
             <if test="oauthType != null">
                 oa_oauth_type,
@@ -61,8 +61,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId},
+            <if test="userPhone != null">
+                #{userPhone},
             </if>
             <if test="oauthType != null">
                 #{oauthType},
@@ -83,8 +83,8 @@
         <!--@mbg.generated-->
         update oauth
         <set>
-            <if test="userId != null">
-                oa_user_id = #{userId},
+            <if test="userPhone != null">
+                oa_user_phone = #{userPhone},
             </if>
             <if test="oauthType != null">
                 oa_oauth_type = #{oauthType},
@@ -105,7 +105,7 @@
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Oauth">
         <!--@mbg.generated-->
         update oauth
-        set oa_user_id    = #{userId},
+        set oa_user_phone    = #{userPhone},
             oa_oauth_type = #{oauthType},
             oa_oauth_id   = #{oauthId},
             oa_unionid    = #{unionid},

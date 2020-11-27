@@ -11,7 +11,7 @@ import lombok.Data;
 public class Oauth {
     private Integer id;
 
-    private Integer userId;
+    private String userPhone;
 
     private String oauthType;
 

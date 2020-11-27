@@ -26,23 +26,20 @@ public class ResumeController {
      * 根据手机号查看用户简历
      *
      * @param phone 手机号
-     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin
     @GetMapping("/{phone}")
-    public ResponseBean<Resume> getResumeByPhone(@PathVariable("phone") String phone) throws SelectException {
+    public ResponseBean<Resume> getResumeByPhone(@PathVariable("phone") String phone) {
         Resume resume = resumeService.getResumeByPhone(phone);
         return new ResponseBean<>(200, "succ", resume);
     }
 
     /**
      * 查看当前用户简历
-     *
-     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin
     @GetMapping("/me")
-    public ResponseBean<Resume> getPersonalResume() throws SelectException {
+    public ResponseBean<Resume> getPersonalResume() {
         String phone = ThreadLocalUtil.getCurrentUser();
         Resume resume = resumeService.getResumeByPhone(phone);
         return new ResponseBean<>(200, "succ", resume);
@@ -52,7 +49,6 @@ public class ResumeController {
      * 修改当前用户简历
      *
      * @param resume 用户简历
-     * @throws SelectException 用户不存在异常
      */
     @RequestLimit(amount = 4)
     @RequiresLogin

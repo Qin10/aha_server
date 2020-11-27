@@ -3,7 +3,6 @@ package cn.hdustea.aha_server.dto;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * 用户DTO
@@ -12,15 +11,6 @@ import java.util.Date;
  **/
 @Data
 public class UserDto {
-    /**
-     * 用户手机号
-     */
-    private String phone;
-
-    /**
-     * 账户首次登录时间
-     */
-    private Date createdTime;
 
     /**
      * 学生证图片保存路径

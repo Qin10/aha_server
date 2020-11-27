@@ -68,7 +68,6 @@ public class ProjectController {
      * 根据项目id获取项目详细信息
      *
      * @param projectId 项目id
-     * @throws SelectException 项目不存在异常
      */
     @RequestLimit(time = 30)
     @RequiresLogin
@@ -110,7 +109,6 @@ public class ProjectController {
      *
      * @param projectDto 修改的项目信息
      * @param projectId  项目id
-     * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/{projectId}")
@@ -127,7 +125,6 @@ public class ProjectController {
      * 删除项目
      *
      * @param projectId 项目id
-     * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/{projectId}")
@@ -144,7 +141,6 @@ public class ProjectController {
      * 根据项目id获取所有项目成员
      *
      * @param projectId 项目id
-     * @throws SelectException 项目不存在异常
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/members")
@@ -158,12 +154,10 @@ public class ProjectController {
      *
      * @param projectMember 项目成员
      * @param projectId     项目id
-     * @throws PermissionDeniedException 无操作权限异常
-     * @throws InsertException           插入异常
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/member/{projectId}")
-    public ResponseBean<Object> saveProjectMemberById(@RequestBody @Validated ProjectMember projectMember, @PathVariable("projectId") int projectId) throws PermissionDeniedException, InsertException {
+    public ResponseBean<Object> saveProjectMemberById(@RequestBody @Validated ProjectMember projectMember, @PathVariable("projectId") int projectId) throws PermissionDeniedException, InsertException, SelectException {
         String phone = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(phone, projectId)) {
             throw new PermissionDeniedException();
@@ -178,7 +172,6 @@ public class ProjectController {
      * @param projectMember 修改的项目成员
      * @param projectId     项目id
      * @param memberPhone   成员手机号
-     * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/member/{projectId}/{memberPhone}")
@@ -196,7 +189,6 @@ public class ProjectController {
      *
      * @param projectMembers 修改的多个项目成员
      * @param projectId      项目id
-     * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/members/{projectId}")
@@ -214,7 +206,6 @@ public class ProjectController {
      *
      * @param projectId   项目id
      * @param memberPhone 成员手机号
-     * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin
     @DeleteMapping("/member/{projectId}/{memberPhone}")
@@ -231,7 +222,6 @@ public class ProjectController {
      * 根据项目id获取所有项目资源
      *
      * @param projectId 项目id
-     * @throws SelectException 项目不存在异常
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/resources")
@@ -244,8 +234,6 @@ public class ProjectController {
      * 获取oss私有资源上传签名(用于上传资源文件)
      *
      * @param projectId 项目id
-     * @throws PermissionDeniedException 无操作权限异常
-     * @throws SelectException           项目不存在异常
      */
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/{projectId}/resources/sign/upload/private")
@@ -264,7 +252,6 @@ public class ProjectController {
      *
      * @param projectResourceDto 项目资源
      * @param projectId          项目id
-     * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
@@ -281,7 +268,6 @@ public class ProjectController {
      * 删除项目资源
      *
      * @param projectResourceId 项目资源id
-     * @throws PermissionDeniedException 无操作权限异常
      */
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/resource/{projectResourceId}")
@@ -299,7 +285,6 @@ public class ProjectController {
      * 获取项目资源文件oss下载签名
      *
      * @param projectResourceId 项目资源id
-     * @throws SelectException 资源不存在异常
      */
     @RequestLimit()
     @RequiresLogin
@@ -315,12 +300,10 @@ public class ProjectController {
 
     /**
      * 获取用户收藏项目列表
-     *
-     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin
     @GetMapping("/collection")
-    public ResponseBean<List<UserCollectionVo>> getAllCollection() throws SelectException {
+    public ResponseBean<List<UserCollectionVo>> getAllCollection() {
         String phone = ThreadLocalUtil.getCurrentUser();
         List<UserCollectionVo> collectionVos = projectService.getAllCollectionByPhone(phone);
         return new ResponseBean<>(200, "succ", collectionVos);
@@ -330,13 +313,11 @@ public class ProjectController {
      * 收藏项目
      *
      * @param projectId 项目id
-     * @throws SelectException 用户不存在异常
-     * @throws InsertException 插入失败异常
      */
     @RequestLimit(time = 30)
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
-    public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws SelectException, InsertException {
+    public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws InsertException {
         String phone = ThreadLocalUtil.getCurrentUser();
         projectService.saveCollection(projectId, phone);
         projectService.incrCollectByProjectId(projectId);
@@ -348,13 +329,11 @@ public class ProjectController {
      * 取消收藏
      *
      * @param projectId 项目id
-     * @throws SelectException 用户不存在异常
-     * @throws DeleteException 删除失败异常
      */
     @RequestLimit(time = 30)
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
-    public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws SelectException, DeleteException {
+    public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws DeleteException {
         String phone = ThreadLocalUtil.getCurrentUser();
         projectService.deleteCollection(projectId, phone);
         projectService.descCollectByProjectId(projectId);
@@ -366,11 +345,10 @@ public class ProjectController {
      * 判断项目是否被收藏
      *
      * @param projectId 项目id
-     * @throws SelectException 用户不存在异常
      */
     @RequiresLogin
     @GetMapping("/collection/{projectId}")
-    public ResponseBean<Boolean> getCollectedByProjectId(@PathVariable("projectId") int projectId) throws SelectException {
+    public ResponseBean<Boolean> getCollectedByProjectId(@PathVariable("projectId") int projectId) {
         String phone = ThreadLocalUtil.getCurrentUser();
         boolean result = projectService.hasCollected(projectId, phone);
         return new ResponseBean<>(200, "succ", result);

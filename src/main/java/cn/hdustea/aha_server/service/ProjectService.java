@@ -43,24 +43,6 @@ public class ProjectService {
     private UserService userService;
 
     /**
-     * 获取所有项目信息
-     *
-     * @return 项目信息列表
-     */
-    public List<Project> getAllProject() {
-        return projectMapper.selectAll();
-    }
-
-    /**
-     * 获取所有项目粗略信息
-     *
-     * @return 项目粗略信息列表
-     */
-    public List<ProjectRoughVo> getAllProjectRoughInfo() {
-        return projectMapper.selectAllRough();
-    }
-
-    /**
      * 分页获取所有项目粗略信息
      *
      * @param pageNum  页码
@@ -199,7 +181,8 @@ public class ProjectService {
      * @param projectId     项目id
      * @throws InsertException 插入异常
      */
-    public void saveProjectMemberByProjectId(ProjectMember projectMember, int projectId) throws InsertException {
+    public void saveProjectMemberByProjectId(ProjectMember projectMember, int projectId) throws InsertException, SelectException {
+        userService.getExistUserByPhone(projectMember.getMemberPhone());
         projectMember.setProjectId(projectId);
         try {
             projectMemberMapper.insert(projectMember);
@@ -250,11 +233,9 @@ public class ProjectService {
      *
      * @param phone 手机号
      * @return 用户收藏列表
-     * @throws SelectException 用户不存在异常
      */
-    public List<UserCollectionVo> getAllCollectionByPhone(String phone) throws SelectException {
-        User user = userService.getUserByPhone(phone);
-        return userCollectionMapper.selectAllVoByUserId(user.getId());
+    public List<UserCollectionVo> getAllCollectionByPhone(String phone) {
+        return userCollectionMapper.selectAllVoByUserPhone(phone);
     }
 
     /**
@@ -262,13 +243,11 @@ public class ProjectService {
      *
      * @param projectId 项目id
      * @param phone     手机号
-     * @throws SelectException 用户不存在异常
      */
-    public void saveCollection(int projectId, String phone) throws SelectException, InsertException {
-        User user = userService.getUserByPhone(phone);
+    public void saveCollection(int projectId, String phone) throws InsertException {
         UserCollection userCollection = new UserCollection();
         userCollection.setProjectId(projectId);
-        userCollection.setUserId(user.getId());
+        userCollection.setUserPhone(phone);
         userCollection.setTimestamp(new Date());
         try {
             userCollectionMapper.insert(userCollection);
@@ -284,11 +263,9 @@ public class ProjectService {
      *
      * @param projectId 项目id
      * @param phone     手机号
-     * @throws SelectException 用户不存在异常
      */
-    public void deleteCollection(int projectId, String phone) throws SelectException, DeleteException {
-        User user = userService.getUserByPhone(phone);
-        int result = userCollectionMapper.deleteByPrimaryKey(user.getId(), projectId);
+    public void deleteCollection(int projectId, String phone) throws DeleteException {
+        int result = userCollectionMapper.deleteByPrimaryKey(phone, projectId);
         if (result == 0) {
             throw new DeleteException("您未收藏过此项目！");
         }
@@ -300,11 +277,9 @@ public class ProjectService {
      * @param projectId 项目id
      * @param phone     手机号
      * @return 项目是否被收藏
-     * @throws SelectException 用户不存在异常
      */
-    public boolean hasCollected(int projectId, String phone) throws SelectException {
-        User user = userService.getUserByPhone(phone);
-        UserCollection userCollection = userCollectionMapper.selectByPrimaryKey(user.getId(), projectId);
+    public boolean hasCollected(int projectId, String phone) {
+        UserCollection userCollection = userCollectionMapper.selectByPrimaryKey(phone, projectId);
         return userCollection != null;
     }
 

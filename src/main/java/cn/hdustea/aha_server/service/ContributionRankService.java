@@ -1,9 +1,8 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.vo.UserContribPointVo;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
@@ -59,9 +58,8 @@ public class ContributionRankService {
     public UserContribPointVo getUserContribPointByPhone(String phone) throws SelectException {
         long rank = getRankByPhone(phone);
         Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, phone);
-        User user = userService.getUserByPhone(phone);
         UserContribPointVo userContribPointVo = new UserContribPointVo();
-        userContribPointVo.setPhone(user.getPhone());
+        userContribPointVo.setPhone(phone);
         userContribPointVo.setContribPoint(BigDecimal.valueOf(contribPoint));
         userContribPointVo.setRank(rank);
         return userContribPointVo;

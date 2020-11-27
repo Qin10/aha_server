@@ -1,17 +1,17 @@
 ###发送注册验证短信
-GET http://{{host}}/sms/sendCode/register/18557517547
+GET http://{{host}}/sms/sendCode/register/15382355341
 
 ###发送修改密码验证短信
-GET http://{{host}}/sms/sendCode/changePassword/18557517547
+GET http://{{host}}/sms/sendCode/changePassword/15382355341
 
 ###用户注册
 POST http://{{host}}/register
 Content-Type: application/json
 
 {
-  "phone": "18557517547",
+  "phone": "15382355341",
   "password": "114514",
-  "nickname": "GZY",
+  "nickname": "YY",
   "code": "1234"
 }
 
@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "phone": "15382355341",
-  "password": "1145145"
+  "password": "114514"
 }
 
 > {% client.global.set("auth_token",response.body.data.token);%}
@@ -33,7 +33,7 @@ Authorization:{{auth_token}}
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###用户修改密码
-POST http://{{host}}/changePassword/18557517547
+POST http://{{host}}/changePassword/15382355341
 Content-Type: application/json
 
 {
@@ -44,7 +44,7 @@ Content-Type: application/json
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###获取用户个人信息
-GET http://{{host}}/userInfo/15382355341
+GET http://{{host}}/userInfo/13819154341
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -137,19 +137,19 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET http://{{host}}/project/2
+GET http://{{host}}/project/7
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有成员信息
-GET http://{{host}}/project/1/members
+GET http://{{host}}/project/7/members
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有资源信息
-GET http://{{host}}/project/1/resources
+GET http://{{host}}/project/7/resources
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -161,19 +161,19 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###收藏资源
-POST http://{{host}}/project/collection/1
+POST http://{{host}}/project/collection/7
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###取消收藏资源
-DELETE http://{{host}}/project/collection/1
+DELETE http://{{host}}/project/collection/7
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###判断收藏资源
-GET http://{{host}}/project/collection/1
+GET http://{{host}}/project/collection/7
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -200,7 +200,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改项目信息
-PUT http://{{host}}/project/6
+PUT http://{{host}}/project/7
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -211,14 +211,14 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目成员
-POST http://{{host}}/project/member/222
+POST http://{{host}}/project/member/7
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "memberPhone": "13819154341",
-  "rank": 2,
-  "job": "队员",
+  "memberPhone": "15382355341",
+  "rank": 1,
+  "job": "队长",
   "editable": 1
 }
 
@@ -262,7 +262,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST http://{{host}}/project/resource/1
+POST http://{{host}}/project/resource/7
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -302,7 +302,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员接口测试
-GET http://{{host}}/admin/user?pageNum=1&pageSize=10&sortBy=contribPoint&orderBy=desc&signedContract=false
+GET http://{{host}}/admin/user?pageNum=1&pageSize=10
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

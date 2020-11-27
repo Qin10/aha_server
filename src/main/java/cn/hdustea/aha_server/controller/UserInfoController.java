@@ -3,7 +3,6 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
@@ -35,7 +34,7 @@ public class UserInfoController {
      */
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/me")
-    public ResponseBean<PersonalUserInfoVo> getPersonalUserInfo() throws SelectException {
+    public ResponseBean<PersonalUserInfoVo> getPersonalUserInfo() {
         String phone = ThreadLocalUtil.getCurrentUser();
         PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(phone);
         return new ResponseBean<>(200, "succ", personalUserInfo);
@@ -45,12 +44,11 @@ public class UserInfoController {
      * 修改当前用户详细信息
      *
      * @param userInfo 用户公共信息的实体类
-     * @throws SelectException 用户不存在异常
      */
     @RequestLimit(amount = 5, time = 120)
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
-    public ResponseBean<Object> updatePersonalUserInfo(@RequestBody UserInfo userInfo) throws SelectException {
+    public ResponseBean<Object> updatePersonalUserInfo(@RequestBody UserInfo userInfo) {
         String phone = ThreadLocalUtil.getCurrentUser();
         userInfoService.updateUserInfoByPhone(userInfo, phone);
         return new ResponseBean<>(200, "succ", null);
@@ -63,7 +61,7 @@ public class UserInfoController {
      */
     @RequiresLogin
     @GetMapping("/{phone}")
-    public ResponseBean<UserInfo> getUserInfoByPhone(@PathVariable("phone") String phone) throws SelectException {
+    public ResponseBean<UserInfo> getUserInfoByPhone(@PathVariable("phone") String phone) {
         UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
         return new ResponseBean<>(200, "succ", userInfo);
     }
@@ -84,12 +82,11 @@ public class UserInfoController {
      * 修改用户头像文件名
      *
      * @param requestMap 包含了修改后头像文件名的Map对象
-     * @throws SelectException 用户不存在异常
      */
     @RequestLimit(amount = 5, time = 120)
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/avatar")
-    public ResponseBean<Object> updateUserAvatar(@RequestBody Map<String, String> requestMap) throws SelectException {
+    public ResponseBean<Object> updateUserAvatar(@RequestBody Map<String, String> requestMap) {
         String phone = ThreadLocalUtil.getCurrentUser();
         String fileUrl = requestMap.get("fileUrl");
         userInfoService.updateAvatarUrlByPhone(fileUrl, phone);

@@ -20,5 +20,5 @@ public interface ContractMapper {
 
     int updateByPrimaryKey(Contract record);
 
-    Contract selectByUserId(@Param("userId")Integer userId);
+    Contract selectByUserPhone(@Param("userPhone")String userPhone);
 }

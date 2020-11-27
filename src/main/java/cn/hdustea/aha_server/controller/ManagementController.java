@@ -45,7 +45,6 @@ public class ManagementController {
      * 获取项目资源文件oss下载签名
      *
      * @param projectResourceId 项目资源id
-     * @throws SelectException 资源不存在异常
      */
     @RequiresLogin
     @GetMapping("/project/resource/{projectResourceId}/sign/download")
@@ -61,7 +60,6 @@ public class ManagementController {
      *
      * @param projectId       项目id
      * @param projectCheckDto 项目审核相关信息
-     * @throws UpdateException 项目不存在异常
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/project/check/{projectId}")
@@ -289,7 +287,7 @@ public class ManagementController {
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/user/info/{userId}")
-    public ResponseBean<Object> updateUserInfo(@RequestBody UserInfo userInfo, @PathVariable("userId") int userId) {
+    public ResponseBean<Object> updateUserInfo(@RequestBody UserInfo userInfo, @PathVariable("userId") int userId) throws SelectException {
         userInfoService.updateUserInfoByUserId(userInfo, userId);
         return new ResponseBean<>(200, "succ", null);
     }
@@ -309,26 +307,24 @@ public class ManagementController {
     /**
      * 获取用户合同信息
      *
-     * @param userId 用户id
+     * @param phone 用户手机号
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @GetMapping("/user/contract/{userId}")
-    public ResponseBean<Contract> getContract(@PathVariable("userId") int userId) {
-        Contract contract = contractService.getContractByUserId(userId);
+    @GetMapping("/user/contract/{phone}")
+    public ResponseBean<Contract> getContract(@PathVariable("phone") String phone) {
+        Contract contract = contractService.getContractByUserPhone(phone);
         return new ResponseBean<>(200, "succ", contract);
     }
 
     /**
      * 下载用户合同签名
      *
-     * @param userId 用户id
-     * @throws IOException     IO异常
-     * @throws SelectException 合同记录不存在异常
+     * @param phone 用户手机号
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @GetMapping("/user/contract/signature/{userId}")
-    public ResponseBean<Contract> getContractSignatureFile(@PathVariable("userId") int userId, HttpServletResponse response) throws IOException, SelectException {
-        contractService.getContractSignatureFile(userId, response);
+    @GetMapping("/user/contract/signature/{phone}")
+    public ResponseBean<Contract> getContractSignatureFile(@PathVariable("phone") String phone, HttpServletResponse response) throws IOException, SelectException {
+        contractService.getContractSignatureFile(phone, response);
         return new ResponseBean<>(200, "succ", null);
     }
 }

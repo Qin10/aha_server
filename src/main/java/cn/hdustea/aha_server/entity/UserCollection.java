@@ -1,10 +1,8 @@
 package cn.hdustea.aha_server.entity;
 
-import java.util.Date;
-
-import cn.hdustea.aha_server.vo.ProjectRoughVo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * 用户收藏实体类
@@ -14,9 +12,9 @@ import lombok.Data;
 @Data
 public class UserCollection {
     /**
-     * 收藏用户id
+     * 收藏用户手机号
      */
-    private Integer userId;
+    private String userPhone;
 
     /**
      * 收藏资源id
