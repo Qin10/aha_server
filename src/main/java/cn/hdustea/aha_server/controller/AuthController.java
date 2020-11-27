@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.dto.ChangePasswordDto;
@@ -42,6 +43,7 @@ public class AuthController {
      * @param loginUserDto 包含账号密码的实体，从请求Json中获取
      * @throws Exception 向上抛出异常
      */
+    @RequestLimit(amount = 5, time = 300)
     @PostMapping("/login")
     public ResponseBean<TokenAndPersonalUserInfoVo> login(@RequestBody @Validated LoginUserDto loginUserDto) throws Exception {
         TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.login(loginUserDto);
@@ -55,6 +57,7 @@ public class AuthController {
      * @param registerUserDto 包含注册信息的实体
      * @throws Exception 向上抛出异常
      */
+    @RequestLimit(amount = 1)
     @PostMapping("/register")
     public ResponseBean<TokenAndPersonalUserInfoVo> register(@RequestBody @Validated RegisterUserDto registerUserDto) throws Exception {
         authService.register(registerUserDto);
@@ -68,10 +71,11 @@ public class AuthController {
      * 修改密码
      *
      * @param changePasswordDto 存放修改密码相关信息的实体类
-     * @param phone              手机号
+     * @param phone             手机号
      * @throws MessageCheckException 短信验证码校验异常
      * @throws SelectException       用户不存在异常
      */
+    @RequestLimit(amount = 1)
     @PostMapping("/changePassword/{phone}")
     public ResponseBean<Object> changePassword(@RequestBody @Validated ChangePasswordDto changePasswordDto, @PathVariable("phone") String phone) throws MessageCheckException, SelectException {
         authService.changePassword(changePasswordDto, phone);
@@ -83,6 +87,7 @@ public class AuthController {
      *
      * @throws SelectException 用户不存在异常
      */
+    @RequestLimit(amount = 1,time = 180)
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/sign/notice")
     public ResponseBean<TokenVo> signNotice() throws SelectException {
@@ -102,6 +107,7 @@ public class AuthController {
      * @throws UpdateException 用户表修改异常
      * @throws SelectException 用户不存在异常
      */
+    @RequestLimit(amount = 1,time = 180)
     @RequiresLogin
     @PostMapping("/sign/contract")
     public ResponseBean<TokenVo> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, SelectException, InsertException {

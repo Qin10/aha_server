@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
@@ -43,16 +44,6 @@ public class ProjectController {
     @Resource
     private UserOperationLogConfig userOperationLogConfig;
 
-//    /**
-//     * 获取全部项目粗略信息
-//     */
-//    @RequiresLogin
-//    @GetMapping
-//    public ResponseBean<List<ProjectRoughVo>> getAllProject() {
-//        List<ProjectRoughVo> projectRoughVos = projectService.getAllProjectRoughInfo();
-//        return new ResponseBean<>(200, "succ", projectRoughVos);
-//    }
-
     /**
      * 分页获取所有项目粗略信息
      *
@@ -64,6 +55,7 @@ public class ProjectController {
      * @param sortBy     排序关键字
      * @param orderBy    排序方式
      */
+    @RequestLimit(time = 5)
     @RequiresLogin
     @GetMapping
     public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) {
@@ -78,6 +70,7 @@ public class ProjectController {
      * @param projectId 项目id
      * @throws SelectException 项目不存在异常
      */
+    @RequestLimit(time = 30)
     @RequiresLogin
     @GetMapping("/{projectId}")
     public ResponseBean<ProjectDetailVo> getProjectById(@PathVariable("projectId") int projectId) throws SelectException {
@@ -308,6 +301,7 @@ public class ProjectController {
      * @param projectResourceId 项目资源id
      * @throws SelectException 资源不存在异常
      */
+    @RequestLimit()
     @RequiresLogin
     @GetMapping("/resource/{projectResourceId}/sign/download")
     public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
@@ -339,6 +333,7 @@ public class ProjectController {
      * @throws SelectException 用户不存在异常
      * @throws InsertException 插入失败异常
      */
+    @RequestLimit(time = 30)
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
     public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws SelectException, InsertException {
@@ -356,6 +351,7 @@ public class ProjectController {
      * @throws SelectException 用户不存在异常
      * @throws DeleteException 删除失败异常
      */
+    @RequestLimit(time = 30)
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
     public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws SelectException, DeleteException {

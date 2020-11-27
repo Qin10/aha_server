@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
  **/
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class ApiException extends Exception {
+public class ApiException extends RuntimeException {
     private Integer code;
 
     public ApiException(String message, Integer code) {

@@ -1,21 +1,19 @@
 package cn.hdustea.aha_server.util;
 
+import cn.hdustea.aha_server.vo.UserContribPointVo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-
-import cn.hdustea.aha_server.vo.UserContribPointVo;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
-import lombok.extern.slf4j.Slf4j;
-
-import javax.annotation.Resource;
 
 /**
  * Redis操作工具类
@@ -41,6 +39,7 @@ public class RedisUtil {
      */
     public static final String REFRESH_TOKEN_PREFIX = "user:token:";
     public static final String USER_PROJECT_READ_PREFIX = "user:project:read:";
+    public static final String REQUEST_LIMIT_PREFIX = "request:limit:";
 
     public static final String PROJECT_READ_KEY = "project:read";
     public static final String CONTRIBUTION_RANK_KEY = "contribution:rank";

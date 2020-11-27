@@ -1,16 +1,15 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.vo.ResponseBean;
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageSendException;
 import cn.hdustea.aha_server.service.SmsService;
-import cn.hdustea.aha_server.util.TimeUtil;
+import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 /**
  * 短信业务相关请求
@@ -29,6 +28,7 @@ public class SmsController {
      * @param phone 手机号
      * @throws MessageSendException 验证短信发送失败异常
      */
+    @RequestLimit(amount = 5, time = 300)
     @GetMapping("/sendCode/register/{phone}")
     public ResponseBean<Object> sendRegisterSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(phone, SmsService.REGISTER_MESSAGE);
@@ -45,6 +45,7 @@ public class SmsController {
      * @param phone 手机号
      * @throws MessageSendException 验证短信发送失败异常
      */
+    @RequestLimit(amount = 5, time = 300)
     @GetMapping("/sendCode/changePassword/{phone}")
     public ResponseBean<Object> sendSmsCode(@PathVariable("phone") String phone) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(phone, SmsService.CHANGE_PASSWORD_MESSAGE);

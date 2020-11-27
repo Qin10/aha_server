@@ -1,20 +1,19 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.vo.OssPolicyVo;
-import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
+import cn.hdustea.aha_server.vo.OssPolicyVo;
+import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
-import cn.hdustea.aha_server.vo.UserRoughInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -48,6 +47,7 @@ public class UserInfoController {
      * @param userInfo 用户公共信息的实体类
      * @throws SelectException 用户不存在异常
      */
+    @RequestLimit(amount = 5, time = 120)
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
     public ResponseBean<Object> updatePersonalUserInfo(@RequestBody UserInfo userInfo) throws SelectException {
@@ -71,6 +71,7 @@ public class UserInfoController {
     /**
      * 获取向OSS上传公共文件签名，用于上传用户头像
      */
+    @RequestLimit(amount = 5, time = 120)
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
     public ResponseBean<OssPolicyVo> signUpdateUserAvatar() {
@@ -85,6 +86,7 @@ public class UserInfoController {
      * @param requestMap 包含了修改后头像文件名的Map对象
      * @throws SelectException 用户不存在异常
      */
+    @RequestLimit(amount = 5, time = 120)
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/avatar")
     public ResponseBean<Object> updateUserAvatar(@RequestBody Map<String, String> requestMap) throws SelectException {

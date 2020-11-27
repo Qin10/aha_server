@@ -77,7 +77,11 @@ public enum ApiExceptionCode {
     /**
      * 参数校验失败
      */
-    ARGUMENTS_VALID_FAIL(601, "参数校验失败！");
+    ARGUMENTS_VALID_FAIL(601, "参数校验失败！"),
+    /**
+     * 访问次数超限
+     */
+    REQUEST_TIMES_EXCEEDED(701, "访问次数超限！");
 
     private final Integer value;
     private final String desc;

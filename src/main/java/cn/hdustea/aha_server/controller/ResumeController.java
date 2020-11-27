@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.Resume;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
@@ -53,6 +54,7 @@ public class ResumeController {
      * @param resume 用户简历
      * @throws SelectException 用户不存在异常
      */
+    @RequestLimit(amount = 4)
     @RequiresLogin
     @PutMapping()
     public ResponseBean<Object> updateResume(@RequestBody Resume resume) throws SelectException {
