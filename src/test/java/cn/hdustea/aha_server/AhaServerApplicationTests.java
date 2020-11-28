@@ -5,7 +5,6 @@ import cn.hdustea.aha_server.exception.apiException.daoException.SelectException
 import cn.hdustea.aha_server.service.*;
 import cn.hdustea.aha_server.task.OssDocumentConvertTask;
 import cn.hdustea.aha_server.util.RedisUtil;
-import com.aliyuncs.exceptions.ClientException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -29,6 +28,8 @@ class AhaServerApplicationTests {
     private ContributionRankService contributionRankService;
     @Resource
     private OssDocumentConvertTask ossDocumentConvertTask;
+    @Resource
+    private MessageService messageService;
 
     @Test
     void contextLoads() {
@@ -65,10 +66,15 @@ class AhaServerApplicationTests {
         System.out.println(contributionRankService.getUserContribPointByPhone("15382355341"));
     }
     @Test
-    void testMNS() throws ClientException {
+    void testMNS() {
         DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
         documentConvertInfoDto.setProjectResourceId(8);
         documentConvertInfoDto.setSrcFilename("企业画像/1606217593868/DJI_20180819_082700.mp4");
         redisUtil.lPush(RedisUtil.DOCUMENT_CONVERT_LIST_KEY,documentConvertInfoDto);
+    }
+
+    @Test
+    void testMessageService(){
+        messageService.saveAllNoticeNotReadByReceiverPhone("15382355341");
     }
 }

@@ -131,7 +131,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目列表
-GET http://{{host}}/project?pageNum=1&pageSize=6
+GET http://{{host}}/project?pageNum=1&pageSize=6&phone=15382355341
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

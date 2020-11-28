@@ -1,10 +1,13 @@
 package cn.hdustea.aha_server.enums;
 
+import lombok.Getter;
+
 /**
  * 错误码枚举
  *
  * @author STEA_YY
  **/
+@Getter
 public enum ApiExceptionCode {
     /**
      * 未找到token
@@ -89,13 +92,5 @@ public enum ApiExceptionCode {
     ApiExceptionCode(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public String getDesc() {
-        return desc;
     }
 }
