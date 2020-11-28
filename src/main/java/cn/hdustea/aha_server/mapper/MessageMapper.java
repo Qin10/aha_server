@@ -1,4 +1,5 @@
 package cn.hdustea.aha_server.mapper;
+
 import cn.hdustea.aha_server.entity.Message;
 import cn.hdustea.aha_server.vo.MessageVo;
 import org.apache.ibatis.annotations.Param;
@@ -23,15 +24,16 @@ public interface MessageMapper {
 
     int updateByPrimaryKey(Message record);
 
-    int updateStatusById(@Param("updatedStatus")Integer updatedStatus,@Param("id")Integer id);
+    int updateStatusById(@Param("updatedStatus") Integer updatedStatus, @Param("id") Integer id);
 
-    int updateStatusByReceiverPhone(@Param("updatedStatus")Integer updatedStatus,@Param("receiverPhone")String receiverPhone);
+    int updateStatusByReceiverPhone(@Param("updatedStatus") Integer updatedStatus, @Param("receiverPhone") String receiverPhone);
 
-    List<MessageVo> selectAllVoByReceiverPhone(@Param("receiverPhone")String receiverPhone);
+    List<MessageVo> selectAllVoByConditions(@Param("receiverPhone") String receiverPhone, @Param("status") Integer status, @Param("type") Integer type);
 
-    int insertList(@Param("list")List<Message> list);
+    int insertList(@Param("list") List<Message> list);
 
-    MessageVo selectVoByIdAndReceiverPhoneAndNotDeleted(@Param("id")Integer id,@Param("receiverPhone")String receiverPhone);
+    MessageVo selectVoByIdAndReceiverPhoneAndNotDeleted(@Param("id") Integer id, @Param("receiverPhone") String receiverPhone);
 
+    Integer countByReceiverPhoneAndStatusAndType(@Param("receiverPhone") String receiverPhone, @Param("status") Integer status, @Param("type") Integer type);
 
 }

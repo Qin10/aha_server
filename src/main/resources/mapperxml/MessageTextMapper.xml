@@ -27,12 +27,14 @@
         from `message_text`
         where mt_id = #{id}
     </delete>
-    <insert id="insert" parameterType="cn.hdustea.aha_server.entity.MessageText">
+    <insert id="insert" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.MessageText"
+            useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into `message_text` (mt_id, mt_sender_phone, mt_content, mt_type, mt_post_date)
         values (#{id}, #{senderPhone}, #{content}, #{type}, #{postDate})
     </insert>
-    <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.MessageText">
+    <insert id="insertSelective" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.MessageText"
+            useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into `message_text`
         <trim prefix="(" suffix=")" suffixOverrides=",">

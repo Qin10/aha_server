@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.dto.MessageDto;
 import cn.hdustea.aha_server.dto.ProjectCheckDto;
 import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.dto.UserDto;
@@ -40,6 +41,8 @@ public class ManagementController {
     private UserInfoService userInfoService;
     @Resource
     private ContractService contractService;
+    @Resource
+    private MessageService messageService;
 
     /**
      * 获取项目资源文件oss下载签名
@@ -325,6 +328,20 @@ public class ManagementController {
     @GetMapping("/user/contract/signature/{phone}")
     public ResponseBean<Object> getContractSignatureFile(@PathVariable("phone") String phone, HttpServletResponse response) throws IOException, SelectException {
         contractService.getContractSignatureFile(phone, response);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PostMapping("/message/notice")
+    public ResponseBean<Object> sendNotice(@RequestBody MessageDto messageDto) {
+        messageService.sendNoticeMessage(messageDto);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PostMapping("/message/system")
+    public ResponseBean<Object> sendSystemMessage(@RequestBody MessageDto messageDto) {
+        messageService.sendSystemMessage(messageDto);
         return new ResponseBean<>(200, "succ", null);
     }
 }

@@ -48,6 +48,8 @@ public class AuthService {
     @Resource
     private ResumeService resumeService;
     @Resource
+    private MessageService messageService;
+    @Resource
     private RedisUtil redisUtil;
     @Resource
     private SmsService smsService;
@@ -71,6 +73,7 @@ public class AuthService {
         User user = userService.getExistUserByPhone(loginUserDto.getPhone());
         if (user != null) {
             if (EncryptUtil.getSHA256(loginUserDto.getPassword()).equals(user.getPassword())) {
+                messageService.saveAllNoticeNotReadByReceiverPhone(loginUserDto.getPhone());
                 String token = signToken(user);
                 PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
                 MDC.put("phone", loginUserDto.getPhone());

@@ -34,9 +34,9 @@ public class MessageService {
     @Resource
     private UserService userService;
 
-    public PageVo<List<MessageVo>> getAllMessageVoByReceiverPhonePagable(String receiverPhone, int pageNum, int pageSize) {
+    public PageVo<List<MessageVo>> getAllMessageVoByReceiverPhonePagable(String receiverPhone, int pageNum, int pageSize, Integer status, Integer type) {
         PageHelper.startPage(pageNum, pageSize);
-        List<MessageVo> messageVos = messageMapper.selectAllVoByReceiverPhone(receiverPhone);
+        List<MessageVo> messageVos = messageMapper.selectAllVoByConditions(receiverPhone, status, type);
         PageInfo<MessageVo> pageInfo = new PageInfo<>(messageVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
@@ -45,19 +45,24 @@ public class MessageService {
         return messageMapper.selectVoByIdAndReceiverPhoneAndNotDeleted(id, reveiverPhone);
     }
 
+    public int getMessageCountNotReadByReceiverPhoneAndType(String reveiverPhone, Integer type) {
+        return messageMapper.countByReceiverPhoneAndStatusAndType(reveiverPhone, MessageType.STATUS_NOT_READ.getValue(), type);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     public void sendPrivateMessage(MessageDto messageDto, String senderPhone) throws SelectException {
+        System.out.println(messageDto.getReveiverPhone());
         userService.getExistUserByPhone(messageDto.getReveiverPhone());
         Message message = new Message();
         MessageText messageText = new MessageText();
         messageText.setSenderPhone(senderPhone);
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_PRIVATE.getValue());
-        messageTextMapper.insert(messageText);
+        messageTextMapper.insertSelective(messageText);
         message.setTextId(messageText.getId());
         message.setReceiverPhone(messageDto.getReveiverPhone());
         message.setReceiveDate(new Date());
-        messageMapper.insert(message);
+        messageMapper.insertSelective(message);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -66,11 +71,11 @@ public class MessageService {
         MessageText messageText = new MessageText();
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_SYSTEM.getValue());
-        messageTextMapper.insert(messageText);
+        messageTextMapper.insertSelective(messageText);
         message.setTextId(messageText.getId());
         message.setReceiverPhone(messageDto.getReveiverPhone());
         message.setReceiveDate(new Date());
-        messageMapper.insert(message);
+        messageMapper.insertSelective(message);
     }
 
     public void sendSystemMessage(MessageDto messageDto, int textId) {
@@ -78,7 +83,7 @@ public class MessageService {
         message.setTextId(textId);
         message.setReceiverPhone(messageDto.getReveiverPhone());
         message.setReceiveDate(new Date());
-        messageMapper.insert(message);
+        messageMapper.insertSelective(message);
     }
 
     public void sendNoticeMessage(MessageDto messageDto, String senderPhone) {
@@ -87,7 +92,7 @@ public class MessageService {
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_NOTICE.getValue());
         messageText.setPostDate(new Date());
-        messageTextMapper.insert(messageText);
+        messageTextMapper.insertSelective(messageText);
     }
 
     public void sendNoticeMessage(MessageDto messageDto) {
@@ -107,6 +112,11 @@ public class MessageService {
 
     public void changeMessageStatusByReceiverPhone(int status, String receiverPhone) {
         messageMapper.updateStatusByReceiverPhone(status, receiverPhone);
+    }
+
+    public boolean isReceiver(String receiverPhone, int id) {
+        Message message = messageMapper.selectByPrimaryKey(id);
+        return message != null && message.getReceiverPhone().equals(receiverPhone);
     }
 
     @Async

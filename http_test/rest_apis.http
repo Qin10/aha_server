@@ -2,7 +2,7 @@
 GET http://{{host}}/sms/sendCode/register/15382355341
 
 ###发送修改密码验证短信
-GET http://{{host}}/sms/sendCode/changePassword/123456781
+GET http://{{host}}/sms/sendCode/changePassword/13819154341
 
 ###用户注册
 POST http://{{host}}/register
@@ -20,7 +20,7 @@ POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": "15382355341",
+  "phone": "13819154341",
   "password": "114514"
 }
 
@@ -33,7 +33,7 @@ Authorization:{{auth_token}}
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###用户修改密码
-POST http://{{host}}/changePassword/15382355341
+POST http://{{host}}/changePassword/13819154341
 Content-Type: application/json
 
 {
@@ -301,11 +301,87 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
-###管理员接口测试
+###管理员发送公告
+POST http://{{host}}/admin/message/notice
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "content": "第一篇公告！"
+}
+
+###管理员发送系统消息
+POST http://{{host}}/admin/message/system
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "reveiverPhone": "15677751219",
+  "content": "第二封系统消息！"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员分页获取用户信息
 GET http://{{host}}/admin/user?pageNum=1&pageSize=10
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
-###
-GET http://{{host}}/login
+### 管理员获取用户信息
+GET http://{{host}}/admin/user/33
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+### 修改用户公开信息
+PUT http://{{host}}/admin/user/info/33
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "school": "杭州电子科技大学"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+### 修改用户私有信息
+PUT http://{{host}}/admin/user/33
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "contribPoint": 500
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###查看未读站内信数量
+GET http://{{host}}/message/count/notRead
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###查看站内信
+GET http://{{host}}/message?pageNum=1&pageSize=10
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###根据id查看站内信
+GET http://{{host}}/message/15
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###投递站内信
+POST  http://{{host}}/message
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "reveiverPhone": "13819154341",
+  "content": "第一条站内信！"
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
