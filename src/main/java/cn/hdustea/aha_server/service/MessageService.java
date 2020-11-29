@@ -34,9 +34,28 @@ public class MessageService {
     @Resource
     private UserService userService;
 
-    public PageVo<List<MessageVo>> getAllMessageVoByReceiverPhonePagable(String receiverPhone, int pageNum, int pageSize, Integer status, Integer type) {
+    public PageVo<List<MessageVo>> getAllMessageVoByReceiverPhonePagable(String receiverPhone, int pageNum, int pageSize, Integer status, String type) throws SelectException {
+        Integer currentType = null;
+        if (status != null && (status < 0 || status > 2)) {
+            throw new SelectException("'status'参数取值错误");
+        }
+        if (type != null) {
+            switch (type) {
+                case "system": {
+                    currentType = MessageType.TYPE_SYSTEM.getValue();
+                    break;
+                }
+                case "private": {
+                    currentType = MessageType.TYPE_PRIVATE.getValue();
+                    break;
+                }
+                default: {
+                    throw new SelectException("'type'参数取值错误");
+                }
+            }
+        }
         PageHelper.startPage(pageNum, pageSize);
-        List<MessageVo> messageVos = messageMapper.selectAllVoByConditions(receiverPhone, status, type);
+        List<MessageVo> messageVos = messageMapper.selectAllVoByConditions(receiverPhone, status, currentType);
         PageInfo<MessageVo> pageInfo = new PageInfo<>(messageVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
@@ -45,8 +64,28 @@ public class MessageService {
         return messageMapper.selectVoByIdAndReceiverPhoneAndNotDeleted(id, reveiverPhone);
     }
 
-    public int getMessageCountNotReadByReceiverPhoneAndType(String reveiverPhone, Integer type) {
-        return messageMapper.countByReceiverPhoneAndStatusAndType(reveiverPhone, MessageType.STATUS_NOT_READ.getValue(), type);
+    public List<MessageVo> getAllMessageVoInCommunicationBySenderPhoneAndReceiverPhone(String receiverPhone, String senderPhone) {
+        return messageMapper.selectAllVoInCommunicationBySenderPhoneAndReceiverPhone(receiverPhone, senderPhone);
+    }
+
+    public int getMessageCountNotReadByReceiverPhoneAndType(String reveiverPhone, String type) throws SelectException {
+        Integer currentType = null;
+        if (type != null) {
+            switch (type) {
+                case "system": {
+                    currentType = MessageType.TYPE_SYSTEM.getValue();
+                    break;
+                }
+                case "private": {
+                    currentType = MessageType.TYPE_PRIVATE.getValue();
+                    break;
+                }
+                default: {
+                    throw new SelectException("'type'参数取值错误");
+                }
+            }
+        }
+        return messageMapper.countByReceiverPhoneAndStatusAndType(reveiverPhone, MessageType.STATUS_NOT_READ.getValue(), currentType);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -95,8 +134,12 @@ public class MessageService {
         messageTextMapper.insertSelective(messageText);
     }
 
-    public void sendNoticeMessage(MessageDto messageDto) {
-        sendNoticeMessage(messageDto, null);
+    public void sendSystemNoticeMessage(MessageDto messageDto) {
+        MessageText messageText = new MessageText();
+        messageText.setContent(messageDto.getContent());
+        messageText.setType(MessageType.TYPE_SYSTEM_NOTICE.getValue());
+        messageText.setPostDate(new Date());
+        messageTextMapper.insertSelective(messageText);
     }
 
     public void updateNoticeTextById(MessageDto messageDto, int id) {
@@ -112,6 +155,10 @@ public class MessageService {
 
     public void changeMessageStatusByReceiverPhone(int status, String receiverPhone) {
         messageMapper.updateStatusByReceiverPhone(status, receiverPhone);
+    }
+
+    public void changeMessageStatusByReceiverPhoneAndSenderPhone(int status, String receiverPhone, String senderPhone) {
+        messageMapper.updateStatusByReceiverPhoneAndSenderPhone(status, receiverPhone, senderPhone);
     }
 
     public boolean isReceiver(String receiverPhone, int id) {

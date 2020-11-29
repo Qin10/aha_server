@@ -28,6 +28,8 @@ public interface MessageMapper {
 
     int updateStatusByReceiverPhone(@Param("updatedStatus") Integer updatedStatus, @Param("receiverPhone") String receiverPhone);
 
+    int updateStatusByReceiverPhoneAndSenderPhone(@Param("updatedStatus") Integer updatedStatus, @Param("receiverPhone") String receiverPhone, @Param("senderPhone") String senderPhone);
+
     List<MessageVo> selectAllVoByConditions(@Param("receiverPhone") String receiverPhone, @Param("status") Integer status, @Param("type") Integer type);
 
     int insertList(@Param("list") List<Message> list);
@@ -35,5 +37,7 @@ public interface MessageMapper {
     MessageVo selectVoByIdAndReceiverPhoneAndNotDeleted(@Param("id") Integer id, @Param("receiverPhone") String receiverPhone);
 
     Integer countByReceiverPhoneAndStatusAndType(@Param("receiverPhone") String receiverPhone, @Param("status") Integer status, @Param("type") Integer type);
+
+    List<MessageVo> selectAllVoInCommunicationBySenderPhoneAndReceiverPhone(@Param("receiverPhone") String receiverPhone, @Param("senderPhone") String senderPhone);
 
 }

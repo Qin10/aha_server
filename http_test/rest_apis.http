@@ -307,7 +307,7 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "content": "第一篇公告！"
+  "content": "只是一篇系统公告！"
 }
 
 ###管理员发送系统消息
@@ -357,19 +357,25 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看未读站内信数量
-GET http://{{host}}/message/count/notRead
+GET http://{{host}}/message/count/notRead?type=private
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看站内信
-GET http://{{host}}/message?pageNum=1&pageSize=10
+GET http://{{host}}/message?pageNum=1&pageSize=10&type=private&status=1
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###根据id查看站内信
-GET http://{{host}}/message/15
+GET http://{{host}}/message/16
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###根据对话获取站内信
+GET http://{{host}}/message/communication/15382355341
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

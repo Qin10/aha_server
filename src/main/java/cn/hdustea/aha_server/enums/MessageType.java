@@ -14,8 +14,8 @@ public enum MessageType {
     STATUS_DELETED(2, "已删除"),
     TYPE_SYSTEM(0, "系统消息"),
     TYPE_PRIVATE(1, "私信"),
-    TYPE_NOTICE(2, "站内通知");
-
+    TYPE_NOTICE(2, "站内通知"),
+    TYPE_SYSTEM_NOTICE(3, "站内系统通知");
     private final Integer value;
     private final String desc;
 

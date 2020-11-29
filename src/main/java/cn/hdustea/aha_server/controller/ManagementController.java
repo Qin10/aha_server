@@ -331,13 +331,23 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 发送群发系统消息(广播)
+     *
+     * @param messageDto 站内信
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/message/notice")
     public ResponseBean<Object> sendNotice(@RequestBody MessageDto messageDto) {
-        messageService.sendNoticeMessage(messageDto);
+        messageService.sendSystemNoticeMessage(messageDto);
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 向指定用户发送系统消息
+     *
+     * @param messageDto 站内信
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/message/system")
     public ResponseBean<Object> sendSystemMessage(@RequestBody MessageDto messageDto) {

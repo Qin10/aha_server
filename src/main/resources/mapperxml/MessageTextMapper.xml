@@ -106,7 +106,8 @@
         select
         <include refid="Base_Column_List"/>
         from message_text mt
-        where mt.mt_type = 2
+        where (mt.mt_type = 2
+                or mt_type = 3)
           and not exists(select 1
                          from message m
                          where m.m_text_id = mt.mt_id

@@ -1129,6 +1129,59 @@ phone|string|否|用户手机号
 	"time":"string //响应时间"
 }
 ```
+## 发送群发系统消息(广播)
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/message/notice `POST` 
+
+**请求体**
+
+```json
+{
+	"content":"string【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 向指定用户发送系统消息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/message/system `POST` 
+
+**请求体**
+
+```json
+{
+	"reveiverPhone":"string",
+	"content":"string【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 # OSS相关请求
 ## 内容安全扫描异常回调(OSS端发送)
 
@@ -2250,6 +2303,175 @@ code|string|否|小程序请求码
 	"data":{
 		"token":"string //token令牌"
 	},
+	"time":"string //响应时间"
+}
+```
+# 站内信相关请求
+## 根据条件获取未读消息条数
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/count/notRead `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+type|string|否|消息类型(system:系统消息,private:私信)
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"int //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 根据条件获取消息队列
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/getAllMessageVoPagable `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+status|int|否|状态(0:未读,1:已读,2:已删除)
+type|string|否|消息类型(system:系统消息,private:私信)
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int",
+			"senderPhone":"string",
+			"type":"int",
+			"status":"int",
+			"receiveDate":"date",
+			"content":"string"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 根据对方手机号获取会话消息，并标记为已读
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/communication/{phone} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+phone|string|否|对方手机号
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int",
+		"senderPhone":"string",
+		"type":"int",
+		"status":"int",
+		"receiveDate":"date",
+		"content":"string"
+	}],
+	"time":"string //响应时间"
+}
+```
+## 根据id获取站内信内容，并标记为已读
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/{messageId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+messageId|int|否|站内信id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除指定站内信（并非真的从数据库中删除）
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/{messageId} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+messageId|int|否|站内信id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 向指定用户发送私信
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/sendPrivateMessage `POST` 
+
+**请求体**
+
+```json
+{
+	"reveiverPhone":"string //收件人手机号",
+	"content":"string【必须】 //站内信内容"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
 	"time":"string //响应时间"
 }
 ```

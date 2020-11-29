@@ -65,16 +65,16 @@ class AhaServerApplicationTests {
     void testCRank() throws SelectException {
         System.out.println(contributionRankService.getUserContribPointByPhone("15382355341"));
     }
+
     @Test
     void testMNS() {
         DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
         documentConvertInfoDto.setProjectResourceId(8);
         documentConvertInfoDto.setSrcFilename("企业画像/1606217593868/DJI_20180819_082700.mp4");
-        redisUtil.lPush(RedisUtil.DOCUMENT_CONVERT_LIST_KEY,documentConvertInfoDto);
+        redisUtil.lPush(RedisUtil.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
     }
 
     @Test
-    void testMessageService(){
-        messageService.saveAllNoticeNotReadByReceiverPhone("15382355341");
+    void testMessageService() {
     }
 }
