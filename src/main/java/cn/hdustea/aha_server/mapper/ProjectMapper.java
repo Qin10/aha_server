@@ -1,4 +1,5 @@
 package cn.hdustea.aha_server.mapper;
+
 import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.vo.ProjectDetailVo;
 import cn.hdustea.aha_server.vo.ProjectRoughVo;
@@ -35,13 +36,13 @@ public interface ProjectMapper {
 
     int updateReadById(@Param("updatedRead") Integer updatedRead, @Param("id") Integer id);
 
-    List<ProjectRoughVo> selectAllRoughByConditions(@Param("phone") String phone, @Param("compId") Integer compId, @Param("awardLevel") Integer awardLevel, @Param("sortBy") String sortBy, @Param("orderBy") String orderBy, @Param("passed") Boolean passed);
+    List<ProjectRoughVo> selectAllRoughByConditions(@Param("phone") String phone, @Param("compId") Integer compId, @Param("awardLevel") Integer awardLevel, @Param("passed") Boolean passed);
 
     int updateIncCollectById(@Param("id") Integer id);
 
     int updateDecCollectById(@Param("id") Integer id);
 
-    int updateMeaningById(@Param("updatedMeaning")BigDecimal updatedMeaning,@Param("id")Integer id);
+    int updateMeaningById(@Param("updatedMeaning") BigDecimal updatedMeaning, @Param("id") Integer id);
 
-    int updatePassedById(@Param("updatedPassed")Boolean updatedPassed,@Param("id")Integer id);
+    int updatePassedById(@Param("updatedPassed") Boolean updatedPassed, @Param("id") Integer id);
 }

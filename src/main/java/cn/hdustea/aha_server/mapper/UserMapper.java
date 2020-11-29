@@ -37,5 +37,5 @@ public interface UserMapper {
 
     UserManagementVo selectManagementVoByPrimaryKey(Integer id);
 
-    List<UserManagementVo> selectAllManagementVoByConditions(@Param("roleId") Integer roleId, @Param("signedNotice") Boolean signedNotice, @Param("signedContract") Boolean signedContract, @Param("typeId") Integer typeId, @Param("phoneLike") String phoneLike, @Param("nicknameLike") String nicknameLike, @Param("trueNameLike") String trueNameLike, @Param("sortBy") String sortBy, @Param("orderBy") String orderBy);
+    List<UserManagementVo> selectAllManagementVoByConditions(@Param("roleId") Integer roleId, @Param("signedNotice") Boolean signedNotice, @Param("signedContract") Boolean signedContract, @Param("typeId") Integer typeId, @Param("phoneLike") String phoneLike, @Param("nicknameLike") String nicknameLike, @Param("trueNameLike") String trueNameLike);
 }

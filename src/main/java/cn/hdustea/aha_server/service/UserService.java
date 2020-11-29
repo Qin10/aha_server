@@ -33,10 +33,10 @@ public class UserService {
         }
     }
 
-    public PageVo<List<UserManagementVo>> getAllUserManagementVoPagable(int pageNum, int pageSize, Integer roleId, Boolean signedNotice, Boolean signedContract, Integer typeId, String phoneLike, String nicknameLike, String trueNameLike, String sortBy, String orderBy) {
+    public PageVo<List<UserManagementVo>> getAllUserManagementVoPagable(int pageNum, int pageSize, Integer roleId, Boolean signedNotice, Boolean signedContract, Integer typeId, String phoneLike, String nicknameLike, String trueNameLike, String sortBy, String orderBy) throws SelectException {
         String currentSortBy = "u_id";
-        String currentOrderBy = "asc";
-        if (sortBy != null) {
+        String currentOrderBy = "desc";
+        if (sortBy != null && !sortBy.equals("")) {
             switch (sortBy) {
                 case "time": {
                     currentSortBy = "u_id";
@@ -55,11 +55,11 @@ public class UserService {
                     break;
                 }
                 default: {
-                    currentSortBy = "u_id";
+                    throw new SelectException("'orderBy'参数取值错误！");
                 }
             }
         }
-        if (orderBy != null) {
+        if (orderBy != null && !orderBy.equals("")) {
             switch (orderBy) {
                 case "desc": {
                     currentOrderBy = "desc";
@@ -70,12 +70,13 @@ public class UserService {
                     break;
                 }
                 default: {
-                    currentOrderBy = "asc";
+                    throw new SelectException("'orderBy'参数取值错误！");
                 }
             }
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<UserManagementVo> userManagementVos = userMapper.selectAllManagementVoByConditions(roleId, signedNotice, signedContract, typeId, phoneLike, nicknameLike, trueNameLike, currentSortBy, currentOrderBy);
+        PageHelper.orderBy(currentSortBy + " " + currentOrderBy);
+        List<UserManagementVo> userManagementVos = userMapper.selectAllManagementVoByConditions(roleId, signedNotice, signedContract, typeId, phoneLike, nicknameLike, trueNameLike);
         PageInfo<UserManagementVo> pageInfo = new PageInfo<>(userManagementVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }

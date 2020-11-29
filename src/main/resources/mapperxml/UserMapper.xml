@@ -250,10 +250,5 @@
                 and ui_true_name like concat('%', #{trueNameLike}, '%')
             </if>
         </where>
-        <if test="sortBy != null and orderBy != null">
-            <!--@ignoreSql-->
-            order by ${sortBy} ${orderBy}
-            <!--@ignoreSql-->
-        </if>
     </select>
 </mapper>

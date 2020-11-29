@@ -49,11 +49,11 @@ public class ProjectService {
      * @param pageSize 页面大小
      * @return 项目粗略信息分页列表
      */
-    public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize, String phone, Integer compId, Integer awardLevel, String sortBy, String orderBy, Boolean passed) {
+    public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize, String phone, Integer compId, Integer awardLevel, String sortBy, String orderBy, Boolean passed) throws SelectException {
         List<ProjectRoughVo> projectRoughVos;
         String currentSortBy = "p_id";
         String currentOrderBy = "desc";
-        if (sortBy != null) {
+        if (sortBy != null && !sortBy.equals("")) {
             switch (sortBy) {
                 case "time": {
                     currentSortBy = "p_id";
@@ -72,11 +72,11 @@ public class ProjectService {
                     break;
                 }
                 default: {
-                    currentSortBy = "p_id";
+                    throw new SelectException("'sortBy'参数取值错误！");
                 }
             }
         }
-        if (orderBy != null) {
+        if (orderBy != null && !orderBy.equals("")) {
             switch (orderBy) {
                 case "desc": {
                     currentOrderBy = "desc";
@@ -87,12 +87,13 @@ public class ProjectService {
                     break;
                 }
                 default: {
-                    currentOrderBy = "desc";
+                    throw new SelectException("'orderBy'参数取值错误！");
                 }
             }
         }
         PageHelper.startPage(pageNum, pageSize);
-        projectRoughVos = projectMapper.selectAllRoughByConditions(phone, compId, awardLevel, currentSortBy, currentOrderBy, passed);
+        PageHelper.orderBy(currentSortBy + " " + currentOrderBy);
+        projectRoughVos = projectMapper.selectAllRoughByConditions(phone, compId, awardLevel, passed);
         PageInfo<ProjectRoughVo> pageInfo = new PageInfo<>(projectRoughVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
