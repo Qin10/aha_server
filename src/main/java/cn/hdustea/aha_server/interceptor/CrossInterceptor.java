@@ -17,10 +17,11 @@ public class CrossInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //跨域
-        response.setHeader("Access-Control-Allow-Origin", "*");
+            response.setHeader("Access-Control-Allow-Origin", "*");
         //跨域 Header
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Expose-Headers", "*");
         // 浏览器是会先发一次options请求，如果请求通过，则继续发送正式的post请求
         // 配置options的请求返回
         if (request.getMethod().equals("OPTIONS")) {
