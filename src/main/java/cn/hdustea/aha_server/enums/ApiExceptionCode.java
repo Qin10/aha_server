@@ -84,7 +84,11 @@ public enum ApiExceptionCode {
     /**
      * 访问次数超限
      */
-    REQUEST_TIMES_EXCEEDED(701, "访问次数超限！");
+    REQUEST_TIMES_EXCEEDED(701, "访问次数超限！"),
+    /**
+     * 授权失败
+     */
+    AUTHORIZATION_FAIL(801, "授权失败！");
 
     private final Integer value;
     private final String desc;

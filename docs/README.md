@@ -2301,8 +2301,58 @@ code|string|否|小程序请求码
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"token":"string //token令牌"
+		"token":"string //token令牌",
+		"personalUserInfo":{
+			"signedNotice":"boolean //是否签署服务协议",
+			"signedContract":"boolean //是否签署合同",
+			"contribPoint":"double //贡献点",
+			"role":{
+				"id":"int //角色id",
+				"name":"string //角色名称"
+			},
+			"userInfo":{
+				"userPhone":"string //用户手机号(外键)",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"birthday":"date //用户出生日期",
+				"typeId":"int //用户类别",
+				"signature":"string //用户个性签名",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"academy":"string //用户学院",
+				"major":"string //用户主修专业",
+				"grade":"int //用户当前年级",
+				"intro":"string //用户自我介绍",
+				"specialtyTags":"string //用户特长标签",
+				"trueName":"string //用户真实姓名",
+				"compTags":"string //用户参与过比赛标签"
+			}
+		}
 	},
+	"time":"string //响应时间"
+}
+```
+## 绑定微信账号
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/wxBind `POST` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+code|string|否|小程序请求码
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
 	"time":"string //响应时间"
 }
 ```

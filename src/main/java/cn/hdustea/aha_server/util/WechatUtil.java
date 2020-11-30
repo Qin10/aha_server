@@ -1,12 +1,8 @@
 package cn.hdustea.aha_server.util;
 
 import cn.hdustea.aha_server.dto.WechatDto;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 微信小程序鉴权授权相关工具类
@@ -20,31 +16,14 @@ public class WechatUtil {
      * @param code 微信请求code
      * @return 包含了各种校验信息的Map
      */
-    public static WechatDto getWxInfo(String code) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestUrl = "https://api.weixin.qq.com/sns/jscode2session";
-        Map<String, String> requestUrlParam = new HashMap<>();
-        // https://mp.weixin.qq.com/wxopen/devprofile?action=get_profile&token=164113089&lang=zh_CN
-        //小程序appId
-        requestUrlParam.put("appid", "wx9b49ada20b56111a");
-        //小程序secret
-        requestUrlParam.put("secret", "bdafdd48671aeb8ad63f5af73b40f332");
-        //小程序端返回的code
-        requestUrlParam.put("js_code", code);
-        //默认参数
-        requestUrlParam.put("grant_type", "authorization_code");
+    public static WechatDto getWxInfo(String code) throws Exception {
         //发送post请求读取调用微信接口获取openid用户唯一标识
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Map> mapResponseEntity = restTemplate.postForEntity(requestUrl, requestUrlParam, Map.class);
-        Map<String, String> responseBody = mapResponseEntity.getBody();
-        WechatDto wechatDto = new WechatDto();
-        wechatDto.setOpenId(responseBody != null ? responseBody.get("openid") : null);
-        wechatDto.setSessionKey(responseBody != null ? responseBody.get("session_key") : null);
-        wechatDto.setUnionid(responseBody != null ? responseBody.get("unionid") : null);
-        return wechatDto;
-//        String response = HttpClientUtil.doPost(requestUrl, requestUrlParam);
-//        ObjectMapper mapper = new ObjectMapper();
-//        Map<String, String> wechatMap = mapper.readValue(response, Map.class);
-//        return wechatMap.get("openid");
+        String requestUrlBuilder = "https://api.weixin.qq.com/sns/jscode2session" +
+                "?appid=wxafd522b076e38be0&secret=ea1c2a333be6b1dc7bf55c25e0738cb0&grant_type=authorization_code&js_code=" +
+                code;
+        ResponseEntity<String> responseEntity = restTemplate.postForEntity(requestUrlBuilder, null, String.class);
+        String responseStr = responseEntity.getBody();
+        return JacksonUtil.json2pojo(responseStr, WechatDto.class);
     }
 }

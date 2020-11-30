@@ -26,4 +26,12 @@ public class OauthService {
     public Oauth getOauthByOauthTypeAndOauthId(String oauthType, String oauthId) {
         return oauthMapper.selectByOauthTypeAndOauthId(oauthType, oauthId);
     }
+
+    public Oauth getOauthByOauthTypeAndUserPhone(String oauthType, String phone) {
+        return oauthMapper.selectByUserPhoneAndOauthType(phone, oauthType);
+    }
+
+    public void saveOauth(Oauth oauth){
+        oauthMapper.insertSelective(oauth);
+    }
 }

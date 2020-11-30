@@ -196,7 +196,7 @@ public class AuthService {
      * @param user 用户私有信息
      * @return token令牌
      */
-    private String signToken(User user) {
+    public String signToken(User user) {
         JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(user);
         String token = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
         redisUtil.set(REFRESH_TOKEN_PREFIX + user.getPhone(), token, jwtConfig.getRefreshTokenExpireTime());

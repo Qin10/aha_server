@@ -1,10 +1,7 @@
 package cn.hdustea.aha_server.aspect;
 
-import cn.hdustea.aha_server.util.RedisUtil;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * 访问次数限制切面类
@@ -14,8 +11,8 @@ import javax.annotation.Resource;
 @Aspect
 @Component
 public class RequestLimitAspect {
-    @Resource
-    private RedisUtil redisUtil;
+//    @Resource
+//    private RedisUtil redisUtil;
 //
 //    @Pointcut("@annotation(requestLimit)")
 //    public void pointCut(RequestLimit requestLimit) {
