@@ -14,9 +14,9 @@ public class Message {
     private Integer id;
 
     /**
-     * 收件人手机号
+     * 收件人id
      */
-    private String receiverPhone;
+    private Integer receiverUserId;
 
     /**
      * 信件内容id(外键)

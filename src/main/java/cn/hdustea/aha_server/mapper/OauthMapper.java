@@ -4,25 +4,26 @@ import cn.hdustea.aha_server.entity.Oauth;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * 第三方登录凭证表mapper
+ * ${description}
  *
  * @author STEA_YY
  **/
 public interface OauthMapper {
-    int deleteByPrimaryKey(Integer id);
+    int deleteByPrimaryKey(@Param("userId") Integer userId, @Param("oauthType") String oauthType);
 
     int insert(Oauth record);
 
     int insertSelective(Oauth record);
 
-    Oauth selectByPrimaryKey(Integer id);
+    Oauth selectByPrimaryKey(@Param("userId") Integer userId, @Param("oauthType") String oauthType);
 
     int updateByPrimaryKeySelective(Oauth record);
 
     int updateByPrimaryKey(Oauth record);
 
+    int deleteByPrimaryKey(Integer id);
+
+    Oauth selectByPrimaryKey(Integer id);
+
     Oauth selectByOauthTypeAndOauthId(@Param("oauthType") String oauthType, @Param("oauthId") String oauthId);
-
-    Oauth selectByUserPhoneAndOauthType(@Param("userPhone") String userPhone, @Param("oauthType") String oauthType);
-
 }

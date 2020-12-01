@@ -718,11 +718,14 @@ public class RedisUtil {
         long currentRank = 1;
         for (ZSetOperations.TypedTuple<Object> tuple : tuples) {
             UserContribPointVo userContribPointVo = new UserContribPointVo();
-            userContribPointVo.setPhone((String) tuple.getValue());
-            userContribPointVo.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
-            userContribPointVo.setRank(currentRank);
-            currentRank++;
-            userContribPointVos.add(userContribPointVo);
+            String userIdStr = (String) tuple.getValue();
+            if (userIdStr != null) {
+                userContribPointVo.setUserId(Integer.parseInt(userIdStr));
+                userContribPointVo.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
+                userContribPointVo.setRank(currentRank);
+                currentRank++;
+                userContribPointVos.add(userContribPointVo);
+            }
         }
         return userContribPointVos;
     }

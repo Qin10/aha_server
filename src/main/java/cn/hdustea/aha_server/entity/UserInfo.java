@@ -5,16 +5,16 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 用户详细信息实体类
+ * ${description}
  *
  * @author STEA_YY
  **/
 @Data
 public class UserInfo {
     /**
-     * 用户手机号(外键)
+     * 用户id(外键)
      */
-    private String userPhone;
+    private Integer userId;
 
     /**
      * 用户昵称

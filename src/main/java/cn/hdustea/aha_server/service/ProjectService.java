@@ -49,7 +49,7 @@ public class ProjectService {
      * @param pageSize 页面大小
      * @return 项目粗略信息分页列表
      */
-    public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize, String phone, Integer compId, Integer awardLevel, String sortBy, String orderBy, Boolean passed) throws SelectException {
+    public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize, Integer userId, Integer compId, Integer awardLevel, String sortBy, String orderBy, Boolean passed) throws SelectException {
         List<ProjectRoughVo> projectRoughVos;
         String currentSortBy = "p_id";
         String currentOrderBy = "desc";
@@ -93,7 +93,7 @@ public class ProjectService {
         }
         PageHelper.startPage(pageNum, pageSize);
         PageHelper.orderBy(currentSortBy + " " + currentOrderBy);
-        projectRoughVos = projectMapper.selectAllRoughByConditions(phone, compId, awardLevel, passed);
+        projectRoughVos = projectMapper.selectAllRoughByConditions(userId, compId, awardLevel, passed);
         PageInfo<ProjectRoughVo> pageInfo = new PageInfo<>(projectRoughVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
@@ -126,12 +126,12 @@ public class ProjectService {
      * 新增项目并记录作者
      *
      * @param projectDto 项目信息
-     * @param phone      手机号
+     * @param userId      用户id
      */
-    public Integer saveProjectAndAuthor(ProjectDto projectDto, String phone) {
+    public Integer saveProjectAndAuthor(ProjectDto projectDto, int userId) {
         Project project = new Project();
         BeanUtils.copyProperties(projectDto, project);
-        project.setCreatorPhone(phone);
+        project.setCreatorUserId(userId);
         projectMapper.insertSelective(project);
         return project.getId();
     }
@@ -152,16 +152,16 @@ public class ProjectService {
     /**
      * 检查用户是否有项目修改权限
      *
-     * @param phone 手机号
+     * @param userId 用户id
      * @param id    项目id
      * @return 是否有修改权限
      */
-    public boolean hasPermission(String phone, int id) {
+    public boolean hasPermission(int userId, int id) {
         Project project = projectMapper.selectByPrimaryKey(id);
-        if (project != null && project.getCreatorPhone().equals(phone)) {
+        if (project != null && project.getCreatorUserId().equals(userId)) {
             return true;
         } else {
-            ProjectMember projectMember = projectMemberMapper.selectByProjectIdAndMemberPhoneAndEditable(id, phone, true);
+            ProjectMember projectMember = projectMemberMapper.selectByProjectIdAndMemberUserIdAndEditable(id, userId, true);
             return projectMember != null;
         }
     }
@@ -183,7 +183,7 @@ public class ProjectService {
      * @throws InsertException 插入异常
      */
     public void saveProjectMemberByProjectId(ProjectMember projectMember, int projectId) throws InsertException, SelectException {
-        userService.getExistUserByPhone(projectMember.getMemberPhone());
+        userService.getExistUserById(projectMember.getMemberUserId());
         projectMember.setProjectId(projectId);
         try {
             projectMemberMapper.insert(projectMember);
@@ -193,25 +193,25 @@ public class ProjectService {
     }
 
     /**
-     * 根据项目id和手机号删除项目成员
+     * 根据项目id和用户id删除项目成员
      *
      * @param projectId 项目id
-     * @param phone     手机号
+     * @param userId     用户id
      */
-    public void deleteProjectMember(int projectId, String phone) {
-        projectMemberMapper.deleteByPrimaryKey(projectId, phone);
+    public void deleteProjectMember(int projectId, int userId) {
+        projectMemberMapper.deleteByPrimaryKey(projectId, userId);
     }
 
     /**
-     * 根据项目id和手机号更新项目成员
+     * 根据项目id和用户id更新项目成员
      *
      * @param projectMember 更新的项目成员
      * @param projectId     项目id
-     * @param phone         手机号
+     * @param userId         用户id
      */
-    public void updateProjectMember(ProjectMember projectMember, int projectId, String phone) {
+    public void updateProjectMember(ProjectMember projectMember, int projectId, int userId) {
         projectMember.setProjectId(projectId);
-        projectMember.setMemberPhone(phone);
+        projectMember.setMemberUserId(userId);
         projectMemberMapper.updateByPrimaryKeySelective(projectMember);
     }
 
@@ -232,23 +232,23 @@ public class ProjectService {
     /**
      * 获取全部用户收藏项目
      *
-     * @param phone 手机号
+     * @param userId 用户id
      * @return 用户收藏列表
      */
-    public List<UserCollectionVo> getAllCollectionByPhone(String phone) {
-        return userCollectionMapper.selectAllVoByUserPhone(phone);
+    public List<UserCollectionVo> getAllCollectionByUserId(int userId) {
+        return userCollectionMapper.selectAllVoByUserId(userId);
     }
 
     /**
      * 收藏项目
      *
      * @param projectId 项目id
-     * @param phone     手机号
+     * @param userId     用户id
      */
-    public void saveCollection(int projectId, String phone) throws InsertException {
+    public void saveCollection(int projectId, int userId) throws InsertException {
         UserCollection userCollection = new UserCollection();
         userCollection.setProjectId(projectId);
-        userCollection.setUserPhone(phone);
+        userCollection.setUserId(userId);
         userCollection.setTimestamp(new Date());
         try {
             userCollectionMapper.insert(userCollection);
@@ -263,10 +263,10 @@ public class ProjectService {
      * 取消收藏
      *
      * @param projectId 项目id
-     * @param phone     手机号
+     * @param userId     用户id
      */
-    public void deleteCollection(int projectId, String phone) throws DeleteException {
-        int result = userCollectionMapper.deleteByPrimaryKey(phone, projectId);
+    public void deleteCollection(int projectId, int userId) throws DeleteException {
+        int result = userCollectionMapper.deleteByPrimaryKey(userId, projectId);
         if (result == 0) {
             throw new DeleteException("您未收藏过此项目！");
         }
@@ -276,11 +276,11 @@ public class ProjectService {
      * 判断项目是否被收藏
      *
      * @param projectId 项目id
-     * @param phone     手机号
+     * @param userId     用户id
      * @return 项目是否被收藏
      */
-    public boolean hasCollected(int projectId, String phone) {
-        UserCollection userCollection = userCollectionMapper.selectByPrimaryKey(phone, projectId);
+    public boolean hasCollected(int projectId, int userId) {
+        UserCollection userCollection = userCollectionMapper.selectByPrimaryKey(userId, projectId);
         return userCollection != null;
     }
 

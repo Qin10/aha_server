@@ -1,30 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.UserMapper">
-    <resultMap id="selectPhoneAndContribPointResult" type="cn.hdustea.aha_server.vo.UserContribPointVo">
-        <result column="u_phone" property="phone"/>
+    <resultMap id="selectUserIdAndContribPointResult" type="cn.hdustea.aha_server.vo.UserContribPointVo">
+        <result column="u_id" property="userId"/>
         <result column="u_contrib_point" property="contribPoint"/>
-    </resultMap>
-    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.User">
-        <!--@mbg.generated-->
-        <!--@Table `user`-->
-        <id column="u_id" property="id"/>
-        <result column="u_phone" property="phone"/>
-        <result column="u_password" property="password"/>
-        <result column="u_created_time" property="createdTime"/>
-        <result column="u_student_rec_filename" property="studentRecFilename"/>
-        <result column="u_contrib_point" property="contribPoint"/>
-        <result column="u_signed_notice" property="signedNotice"/>
-        <result column="u_signed_contract" property="signedContract"/>
-        <result column="u_role_id" property="roleId"/>
-        <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
-                     select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
     <resultMap id="ManagementVoResultMap" type="cn.hdustea.aha_server.vo.UserManagementVo">
         <!--@mbg.generated-->
         <!--@Table `user`-->
         <id column="u_id" property="id"/>
-        <result column="u_phone" property="phone"/>
+        <result column="u_id" property="id"/>
         <result column="u_created_time" property="createdTime"/>
         <result column="u_student_rec_filename" property="studentRecFilename"/>
         <result column="u_contrib_point" property="contribPoint"/>
@@ -48,10 +33,24 @@
         <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
                      select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.User">
+        <!--@mbg.generated-->
+        <!--@Table `user`-->
+        <id column="u_id" property="id"/>
+        <result column="u_password" property="password"/>
+        <result column="u_created_time" property="createdTime"/>
+        <result column="u_student_rec_filename" property="studentRecFilename"/>
+        <result column="u_contrib_point" property="contribPoint"/>
+        <result column="u_signed_notice" property="signedNotice"/>
+        <result column="u_signed_contract" property="signedContract"/>
+        <result column="u_role_id" property="roleId"/>
+        <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
+                     select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
+    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        u_id, u_phone, u_password, u_created_time, u_student_rec_filename, u_contrib_point,
-        u_signed_notice, u_signed_contract, u_role_id
+        u_id, u_password, u_created_time, u_student_rec_filename, u_contrib_point, u_signed_notice,
+        u_signed_contract, u_role_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -69,19 +68,16 @@
     <insert id="insert" keyColumn="u_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into `user` (u_phone, u_password, u_created_time, u_student_rec_filename, u_contrib_point,
-                            u_signed_notice, u_signed_contract, u_role_id)
-        values (#{phone}, #{password}, #{createdTime}, #{studentRecFilename}, #{contribPoint},
-                #{signedNotice}, #{signedContract}, #{roleId})
+        insert into `user` (u_password, u_created_time, u_student_rec_filename, u_contrib_point, u_signed_notice,
+                            u_signed_contract, u_role_id)
+        values (#{password}, #{createdTime}, #{studentRecFilename}, #{contribPoint}, #{signedNotice},
+                #{signedContract}, #{roleId})
     </insert>
     <insert id="insertSelective" keyColumn="u_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into `user`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="phone != null">
-                u_phone,
-            </if>
             <if test="password != null">
                 u_password,
             </if>
@@ -105,9 +101,6 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="phone != null">
-                #{phone},
-            </if>
             <if test="password != null">
                 #{password},
             </if>
@@ -135,9 +128,6 @@
         <!--@mbg.generated-->
         update `user`
         <set>
-            <if test="phone != null">
-                u_phone = #{phone},
-            </if>
             <if test="password != null">
                 u_password = #{password},
             </if>
@@ -165,8 +155,7 @@
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.User">
         <!--@mbg.generated-->
         update `user`
-        set u_phone                = #{phone},
-            u_password             = #{password},
+        set u_password             = #{password},
             u_created_time         = #{createdTime},
             u_student_rec_filename = #{studentRecFilename},
             u_contrib_point        = #{contribPoint},
@@ -178,37 +167,37 @@
 
 
     <!--auto generated by MybatisCodeHelper on 2020-11-02-->
-    <select id="selectByPhone" resultMap="BaseResultMap">
+    <select id="selectById" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from `user`
-        where u_phone = #{phone}
+        where u_id = #{id}
     </select>
 
     <!--auto generated by MybatisCodeHelper on 2020-11-02-->
-    <update id="updatePasswordByPhone">
+    <update id="updatePasswordById">
         update `user`
         set u_password=#{updatedPassword}
-        where u_phone = #{phone}
+        where u_id = #{id}
     </update>
 
     <!--auto generated by MybatisCodeHelper on 2020-11-02-->
-    <update id="updateSignedNoticeByPhone">
+    <update id="updateSignedNoticeById">
         update `user`
         set u_signed_notice=#{updatedSignedNotice}
-        where u_phone = #{phone}
+        where u_id = #{id}
     </update>
 
     <!--auto generated by MybatisCodeHelper on 2020-11-02-->
-    <update id="updateSignedContractByPhone">
+    <update id="updateSignedContractById">
         update `user`
         set u_signed_contract=#{updatedSignedContract}
-        where u_phone = #{phone}
+        where u_id = #{id}
     </update>
 
     <!--auto generated by MybatisCodeHelper on 2020-11-04-->
-    <select id="selectPhoneAndContribPoint" resultMap="selectPhoneAndContribPointResult">
-        select u_phone, u_contrib_point
+    <select id="selectIdAndContribPoint" resultMap="selectUserIdAndContribPointResult">
+        select u_id, u_contrib_point
         from `user`
     </select>
 
@@ -217,7 +206,7 @@
         <include refid="Base_Column_List"/>,
         <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
         from user u
-                     join user_info ui on ui.ui_user_phone = u.u_phone
+                     join user_info ui on ui.ui_user_id = u.u_id
         where u_id = #{id}
     </select>
 
@@ -226,7 +215,7 @@
         <include refid="Base_Column_List"/>,
         <include refid="cn.hdustea.aha_server.mapper.UserInfoMapper.Base_Column_List"/>
         from user u
-                     join user_info ui on ui.ui_user_phone = u.u_phone
+                     join user_info ui on ui.ui_user_id = u.u_id
         <where>
             <if test="roleId != null">
                 and u_role_id = #{roleId}
@@ -239,9 +228,6 @@
             </if>
             <if test="typeId != null">
                 and ui_type_id = #{typeId}
-            </if>
-            <if test="phoneLike != null and phoneLike != ''">
-                and u_phone like concat('%', #{phoneLike}, '%')
             </if>
             <if test="nicknameLike != null and nicknameLike != ''">
                 and ui_nickname like concat('%', #{nicknameLike}, '%')

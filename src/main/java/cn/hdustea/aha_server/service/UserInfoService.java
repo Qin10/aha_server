@@ -22,25 +22,24 @@ public class UserInfoService {
     private UserService userService;
 
     /**
-     * 根据手机号获取用户公有信息
+     * 根据用户id获取用户公有信息
      *
-     * @param phone 用户手机号
+     * @param userId 用户id
      * @return 用户公有信息实体类
      */
-    public UserInfo getUserInfoByPhone(String phone) {
-        userService.getUserByPhone(phone);
-        return userInfoMapper.selectByPrimaryKey(phone);
+    public UserInfo getUserInfoByUserId(Integer userId) {
+        return userInfoMapper.selectByPrimaryKey(userId);
     }
 
     /**
-     * 根据手机号获取用户个人详细信息
+     * 根据用户id获取用户个人详细信息
      *
-     * @param phone 用户手机号
+     * @param userId 用户id
      * @return 用户个人详细信息
      */
-    public PersonalUserInfoVo getPersonalUserInfo(String phone) {
-        User user = userService.getUserByPhone(phone);
-        UserInfo userInfo = getUserInfoByPhone(phone);
+    public PersonalUserInfoVo getPersonalUserInfo(Integer userId) {
+        User user = userService.getUserById(userId);
+        UserInfo userInfo = getUserInfoByUserId(userId);
         PersonalUserInfoVo personalUserInfoVo = new PersonalUserInfoVo();
         personalUserInfoVo.setContribPoint(user.getContribPoint());
         personalUserInfoVo.setSignedNotice(user.getSignedNotice());
@@ -60,18 +59,18 @@ public class UserInfoService {
     }
 
     /**
-     * 根据手机号修改用户公有信息
+     * 根据用户id修改用户公有信息
      *
      * @param userInfo 用户公有信息实体类
-     * @param phone    用户手机号
+     * @param userId   用户id
      */
-    public void updateUserInfoByPhone(UserInfo userInfo, String phone) {
-        userInfo.setUserPhone(phone);
+    public void updateUserInfoByUserId(UserInfo userInfo, Integer userId) {
+        userInfo.setUserId(userId);
         userInfoMapper.updateByPrimaryKeySelective(userInfo);
     }
 
     public void updateUserInfoByUserId(UserInfo userInfo, int userId) throws SelectException {
         User user = userService.getExistUserById(userId);
-        updateUserInfoByPhone(userInfo, user.getPhone());
+        updateUserInfoByUserId(userInfo, user.getId());
     }
 }

@@ -34,8 +34,8 @@ public class UserInfoController {
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/me")
     public ResponseBean<PersonalUserInfoVo> getPersonalUserInfo() {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(userId);
         return new ResponseBean<>(200, "succ", personalUserInfo);
     }
 
@@ -48,20 +48,20 @@ public class UserInfoController {
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
     public ResponseBean<Object> updatePersonalUserInfo(@RequestBody UserInfo userInfo) {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        userInfoService.updateUserInfoByPhone(userInfo, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        userInfoService.updateUserInfoByUserId(userInfo, userId);
         return new ResponseBean<>(200, "succ", null);
     }
 
     /**
-     * 通过手机号查询用户详细信息
+     * 通过用户id查询用户详细信息
      *
-     * @param phone 手机号
+     * @param userId 用户id
      */
     @RequiresLogin
-    @GetMapping("/{phone}")
-    public ResponseBean<UserInfo> getUserInfoByPhone(@PathVariable("phone") String phone) {
-        UserInfo userInfo = userInfoService.getUserInfoByPhone(phone);
+    @GetMapping("/{userId}")
+    public ResponseBean<UserInfo> getUserInfoByPhone(@PathVariable("userId") Integer userId) {
+        UserInfo userInfo = userInfoService.getUserInfoByUserId(userId);
         return new ResponseBean<>(200, "succ", userInfo);
     }
 
@@ -72,8 +72,8 @@ public class UserInfoController {
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
     public ResponseBean<OssPolicyVo> signUpdateUserAvatar() {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        OssPolicyVo ossPolicyVo = ossService.signUpload("avatar/" + phone, false);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        OssPolicyVo ossPolicyVo = ossService.signUpload("avatar/" + userId, false);
         return new ResponseBean<>(200, "succ", ossPolicyVo);
     }
 }

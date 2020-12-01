@@ -36,12 +36,12 @@ public class ContributionRankService {
     /**
      * 获取用户个人排名
      *
-     * @param phone 手机号
+     * @param userId 用户id
      * @return 用户排名
      * @throws SelectException 用户不存在异常
      */
-    public long getRankByPhone(String phone) throws SelectException {
-        Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIBUTION_RANK_KEY, phone);
+    public long getRankByUserId(Integer userId) throws SelectException {
+        Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIBUTION_RANK_KEY, userId);
         if (rank == null) {
             throw new SelectException("未查询到排名!");
         }
@@ -51,15 +51,15 @@ public class ContributionRankService {
     /**
      * 获取用户个人排名和贡献点
      *
-     * @param phone 手机号
+     * @param userId 用户id
      * @return 用户个人排名和贡献点
      * @throws SelectException 用户不存在异常
      */
-    public UserContribPointVo getUserContribPointByPhone(String phone) throws SelectException {
-        long rank = getRankByPhone(phone);
-        Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, phone);
+    public UserContribPointVo getUserContribPointByUserId(Integer userId) throws SelectException {
+        long rank = getRankByUserId(userId);
+        Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, userId);
         UserContribPointVo userContribPointVo = new UserContribPointVo();
-        userContribPointVo.setPhone(phone);
+        userContribPointVo.setUserId(userId);
         userContribPointVo.setContribPoint(BigDecimal.valueOf(contribPoint));
         userContribPointVo.setRank(rank);
         return userContribPointVo;

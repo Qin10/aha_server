@@ -6,15 +6,16 @@ import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.dto.ChangePasswordDto;
 import cn.hdustea.aha_server.dto.LoginUserDto;
 import cn.hdustea.aha_server.dto.RegisterUserDto;
-import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
-import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
 import cn.hdustea.aha_server.entity.Contract;
-import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.vo.*;
+import cn.hdustea.aha_server.vo.ResponseBean;
+import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
+import cn.hdustea.aha_server.vo.TokenVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -73,7 +74,7 @@ public class AuthController {
      */
     @RequestLimit(amount = 1)
     @PostMapping("/changePassword/{phone}")
-    public ResponseBean<Object> changePassword(@RequestBody @Validated ChangePasswordDto changePasswordDto, @PathVariable("phone") String phone) throws MessageCheckException, SelectException {
+    public ResponseBean<Object> changePassword(@RequestBody @Validated ChangePasswordDto changePasswordDto, @PathVariable("phone") String phone) throws MessageCheckException, UserNotFoundException {
         authService.changePassword(changePasswordDto, phone);
         return new ResponseBean<>(200, "密码修改成功！", null);
     }
@@ -84,9 +85,9 @@ public class AuthController {
     @RequestLimit(amount = 1, time = 180)
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/sign/notice")
-    public ResponseBean<TokenVo> signNotice() throws SelectException, UpdateException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        String updatedToken = authService.signNotice(phone);
+    public ResponseBean<TokenVo> signNotice() throws UpdateException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        String updatedToken = authService.signNotice(userId);
         TokenVo tokenVo = new TokenVo();
         tokenVo.setToken(updatedToken);
         return new ResponseBean<>(200, "已同意用户协议", tokenVo);
@@ -101,9 +102,9 @@ public class AuthController {
     @RequestLimit(amount = 1, time = 180)
     @RequiresLogin
     @PostMapping("/sign/contract")
-    public ResponseBean<TokenVo> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, SelectException, InsertException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        String updatedToken = authService.signContract(phone, file, contract);
+    public ResponseBean<TokenVo> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, InsertException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        String updatedToken = authService.signContract(userId, file, contract);
         TokenVo tokenVo = new TokenVo();
         tokenVo.setToken(updatedToken);
         return new ResponseBean<>(200, "已签署合同", tokenVo);
@@ -115,8 +116,8 @@ public class AuthController {
     @RequiresLogin
     @GetMapping("/logout")
     public ResponseBean<Object> logout() {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        authService.logout(phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        authService.logout(userId);
         return new ResponseBean<>(200, "登出成功", null);
     }
 }

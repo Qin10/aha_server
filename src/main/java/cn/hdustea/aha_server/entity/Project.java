@@ -1,29 +1,23 @@
 package cn.hdustea.aha_server.entity;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-/**
- * ${description}
- *
- * @author STEA_YY
- **/
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 团队表
+ *
+ * @author STEA_YY
  */
 @Data
 public class Project {
     private Integer id;
 
     /**
-     * 团队创建者手机号
+     * 团队创建者id
      */
-    private String creatorPhone;
+    private Integer creatorUserId;
 
     /**
      * 团队名称

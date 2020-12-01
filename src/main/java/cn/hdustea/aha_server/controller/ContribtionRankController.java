@@ -44,8 +44,8 @@ public class ContribtionRankController {
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean<UserContribPointVo> getMyRank() throws SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        UserContribPointVo userContribPointVo = contributionRankService.getUserContribPointByPhone(phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        UserContribPointVo userContribPointVo = contributionRankService.getUserContribPointByUserId(userId);
         return new ResponseBean<>(200, "succ", userContribPointVo);
     }
 }

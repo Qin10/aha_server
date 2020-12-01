@@ -2,13 +2,13 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.dto.ProjectResourceDto;
-import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
-import cn.hdustea.aha_server.vo.*;
-import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
-import cn.hdustea.aha_server.entity.*;
+import cn.hdustea.aha_server.dto.ProjectDto;
+import cn.hdustea.aha_server.dto.ProjectResourceDto;
+import cn.hdustea.aha_server.entity.ProjectMember;
+import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
+import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.OssService;
@@ -16,6 +16,7 @@ import cn.hdustea.aha_server.service.ProjectResourceService;
 import cn.hdustea.aha_server.service.ProjectService;
 import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
+import cn.hdustea.aha_server.vo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class ProjectController {
      *
      * @param pageNum    页码
      * @param pageSize   分页大小
-     * @param phone      手机号
+     * @param userId      用户id
      * @param compId     竞赛id
      * @param awardLevel 获奖级别
      * @param sortBy     排序关键字
@@ -58,9 +59,9 @@ public class ProjectController {
     @RequestLimit(time = 5)
     @RequiresLogin
     @GetMapping
-    public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "phone", required = false) String phone, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
+    public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
         Boolean passed = null;
-        PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, phone, compId, awardLevel, sortBy, orderBy, passed);
+        PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, userId, compId, awardLevel, sortBy, orderBy, passed);
         return new ResponseBean<>(200, "succ", projectRoughVos);
     }
 
@@ -73,10 +74,10 @@ public class ProjectController {
     @RequiresLogin
     @GetMapping("/{projectId}")
     public ResponseBean<ProjectDetailVo> getProjectById(@PathVariable("projectId") int projectId) throws SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
+        Integer userId = ThreadLocalUtil.getCurrentUser();
         ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "查看项目", "id=" + projectId);
-        incrReadByProjectId(projectId, phone);
+        incrReadByProjectId(projectId, userId);
         return new ResponseBean<>(200, "succ", projectDetailVo);
     }
 
@@ -86,8 +87,8 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload/public")
     public ResponseBean<OssPolicyVo> signUploadPublicFile() {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        OssPolicyVo ossPolicyVo = ossService.signUpload("resource/" + phone, false);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        OssPolicyVo ossPolicyVo = ossService.signUpload("resource/" + userId, false);
         return new ResponseBean<>(200, "succ", ossPolicyVo);
     }
 
@@ -99,8 +100,8 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
     public ResponseBean<InsertedIdVo> saveProject(@RequestBody @Validated ProjectDto projectDto) {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        Integer projectId = projectService.saveProjectAndAuthor(projectDto, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        Integer projectId = projectService.saveProjectAndAuthor(projectDto, userId);
         return new ResponseBean<>(200, "succ", new InsertedIdVo(projectId));
     }
 
@@ -113,8 +114,8 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/{projectId}")
     public ResponseBean<Object> updateProjectById(@RequestBody ProjectDto projectDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
         projectService.updateProjectByProjectId(projectDto, projectId);
@@ -129,8 +130,8 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/{projectId}")
     public ResponseBean<Object> deleteProjectById(@PathVariable("projectId") int projectId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
         projectService.deleteProjectById(projectId);
@@ -158,8 +159,8 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/member/{projectId}")
     public ResponseBean<Object> saveProjectMemberById(@RequestBody @Validated ProjectMember projectMember, @PathVariable("projectId") int projectId) throws PermissionDeniedException, InsertException, SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
         projectService.saveProjectMemberByProjectId(projectMember, projectId);
@@ -171,16 +172,16 @@ public class ProjectController {
      *
      * @param projectMember 修改的项目成员
      * @param projectId     项目id
-     * @param memberPhone   成员手机号
+     * @param memberUserId   成员用户id
      */
     @RequiresLogin(requireSignContract = true)
-    @PutMapping("/member/{projectId}/{memberPhone}")
-    public ResponseBean<Object> updateResourceMemberById(@RequestBody ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
+    @PutMapping("/member/{projectId}/{memberUserId}")
+    public ResponseBean<Object> updateResourceMemberById(@RequestBody ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberUserId") Integer memberUserId) throws PermissionDeniedException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectService.updateProjectMember(projectMember, projectId, memberPhone);
+        projectService.updateProjectMember(projectMember, projectId, memberUserId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -193,8 +194,8 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/members/{projectId}")
     public ResponseBean<Object> updateResourceMemberById(@RequestBody List<ProjectMember> projectMembers, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
         projectService.updateProjectMembers(projectMembers, projectId);
@@ -205,16 +206,16 @@ public class ProjectController {
      * 删除项目成员
      *
      * @param projectId   项目id
-     * @param memberPhone 成员手机号
+     * @param memberUserId 成员用户id
      */
     @RequiresLogin
-    @DeleteMapping("/member/{projectId}/{memberPhone}")
-    public ResponseBean<Object> deleteProjectMember(@PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
+    @DeleteMapping("/member/{projectId}/{memberUserId}")
+    public ResponseBean<Object> deleteProjectMember(@PathVariable("projectId") int projectId, @PathVariable("memberUserId") Integer memberUserId) throws PermissionDeniedException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
-        projectService.deleteProjectMember(projectId, memberPhone);
+        projectService.deleteProjectMember(projectId, memberUserId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -238,9 +239,9 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/{projectId}/resources/sign/upload/private")
     public ResponseBean<OssPolicyVo> signUploadPrivateFile(@PathVariable("projectId") int projectId) throws PermissionDeniedException, SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
+        Integer userId = ThreadLocalUtil.getCurrentUser();
         ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
-        if (!projectService.hasPermission(phone, projectId)) {
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
         OssPolicyVo ossPolicyVo = ossService.signUpload(projectDetailVo.getName() + "/", true);
@@ -256,8 +257,8 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
     public ResponseBean<InsertedIdVo> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (!projectService.hasPermission(phone, projectId)) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
         Integer projectResourceId = projectResourceService.saveProjectResourceByProjectId(projectResourceDto, projectId);
@@ -272,9 +273,9 @@ public class ProjectController {
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/resource/{projectResourceId}")
     public ResponseBean<Object> deleteProjectResourceById(@PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
+        Integer userId = ThreadLocalUtil.getCurrentUser();
         ProjectResource possibleProjectResource = projectResourceService.getProjectResourceById(projectResourceId);
-        if (possibleProjectResource == null || !projectService.hasPermission(phone, possibleProjectResource.getProjectId())) {
+        if (possibleProjectResource == null || !projectService.hasPermission(userId, possibleProjectResource.getProjectId())) {
             throw new PermissionDeniedException();
         }
         projectResourceService.deleteProjectResourceById(projectResourceId);
@@ -304,8 +305,8 @@ public class ProjectController {
     @RequiresLogin
     @GetMapping("/collection")
     public ResponseBean<List<UserCollectionVo>> getAllCollection() {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        List<UserCollectionVo> collectionVos = projectService.getAllCollectionByPhone(phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        List<UserCollectionVo> collectionVos = projectService.getAllCollectionByUserId(userId);
         return new ResponseBean<>(200, "succ", collectionVos);
     }
 
@@ -318,8 +319,8 @@ public class ProjectController {
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
     public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws InsertException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        projectService.saveCollection(projectId, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        projectService.saveCollection(projectId, userId);
         projectService.incrCollectByProjectId(projectId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "收藏项目", "id=" + projectId);
         return new ResponseBean<>(200, "收藏成功！", null);
@@ -334,8 +335,8 @@ public class ProjectController {
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
     public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws DeleteException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        projectService.deleteCollection(projectId, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        projectService.deleteCollection(projectId, userId);
         projectService.descCollectByProjectId(projectId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "取消收藏资源", "id=" + projectId);
         return new ResponseBean<>(200, "取消收藏成功！", null);
@@ -349,8 +350,8 @@ public class ProjectController {
     @RequiresLogin
     @GetMapping("/collection/{projectId}")
     public ResponseBean<Boolean> getCollectedByProjectId(@PathVariable("projectId") int projectId) {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        boolean result = projectService.hasCollected(projectId, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        boolean result = projectService.hasCollected(projectId, userId);
         return new ResponseBean<>(200, "succ", result);
     }
 
@@ -359,10 +360,10 @@ public class ProjectController {
      *
      * @param projectId 项目id
      */
-    private void incrReadByProjectId(int projectId, String phone) {
-        if (redisUtil.get(RedisUtil.USER_PROJECT_READ_PREFIX + phone + ":" + projectId) == null) {
+    private void incrReadByProjectId(int projectId, Integer userId) {
+        if (redisUtil.get(RedisUtil.USER_PROJECT_READ_PREFIX + userId + ":" + projectId) == null) {
             redisUtil.hincr(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId), 1);
-            redisUtil.set(RedisUtil.USER_PROJECT_READ_PREFIX + phone + ":" + projectId, true, 600);
+            redisUtil.set(RedisUtil.USER_PROJECT_READ_PREFIX + userId + ":" + projectId, true, 600);
         }
     }
 }

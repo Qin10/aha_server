@@ -11,9 +11,9 @@ import lombok.Data;
 public class UserRoughInfoVo {
 
     /**
-     * 用户手机号
+     * 用户id
      */
-    private String phone;
+    private Integer userId;
 
     /**
      * 用户昵称

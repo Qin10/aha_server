@@ -3,21 +3,34 @@ package cn.hdustea.aha_server.entity;
 import lombok.Data;
 
 /**
- * 第三方授权凭证实体类
+ * ${description}
  *
  * @author STEA_YY
  **/
 @Data
 public class Oauth {
-    private Integer id;
+    /**
+     * 用户id
+     */
+    private Integer userId;
 
-    private String userPhone;
-
+    /**
+     * 授权类型
+     */
     private String oauthType;
 
+    /**
+     * 授权码
+     */
     private String oauthId;
 
+    /**
+     * 微信通用id(保留字段，考虑废弃)
+     */
     private String unionid;
 
+    /**
+     * 授权秘钥(保留字段)
+     */
     private String credential;
 }

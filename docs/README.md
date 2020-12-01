@@ -1,5 +1,4 @@
 # 授权鉴权类请求
-
 ## 通过账号密码登录
 
 *作者: STEA_YY*
@@ -34,7 +33,7 @@
 				"name":"string //角色名称"
 			},
 			"userInfo":{
-				"userPhone":"string //用户手机号(外键)",
+				"userId":"int //用户id(外键)",
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"birthday":"date //用户出生日期",
@@ -92,7 +91,7 @@
 				"name":"string //角色名称"
 			},
 			"userInfo":{
-				"userPhone":"string //用户手机号(外键)",
+				"userId":"int //用户id(外键)",
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"birthday":"date //用户出生日期",
@@ -250,7 +249,7 @@ id|int|否|竞赛信息id
 
 **请求URL**
 
-/competition `GET` 
+/competition/getAllCompetition `GET` 
 
 
 **返回结果**
@@ -325,7 +324,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/rank `GET` 
+/rank/getRankList `GET` 
 
 
 **返回结果**
@@ -335,7 +334,7 @@ id|int|否|竞赛标签id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":[{
-		"phone":"string //手机号",
+		"userId":"int //用户id",
 		"contribPoint":"double //贡献点",
 		"rank":"long //排名"
 	}],
@@ -358,7 +357,7 @@ id|int|否|竞赛标签id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"phone":"string //手机号",
+		"userId":"int //用户id",
 		"contribPoint":"double //贡献点",
 		"rank":"long //排名"
 	},
@@ -522,19 +521,21 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/admin/project/member/{projectId}/{memberPhone} `PUT` 
+/admin/project/member/{projectId}/{memberUserId} `PUT` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectId|int|否|项目id
-memberPhone|string|否|项目成员手机号
+memberUserId|int|否|项目成员用户id
 
 **请求体**
 
 ```json
 {
+	"projectId":"int",
+	"memberUserId":"int //团队成员id【必须】",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
 	"job":"string //团队成员职务【必须】",
 	"editable":"boolean //成员是否可编辑项目信息【必须】"
@@ -569,10 +570,11 @@ projectId|int|否|项目id
 
 ```json
 [{
-	"memberPhone":"string //团队成员手机号【必须】",
-	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
-	"job":"string //团队成员职务",
-	"editable":"boolean //成员是否可编辑项目信息"
+	"projectId":"int",
+	"memberUserId":"int //团队成员id【必须】",
+	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
+	"job":"string //团队成员职务【必须】",
+	"editable":"boolean //成员是否可编辑项目信息【必须】"
 }]
 ```
 
@@ -592,14 +594,14 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/admin/project/member/{projectId}/{memberPhone} `DELETE` 
+/admin/project/member/{projectId}/{memberUserId} `DELETE` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectId|int|否|项目id
-memberPhone|string|否|成员手机号
+memberUserId|int|否|成员用户id
 
 **返回结果**
 
@@ -685,7 +687,6 @@ projectResourceId|int|否|项目资源id
 
 ```json
 {
-	"id":"int //竞赛id",
 	"compTagId":"int //所属赛事标签（外键）",
 	"name":"string //赛事名称",
 	"intro":"string //赛事简介",
@@ -721,7 +722,6 @@ id|int|否|竞赛id
 
 ```json
 {
-	"id":"int //竞赛id",
 	"compTagId":"int //所属赛事标签（外键）",
 	"name":"string //赛事名称",
 	"intro":"string //赛事简介",
@@ -775,7 +775,6 @@ id|int|否|竞赛id
 
 ```json
 {
-	"id":"int //竞赛标签id",
 	"name":"string //竞赛标签名称"
 }
 ```
@@ -808,7 +807,6 @@ id|int|否|竞赛标签id
 
 ```json
 {
-	"id":"int //竞赛标签id",
 	"name":"string //竞赛标签名称"
 }
 ```
@@ -865,7 +863,6 @@ roleId|int|否|角色id
 signedNotice|boolean|否|是否签署服务协议
 signedContract|boolean|否|是否签署合同
 typeId|int|否|用户类型
-phoneLike|string|否|模糊手机号
 nicknameLike|string|否|模糊昵称
 trueNameLike|string|否|模糊真实姓名
 sortBy|string|否|排序关键字
@@ -882,7 +879,6 @@ orderBy|string|否|排序方式
 		"pageSize":"int //分页大小",
 		"pageData":[{
 			"id":"int //用户id",
-			"phone":"string //用户手机号",
 			"createdTime":"date //账户首次登录时间",
 			"studentRecFilename":"string //学生证图片保存路径",
 			"contribPoint":"double //贡献点",
@@ -934,7 +930,6 @@ userId|int|否|用户id
 	"msg":"string //响应消息",
 	"data":{
 		"id":"int //用户id",
-		"phone":"string //用户手机号",
 		"createdTime":"date //账户首次登录时间",
 		"studentRecFilename":"string //学生证图片保存路径",
 		"contribPoint":"double //贡献点",
@@ -1017,7 +1012,6 @@ userId|int|否|用户id
 
 ```json
 {
-	"userPhone":"string //用户手机号(外键)",
 	"nickname":"string //用户昵称",
 	"gender":"boolean //用户性别",
 	"birthday":"date //用户出生日期",
@@ -1075,13 +1069,13 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/user/contract/{phone} `GET` 
+/admin/user/contract/{userId} `GET` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
-phone|string|否|用户手机号
+userId|int|否|用户id
 
 **返回结果**
 
@@ -1090,8 +1084,8 @@ phone|string|否|用户手机号
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"id":"int //合同id",
-		"userPhone":"string //用户手机号(外键)",
+		"id":"int",
+		"userId":"int //用户id(外键)",
 		"name":"string //联系人",
 		"signatureFilename":"string //签名文件名",
 		"signTime":"date //合同签名时间"
@@ -1105,13 +1099,13 @@ phone|string|否|用户手机号
 
 **请求URL**
 
-/admin/user/contract/signature/{phone} `GET` 
+/admin/user/contract/signature/{userId} `GET` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
-phone|string|否|用户手机号
+userId|int|否|用户id
 
 **返回结果**
 
@@ -1119,13 +1113,7 @@ phone|string|否|用户手机号
 {
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
-	"data":{
-		"id":"int //合同id",
-		"userPhone":"string //用户手机号(外键)",
-		"name":"string //联系人",
-		"signatureFilename":"string //签名文件名",
-		"signTime":"date //合同签名时间"
-	},
+	"data":"object //响应数据",
 	"time":"string //响应时间"
 }
 ```
@@ -1135,13 +1123,13 @@ phone|string|否|用户手机号
 
 **请求URL**
 
-/admin/message/notice `POST` 
+/admin/message/systemNotice `POST` 
 
 **请求体**
 
 ```json
 {
-	"content":"string【必须】"
+	"content":"string //信件内容【必须】"
 }
 ```
 
@@ -1161,14 +1149,183 @@ phone|string|否|用户手机号
 
 **请求URL**
 
-/admin/message/system `POST` 
+/admin/message/systemPrivate `POST` 
 
 **请求体**
 
 ```json
 {
-	"reveiverPhone":"string",
-	"content":"string【必须】"
+	"receiverUserId":"int //收件人用户id",
+	"content":"string //信件内容【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+# 站内信相关请求
+## 根据条件获取未读消息条数
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/count/notRead `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+type|string|否|消息类型(system:系统消息,private:私信)
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"int //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 根据条件获取消息队列
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/getAllMessageVoPagable `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+status|int|否|状态(0:未读,1:已读,2:已删除)
+type|string|否|消息类型(system:系统消息,private:私信)
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //站内信id",
+			"senderUserId":"int //发信人用户id",
+			"type":"int //类型",
+			"status":"int //阅读状态",
+			"receiveDate":"date //收件时间",
+			"content":"string //信件内容"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 根据对方用户id获取会话消息，并标记为已读
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/communication/{senderUserId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+senderUserId|int|否|对方用户id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //站内信id",
+		"senderUserId":"int //发信人用户id",
+		"type":"int //类型",
+		"status":"int //阅读状态",
+		"receiveDate":"date //收件时间",
+		"content":"string //信件内容"
+	}],
+	"time":"string //响应时间"
+}
+```
+## 根据id获取站内信内容，并标记为已读
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/{messageId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+messageId|int|否|站内信id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除指定站内信（并非真的从数据库中删除）
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/{messageId} `DELETE` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+messageId|int|否|站内信id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 向指定用户发送私信
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/message/sendPrivateMessage `POST` 
+
+**请求体**
+
+```json
+{
+	"receiverUserId":"int //收件人用户id",
+	"content":"string //信件内容【必须】"
 }
 ```
 
@@ -1200,8 +1357,14 @@ content|string|否|返回实体(json)
 
 **返回结果**
 
-(二进制文件流)
-
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 项目相关请求
 ## 分页获取所有项目粗略信息
 
@@ -1209,7 +1372,7 @@ content|string|否|返回实体(json)
 
 **请求URL**
 
-/project `GET` 
+/project/getAllProjectPageable `GET` 
 
 **请求参数**
 
@@ -1217,7 +1380,7 @@ content|string|否|返回实体(json)
 --:|:--:|:--:|:--
 pageNum|int|否|页码
 pageSize|int|否|分页大小
-phone|string|否|手机号
+userId|int|否|用户id
 compId|int|否|竞赛id
 awardLevel|int|否|获奖级别
 sortBy|string|否|排序关键字
@@ -1234,7 +1397,7 @@ orderBy|string|否|排序方式
 		"pageSize":"int //分页大小",
 		"pageData":[{
 			"id":"int //项目id",
-			"creatorPhone":"string //团队创建者手机号",
+			"creatorUserId":"int //团队创建者用户id",
 			"name":"string //项目名称",
 			"read":"int //点击率",
 			"collect":"int //收藏数量",
@@ -1270,7 +1433,7 @@ projectId|int|否|项目id
 	"msg":"string //响应消息",
 	"data":{
 		"id":"int //项目id",
-		"creatorPhone":"string //团队创建者手机号",
+		"creatorUserId":"int //团队创建者用户id",
 		"name":"string //团队名称",
 		"avatarUrl":"string //团队头像url",
 		"tags":"string //项目标签",
@@ -1292,7 +1455,7 @@ projectId|int|否|项目id
 		"meaning":"double //项目资源完整程度，决定贡献点",
 		"passed":"boolean //是否通过审核",
 		"members":[{
-			"memberPhone":"string //团队成员手机号",
+			"memberUserId":"int //团队成员用户id",
 			"nickname":"string //成员昵称",
 			"trueName":"string //成员真实姓名",
 			"avatarUrl":"string //成员头像url",
@@ -1344,7 +1507,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project `POST` 
+/project/saveProject `POST` 
 
 **请求体**
 
@@ -1459,7 +1622,7 @@ projectId|int|否|项目id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":[{
-		"memberPhone":"string //团队成员手机号",
+		"memberUserId":"int //团队成员用户id",
 		"nickname":"string //成员昵称",
 		"trueName":"string //成员真实姓名",
 		"avatarUrl":"string //成员头像url",
@@ -1489,8 +1652,8 @@ projectId|int|否|项目id
 
 ```json
 {
-	"projectId":"int //项目id(外键)",
-	"memberPhone":"string //团队成员手机号【必须】",
+	"projectId":"int",
+	"memberUserId":"int //团队成员id【必须】",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
 	"job":"string //团队成员职务【必须】",
 	"editable":"boolean //成员是否可编辑项目信息【必须】"
@@ -1513,22 +1676,22 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/member/{projectId}/{memberPhone} `PUT` 
+/project/member/{projectId}/{memberUserId} `PUT` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectId|int|否|项目id
-memberPhone|string|否|成员手机号
+memberUserId|int|否|成员用户id
 
 **请求体**
 
 ```json
 {
-	"rank":"int //团队成员顺位(决定显示顺序，1为队长)【必须】",
-	"job":"string //团队成员职务【必须】",
-	"editable":"boolean //成员是否可编辑项目信息【必须】"
+	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
+	"job":"string //团队成员职务",
+	"editable":"boolean //成员是否可编辑项目信息"
 }
 ```
 
@@ -1560,7 +1723,7 @@ projectId|int|否|项目id
 
 ```json
 [{
-	"memberPhone":"string //团队成员手机号【必须】",
+	"memberUserId":"int //团队成员id【必须】",
 	"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 	"job":"string //团队成员职务",
 	"editable":"boolean //成员是否可编辑项目信息"
@@ -1583,14 +1746,14 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/member/{projectId}/{memberPhone} `DELETE` 
+/project/member/{projectId}/{memberUserId} `DELETE` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectId|int|否|项目id
-memberPhone|string|否|成员手机号
+memberUserId|int|否|成员用户id
 
 **返回结果**
 
@@ -1766,7 +1929,7 @@ projectResourceId|int|否|项目资源id
 	"data":[{
 		"project":{
 			"id":"int //项目id",
-			"creatorPhone":"string //团队创建者手机号",
+			"creatorUserId":"int //团队创建者用户id",
 			"name":"string //项目名称",
 			"read":"int //点击率",
 			"collect":"int //收藏数量",
@@ -1854,19 +2017,19 @@ projectId|int|否|项目id
 }
 ```
 # 用户简历相关请求
-## 根据手机号查看用户简历
+## 根据用户id查看用户简历
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/resume/{phone} `GET` 
+/resume/{userId} `GET` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
-phone|string|否|手机号
+userId|int|否|用户id
 
 **返回结果**
 
@@ -1875,8 +2038,7 @@ phone|string|否|手机号
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"id":{},
-		"userPhone":"string //用户手机号(业务外键)",
+		"userId":"int //用户手机号(业务外键)",
 		"name":"string //真实姓名",
 		"phone":"string //手机号",
 		"email":"string //电子邮箱",
@@ -1943,8 +2105,7 @@ phone|string|否|手机号
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"id":{},
-		"userPhone":"string //用户手机号(业务外键)",
+		"userId":"int //用户手机号(业务外键)",
 		"name":"string //真实姓名",
 		"phone":"string //手机号",
 		"email":"string //电子邮箱",
@@ -2001,14 +2162,12 @@ phone|string|否|手机号
 
 **请求URL**
 
-/resume `PUT` 
+/resume/updateResume `PUT` 
 
 **请求体**
 
 ```json
 {
-	"id":{},
-	"userPhone":"string //用户手机号(业务外键)",
 	"name":"string //真实姓名",
 	"phone":"string //手机号",
 	"email":"string //电子邮箱",
@@ -2142,7 +2301,7 @@ phone|string|否|手机号
 			"name":"string //角色名称"
 		},
 		"userInfo":{
-			"userPhone":"string //用户手机号(外键)",
+			"userId":"int //用户id(外键)",
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"birthday":"date //用户出生日期",
@@ -2174,7 +2333,6 @@ phone|string|否|手机号
 
 ```json
 {
-	"userPhone":"string //用户手机号(外键)",
 	"nickname":"string //用户昵称",
 	"gender":"boolean //用户性别",
 	"birthday":"date //用户出生日期",
@@ -2202,19 +2360,19 @@ phone|string|否|手机号
 	"time":"string //响应时间"
 }
 ```
-## 通过手机号查询用户详细信息
+## 通过用户id查询用户详细信息
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/userInfo/{phone} `GET` 
+/userInfo/{userId} `GET` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
-phone|string|否|手机号
+userId|int|否|用户id
 
 **返回结果**
 
@@ -2223,7 +2381,7 @@ phone|string|否|手机号
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"userPhone":"string //用户手机号(外键)",
+		"userId":"int //用户id(外键)",
 		"nickname":"string //用户昵称",
 		"gender":"boolean //用户性别",
 		"birthday":"date //用户出生日期",
@@ -2268,17 +2426,6 @@ phone|string|否|手机号
 	"time":"string //响应时间"
 }
 ```
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
 # 微信小程序授权/鉴权相关请求
 ## 通过微信小程序授权登录
 
@@ -2311,7 +2458,7 @@ code|string|否|小程序请求码
 				"name":"string //角色名称"
 			},
 			"userInfo":{
-				"userPhone":"string //用户手机号(外键)",
+				"userId":"int //用户id(外键)",
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"birthday":"date //用户出生日期",
@@ -2345,175 +2492,6 @@ code|string|否|小程序请求码
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 code|string|否|小程序请求码
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
-# 站内信相关请求
-## 根据条件获取未读消息条数
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/message/count/notRead `GET` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-type|string|否|消息类型(system:系统消息,private:私信)
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"int //响应数据",
-	"time":"string //响应时间"
-}
-```
-## 根据条件获取消息队列
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/message/getAllMessageVoPagable `GET` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-pageNum|int|否|页码
-pageSize|int|否|分页大小
-status|int|否|状态(0:未读,1:已读,2:已删除)
-type|string|否|消息类型(system:系统消息,private:私信)
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"pageNum":"int //页码",
-		"pageSize":"int //分页大小",
-		"pageData":[{
-			"id":"int",
-			"senderPhone":"string",
-			"type":"int",
-			"status":"int",
-			"receiveDate":"date",
-			"content":"string"
-		}]
-	},
-	"time":"string //响应时间"
-}
-```
-## 根据对方手机号获取会话消息，并标记为已读
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/message/communication/{phone} `GET` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-phone|string|否|对方手机号
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":[{
-		"id":"int",
-		"senderPhone":"string",
-		"type":"int",
-		"status":"int",
-		"receiveDate":"date",
-		"content":"string"
-	}],
-	"time":"string //响应时间"
-}
-```
-## 根据id获取站内信内容，并标记为已读
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/message/{messageId} `GET` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-messageId|int|否|站内信id
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
-## 删除指定站内信（并非真的从数据库中删除）
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/message/{messageId} `DELETE` 
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-messageId|int|否|站内信id
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
-## 向指定用户发送私信
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/message/sendPrivateMessage `POST` 
-
-**请求体**
-
-```json
-{
-	"reveiverPhone":"string //收件人手机号",
-	"content":"string【必须】 //站内信内容"
-}
-```
 
 **返回结果**
 

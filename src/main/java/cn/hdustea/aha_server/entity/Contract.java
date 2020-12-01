@@ -1,25 +1,21 @@
 package cn.hdustea.aha_server.entity;
 
+import java.util.Date;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
- * 合同实体类
+ * ${description}
  *
  * @author STEA_YY
  **/
 @Data
 public class Contract {
-    /**
-     * 合同id
-     */
     private Integer id;
 
     /**
-     * 用户手机号(外键)
+     * 用户id(外键)
      */
-    private String userPhone;
+    private Integer userId;
 
     /**
      * 联系人

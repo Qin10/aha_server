@@ -26,7 +26,7 @@ public class Resume {
     /**
      * 用户手机号(业务外键)
      */
-    private String userPhone;
+    private Integer userId;
     /**
      * 真实姓名
      */

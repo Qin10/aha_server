@@ -34,7 +34,7 @@ public class MessageService {
     @Resource
     private UserService userService;
 
-    public PageVo<List<MessageVo>> getAllMessageVoByReceiverPhonePagable(String receiverPhone, int pageNum, int pageSize, Integer status, String type) throws SelectException {
+    public PageVo<List<MessageVo>> getAllMessageVoByReceiverUserIdPagable(int receiverUserId, int pageNum, int pageSize, Integer status, String type) throws SelectException {
         Integer currentType = null;
         if (status != null && (status < 0 || status > 2)) {
             throw new SelectException("'status'参数取值错误");
@@ -55,20 +55,20 @@ public class MessageService {
             }
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<MessageVo> messageVos = messageMapper.selectAllVoByConditions(receiverPhone, status, currentType);
+        List<MessageVo> messageVos = messageMapper.selectAllVoByConditions(receiverUserId, status, currentType);
         PageInfo<MessageVo> pageInfo = new PageInfo<>(messageVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
-    public MessageVo getMessageVoByIdAndReceiverPhone(int id, String reveiverPhone) {
-        return messageMapper.selectVoByIdAndReceiverPhoneAndNotDeleted(id, reveiverPhone);
+    public MessageVo getMessageVoByIdAndReceiverUserId(int id, int receiverUserId) {
+        return messageMapper.selectVoByIdAndReceiverUserIdAndNotDeleted(id, receiverUserId);
     }
 
-    public List<MessageVo> getAllMessageVoInCommunicationBySenderPhoneAndReceiverPhone(String receiverPhone, String senderPhone) {
-        return messageMapper.selectAllVoInCommunicationBySenderPhoneAndReceiverPhone(receiverPhone, senderPhone);
+    public List<MessageVo> getAllMessageVoInCommunicationBySenderUserIdAndReceiverUserId(int receiverUserId, int senderUserId) {
+        return messageMapper.selectAllVoInCommunicationBySenderUserIdAndReceiverUserId(receiverUserId, senderUserId);
     }
 
-    public int getMessageCountNotReadByReceiverPhoneAndType(String reveiverPhone, String type) throws SelectException {
+    public int getMessageCountNotReadByReceiverUserIdAndType(int receiverUserId, String type) throws SelectException {
         Integer currentType = null;
         if (type != null) {
             switch (type) {
@@ -85,21 +85,21 @@ public class MessageService {
                 }
             }
         }
-        return messageMapper.countByReceiverPhoneAndStatusAndType(reveiverPhone, MessageType.STATUS_NOT_READ.getValue(), currentType);
+        return messageMapper.countByReceiverUserIdAndStatusAndType(receiverUserId, MessageType.STATUS_NOT_READ.getValue(), currentType);
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void sendPrivateMessage(MessageDto messageDto, String senderPhone) throws SelectException {
-        System.out.println(messageDto.getReveiverPhone());
-        userService.getExistUserByPhone(messageDto.getReveiverPhone());
+    public void sendPrivateMessage(MessageDto messageDto, int senderUserId) throws SelectException {
+        System.out.println(messageDto.getReceiverUserId());
+        userService.getExistUserById(messageDto.getReceiverUserId());
         Message message = new Message();
         MessageText messageText = new MessageText();
-        messageText.setSenderPhone(senderPhone);
+        messageText.setSenderUserId(senderUserId);
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_PRIVATE.getValue());
         messageTextMapper.insertSelective(messageText);
         message.setTextId(messageText.getId());
-        message.setReceiverPhone(messageDto.getReveiverPhone());
+        message.setReceiverUserId(messageDto.getReceiverUserId());
         message.setReceiveDate(new Date());
         messageMapper.insertSelective(message);
     }
@@ -112,7 +112,7 @@ public class MessageService {
         messageText.setType(MessageType.TYPE_SYSTEM.getValue());
         messageTextMapper.insertSelective(messageText);
         message.setTextId(messageText.getId());
-        message.setReceiverPhone(messageDto.getReveiverPhone());
+        message.setReceiverUserId(messageDto.getReceiverUserId());
         message.setReceiveDate(new Date());
         messageMapper.insertSelective(message);
     }
@@ -120,14 +120,14 @@ public class MessageService {
     public void sendSystemMessage(MessageDto messageDto, int textId) {
         Message message = new Message();
         message.setTextId(textId);
-        message.setReceiverPhone(messageDto.getReveiverPhone());
+        message.setReceiverUserId(messageDto.getReceiverUserId());
         message.setReceiveDate(new Date());
         messageMapper.insertSelective(message);
     }
 
-    public void sendNoticeMessage(MessageDto messageDto, String senderPhone) {
+    public void sendNoticeMessage(MessageDto messageDto, int senderUserId) {
         MessageText messageText = new MessageText();
-        messageText.setSenderPhone(senderPhone);
+        messageText.setSenderUserId(senderUserId);
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_NOTICE.getValue());
         messageText.setPostDate(new Date());
@@ -153,26 +153,26 @@ public class MessageService {
         messageMapper.updateStatusById(status, id);
     }
 
-    public void changeMessageStatusByReceiverPhone(int status, String receiverPhone) {
-        messageMapper.updateStatusByReceiverPhone(status, receiverPhone);
+    public void changeMessageStatusByReceiverUserId(int status, int receiverUserId) {
+        messageMapper.updateStatusByReceiverUserId(status, receiverUserId);
     }
 
-    public void changeMessageStatusByReceiverPhoneAndSenderPhone(int status, String receiverPhone, String senderPhone) {
-        messageMapper.updateStatusByReceiverPhoneAndSenderPhone(status, receiverPhone, senderPhone);
+    public void changeMessageStatusByReceiverUserIdAndSenderUserId(int status, int receiverUserId, int senderUserId) {
+        messageMapper.updateStatusByReceiverUserIdAndSenderUserId(status, receiverUserId, senderUserId);
     }
 
-    public boolean isReceiver(String receiverPhone, int id) {
+    public boolean isReceiver(int receiverUserId, int id) {
         Message message = messageMapper.selectByPrimaryKey(id);
-        return message != null && message.getReceiverPhone().equals(receiverPhone);
+        return message != null && message.getReceiverUserId().equals(receiverUserId);
     }
 
     @Async
-    public void saveAllNoticeNotReadByReceiverPhone(String receiverPhone) {
-        List<MessageText> messageTexts = messageTextMapper.selectAllNoticeNotReadByReceivePhone(receiverPhone);
+    public void saveAllNoticeNotReadByReceiverUserId(int receiverUserId) {
+        List<MessageText> messageTexts = messageTextMapper.selectAllNoticeNotReadByReceiveUserId(receiverUserId);
         List<Message> messages = new ArrayList<>();
         for (MessageText messageText : messageTexts) {
             Message message = new Message();
-            message.setReceiverPhone(receiverPhone);
+            message.setReceiverUserId(receiverUserId);
             message.setTextId(messageText.getId());
             message.setReceiveDate(messageText.getPostDate());
             message.setStatus(MessageType.STATUS_NOT_READ.getValue());

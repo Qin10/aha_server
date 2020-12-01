@@ -104,7 +104,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     }
                 }
                 ThreadLocalUtil.setCurrentUser(jwtPayloadDto.getAccount());
-                MDC.put("phone", jwtPayloadDto.getAccount());
+                MDC.put("phone", jwtPayloadDto.getAccount().toString());
                 MDC.put("ip", IpUtil.getIpAddr(request));
                 return true;
             }
@@ -113,7 +113,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     }
 
     @Override
-    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ThreadLocalUtil.removeCurrentUser();
         MDC.clear();
     }

@@ -1,9 +1,6 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.MessageText;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import cn.hdustea.aha_server.entity.MessageText;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * ${description}
@@ -23,6 +20,5 @@ public interface MessageTextMapper {
 
     int updateByPrimaryKey(MessageText record);
 
-    List<MessageText> selectAllNoticeNotReadByReceivePhone(@Param("receivePhone") String receivePhone);
-
+    List<MessageText> selectAllNoticeNotReadByReceiveUserId(@Param("receiveUserId") Integer receiveUserId);
 }

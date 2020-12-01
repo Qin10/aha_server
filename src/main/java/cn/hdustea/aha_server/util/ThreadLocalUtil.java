@@ -6,13 +6,13 @@ package cn.hdustea.aha_server.util;
  * @author STEA_YY
  **/
 public class ThreadLocalUtil {
-    private static final ThreadLocal<String> CURRENT_USER_THREAD_LOCAL = new ThreadLocal<String>();
+    private static final ThreadLocal<Integer> CURRENT_USER_THREAD_LOCAL = new ThreadLocal<Integer>();
 
-    public static void setCurrentUser(String phone) {
-        CURRENT_USER_THREAD_LOCAL.set(phone);
+    public static void setCurrentUser(Integer userId) {
+        CURRENT_USER_THREAD_LOCAL.set(userId);
     }
 
-    public static String getCurrentUser() {
+    public static Integer getCurrentUser() {
         return CURRENT_USER_THREAD_LOCAL.get();
     }
 

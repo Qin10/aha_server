@@ -1,20 +1,19 @@
 package cn.hdustea.aha_server.entity;
 
+import java.util.Date;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
- * 用户收藏实体类
+ * ${description}
  *
  * @author STEA_YY
  **/
 @Data
 public class UserCollection {
     /**
-     * 收藏用户手机号
+     * 收藏用户id
      */
-    private String userPhone;
+    private Integer userId;
 
     /**
      * 收藏资源id

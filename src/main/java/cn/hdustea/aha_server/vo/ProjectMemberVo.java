@@ -1,10 +1,6 @@
 package cn.hdustea.aha_server.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 
 /**
  * 项目成员Vo
@@ -15,9 +11,9 @@ import javax.validation.constraints.NotNull;
 public class ProjectMemberVo {
 
     /**
-     * 团队成员手机号
+     * 团队成员用户id
      */
-    private String memberPhone;
+    private Integer memberUserId;
 
     /**
      * 成员昵称

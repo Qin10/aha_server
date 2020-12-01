@@ -1,12 +1,8 @@
 package cn.hdustea.aha_server.vo;
 
-import cn.hdustea.aha_server.entity.Competition;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -22,9 +18,9 @@ public class ProjectRoughVo {
     private Integer id;
 
     /**
-     * 团队创建者手机号
+     * 团队创建者用户id
      */
-    private String creatorPhone;
+    private Integer creatorUserId;
 
     /**
      * 项目名称

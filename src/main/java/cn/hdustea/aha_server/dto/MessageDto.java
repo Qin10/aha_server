@@ -13,9 +13,9 @@ import javax.validation.constraints.NotEmpty;
 public class MessageDto {
 
     /**
-     * 收件人手机号
+     * 收件人用户id
      */
-    private String reveiverPhone;
+    private Integer receiverUserId;
 
     /**
      * 类型

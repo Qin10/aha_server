@@ -101,12 +101,12 @@ public class ManagementController {
      *
      * @param projectMember 项目成员信息
      * @param projectId     项目id
-     * @param memberPhone   项目成员手机号
+     * @param memberUserId  项目成员用户id
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @PutMapping("/project/member/{projectId}/{memberPhone}")
-    public ResponseBean<Object> updateResourceMemberById(@RequestBody ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) {
-        projectService.updateProjectMember(projectMember, projectId, memberPhone);
+    @PutMapping("/project/member/{projectId}/{memberUserId}")
+    public ResponseBean<Object> updateResourceMemberById(@RequestBody ProjectMember projectMember, @PathVariable("projectId") int projectId, @PathVariable("memberUserId") Integer memberUserId) {
+        projectService.updateProjectMember(projectMember, projectId, memberUserId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -126,13 +126,13 @@ public class ManagementController {
     /**
      * 删除项目成员
      *
-     * @param projectId   项目id
-     * @param memberPhone 成员手机号
+     * @param projectId    项目id
+     * @param memberUserId 成员用户id
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @DeleteMapping("/project/member/{projectId}/{memberPhone}")
-    public ResponseBean<Object> deleteProjectMember(@PathVariable("projectId") int projectId, @PathVariable("memberPhone") String memberPhone) {
-        projectService.deleteProjectMember(projectId, memberPhone);
+    @DeleteMapping("/project/member/{projectId}/{memberUserId}")
+    public ResponseBean<Object> deleteProjectMember(@PathVariable("projectId") int projectId, @PathVariable("memberUserId") Integer memberUserId) {
+        projectService.deleteProjectMember(projectId, memberUserId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -244,7 +244,6 @@ public class ManagementController {
      * @param signedNotice   是否签署服务协议
      * @param signedContract 是否签署合同
      * @param typeId         用户类型
-     * @param phoneLike      模糊手机号
      * @param nicknameLike   模糊昵称
      * @param trueNameLike   模糊真实姓名
      * @param sortBy         排序关键字
@@ -252,8 +251,8 @@ public class ManagementController {
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/user")
-    public ResponseBean<PageVo<List<UserManagementVo>>> getAllUserManagementVoPagable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "roleId", required = false) Integer roleId, @RequestParam(value = "signedNotice", required = false) Boolean signedNotice, @RequestParam(value = "signedContract", required = false) Boolean signedContract, @RequestParam(value = "typeId", required = false) Integer typeId, @RequestParam(value = "phoneLike", required = false) String phoneLike, @RequestParam(value = "nicknameLike", required = false) String nicknameLike, @RequestParam(value = "trueNameLike", required = false) String trueNameLike, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
-        PageVo<List<UserManagementVo>> userVos = userService.getAllUserManagementVoPagable(pageNum, pageSize, roleId, signedNotice, signedContract, typeId, phoneLike, nicknameLike, trueNameLike, sortBy, orderBy);
+    public ResponseBean<PageVo<List<UserManagementVo>>> getAllUserManagementVoPagable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "roleId", required = false) Integer roleId, @RequestParam(value = "signedNotice", required = false) Boolean signedNotice, @RequestParam(value = "signedContract", required = false) Boolean signedContract, @RequestParam(value = "typeId", required = false) Integer typeId, @RequestParam(value = "nicknameLike", required = false) String nicknameLike, @RequestParam(value = "trueNameLike", required = false) String trueNameLike, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
+        PageVo<List<UserManagementVo>> userVos = userService.getAllUserManagementVoPagable(pageNum, pageSize, roleId, signedNotice, signedContract, typeId, nicknameLike, trueNameLike, sortBy, orderBy);
         return new ResponseBean<>(200, "succ", userVos);
     }
 
@@ -310,24 +309,24 @@ public class ManagementController {
     /**
      * 获取用户合同信息
      *
-     * @param phone 用户手机号
+     * @param userId 用户id
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @GetMapping("/user/contract/{phone}")
-    public ResponseBean<Contract> getContract(@PathVariable("phone") String phone) {
-        Contract contract = contractService.getContractByUserPhone(phone);
+    @GetMapping("/user/contract/{userId}")
+    public ResponseBean<Contract> getContract(@PathVariable("userId") Integer userId) {
+        Contract contract = contractService.getContractByUserId(userId);
         return new ResponseBean<>(200, "succ", contract);
     }
 
     /**
      * 下载用户合同签名
      *
-     * @param phone 用户手机号
+     * @param userId 用户id
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @GetMapping("/user/contract/signature/{phone}")
-    public ResponseBean<Object> getContractSignatureFile(@PathVariable("phone") String phone, HttpServletResponse response) throws IOException, SelectException {
-        contractService.getContractSignatureFile(phone, response);
+    @GetMapping("/user/contract/signature/{userId}")
+    public ResponseBean<Object> getContractSignatureFile(@PathVariable("userId") Integer userId, HttpServletResponse response) throws IOException, SelectException {
+        contractService.getContractSignatureFile(userId, response);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -337,8 +336,8 @@ public class ManagementController {
      * @param messageDto 站内信
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @PostMapping("/message/notice")
-    public ResponseBean<Object> sendNotice(@RequestBody MessageDto messageDto) {
+    @PostMapping("/message/systemNotice")
+    public ResponseBean<Object> sendSystemNotice(@RequestBody MessageDto messageDto) {
         messageService.sendSystemNoticeMessage(messageDto);
         return new ResponseBean<>(200, "succ", null);
     }
@@ -349,7 +348,7 @@ public class ManagementController {
      * @param messageDto 站内信
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @PostMapping("/message/system")
+    @PostMapping("/message/systemPrivate")
     public ResponseBean<Object> sendSystemMessage(@RequestBody MessageDto messageDto) {
         messageService.sendSystemMessage(messageDto);
         return new ResponseBean<>(200, "succ", null);

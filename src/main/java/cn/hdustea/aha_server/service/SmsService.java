@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.entity.User;
+import cn.hdustea.aha_server.entity.Oauth;
+import cn.hdustea.aha_server.enums.OauthType;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageSendException;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,8 @@ public class SmsService {
     private RedisUtil redisUtil;
     @Resource
     private UserService userService;
+    @Resource
+    private OauthService oauthService;
     private static final int MESSAGE_EXPIRED_TIME = 60 * 5;
     /**
      * 注册验证码
@@ -40,18 +43,18 @@ public class SmsService {
      */
     public boolean sendSmsCode(String phone, int type) throws MessageSendException {
 //        String code = makeSmsCode(4);
-        User user = userService.getUserByPhone(phone);
+        Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.PHONE.getValue(),phone);
         String code = "1234";
         switch (type) {
             case REGISTER_MESSAGE: {
-                if (user != null) {
+                if (oauth != null) {
                     throw new MessageSendException("该手机号已被注册！");
                 }
                 redisUtil.set(REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             case CHANGE_PASSWORD_MESSAGE: {
-                if (user == null) {
+                if (oauth == null) {
                     throw new MessageSendException("用户不存在！");
                 }
                 redisUtil.set(CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);

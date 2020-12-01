@@ -1,24 +1,21 @@
 package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.ProjectMember;
-import cn.hdustea.aha_server.vo.ProjectMemberVo;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import cn.hdustea.aha_server.vo.ProjectMemberVo;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
- * 项目成员表mapper
+ * ${description}
  *
  * @author STEA_YY
  **/
 public interface ProjectMemberMapper {
-    int deleteByPrimaryKey(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone);
+    int deleteByPrimaryKey(@Param("projectId") Integer projectId, @Param("memberUserId") Integer memberUserId);
 
     int insert(ProjectMember record);
 
     int insertSelective(ProjectMember record);
 
-    ProjectMember selectByPrimaryKey(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone);
+    ProjectMember selectByPrimaryKey(@Param("projectId") Integer projectId, @Param("memberUserId") Integer memberUserId);
 
     int updateByPrimaryKeySelective(ProjectMember record);
 
@@ -26,9 +23,7 @@ public interface ProjectMemberMapper {
 
     List<ProjectMember> selectAllByProjectId(@Param("projectId") Integer projectId);
 
-    ProjectMember selectByProjectIdAndMemberPhoneAndEditable(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone, @Param("editable") Boolean editable);
-
-    ProjectMemberVo selectVoByPrimaryKey(@Param("projectId") Integer projectId, @Param("memberPhone") String memberPhone);
+    ProjectMember selectByProjectIdAndMemberUserIdAndEditable(@Param("projectId") Integer projectId, @Param("memberUserId") Integer memberUserId, @Param("editable") Boolean editable);
 
     List<ProjectMemberVo> selectAllVoByProjectIdOrderByRank(@Param("projectId") Integer projectId);
 }

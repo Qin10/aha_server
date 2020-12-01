@@ -23,14 +23,14 @@ public class ResumeController {
     private ResumeService resumeService;
 
     /**
-     * 根据手机号查看用户简历
+     * 根据用户id查看用户简历
      *
-     * @param phone 手机号
+     * @param userId 用户id
      */
     @RequiresLogin
-    @GetMapping("/{phone}")
-    public ResponseBean<Resume> getResumeByPhone(@PathVariable("phone") String phone) {
-        Resume resume = resumeService.getResumeByPhone(phone);
+    @GetMapping("/{userId}")
+    public ResponseBean<Resume> getResumeByPhone(@PathVariable("userId") Integer userId) {
+        Resume resume = resumeService.getResumeByUserId(userId);
         return new ResponseBean<>(200, "succ", resume);
     }
 
@@ -40,8 +40,8 @@ public class ResumeController {
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean<Resume> getPersonalResume() {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        Resume resume = resumeService.getResumeByPhone(phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        Resume resume = resumeService.getResumeByUserId(userId);
         return new ResponseBean<>(200, "succ", resume);
     }
 
@@ -54,8 +54,8 @@ public class ResumeController {
     @RequiresLogin
     @PutMapping()
     public ResponseBean<Object> updateResume(@RequestBody Resume resume) throws SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        resumeService.updateResumeByPhone(resume, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        resumeService.updateResumeByUserId(resume, userId);
         return new ResponseBean<>(200, "succ", null);
     }
 }

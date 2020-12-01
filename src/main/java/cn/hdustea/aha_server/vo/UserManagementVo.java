@@ -19,11 +19,6 @@ public class UserManagementVo {
     private Integer id;
 
     /**
-     * 用户手机号
-     */
-    private String phone;
-
-    /**
      * 账户首次登录时间
      */
     private Date createdTime;

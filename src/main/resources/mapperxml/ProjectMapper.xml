@@ -5,7 +5,7 @@
         <!--@mbg.generated-->
         <!--@Table project-->
         <id column="p_id" property="id"/>
-        <result column="p_creator_phone" property="creatorPhone"/>
+        <result column="p_creator_user_id" property="creatorUserId"/>
         <result column="p_name" property="name"/>
         <result column="p_avatar_url" property="avatarUrl"/>
         <result column="p_tags" property="tags"/>
@@ -24,7 +24,7 @@
         <!--@mbg.generated-->
         <!--@Table project-->
         <id column="p_id" property="id"/>
-        <result column="p_creator_phone" property="creatorPhone"/>
+        <result column="p_creator_user_id" property="creatorUserId"/>
         <result column="p_name" property="name"/>
         <result column="p_avatar_url" property="avatarUrl"/>
         <result column="p_tags" property="tags"/>
@@ -38,7 +38,7 @@
         <!--@mbg.generated-->
         <!--@Table project-->
         <id column="p_id" property="id"/>
-        <result column="p_creator_phone" property="creatorPhone"/>
+        <result column="p_creator_user_id" property="creatorUserId"/>
         <result column="p_name" property="name"/>
         <result column="p_avatar_url" property="avatarUrl"/>
         <result column="p_tags" property="tags"/>
@@ -61,19 +61,21 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        p_id, p_creator_phone, p_name, p_avatar_url, p_tags, p_intro, p_read, p_collect, p_comp_id,
-        p_comp_name, p_award_level, p_award_time, p_award_prove_url, p_meaning, p_passed
+        p_id, p_creator_user_id, p_name, p_avatar_url, p_tags, p_intro, p_read, p_collect,
+        p_comp_id, p_comp_name, p_award_level, p_award_time, p_award_prove_url, p_meaning,
+        p_passed
     </sql>
     <sql id="Rough_Column_List">
         <!--@mbg.generated-->
-        p_id, p_creator_phone, p_name, p_avatar_url, p_tags, p_read, p_collect, p_comp_id,
+        p_id, p_creator_user_id, p_name, p_avatar_url, p_tags, p_read, p_collect, p_comp_id,
         p_award_level, p_award_time
     </sql>
     <sql id="Detail_Column_List">
         <!--@mbg.generated-->
-        p_id, p_creator_phone, p_name, p_avatar_url, p_tags, p_intro, p_read, p_collect, p_comp_id,
+        p_id, p_creator_user_id, p_name, p_avatar_url, p_tags, p_intro, p_read, p_collect, p_comp_id,
         p_comp_name, p_award_level, p_award_time, p_award_prove_url, p_meaning, p_passed
     </sql>
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
@@ -90,18 +92,20 @@
     <insert id="insert" keyColumn="p_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Project"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into project (p_creator_phone, p_name, p_avatar_url, p_tags, p_intro, p_comp_id,
-                             p_comp_name, p_award_level, p_award_time, p_award_prove_url)
-        values (#{creatorPhone}, #{name}, #{avatarUrl}, #{tags}, #{intro}, #{compId},
-                #{compName}, #{awardLevel}, #{awardTime}, #{awardProveUrl})
+        insert into project (p_creator_user_id, p_name, p_avatar_url, p_tags, p_intro, p_read, p_collect,
+                             p_comp_id, p_comp_name, p_award_level, p_award_time, p_award_prove_url, p_meaning,
+                             p_passed)
+        values (#{creatorUserId}, #{name}, #{avatarUrl}, #{tags}, #{intro}, #{read}, #{collect},
+                #{compId}, #{compName}, #{awardLevel}, #{awardTime}, #{awardProveUrl}, #{meaning},
+                #{passed})
     </insert>
     <insert id="insertSelective" keyColumn="p_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Project"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into project
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="creatorPhone != null">
-                p_creator_phone,
+            <if test="creatorUserId != null">
+                p_creator_user_id,
             </if>
             <if test="name != null">
                 p_name,
@@ -114,6 +118,12 @@
             </if>
             <if test="intro != null">
                 p_intro,
+            </if>
+            <if test="read != null">
+                p_read,
+            </if>
+            <if test="collect != null">
+                p_collect,
             </if>
             <if test="compId != null">
                 p_comp_id,
@@ -130,10 +140,16 @@
             <if test="awardProveUrl != null">
                 p_award_prove_url,
             </if>
+            <if test="meaning != null">
+                p_meaning,
+            </if>
+            <if test="passed != null">
+                p_passed,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="creatorPhone != null">
-                #{creatorPhone},
+            <if test="creatorUserId != null">
+                #{creatorUserId},
             </if>
             <if test="name != null">
                 #{name},
@@ -146,6 +162,12 @@
             </if>
             <if test="intro != null">
                 #{intro},
+            </if>
+            <if test="read != null">
+                #{read},
+            </if>
+            <if test="collect != null">
+                #{collect},
             </if>
             <if test="compId != null">
                 #{compId},
@@ -162,12 +184,21 @@
             <if test="awardProveUrl != null">
                 #{awardProveUrl},
             </if>
+            <if test="meaning != null">
+                #{meaning},
+            </if>
+            <if test="passed != null">
+                #{passed},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.Project">
         <!--@mbg.generated-->
         update project
         <set>
+            <if test="creatorUserId != null">
+                p_creator_user_id = #{creatorUserId},
+            </if>
             <if test="name != null">
                 p_name = #{name},
             </if>
@@ -179,6 +210,12 @@
             </if>
             <if test="intro != null">
                 p_intro = #{intro},
+            </if>
+            <if test="read != null">
+                p_read = #{read},
+            </if>
+            <if test="collect != null">
+                p_collect = #{collect},
             </if>
             <if test="compId != null">
                 p_comp_id = #{compId},
@@ -195,21 +232,32 @@
             <if test="awardProveUrl != null">
                 p_award_prove_url = #{awardProveUrl},
             </if>
+            <if test="meaning != null">
+                p_meaning = #{meaning},
+            </if>
+            <if test="passed != null">
+                p_passed = #{passed},
+            </if>
         </set>
         where p_id = #{id}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Project">
         <!--@mbg.generated-->
         update project
-        set p_name            = #{name},
+        set p_creator_user_id = #{creatorUserId},
+            p_name            = #{name},
             p_avatar_url      = #{avatarUrl},
             p_tags            = #{tags},
             p_intro           = #{intro},
+            p_read            = #{read},
+            p_collect         = #{collect},
             p_comp_id         = #{compId},
             p_comp_name       = #{compName},
             p_award_level     = #{awardLevel},
             p_award_time      = #{awardTime},
-            p_award_prove_url = #{awardProveUrl}
+            p_award_prove_url = #{awardProveUrl},
+            p_meaning         = #{meaning},
+            p_passed          = #{passed}
         where p_id = #{id}
     </update>
 
@@ -254,15 +302,15 @@
         from project
                      left join project_member pm on pm.pm_project_id = project.p_id
         <where>
-            <if test="phone != null and phone != ''">
-                and (p_creator_phone = #{phone}
-                    or pm_member_phone = #{phone})
+            <if test="createUserId != null">
+                and (p_creator_user_id = #{createUserId}
+                    or pm_member_user_id = #{createUserId})
             </if>
             <if test="compId != null">
                 and p_comp_id = #{compId}
             </if>
             <if test="awardLevel != null">
-                and p_award_level >= #{awardLevel}
+                and p_award_level &gt;= #{awardLevel}
             </if>
             <if test="passed != null">
                 and p_passed = #{passed}
@@ -277,24 +325,24 @@
         where p_id = #{id}
     </update>
 
-<!--auto generated by MybatisCodeHelper on 2020-11-23-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-23-->
     <update id="updateDecCollectById">
         update project
-        set p_collect = p_collect-1
-        where p_id=#{id}
+        set p_collect = p_collect - 1
+        where p_id = #{id}
     </update>
 
-<!--auto generated by MybatisCodeHelper on 2020-11-25-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-25-->
     <update id="updateMeaningById">
         update project
         set p_meaning=#{updatedMeaning}
-        where p_id=#{id}
+        where p_id = #{id}
     </update>
 
-<!--auto generated by MybatisCodeHelper on 2020-11-25-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-25-->
     <update id="updatePassedById">
         update project
         set p_passed=#{updatedPassed}
-        where p_id=#{id}
+        where p_id = #{id}
     </update>
 </mapper>

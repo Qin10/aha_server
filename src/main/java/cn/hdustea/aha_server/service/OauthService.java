@@ -27,11 +27,11 @@ public class OauthService {
         return oauthMapper.selectByOauthTypeAndOauthId(oauthType, oauthId);
     }
 
-    public Oauth getOauthByOauthTypeAndUserPhone(String oauthType, String phone) {
-        return oauthMapper.selectByUserPhoneAndOauthType(phone, oauthType);
+    public Oauth getOauthByOauthTypeAndUserId(String oauthType, int userId) {
+        return oauthMapper.selectByPrimaryKey(userId, oauthType);
     }
 
-    public void saveOauth(Oauth oauth){
+    public void saveOauth(Oauth oauth) {
         oauthMapper.insertSelective(oauth);
     }
 }

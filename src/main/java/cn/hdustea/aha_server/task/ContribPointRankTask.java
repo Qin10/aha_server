@@ -28,10 +28,10 @@ public class ContribPointRankTask {
     @Async
     public void getRank() {
         log.debug("Contrib Rank Task is Running");
-        List<UserContribPointVo> userContribPointVos = userMapper.selectPhoneAndContribPoint();
+        List<UserContribPointVo> userContribPointVos = userMapper.selectIdAndContribPoint();
         redisUtil.del(RedisUtil.CONTRIBUTION_RANK_KEY);
         for (UserContribPointVo userContribPointVo : userContribPointVos) {
-            redisUtil.zSSet(RedisUtil.CONTRIBUTION_RANK_KEY, userContribPointVo.getPhone(), userContribPointVo.getContribPoint().doubleValue());
+            redisUtil.zSSet(RedisUtil.CONTRIBUTION_RANK_KEY, userContribPointVo.getUserId(), userContribPointVo.getContribPoint().doubleValue());
         }
     }
 }

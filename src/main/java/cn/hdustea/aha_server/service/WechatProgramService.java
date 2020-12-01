@@ -46,29 +46,28 @@ public class WechatProgramService {
         if (wechatOauth == null) {
             throw new WechatUnauthorizedException();
         } else {
-            String userPhone = wechatOauth.getUserPhone();
-            MDC.put("phone", userPhone);
+            MDC.put("id", wechatOauth.getUserId().toString());
             MDC.put("ip", IpUtil.getIpAddr(request));
-            User user = userService.getUserByPhone(userPhone);
+            User user = userService.getUserById(wechatOauth.getUserId());
             String token = authService.signToken(user);
-            PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(user.getPhone());
+            PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(user.getId());
             return new TokenAndPersonalUserInfoVo(token, personalUserInfo);
         }
     }
 
-    public void wechatBind(String phone, String code) throws Exception {
+    public void wechatBind(int userId, String code) throws Exception {
         String openid = WechatUtil.getWxInfo(code).getOpenid();
         if (openid == null) {
             throw new AuthorizationException("非法授权码！");
         }
-        if (oauthService.getOauthByOauthTypeAndUserPhone(OauthType.WECHAT.getValue(), phone) != null) {
+        if (oauthService.getOauthByOauthTypeAndUserId(OauthType.WECHAT.getValue(), userId) != null) {
             throw new AuthorizationException("您已绑定过微信账号！");
         }
         if (oauthService.getOauthByOauthTypeAndOauthId(OauthType.WECHAT.getValue(), openid) != null) {
             throw new AuthorizationException("该微信账号已被绑定过！");
         }
         Oauth oauth = new Oauth();
-        oauth.setUserPhone(phone);
+        oauth.setUserId(userId);
         oauth.setOauthType(OauthType.WECHAT.getValue());
         oauth.setOauthId(openid);
         oauthService.saveOauth(oauth);

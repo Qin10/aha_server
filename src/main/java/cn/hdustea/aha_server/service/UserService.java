@@ -33,21 +33,22 @@ public class UserService {
         }
     }
 
-    public PageVo<List<UserManagementVo>> getAllUserManagementVoPagable(int pageNum, int pageSize, Integer roleId, Boolean signedNotice, Boolean signedContract, Integer typeId, String phoneLike, String nicknameLike, String trueNameLike, String sortBy, String orderBy) throws SelectException {
+    public User getUserById(int id) {
+        return userMapper.selectByPrimaryKey(id);
+    }
+
+    public PageVo<List<UserManagementVo>> getAllUserManagementVoPagable(int pageNum, int pageSize, Integer roleId, Boolean signedNotice, Boolean signedContract, Integer typeId, String nicknameLike, String trueNameLike, String sortBy, String orderBy) throws SelectException {
         String currentSortBy = "u_id";
         String currentOrderBy = "desc";
         if (sortBy != null && !sortBy.equals("")) {
             switch (sortBy) {
-                case "time": {
+                case "time":
+                case "id": {
                     currentSortBy = "u_id";
                     break;
                 }
                 case "role": {
                     currentSortBy = "u_role_id";
-                    break;
-                }
-                case "phone": {
-                    currentSortBy = "u_phone";
                     break;
                 }
                 case "contribPoint": {
@@ -76,32 +77,13 @@ public class UserService {
         }
         PageHelper.startPage(pageNum, pageSize);
         PageHelper.orderBy(currentSortBy + " " + currentOrderBy);
-        List<UserManagementVo> userManagementVos = userMapper.selectAllManagementVoByConditions(roleId, signedNotice, signedContract, typeId, phoneLike, nicknameLike, trueNameLike);
+        List<UserManagementVo> userManagementVos = userMapper.selectAllManagementVoByConditions(roleId, signedNotice, signedContract, typeId, nicknameLike, trueNameLike);
         PageInfo<UserManagementVo> pageInfo = new PageInfo<>(userManagementVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
     public UserManagementVo getUserManagementVoById(int id) {
         return userMapper.selectManagementVoByPrimaryKey(id);
-    }
-
-    /**
-     * 根据手机号查询用户
-     *
-     * @param phone 手机号
-     * @return 用户实体类
-     */
-    public User getExistUserByPhone(String phone) throws SelectException {
-        User user = userMapper.selectByPhone(phone);
-        if (user == null) {
-            throw new SelectException("用户不存在！");
-        } else {
-            return user;
-        }
-    }
-
-    public User getUserByPhone(String phone) {
-        return userMapper.selectByPhone(phone);
     }
 
     /**
@@ -127,30 +109,30 @@ public class UserService {
     /**
      * 修改密码
      *
-     * @param phone       手机号
+     * @param id          用户id
      * @param newPassword 新的密码
      */
-    public void updatePassword(String phone, String newPassword) {
-        userMapper.updatePasswordByPhone(newPassword, phone);
+    public void updatePassword(Integer id, String newPassword) {
+        userMapper.updatePasswordById(newPassword, id);
     }
 
     /**
      * 修改是否同意服务协议标识
      *
-     * @param phone        手机号
+     * @param id           用户id
      * @param signedNotice 是否同意服务协议
      */
-    public void updatesignedNotice(String phone, boolean signedNotice) {
-        userMapper.updateSignedNoticeByPhone(signedNotice, phone);
+    public void updatesignedNotice(Integer id, boolean signedNotice) {
+        userMapper.updateSignedNoticeById(signedNotice, id);
     }
 
     /**
      * 修改是否签署合同标识
      *
-     * @param phone          手机号
+     * @param id             用户id
      * @param signedContract 是否签署合同
      */
-    public void updateSignedContract(String phone, boolean signedContract) {
-        userMapper.updateSignedContractByPhone(signedContract, phone);
+    public void updateSignedContract(Integer id, boolean signedContract) {
+        userMapper.updateSignedContractById(signedContract, id);
     }
 }

@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 @Data
 public class UserContribPointVo {
     /**
-     * 手机号
+     * 用户id
      */
-    private String phone;
+    private Integer userId;
     /**
      * 贡献点
      */

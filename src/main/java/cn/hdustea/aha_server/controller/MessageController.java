@@ -35,8 +35,8 @@ public class MessageController {
     @RequiresLogin
     @GetMapping("/count/notRead")
     public ResponseBean<Integer> getMessageCountNotRead(@RequestParam(value = "type", required = false) String type) throws SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        int count = messageService.getMessageCountNotReadByReceiverPhoneAndType(phone, type);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        int count = messageService.getMessageCountNotReadByReceiverUserIdAndType(userId, type);
         return new ResponseBean<>(200, "succ", count);
     }
 
@@ -51,23 +51,23 @@ public class MessageController {
     @RequiresLogin
     @GetMapping()
     public ResponseBean<PageVo<List<MessageVo>>> getAllMessageVoPagable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "status", required = false) Integer status, @RequestParam(value = "type", required = false) String type) throws SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        PageVo<List<MessageVo>> messageVos = messageService.getAllMessageVoByReceiverPhonePagable(phone, pageNum, pageSize, status, type);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        PageVo<List<MessageVo>> messageVos = messageService.getAllMessageVoByReceiverUserIdPagable(userId, pageNum, pageSize, status, type);
         return new ResponseBean<>(200, "succ", messageVos);
     }
 
     /**
-     * 根据对方手机号获取会话消息，并标记为已读
+     * 根据对方用户id获取会话消息，并标记为已读
      *
-     * @param phone 对方手机号
+     * @param senderUserId 对方用户id
      */
     @RequiresLogin
-    @GetMapping("/communication/{phone}")
-    public ResponseBean<List<MessageVo>> getMessageInCommunication(@PathVariable("phone") String phone) {
-        String userPhone = ThreadLocalUtil.getCurrentUser();
-        List<MessageVo> messageVos = messageService.getAllMessageVoInCommunicationBySenderPhoneAndReceiverPhone(userPhone, phone);
+    @GetMapping("/communication/{senderUserId}")
+    public ResponseBean<List<MessageVo>> getMessageInCommunication(@PathVariable("senderUserId") Integer senderUserId) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        List<MessageVo> messageVos = messageService.getAllMessageVoInCommunicationBySenderUserIdAndReceiverUserId(userId, senderUserId);
         if (!messageVos.isEmpty()) {
-            messageService.changeMessageStatusByReceiverPhoneAndSenderPhone(MessageType.STATUS_READ.getValue(), userPhone, phone);
+            messageService.changeMessageStatusByReceiverUserIdAndSenderUserId(MessageType.STATUS_READ.getValue(), userId, senderUserId);
         }
         return new ResponseBean<>(200, "succ", messageVos);
     }
@@ -80,8 +80,8 @@ public class MessageController {
     @RequiresLogin
     @GetMapping("/{messageId}")
     public ResponseBean<Object> getMessageVoById(@PathVariable("messageId") int messageId) {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        MessageVo messageVo = messageService.getMessageVoByIdAndReceiverPhone(messageId, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        MessageVo messageVo = messageService.getMessageVoByIdAndReceiverUserId(messageId, userId);
         if (messageVo != null) {
             if (messageVo.getStatus() == MessageType.STATUS_NOT_READ.getValue()) {
                 messageService.changeMessageStatusById(MessageType.STATUS_READ.getValue(), messageId);
@@ -98,8 +98,8 @@ public class MessageController {
     @RequiresLogin
     @DeleteMapping("/{messageId}")
     public ResponseBean<Object> deleteMessageVoById(@PathVariable("messageId") int messageId) throws PermissionDeniedException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        if (messageService.isReceiver(phone, messageId)) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (messageService.isReceiver(userId, messageId)) {
             messageService.changeMessageStatusById(MessageType.STATUS_DELETED.getValue(), messageId);
         } else {
             throw new PermissionDeniedException();
@@ -115,8 +115,8 @@ public class MessageController {
     @RequiresLogin
     @PostMapping()
     public ResponseBean<Object> sendPrivateMessage(@Validated @RequestBody MessageDto messageDto) throws SelectException {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        messageService.sendPrivateMessage(messageDto, phone);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        messageService.sendPrivateMessage(messageDto, userId);
         return new ResponseBean<>(200, "succ", null);
     }
 }

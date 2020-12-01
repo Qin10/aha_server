@@ -20,27 +20,27 @@ public class ResumeService {
     private UserService userService;
 
     /**
-     * 根据手机号查询简历
+     * 根据用户id查询简历
      *
-     * @param phone 用户手机号
+     * @param userId 用户id
      * @return 简历实体类
      */
-    public Resume getResumeByPhone(String phone) {
-        Resume resume = resumeDao.findByUserPhone(phone);
+    public Resume getResumeByUserId(Integer userId) {
+        Resume resume = resumeDao.findByUserId(userId);
         return resume == null ? new Resume() : resume;
     }
 
     /**
-     * 根据用户手机号修改简历
+     * 根据用户id修改简历
      *
      * @param resume 简历实体类
-     * @param phone  用户手机号
+     * @param userId  用户id
      * @throws SelectException 用户不存在异常
      */
-    public void updateResumeByPhone(Resume resume, String phone) throws SelectException {
-        userService.getExistUserByPhone(phone);
-        resume.setUserPhone(phone);
-        Resume possibleResume = resumeDao.findByUserPhone(phone);
+    public void updateResumeByUserId(Resume resume, Integer userId) throws SelectException {
+        userService.getExistUserById(userId);
+        resume.setUserId(userId);
+        Resume possibleResume = resumeDao.findByUserId(userId);
         if (possibleResume != null) {
             resume.setId(possibleResume.getId());
         }

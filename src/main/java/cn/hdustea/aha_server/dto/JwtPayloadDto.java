@@ -12,7 +12,7 @@ public class JwtPayloadDto {
     /**
      * 账号
      */
-    private String account;
+    private Integer account;
     /**
      * 角色名称
      */

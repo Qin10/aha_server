@@ -52,7 +52,7 @@ public class JWTUtil {
         JwtPayloadDto jwtPayloadDto = new JwtPayloadDto();
         try {
             DecodedJWT jwt = JWT.decode(token);
-            jwtPayloadDto.setAccount(jwt.getClaim("account").asString());
+            jwtPayloadDto.setAccount(jwt.getClaim("account").asInt());
             jwtPayloadDto.setRoleName(jwt.getClaim("roleName").asString());
             jwtPayloadDto.setSignedNotice(jwt.getClaim("signedNotice").asBoolean());
             jwtPayloadDto.setSignedContract(jwt.getClaim("signedContract").asBoolean());
@@ -70,7 +70,7 @@ public class JWTUtil {
      */
     public static JwtPayloadDto packagePayload(User user) {
         JwtPayloadDto jwtPayloadDto = new JwtPayloadDto();
-        jwtPayloadDto.setAccount(user.getPhone());
+        jwtPayloadDto.setAccount(user.getId());
         jwtPayloadDto.setRoleName(user.getRole().getName());
         jwtPayloadDto.setSignedNotice(user.getSignedNotice());
         jwtPayloadDto.setSignedContract(user.getSignedContract());

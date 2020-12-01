@@ -1,10 +1,6 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.Message;
-import cn.hdustea.aha_server.vo.MessageVo;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import cn.hdustea.aha_server.entity.Message;import cn.hdustea.aha_server.vo.MessageVo;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * ${description}
@@ -26,18 +22,17 @@ public interface MessageMapper {
 
     int updateStatusById(@Param("updatedStatus") Integer updatedStatus, @Param("id") Integer id);
 
-    int updateStatusByReceiverPhone(@Param("updatedStatus") Integer updatedStatus, @Param("receiverPhone") String receiverPhone);
+    int updateStatusByReceiverUserId(@Param("updatedStatus") Integer updatedStatus, @Param("receiverUserId") Integer receiverUserId);
 
-    int updateStatusByReceiverPhoneAndSenderPhone(@Param("updatedStatus") Integer updatedStatus, @Param("receiverPhone") String receiverPhone, @Param("senderPhone") String senderPhone);
+    int updateStatusByReceiverUserIdAndSenderUserId(@Param("updatedStatus") Integer updatedStatus, @Param("receiverUserId") Integer receiverUserId, @Param("senderUserId") Integer senderUserId);
 
-    List<MessageVo> selectAllVoByConditions(@Param("receiverPhone") String receiverPhone, @Param("status") Integer status, @Param("type") Integer type);
+    List<MessageVo> selectAllVoByConditions(@Param("receiverUserId") Integer receiverUserId, @Param("status") Integer status, @Param("type") Integer type);
 
     int insertList(@Param("list") List<Message> list);
 
-    MessageVo selectVoByIdAndReceiverPhoneAndNotDeleted(@Param("id") Integer id, @Param("receiverPhone") String receiverPhone);
+    MessageVo selectVoByIdAndReceiverUserIdAndNotDeleted(@Param("id") Integer id, @Param("receiverUserId") Integer receiverUserId);
 
-    Integer countByReceiverPhoneAndStatusAndType(@Param("receiverPhone") String receiverPhone, @Param("status") Integer status, @Param("type") Integer type);
+    Integer countByReceiverUserIdAndStatusAndType(@Param("receiverUserId") Integer receiverUserId, @Param("status") Integer status, @Param("type") Integer type);
 
-    List<MessageVo> selectAllVoInCommunicationBySenderPhoneAndReceiverPhone(@Param("receiverPhone") String receiverPhone, @Param("senderPhone") String senderPhone);
-
+    List<MessageVo> selectAllVoInCommunicationBySenderUserIdAndReceiverUserId(@Param("receiverUserId") Integer receiverUserId, @Param("senderUserId") Integer senderUserId);
 }

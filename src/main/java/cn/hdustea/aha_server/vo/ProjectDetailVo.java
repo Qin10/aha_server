@@ -1,12 +1,8 @@
 package cn.hdustea.aha_server.vo;
 
 import cn.hdustea.aha_server.entity.Competition;
-import cn.hdustea.aha_server.entity.ProjectMember;
-import cn.hdustea.aha_server.entity.ProjectResource;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -26,9 +22,9 @@ public class ProjectDetailVo {
     private Integer id;
 
     /**
-     * 团队创建者手机号
+     * 团队创建者用户id
      */
-    private String creatorPhone;
+    private Integer creatorUserId;
 
     /**
      * 团队名称

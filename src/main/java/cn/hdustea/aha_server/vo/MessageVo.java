@@ -18,9 +18,9 @@ public class MessageVo {
     private int id;
 
     /**
-     * 发信人手机号
+     * 发信人用户id
      */
-    private String senderPhone;
+    private Integer senderUserId;
 
     /**
      * 类型

@@ -1,5 +1,5 @@
 ###发送注册验证短信
-GET http://{{host}}/sms/sendCode/register/15382355341
+GET http://{{host}}/sms/sendCode/register/13819154341
 
 ###发送修改密码验证短信
 GET http://{{host}}/sms/sendCode/changePassword/13819154341
@@ -9,7 +9,7 @@ POST http://{{host}}/register
 Content-Type: application/json
 
 {
-  "phone": "15382355341",
+  "phone": "13819154341",
   "password": "114514",
   "nickname": "YY",
   "code": "1234"
@@ -20,7 +20,7 @@ POST http://{{host}}/login
 Content-Type: application/json
 
 {
-  "phone": "15382355341",
+  "phone": "13819154341",
   "password": "114514"
 }
 
@@ -44,7 +44,7 @@ Content-Type: application/json
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###获取用户个人信息
-GET http://{{host}}/userInfo/15382355342
+GET http://{{host}}/userInfo/49
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -131,19 +131,19 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目列表
-GET http://{{host}}/project?pageNum=1&pageSize=5&sortBy=read&orderBy=desc
+GET http://{{host}}/project?pageNum=1&pageSize=5&userId=49
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET http://{{host}}/project/15
+GET http://{{host}}/project/70
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有成员信息
-GET http://{{host}}/project/7/members
+GET http://{{host}}/project/70/members
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -161,19 +161,19 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###收藏资源
-POST http://{{host}}/project/collection/7
+POST http://{{host}}/project/collection/70
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###取消收藏资源
-DELETE http://{{host}}/project/collection/7
+DELETE http://{{host}}/project/collection/70
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###判断收藏资源
-GET http://{{host}}/project/collection/7
+GET http://{{host}}/project/collection/70
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -211,12 +211,12 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目成员
-POST http://{{host}}/project/member/7
+POST http://{{host}}/project/member/70
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "memberPhone": "15382355341",
+  "memberUserId": 49,
   "rank": 1,
   "job": "队长",
   "editable": 1
@@ -225,7 +225,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改项目成员信息
-PUT http://{{host}}/project/member/1/15382355341
+PUT http://{{host}}/project/member/70/49
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -262,7 +262,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST http://{{host}}/project/resource/7
+POST http://{{host}}/project/resource/70
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -284,7 +284,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###删除项目资源
-DELETE http://{{host}}/project/resource/3
+DELETE http://{{host}}/project/resource/74
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -302,22 +302,22 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员发送公告
-POST http://{{host}}/admin/message/notice
+POST http://{{host}}/admin/message/systemNotice
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "content": "只是一篇系统公告！"
+  "content": "这是一篇系统公告！"
 }
 
 ###管理员发送系统消息
-POST http://{{host}}/admin/message/system
+POST http://{{host}}/admin/message/systemPrivate
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "reveiverPhone": "15677751219",
-  "content": "第二封系统消息！"
+  "receiverUserId": 50,
+  "content": "第一封系统消息！"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -363,19 +363,19 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看站内信
-GET http://{{host}}/message?pageNum=1&pageSize=10&type=private&status=1
+GET http://{{host}}/message?pageNum=1&pageSize=10&type=private
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###根据id查看站内信
-GET http://{{host}}/message/16
+GET http://{{host}}/message/22
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###根据对话获取站内信
-GET http://{{host}}/message/communication/15382355341
+GET http://{{host}}/message/communication/49
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -386,8 +386,19 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "reveiverPhone": "13819154341",
+  "receiverUserId": 49,
   "content": "第一条站内信！"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###微信绑定
+POST http://{{host}}/wxBind?code=053gCg1w3ikZnV2cl74w3rBPOj1gCg1C
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###微信登录
+POST http://{{host}}/wxLogin?code=07370Rkl28Uo4641jMnl2Qz3Qv070RkJ
+
+> {% client.global.set("auth_token",response.body.data.token);%}

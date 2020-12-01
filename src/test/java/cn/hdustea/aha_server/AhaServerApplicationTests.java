@@ -1,7 +1,6 @@
 package cn.hdustea.aha_server;
 
 import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
-import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.*;
 import cn.hdustea.aha_server.task.OssDocumentConvertTask;
 import cn.hdustea.aha_server.util.RedisUtil;
@@ -37,10 +36,6 @@ class AhaServerApplicationTests {
     void contextLoads() {
     }
 
-    @Test
-    void testGetUser() throws SelectException {
-        System.out.println(userService.getExistUserByPhone("15382355341"));
-    }
 
     @Test
     void testAliOssUpload() {
@@ -63,10 +58,6 @@ class AhaServerApplicationTests {
         System.out.println(contributionRankService.getRankList());
     }
 
-    @Test
-    void testCRank() throws SelectException {
-        System.out.println(contributionRankService.getUserContribPointByPhone("15382355341"));
-    }
 
     @Test
     void testMNS() {

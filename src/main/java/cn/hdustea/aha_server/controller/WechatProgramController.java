@@ -46,8 +46,8 @@ public class WechatProgramController {
     @RequiresLogin
     @PostMapping("/wxBind")
     public ResponseBean<Object> wechatBind(@RequestParam("code") String code) throws Exception {
-        String phone = ThreadLocalUtil.getCurrentUser();
-        wechatProgramService.wechatBind(phone, code);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        wechatProgramService.wechatBind(userId, code);
         return new ResponseBean<>(200, "succ", null);
     }
 }

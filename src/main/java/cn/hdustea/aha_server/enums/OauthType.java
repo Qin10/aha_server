@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 public enum OauthType {
 
+    PHONE("phone"),
     WECHAT("wechat");
 
     private final String value;
