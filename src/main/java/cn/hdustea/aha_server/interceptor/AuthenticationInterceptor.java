@@ -104,7 +104,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     }
                 }
                 ThreadLocalUtil.setCurrentUser(jwtPayloadDto.getAccount());
-                MDC.put("phone", jwtPayloadDto.getAccount().toString());
+                MDC.put("userId", jwtPayloadDto.getAccount().toString());
                 MDC.put("ip", IpUtil.getIpAddr(request));
                 return true;
             }

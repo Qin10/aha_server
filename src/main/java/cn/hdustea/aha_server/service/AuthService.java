@@ -318,7 +318,7 @@ public class AuthService {
         String token = signToken(user);
 
         PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(user.getId());
-        MDC.put("id", user.getId().toString());
+        MDC.put("userId", user.getId().toString());
         MDC.put("ip", IpUtil.getIpAddr(request));
         return new TokenAndPersonalUserInfoVo(token, personalUserInfo);
     }

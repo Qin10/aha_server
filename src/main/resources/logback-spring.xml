@@ -20,7 +20,7 @@
     </appender>
     <appender name="USER_OPERATION_LOG" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>[UserOperationLog][%d{yyyy-MM-dd HH:mm:ss.SSS}][%level]---[%X{ip}][%X{phone}]---%m%n</pattern>
+            <pattern>[UserOperationLog][%d{yyyy-MM-dd HH:mm:ss.SSS}][%level]---[%X{ip}][%X{userId}]---%m%n</pattern>
             <charset>utf8</charset>
         </encoder>
     </appender>

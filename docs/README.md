@@ -357,7 +357,7 @@ id|int|否|竞赛信息id
 
 **请求URL**
 
-/competition/getAllCompetition `GET` 
+/competition `GET` 
 
 
 **返回结果**
@@ -432,7 +432,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/rank/getRankList `GET` 
+/rank `GET` 
 
 
 **返回结果**
@@ -1309,7 +1309,7 @@ type|string|否|消息类型(system:系统消息,private:私信)
 
 **请求URL**
 
-/message/getAllMessageVoPagable `GET` 
+/message `GET` 
 
 **请求参数**
 
@@ -1615,7 +1615,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/saveProject `POST` 
+/project `POST` 
 
 **请求体**
 
@@ -2270,7 +2270,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/resume/updateResume `PUT` 
+/resume `PUT` 
 
 **请求体**
 
@@ -2342,7 +2342,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/sms/code/{phone} `POST` 
+/sms/code `POST` 
 
 **请求体**
 

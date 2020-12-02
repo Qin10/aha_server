@@ -2,10 +2,22 @@
 GET http://{{host}}/sms/code/15382355341?type=register
 
 ###发送修改密码验证短信
-GET http://{{host}}/sms/code/13819154341?type=changePassword
+POST http://{{host}}/sms/code
+Content-Type: application/json
 
-###发送修改密码验证短信
-GET http://{{host}}/sms/code/13819154341?type=bindPhone
+{
+  "phone": "15382355341",
+  "type": "changePassword"
+}
+
+###发送绑定手机号验证短信
+POST http://{{host}}/sms/code
+Content-Type: application/json
+
+{
+  "phone": "15382355341",
+  "type": "bindPhone"
+}
 
 ###用户注册
 POST http://{{host}}/register/phone
@@ -34,7 +46,7 @@ Authorization:{{auth_token}}
 Content-Type: application/json
 
 {
-  "phone": "13819154341",
+  "phone": "15382355341",
   "code": "1234"
 }
 
@@ -56,7 +68,7 @@ Authorization:{{auth_token}}
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###用户修改密码
-POST http://{{host}}/changePassword/phone/13819154341
+POST http://{{host}}/changePassword/phone/15382355341
 Content-Type: application/json
 
 {
@@ -421,17 +433,20 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
-###微信登录
-POST http://{{host}}/login/wechat?code=0932Qb0w3UHMpV2Vs40w3W1In132Qb0u
-
-> {% client.global.set("auth_token",response.body.data.token);%}
-
-###微信注册
-POST http://{{host}}/register/wechat
+###微信注册登录
+POST http://{{host}}/login/wechat
 Content-Type: application/json
 
 {
-  "nickname": "YY2",
-  "code": "013yP01w39LXoV2ZiW3w3yqloH3yP01S",
+  "nickname": "YYa",
+  "code": "073RgKFa1knK4A0qzkHa1jXO1V3RgKFB",
   "signedNotice": true
 }
+
+> {% client.global.set("auth_token",response.body.data.token);%}
+
+###获取全部竞赛信息
+GET http://{{host}}/competition
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

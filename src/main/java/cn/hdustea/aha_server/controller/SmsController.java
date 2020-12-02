@@ -27,7 +27,7 @@ public class SmsController {
      * @param smsSendDto 短信发送相关信息
      */
     @RequestLimit(amount = 5, time = 300)
-    @PostMapping("/code/{phone}")
+    @PostMapping("/code")
     public ResponseBean<Object> sendRegisterSmsCode(@Validated @RequestBody SmsSendDto smsSendDto) throws MessageSendException {
         boolean isSent = smsService.sendSmsCode(smsSendDto.getPhone(), smsSendDto.getType());
         if (isSent) {
