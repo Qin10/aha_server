@@ -5,7 +5,7 @@
 
 **请求URL**
 
-/login `POST` 
+/login/phone `POST` 
 
 **请求体**
 
@@ -60,7 +60,7 @@
 
 **请求URL**
 
-/register `POST` 
+/register/phone `POST` 
 
 **请求体**
 
@@ -112,20 +112,46 @@
 	"time":"string //响应时间"
 }
 ```
+## 绑定手机号
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/bind/phone `POST` 
+
+**请求体**
+
+```json
+{
+	"phone":"string //手机号【必须】",
+	"code":"string //验证码【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 ## 修改密码
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/changePassword/{phone} `POST` 
+/changePassword/phone/{phone} `POST` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 phone|string|否|手机号
-
 **请求体**
 
 ```json
@@ -151,7 +177,7 @@ phone|string|否|手机号
 
 **请求URL**
 
-/sign/notice `GET` 
+/sign/notice `POST` 
 
 
 **返回结果**
@@ -179,7 +205,11 @@ phone|string|否|手机号
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 file|file|否|合同签名文件
+id|int|否|
+userId|int|否|用户id(外键)
 name|string|否|联系人
+signatureFilename|string|否|签名文件名
+signTime|date|否|合同签名时间
 
 **返回结果**
 
@@ -209,6 +239,138 @@ name|string|否|联系人
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 通过微信小程序授权登录
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/login/wechat `POST` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+code|string|否|小程序请求码
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"token":"string //token令牌",
+		"personalUserInfo":{
+			"signedNotice":"boolean //是否签署服务协议",
+			"signedContract":"boolean //是否签署合同",
+			"contribPoint":"double //贡献点",
+			"role":{
+				"id":"int //角色id",
+				"name":"string //角色名称"
+			},
+			"userInfo":{
+				"userId":"int //用户id(外键)",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"birthday":"date //用户出生日期",
+				"typeId":"int //用户类别",
+				"signature":"string //用户个性签名",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"academy":"string //用户学院",
+				"major":"string //用户主修专业",
+				"grade":"int //用户当前年级",
+				"intro":"string //用户自我介绍",
+				"specialtyTags":"string //用户特长标签",
+				"trueName":"string //用户真实姓名",
+				"compTags":"string //用户参与过比赛标签"
+			}
+		}
+	},
+	"time":"string //响应时间"
+}
+```
+## 绑定微信账号
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/bind/wechat `POST` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+code|string|否|小程序请求码
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 通过微信号注册
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/register/wechat `POST` 
+
+**请求体**
+
+```json
+{
+	"nickname":"string //昵称【必须】",
+	"signedNotice":"boolean //是否同意服务协议",
+	"code":"string //微信code【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"token":"string //token令牌",
+		"personalUserInfo":{
+			"signedNotice":"boolean //是否签署服务协议",
+			"signedContract":"boolean //是否签署合同",
+			"contribPoint":"double //贡献点",
+			"role":{
+				"id":"int //角色id",
+				"name":"string //角色名称"
+			},
+			"userInfo":{
+				"userId":"int //用户id(外键)",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"birthday":"date //用户出生日期",
+				"typeId":"int //用户类别",
+				"signature":"string //用户个性签名",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"academy":"string //用户学院",
+				"major":"string //用户主修专业",
+				"grade":"int //用户当前年级",
+				"intro":"string //用户自我介绍",
+				"specialtyTags":"string //用户特长标签",
+				"trueName":"string //用户真实姓名",
+				"compTags":"string //用户参与过比赛标签"
+			}
+		}
+	},
 	"time":"string //响应时间"
 }
 ```
