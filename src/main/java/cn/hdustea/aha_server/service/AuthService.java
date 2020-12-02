@@ -8,9 +8,8 @@ import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.enums.OauthType;
 import cn.hdustea.aha_server.exception.apiException.AuthorizationException;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.AccountNotFoundException;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.WechatUnauthorizedException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.InvalidPasswordException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
@@ -225,19 +224,45 @@ public class AuthService {
     }
 
     /**
-     * 使用微信请求code完成登录校验
+     * 处理微信登录或注册请求
      *
-     * @param code 微信请求code
-     * @return token令牌
-     * @throws WechatUnauthorizedException 微信小程序授权信息未找到异常
+     * @param wechatRegisterUserDto 微信注册信息
+     * @return token和部分用户信息
+     * @throws JsonProcessingException jackson异常
+     * @throws SelectException         查询异常
+     * @throws AuthorizationException  授权异常
      */
-    public TokenAndPersonalUserInfoVo LoginByWechat(String code) throws JsonProcessingException, WechatUnauthorizedException, SelectException {
-        String openid = WechatUtil.getWxInfo(code, wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
+    public TokenAndPersonalUserInfoVo LoginByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws JsonProcessingException, SelectException, AuthorizationException {
+        String openid = WechatUtil.getWxInfo(wechatRegisterUserDto.getCode(), wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
+        if (openid == null) {
+            throw new AuthorizationException("非法授权码！");
+        }
         Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.WECHAT.getValue(), openid);
-        if (wechatOauth == null) {
-            throw new WechatUnauthorizedException();
-        } else {
+        if (wechatOauth != null) {
             return excuteLoginByUserId(wechatOauth.getUserId());
+        } else {
+            User user = new User();
+            user.setSignedNotice(wechatRegisterUserDto.isSignedNotice());
+            user.setRoleId(1);
+            user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
+            userService.saveUser(user);
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserId(user.getId());
+            userInfo.setNickname(wechatRegisterUserDto.getNickname());
+            if (wechatRegisterUserDto.getAvatarUrl() != null) {
+                userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
+            } else {
+                userInfo.setAvatarUrl(wechatRegisterUserDto.getAvatarUrl());
+            }
+            userInfoService.saveUserInfo(userInfo);
+            Oauth oauth = new Oauth();
+            oauth.setUserId(user.getId());
+            oauth.setOauthType(OauthType.WECHAT.getValue());
+            oauth.setOauthId(openid);
+            oauthService.saveOauth(oauth);
+            Resume resume = new Resume();
+            resumeService.updateResumeByUserId(resume, user.getId());
+            return excuteLoginByUserId(user.getId());
         }
     }
 
@@ -264,47 +289,6 @@ public class AuthService {
         oauth.setOauthType(OauthType.WECHAT.getValue());
         oauth.setOauthId(openid);
         oauthService.saveOauth(oauth);
-    }
-
-    /**
-     * 处理微信登录请求
-     *
-     * @param wechatRegisterUserDto 微信登录信息
-     * @return token和部分用户信息
-     * @throws Exception 抛出异常
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public TokenAndPersonalUserInfoVo registerByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
-        String openid = WechatUtil.getWxInfo(wechatRegisterUserDto.getCode(), wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
-        if (openid == null) {
-            throw new AuthorizationException("非法授权码！");
-        }
-        Oauth possibleOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.WECHAT.getValue(), openid);
-        if (possibleOauth != null) {
-            throw new AccountExistedException();
-        }
-        User user = new User();
-        user.setSignedNotice(wechatRegisterUserDto.isSignedNotice());
-        user.setRoleId(1);
-        user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
-        userService.saveUser(user);
-        UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(user.getId());
-        userInfo.setNickname(wechatRegisterUserDto.getNickname());
-        if (wechatRegisterUserDto.getAvatarUrl() != null) {
-            userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
-        } else {
-            userInfo.setAvatarUrl(wechatRegisterUserDto.getAvatarUrl());
-        }
-        userInfoService.saveUserInfo(userInfo);
-        Oauth oauth = new Oauth();
-        oauth.setUserId(user.getId());
-        oauth.setOauthType(OauthType.WECHAT.getValue());
-        oauth.setOauthId(openid);
-        oauthService.saveOauth(oauth);
-        Resume resume = new Resume();
-        resumeService.updateResumeByUserId(resume, user.getId());
-        return excuteLoginByUserId(user.getId());
     }
 
     /**

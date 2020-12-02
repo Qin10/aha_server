@@ -7,7 +7,6 @@ import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.exception.apiException.AuthorizationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.AccountNotFoundException;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.WechatUnauthorizedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
@@ -155,11 +154,7 @@ public class AuthController {
     @PostMapping("/login/wechat")
     public ResponseBean<TokenAndPersonalUserInfoVo> loginByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
         TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo;
-        try {
-            tokenAndPersonalUserInfoVo = authService.LoginByWechat(wechatRegisterUserDto.getCode());
-        } catch (WechatUnauthorizedException e) {
-            tokenAndPersonalUserInfoVo = authService.registerByWechat(wechatRegisterUserDto);
-        }
+        tokenAndPersonalUserInfoVo = authService.LoginByWechat(wechatRegisterUserDto);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户登录", "");
         return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoVo);
     }

@@ -50,10 +50,6 @@ public enum ApiExceptionCode {
      */
     ACCOUNT_EXISTED(303, "该用户已经存在！"),
     /**
-     * 未找到微信授权信息
-     */
-    WECHAT_UNAUTHORIZED(304, "未找到微信授权信息！"),
-    /**
      * 创建失败
      */
     INSERT_ERROR(401, "创建失败！"),
