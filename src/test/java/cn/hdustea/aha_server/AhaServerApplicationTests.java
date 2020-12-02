@@ -29,8 +29,6 @@ class AhaServerApplicationTests {
     private OssDocumentConvertTask ossDocumentConvertTask;
     @Resource
     private MessageService messageService;
-    @Resource
-    private WechatProgramService wechatProgramService;
 
     @Test
     void contextLoads() {
@@ -69,9 +67,5 @@ class AhaServerApplicationTests {
 
     @Test
     void testMessageService() {
-    }
-    @Test
-    void testWechat() throws Exception {
-        wechatProgramService.wechatLogin("04314fGa121b5A0BorJa14quIB314fGW");
     }
 }

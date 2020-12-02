@@ -69,6 +69,13 @@ public class UserInfoService {
         userInfoMapper.updateByPrimaryKeySelective(userInfo);
     }
 
+    /**
+     * 根据用户id更新用户公开信息
+     *
+     * @param userInfo 用户公开信息
+     * @param userId   用户id
+     * @throws SelectException 用户未找到异常
+     */
     public void updateUserInfoByUserId(UserInfo userInfo, int userId) throws SelectException {
         User user = userService.getExistUserById(userId);
         updateUserInfoByUserId(userInfo, user.getId());

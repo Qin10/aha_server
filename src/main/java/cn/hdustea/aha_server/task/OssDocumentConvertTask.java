@@ -33,6 +33,11 @@ public class OssDocumentConvertTask {
     @Resource
     private ProjectResourceMapper projectResourceMapper;
 
+    /**
+     * 处理文档转换队列
+     *
+     * @throws ClientException OSS客户端异常
+     */
     @Scheduled(fixedDelay = 1000)
     public void runConvertTask() throws ClientException {
         DocumentConvertInfoDto runningDocumentConvertInfoDto = (DocumentConvertInfoDto) redisUtil.get(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
@@ -77,6 +82,14 @@ public class OssDocumentConvertTask {
 
     }
 
+    /**
+     * 转换文档
+     *
+     * @param srcBucketName          源bucket名称
+     * @param targetBucketName       目标bucket名称
+     * @param documentConvertInfoDto 文档转换信息
+     * @throws ClientException OSS客户端异常
+     */
     public void convertDocument(String srcBucketName, String targetBucketName, DocumentConvertInfoDto documentConvertInfoDto) throws ClientException {
         CreateOfficeConversionTaskRequest taskRequest = new CreateOfficeConversionTaskRequest();
         taskRequest.setProject("aha-document-preview");

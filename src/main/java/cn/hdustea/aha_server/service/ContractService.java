@@ -29,6 +29,13 @@ public class ContractService {
         return contractMapper.selectByUserId(userId);
     }
 
+    /**
+     * 根据用户id下载合同签名文件
+     *
+     * @param userId 用户id
+     * @throws IOException     IO异常
+     * @throws SelectException 查询异常
+     */
     public void getContractSignatureFile(int userId, HttpServletResponse response) throws IOException, SelectException {
         Contract contract = contractMapper.selectByUserId(userId);
         if (contract != null && contract.getSignatureFilename() != null) {

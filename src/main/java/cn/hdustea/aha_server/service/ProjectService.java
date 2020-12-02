@@ -45,9 +45,16 @@ public class ProjectService {
     /**
      * 分页获取所有项目粗略信息
      *
-     * @param pageNum  页码
-     * @param pageSize 页面大小
-     * @return 项目粗略信息分页列表
+     * @param pageNum    页码
+     * @param pageSize   分页大小
+     * @param userId     所有者用户id
+     * @param compId     竞赛id
+     * @param awardLevel 获奖级别
+     * @param sortBy     排序依据
+     * @param orderBy    排序方式
+     * @param passed     是否通过
+     * @return 项目列表
+     * @throws SelectException 查询异常
      */
     public PageVo<List<ProjectRoughVo>> getAllProjectRoughInfoPagable(int pageNum, int pageSize, Integer userId, Integer compId, Integer awardLevel, String sortBy, String orderBy, Boolean passed) throws SelectException {
         List<ProjectRoughVo> projectRoughVos;
@@ -126,7 +133,7 @@ public class ProjectService {
      * 新增项目并记录作者
      *
      * @param projectDto 项目信息
-     * @param userId      用户id
+     * @param userId     用户id
      */
     public Integer saveProjectAndAuthor(ProjectDto projectDto, int userId) {
         Project project = new Project();
@@ -153,7 +160,7 @@ public class ProjectService {
      * 检查用户是否有项目修改权限
      *
      * @param userId 用户id
-     * @param id    项目id
+     * @param id     项目id
      * @return 是否有修改权限
      */
     public boolean hasPermission(int userId, int id) {
@@ -196,7 +203,7 @@ public class ProjectService {
      * 根据项目id和用户id删除项目成员
      *
      * @param projectId 项目id
-     * @param userId     用户id
+     * @param userId    用户id
      */
     public void deleteProjectMember(int projectId, int userId) {
         projectMemberMapper.deleteByPrimaryKey(projectId, userId);
@@ -207,7 +214,7 @@ public class ProjectService {
      *
      * @param projectMember 更新的项目成员
      * @param projectId     项目id
-     * @param userId         用户id
+     * @param userId        用户id
      */
     public void updateProjectMember(ProjectMember projectMember, int projectId, int userId) {
         projectMember.setProjectId(projectId);
@@ -243,7 +250,7 @@ public class ProjectService {
      * 收藏项目
      *
      * @param projectId 项目id
-     * @param userId     用户id
+     * @param userId    用户id
      */
     public void saveCollection(int projectId, int userId) throws InsertException {
         UserCollection userCollection = new UserCollection();
@@ -263,7 +270,7 @@ public class ProjectService {
      * 取消收藏
      *
      * @param projectId 项目id
-     * @param userId     用户id
+     * @param userId    用户id
      */
     public void deleteCollection(int projectId, int userId) throws DeleteException {
         int result = userCollectionMapper.deleteByPrimaryKey(userId, projectId);
@@ -276,7 +283,7 @@ public class ProjectService {
      * 判断项目是否被收藏
      *
      * @param projectId 项目id
-     * @param userId     用户id
+     * @param userId    用户id
      * @return 项目是否被收藏
      */
     public boolean hasCollected(int projectId, int userId) {
@@ -302,6 +309,13 @@ public class ProjectService {
         projectMapper.updateDecCollectById(projectId);
     }
 
+    /**
+     * 处理审核项目请求
+     *
+     * @param projectCheckDto 项目审核信息
+     * @param projectId       项目id
+     * @throws UpdateException 更新异常
+     */
     @Transactional(rollbackFor = Exception.class)
     public void checkProjectByProjectId(ProjectCheckDto projectCheckDto, int projectId) throws UpdateException {
         Project project = projectMapper.selectByPrimaryKey(projectId);

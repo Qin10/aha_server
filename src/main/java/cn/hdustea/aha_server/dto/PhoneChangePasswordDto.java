@@ -10,7 +10,7 @@ import javax.validation.constraints.NotEmpty;
  * @author STEA_YY
  **/
 @Data
-public class ChangePasswordDto {
+public class PhoneChangePasswordDto {
     /**
      * 新密码
      */

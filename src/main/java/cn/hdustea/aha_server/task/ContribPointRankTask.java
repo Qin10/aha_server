@@ -24,6 +24,9 @@ public class ContribPointRankTask {
     @Resource
     private RedisUtil redisUtil;
 
+    /**
+     * 更新排行榜
+     */
     @Scheduled(cron = "0 0 * * * ?")
     @Async
     public void getRank() {

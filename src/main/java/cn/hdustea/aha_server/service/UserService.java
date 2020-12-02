@@ -24,6 +24,13 @@ public class UserService {
     @Resource
     private UserMapper userMapper;
 
+    /**
+     * 根据id查找用户，如果未找到则抛出异常
+     *
+     * @param id 用户id
+     * @return 用户
+     * @throws SelectException 查询异常
+     */
     public User getExistUserById(int id) throws SelectException {
         User user = userMapper.selectByPrimaryKey(id);
         if (user == null) {
@@ -33,10 +40,30 @@ public class UserService {
         }
     }
 
+    /**
+     * 根据id查找用户
+     *
+     * @param id 用户id
+     * @return 用户
+     */
     public User getUserById(int id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
+    /**
+     * @param pageNum        页码
+     * @param pageSize       分页大小
+     * @param roleId         角色id
+     * @param signedNotice   是否签署服务协议
+     * @param signedContract 是否签署合同
+     * @param typeId         用户类型id
+     * @param nicknameLike   模糊昵称
+     * @param trueNameLike   模糊真实姓名
+     * @param sortBy         排序依据
+     * @param orderBy        排序方式
+     * @return 用户列表
+     * @throws SelectException 查询异常
+     */
     public PageVo<List<UserManagementVo>> getAllUserManagementVoPagable(int pageNum, int pageSize, Integer roleId, Boolean signedNotice, Boolean signedContract, Integer typeId, String nicknameLike, String trueNameLike, String sortBy, String orderBy) throws SelectException {
         String currentSortBy = "u_id";
         String currentOrderBy = "desc";
@@ -82,6 +109,12 @@ public class UserService {
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
+    /**
+     * 根据id获取用户管理信息
+     *
+     * @param id 用户id
+     * @return 用户管理信息
+     */
     public UserManagementVo getUserManagementVoById(int id) {
         return userMapper.selectManagementVoByPrimaryKey(id);
     }
@@ -95,10 +128,21 @@ public class UserService {
         userMapper.insertSelective(user);
     }
 
+    /**
+     * 根据id删除用户
+     *
+     * @param id 用户id
+     */
     public void deleteUserById(int id) {
         userMapper.deleteByPrimaryKey(id);
     }
 
+    /**
+     * 根据id更新用户私有信息
+     *
+     * @param userDto 用户私有信息
+     * @param id      用户id
+     */
     public void updateUserById(UserDto userDto, int id) {
         User user = new User();
         BeanUtils.copyProperties(userDto, user);

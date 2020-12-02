@@ -1,26 +1,49 @@
 ###发送注册验证短信
-GET http://{{host}}/sms/sendCode/register/13819154341
+GET http://{{host}}/sms/code/15382355341?type=register
 
 ###发送修改密码验证短信
-GET http://{{host}}/sms/sendCode/changePassword/13819154341
+GET http://{{host}}/sms/code/13819154341?type=changePassword
+
+###发送修改密码验证短信
+GET http://{{host}}/sms/code/13819154341?type=bindPhone
 
 ###用户注册
-POST http://{{host}}/register
+POST http://{{host}}/register/phone
+Content-Type: application/json
+
+{
+  "phone": "15382355341",
+  "password": "114514",
+  "nickname": "YY",
+  "code": "1234",
+  "signedNotice": true
+}
+
+###用户登录
+POST http://{{host}}/login/phone
+Content-Type: application/json
+
+{
+  "phone": "15382355341",
+  "password": "114514"
+}
+
+###绑定手机号
+POST http://{{host}}/bind/phone
+Authorization:{{auth_token}}
 Content-Type: application/json
 
 {
   "phone": "13819154341",
-  "password": "114514",
-  "nickname": "YY",
   "code": "1234"
 }
 
 ###用户登录
-POST http://{{host}}/login
+POST http://{{host}}/login/phone
 Content-Type: application/json
 
 {
-  "phone": "13819154341",
+  "phone": "15382355341",
   "password": "114514"
 }
 
@@ -33,7 +56,7 @@ Authorization:{{auth_token}}
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###用户修改密码
-POST http://{{host}}/changePassword/13819154341
+POST http://{{host}}/changePassword/phone/13819154341
 Content-Type: application/json
 
 {
@@ -393,12 +416,22 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###微信绑定
-POST http://{{host}}/wxBind?code=053gCg1w3ikZnV2cl74w3rBPOj1gCg1C
+POST http://{{host}}/bind/wechat?code=053gCg1w3ikZnV2cl74w3rBPOj1gCg1C
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###微信登录
-POST http://{{host}}/wxLogin?code=07370Rkl28Uo4641jMnl2Qz3Qv070RkJ
+POST http://{{host}}/login/wechat?code=0932Qb0w3UHMpV2Vs40w3W1In132Qb0u
 
 > {% client.global.set("auth_token",response.body.data.token);%}
+
+###微信注册
+POST http://{{host}}/register/wechat
+Content-Type: application/json
+
+{
+  "nickname": "YY2",
+  "code": "013yP01w39LXoV2ZiW3w3yqloH3yP01S",
+  "signedNotice": true
+}

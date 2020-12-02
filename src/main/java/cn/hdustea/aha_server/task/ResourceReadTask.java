@@ -24,6 +24,9 @@ public class ResourceReadTask {
     @javax.annotation.Resource
     private ProjectMapper projectMapper;
 
+    /**
+     * 批量更新项目阅读量
+     */
     @Scheduled(cron = "0 0/5 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     @Async

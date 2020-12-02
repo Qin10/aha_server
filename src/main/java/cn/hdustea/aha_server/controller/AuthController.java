@@ -3,11 +3,10 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
-import cn.hdustea.aha_server.dto.ChangePasswordDto;
-import cn.hdustea.aha_server.dto.LoginUserDto;
-import cn.hdustea.aha_server.dto.RegisterUserDto;
+import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.Contract;
-import cn.hdustea.aha_server.exception.apiException.authenticationException.UserNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.AuthorizationException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.AccountNotFoundException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
@@ -41,12 +40,12 @@ public class AuthController {
     /**
      * 通过账号密码登录
      *
-     * @param loginUserDto 包含账号密码的实体，从请求Json中获取
+     * @param phoneLoginUserDto 包含账号密码的实体，从请求Json中获取
      */
     @RequestLimit(amount = 5, time = 300)
-    @PostMapping("/login")
-    public ResponseBean<TokenAndPersonalUserInfoVo> login(@RequestBody @Validated LoginUserDto loginUserDto) throws Exception {
-        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.login(loginUserDto);
+    @PostMapping("/login/phone")
+    public ResponseBean<TokenAndPersonalUserInfoVo> loginByPhone(@RequestBody @Validated PhoneLoginUserDto phoneLoginUserDto) throws Exception {
+        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.loginByPhone(phoneLoginUserDto);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户登录", "");
         return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoVo);
     }
@@ -54,28 +53,40 @@ public class AuthController {
     /**
      * 通过手机号注册
      *
-     * @param registerUserDto 包含注册信息的实体
+     * @param phoneRegisterUserDto 包含注册信息的实体
      */
     @RequestLimit(amount = 1)
-    @PostMapping("/register")
-    public ResponseBean<TokenAndPersonalUserInfoVo> register(@RequestBody @Validated RegisterUserDto registerUserDto) throws Exception {
-        authService.register(registerUserDto);
-        LoginUserDto loginUserDto = new LoginUserDto(registerUserDto.getPhone(), registerUserDto.getPassword());
-        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.login(loginUserDto);
+    @PostMapping("/register/phone")
+    public ResponseBean<TokenAndPersonalUserInfoVo> registerByPhone(@RequestBody @Validated PhoneRegisterUserDto phoneRegisterUserDto) throws Exception {
+        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.registerByPhone(phoneRegisterUserDto);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户注册", "");
         return new ResponseBean<>(200, "注册成功", tokenAndPersonalUserInfoVo);
     }
 
     /**
+     * 绑定手机号
+     *
+     * @param phoneBindDto 绑定信息实体
+     */
+    @RequiresLogin(requireSignNotice = false)
+    @RequestLimit(amount = 1)
+    @PostMapping("/bind/phone")
+    public ResponseBean<Object> bindPhone(@RequestBody @Validated PhoneBindDto phoneBindDto) throws MessageCheckException, AuthorizationException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        authService.bindPhone(phoneBindDto, userId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
      * 修改密码
      *
-     * @param changePasswordDto 存放修改密码相关信息的实体类
-     * @param phone             手机号
+     * @param phoneChangePasswordDto 存放修改密码相关信息的实体类
+     * @param phone                  手机号
      */
     @RequestLimit(amount = 1)
-    @PostMapping("/changePassword/{phone}")
-    public ResponseBean<Object> changePassword(@RequestBody @Validated ChangePasswordDto changePasswordDto, @PathVariable("phone") String phone) throws MessageCheckException, UserNotFoundException {
-        authService.changePassword(changePasswordDto, phone);
+    @PostMapping("/changePassword/phone/{phone}")
+    public ResponseBean<Object> changePassword(@RequestBody @Validated PhoneChangePasswordDto phoneChangePasswordDto, @PathVariable("phone") String phone) throws MessageCheckException, AccountNotFoundException {
+        authService.changePasswordByPhone(phoneChangePasswordDto, phone);
         return new ResponseBean<>(200, "密码修改成功！", null);
     }
 
@@ -84,7 +95,7 @@ public class AuthController {
      */
     @RequestLimit(amount = 1, time = 180)
     @RequiresLogin(requireSignNotice = false)
-    @GetMapping("/sign/notice")
+    @PostMapping("/sign/notice")
     public ResponseBean<TokenVo> signNotice() throws UpdateException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signNotice(userId);
@@ -119,5 +130,43 @@ public class AuthController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         authService.logout(userId);
         return new ResponseBean<>(200, "登出成功", null);
+    }
+
+    /**
+     * 通过微信小程序授权登录
+     *
+     * @param code 小程序请求码
+     */
+    @PostMapping("/login/wechat")
+    public ResponseBean<TokenAndPersonalUserInfoVo> wechatLogin(@RequestParam("code") String code) throws Exception {
+        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.LoginByWechat(code);
+        log.info(userOperationLogConfig.getFormat(), AuthController.MODULE_NAME, "用户登录", "");
+        return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoVo);
+    }
+
+    /**
+     * 绑定微信账号
+     *
+     * @param code 小程序请求码
+     */
+    @RequiresLogin(requireSignNotice = false)
+    @PostMapping("/bind/wechat")
+    public ResponseBean<Object> wechatBind(@RequestParam("code") String code) throws Exception {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        authService.bindWechat(userId, code);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 通过微信号注册
+     *
+     * @param wechatRegisterUserDto 包含注册信息的实体
+     */
+    @RequestLimit(amount = 1)
+    @PostMapping("/register/wechat")
+    public ResponseBean<TokenAndPersonalUserInfoVo> registerByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
+        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.registerByWechat(wechatRegisterUserDto);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户注册", "");
+        return new ResponseBean<>(200, "注册成功", tokenAndPersonalUserInfoVo);
     }
 }

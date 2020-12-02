@@ -98,10 +98,21 @@ public class ProjectResourceService {
         projectResourceMapper.deleteByPrimaryKey(id);
     }
 
+    /**
+     * 根据项目资源id增加下载量
+     *
+     * @param id 项目资源id
+     */
     public void incrDownloadById(int id) {
         projectResourceMapper.updateIncDownloadById(id);
     }
 
+    /**
+     * 根据文件名改变项目资源冻结状态
+     *
+     * @param filename 文件名
+     * @param freezed  资源冻结状态
+     */
     public void freezeProjectResourceByFilename(String filename, boolean freezed) {
         ProjectResource projectResource = projectResourceMapper.selectByFilename(filename);
         if (projectResource != null) {

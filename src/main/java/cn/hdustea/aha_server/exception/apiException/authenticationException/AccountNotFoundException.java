@@ -8,13 +8,13 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
  *
  * @author STEA_YY
  **/
-public class UserNotFoundException extends AuthenticationException {
+public class AccountNotFoundException extends AuthenticationException {
 
-    public UserNotFoundException(String message) {
+    public AccountNotFoundException(String message) {
         super(message, ApiExceptionCode.USER_NOT_FOUND.getValue());
     }
 
-    public UserNotFoundException() {
+    public AccountNotFoundException() {
         super(ApiExceptionCode.USER_NOT_FOUND.getDesc(), ApiExceptionCode.USER_NOT_FOUND.getValue());
     }
 }

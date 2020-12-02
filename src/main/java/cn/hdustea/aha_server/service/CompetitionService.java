@@ -87,6 +87,11 @@ public class CompetitionService {
         competitionTagMapper.updateByPrimaryKeySelective(competitionTag);
     }
 
+    /**
+     * 删除竞赛标签
+     *
+     * @param id 竞赛标签id
+     */
     public void deleteCompetitionTagById(int id) {
         competitionTagMapper.deleteByPrimaryKey(id);
     }

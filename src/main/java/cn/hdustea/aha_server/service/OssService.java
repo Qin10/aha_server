@@ -84,10 +84,23 @@ public class OssService {
                 filename;
     }
 
+    /**
+     * 根据文件名改变项目资源冻结状态
+     *
+     * @param filename 文件名
+     * @param freezed  是否冻结
+     */
     public void freezeProjectResource(String filename, boolean freezed) {
         projectResourceService.freezeProjectResourceByFilename(filename, freezed);
     }
 
+    /**
+     * 校验OSS内容安全回调请求
+     *
+     * @param checksum OSS签名
+     * @param content  OSS返回内容
+     * @return 校验结果
+     */
     public boolean verifyOssGreenCallback(String checksum, String content) {
         String payload = aliyunOSSConfig.getAliyunUid() + aliyunOSSConfig.getGreenCallbackSeed() + content;
         String generatedChecksum = EncryptUtil.getSHA256(payload);

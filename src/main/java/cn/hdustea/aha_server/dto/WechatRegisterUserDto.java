@@ -5,22 +5,12 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 /**
- * 注册请求vo
+ * 微信注册信息DTO
  *
  * @author STEA_YY
  **/
 @Data
-public class RegisterUserDto {
-    /**
-     * 手机号
-     */
-    @NotEmpty(message = "手机号不能为空")
-    private String phone;
-    /**
-     * 密码
-     */
-    @NotEmpty(message = "密码不能为空")
-    private String password;
+public class WechatRegisterUserDto {
     /**
      * 昵称
      */
@@ -31,8 +21,8 @@ public class RegisterUserDto {
      */
     private boolean signedNotice;
     /**
-     * 短信验证码
+     * 微信code
      */
-    @NotEmpty(message = "验证码不能为空")
+    @NotEmpty(message = "code不能为空")
     private String code;
 }
