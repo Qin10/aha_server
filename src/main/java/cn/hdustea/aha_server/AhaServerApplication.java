@@ -1,9 +1,6 @@
 package cn.hdustea.aha_server;
 
-import cn.hdustea.aha_server.config.AliyunOSSConfig;
-import cn.hdustea.aha_server.config.FileUploadPathConfig;
-import cn.hdustea.aha_server.config.JWTConfig;
-import cn.hdustea.aha_server.config.UserOperationLogConfig;
+import cn.hdustea.aha_server.config.*;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -17,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author STEA_YY
  */
 @SpringBootApplication
-@EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class, AliyunOSSConfig.class, UserOperationLogConfig.class})
+@EnableConfigurationProperties({JWTConfig.class, FileUploadPathConfig.class, AliyunOSSConfig.class, UserOperationLogConfig.class, WechatConfig.class})
 @MapperScan(basePackages = "cn.hdustea.aha_server.mapper")
 @EnableScheduling
 @EnableAsync

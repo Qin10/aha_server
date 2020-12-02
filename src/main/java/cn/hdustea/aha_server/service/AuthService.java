@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.config.WechatConfig;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.enums.OauthType;
@@ -56,6 +57,8 @@ public class AuthService {
     private JWTConfig jwtConfig;
     @Resource
     private FileUploadPathConfig fileUploadPathConfig;
+    @Resource
+    private WechatConfig wechatConfig;
     @Resource
     private ContractService contractService;
     @Resource
@@ -228,7 +231,7 @@ public class AuthService {
      * @throws WechatUnauthorizedException 微信小程序授权信息未找到异常
      */
     public TokenAndPersonalUserInfoVo LoginByWechat(String code) throws Exception {
-        String openid = WechatUtil.getWxInfo(code).getOpenid();
+        String openid = WechatUtil.getWxInfo(code, wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
         Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.WECHAT.getValue(), openid);
         if (wechatOauth == null) {
             throw new WechatUnauthorizedException();
@@ -245,7 +248,7 @@ public class AuthService {
      * @throws Exception 抛出异常
      */
     public void bindWechat(int userId, String code) throws Exception {
-        String openid = WechatUtil.getWxInfo(code).getOpenid();
+        String openid = WechatUtil.getWxInfo(code, wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
         if (openid == null) {
             throw new AuthorizationException("非法授权码！");
         }
@@ -271,7 +274,7 @@ public class AuthService {
      */
     @Transactional(rollbackFor = Exception.class)
     public TokenAndPersonalUserInfoVo registerByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
-        String openid = WechatUtil.getWxInfo(wechatRegisterUserDto.getCode()).getOpenid();
+        String openid = WechatUtil.getWxInfo(wechatRegisterUserDto.getCode(), wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
         if (openid == null) {
             throw new AuthorizationException("非法授权码！");
         }

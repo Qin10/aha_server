@@ -152,6 +152,7 @@
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 phone|string|否|手机号
+
 **请求体**
 
 ```json
@@ -205,11 +206,7 @@ phone|string|否|手机号
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 file|file|否|合同签名文件
-id|int|否|
-userId|int|否|用户id(外键)
 name|string|否|联系人
-signatureFilename|string|否|签名文件名
-signTime|date|否|合同签名时间
 
 **返回结果**
 

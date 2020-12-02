@@ -16,11 +16,11 @@ public class WechatUtil {
      * @param code 微信请求code
      * @return 包含了各种校验信息的Map
      */
-    public static WechatDto getWxInfo(String code) throws Exception {
+    public static WechatDto getWxInfo(String code, String appid, String secret) throws Exception {
         //发送post请求读取调用微信接口获取openid用户唯一标识
         RestTemplate restTemplate = new RestTemplate();
         String requestUrlBuilder = "https://api.weixin.qq.com/sns/jscode2session" +
-                "?appid=wxafd522b076e38be0&secret=ea1c2a333be6b1dc7bf55c25e0738cb0&grant_type=authorization_code&js_code=" +
+                "?appid=" + appid + "&secret=" + secret + "&grant_type=authorization_code&js_code=" +
                 code;
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(requestUrlBuilder, null, String.class);
         String responseStr = responseEntity.getBody();
