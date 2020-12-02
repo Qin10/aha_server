@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.util;
 
 import cn.hdustea.aha_server.dto.WechatDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +17,7 @@ public class WechatUtil {
      * @param code 微信请求code
      * @return 包含了各种校验信息的Map
      */
-    public static WechatDto getWxInfo(String code, String appid, String secret) throws Exception {
+    public static WechatDto getWxInfo(String code, String appid, String secret) throws JsonProcessingException {
         //发送post请求读取调用微信接口获取openid用户唯一标识
         RestTemplate restTemplate = new RestTemplate();
         String requestUrlBuilder = "https://api.weixin.qq.com/sns/jscode2session" +

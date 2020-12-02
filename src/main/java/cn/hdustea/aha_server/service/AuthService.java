@@ -19,6 +19,7 @@ import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckExc
 import cn.hdustea.aha_server.util.*;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -230,7 +231,7 @@ public class AuthService {
      * @return token令牌
      * @throws WechatUnauthorizedException 微信小程序授权信息未找到异常
      */
-    public TokenAndPersonalUserInfoVo LoginByWechat(String code) throws Exception {
+    public TokenAndPersonalUserInfoVo LoginByWechat(String code) throws JsonProcessingException, WechatUnauthorizedException, SelectException {
         String openid = WechatUtil.getWxInfo(code, wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
         Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.WECHAT.getValue(), openid);
         if (wechatOauth == null) {
@@ -290,7 +291,11 @@ public class AuthService {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(user.getId());
         userInfo.setNickname(wechatRegisterUserDto.getNickname());
-        userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
+        if (wechatRegisterUserDto.getAvatarUrl() != null) {
+            userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
+        } else {
+            userInfo.setAvatarUrl(wechatRegisterUserDto.getAvatarUrl());
+        }
         userInfoService.saveUserInfo(userInfo);
         Oauth oauth = new Oauth();
         oauth.setUserId(user.getId());

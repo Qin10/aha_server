@@ -7,6 +7,7 @@ import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.Contract;
 import cn.hdustea.aha_server.exception.apiException.AuthorizationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.AccountNotFoundException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.WechatUnauthorizedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
@@ -133,18 +134,6 @@ public class AuthController {
     }
 
     /**
-     * 通过微信小程序授权登录
-     *
-     * @param code 小程序请求码
-     */
-    @PostMapping("/login/wechat")
-    public ResponseBean<TokenAndPersonalUserInfoVo> wechatLogin(@RequestParam("code") String code) throws Exception {
-        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.LoginByWechat(code);
-        log.info(userOperationLogConfig.getFormat(), AuthController.MODULE_NAME, "用户登录", "");
-        return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoVo);
-    }
-
-    /**
      * 绑定微信账号
      *
      * @param code 小程序请求码
@@ -158,15 +147,20 @@ public class AuthController {
     }
 
     /**
-     * 通过微信号注册
+     * 通过微信号登录或注册
      *
      * @param wechatRegisterUserDto 包含注册信息的实体
      */
     @RequestLimit(amount = 1)
-    @PostMapping("/register/wechat")
-    public ResponseBean<TokenAndPersonalUserInfoVo> registerByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
-        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.registerByWechat(wechatRegisterUserDto);
-        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户注册", "");
-        return new ResponseBean<>(200, "注册成功", tokenAndPersonalUserInfoVo);
+    @PostMapping("/login/wechat")
+    public ResponseBean<TokenAndPersonalUserInfoVo> loginByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
+        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo;
+        try {
+            tokenAndPersonalUserInfoVo = authService.LoginByWechat(wechatRegisterUserDto.getCode());
+        } catch (WechatUnauthorizedException e) {
+            tokenAndPersonalUserInfoVo = authService.registerByWechat(wechatRegisterUserDto);
+        }
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户登录", "");
+        return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoVo);
     }
 }

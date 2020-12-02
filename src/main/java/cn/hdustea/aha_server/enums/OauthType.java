@@ -10,7 +10,13 @@ import lombok.Getter;
 @Getter
 public enum OauthType {
 
+    /**
+     * 手机号授权
+     */
     PHONE("phone"),
+    /**
+     * 微信授权
+     */
     WECHAT("wechat");
 
     private final String value;

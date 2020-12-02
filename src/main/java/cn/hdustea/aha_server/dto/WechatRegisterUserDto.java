@@ -25,4 +25,9 @@ public class WechatRegisterUserDto {
      */
     @NotEmpty(message = "code不能为空")
     private String code;
+
+    /**
+     * 头像URL
+     */
+    private String avatarUrl;
 }

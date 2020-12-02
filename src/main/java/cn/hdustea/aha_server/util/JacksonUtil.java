@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.codec.binary.Base64;
@@ -35,7 +36,7 @@ public class JacksonUtil {
      * json 转JavaBean
      */
 
-    public static <T> T json2pojo(String jsonString, Class<T> clazz) throws Exception {
+    public static <T> T json2pojo(String jsonString, Class<T> clazz) throws JsonProcessingException {
         objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         return objectMapper.readValue(jsonString, clazz);
     }
