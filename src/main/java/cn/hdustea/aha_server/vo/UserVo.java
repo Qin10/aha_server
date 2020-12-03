@@ -1,17 +1,18 @@
-package cn.hdustea.aha_server.entity;
+package cn.hdustea.aha_server.vo;
 
+import cn.hdustea.aha_server.entity.Role;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * ${description}
+ * 用户私有信息VO
  *
  * @author STEA_YY
  **/
 @Data
-public class User {
+public class UserVo {
     private Integer id;
 
     /**
@@ -45,7 +46,7 @@ public class User {
     private Boolean signedContract;
 
     /**
-     * 角色id(外键)
+     * 用户角色
      */
-    private Integer roleId;
+    private Role role;
 }

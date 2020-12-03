@@ -13,14 +13,12 @@
     <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.ProjectMemberVo">
         <!--@mbg.generated-->
         <!--@Table project_member-->
-        <id column="pm_member_user_id" property="memberUserId"/>
         <result column="pm_rank" property="rank"/>
         <result column="pm_job" property="job"/>
         <result column="pm_editable" property="editable"/>
-        <result column="ui_nickname" property="nickname"/>
-        <result column="ui_true_name" property="trueName"/>
-        <result column="ui_avatar_url" property="avatarUrl"/>
-        <result column="ui_school" property="school"/>
+        <association property="memberUser" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo"
+                     column="pm_member_user_id"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectVoByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

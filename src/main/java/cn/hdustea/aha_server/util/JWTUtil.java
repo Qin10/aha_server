@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.util;
 
 import cn.hdustea.aha_server.dto.JwtPayloadDto;
-import cn.hdustea.aha_server.entity.User;
+import cn.hdustea.aha_server.vo.UserVo;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -65,15 +65,15 @@ public class JWTUtil {
     /**
      * 根据用户实体类打包payload
      *
-     * @param user 用户实体类
+     * @param userVo 用户
      * @return payload封装实体
      */
-    public static JwtPayloadDto packagePayload(User user) {
+    public static JwtPayloadDto packagePayload(UserVo userVo) {
         JwtPayloadDto jwtPayloadDto = new JwtPayloadDto();
-        jwtPayloadDto.setAccount(user.getId());
-        jwtPayloadDto.setRoleName(user.getRole().getName());
-        jwtPayloadDto.setSignedNotice(user.getSignedNotice());
-        jwtPayloadDto.setSignedContract(user.getSignedContract());
+        jwtPayloadDto.setAccount(userVo.getId());
+        jwtPayloadDto.setRoleName(userVo.getRole().getName());
+        jwtPayloadDto.setSignedNotice(userVo.getSignedNotice());
+        jwtPayloadDto.setSignedContract(userVo.getSignedContract());
         return jwtPayloadDto;
     }
 

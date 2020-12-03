@@ -34,7 +34,7 @@ public class ContribPointRankTask {
         List<UserContribPointVo> userContribPointVos = userMapper.selectIdAndContribPoint();
         redisUtil.del(RedisUtil.CONTRIBUTION_RANK_KEY);
         for (UserContribPointVo userContribPointVo : userContribPointVos) {
-            redisUtil.zSSet(RedisUtil.CONTRIBUTION_RANK_KEY, userContribPointVo.getUserId(), userContribPointVo.getContribPoint().doubleValue());
+            redisUtil.zSSet(RedisUtil.CONTRIBUTION_RANK_KEY, userContribPointVo.getUser(), userContribPointVo.getContribPoint().doubleValue());
         }
     }
 }

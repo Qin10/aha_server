@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.util;
 
 import cn.hdustea.aha_server.vo.UserContribPointVo;
+import cn.hdustea.aha_server.vo.UserRoughInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -748,7 +749,7 @@ public class RedisUtil {
         long currentRank = 1;
         for (ZSetOperations.TypedTuple<Object> tuple : tuples) {
             UserContribPointVo userContribPointVo = new UserContribPointVo();
-            userContribPointVo.setUserId((Integer) tuple.getValue());
+            userContribPointVo.setUser((UserRoughInfoVo) tuple.getValue());
             userContribPointVo.setContribPoint(tuple.getScore() != null ? BigDecimal.valueOf(tuple.getScore()) : null);
             userContribPointVo.setRank(currentRank);
             currentRank++;

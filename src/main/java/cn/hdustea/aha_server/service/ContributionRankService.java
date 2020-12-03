@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
+import cn.hdustea.aha_server.vo.UserRoughInfoVo;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ public class ContributionRankService {
     @Resource
     private RedisUtil redisUtil;
     @Resource
-    private UserService userService;
+    private UserInfoService userInfoService;
 
     /**
      * 获取排行榜
@@ -36,12 +37,12 @@ public class ContributionRankService {
     /**
      * 获取用户个人排名
      *
-     * @param userId 用户id
+     * @param userInfoVo 用户信息封装
      * @return 用户排名
      * @throws SelectException 用户不存在异常
      */
-    public long getRankByUserId(Integer userId) throws SelectException {
-        Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIBUTION_RANK_KEY, userId);
+    public long getRankByUserInfoVo(UserRoughInfoVo userInfoVo) throws SelectException {
+        Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIBUTION_RANK_KEY, userInfoVo);
         if (rank == null) {
             throw new SelectException("未查询到排名!");
         }
@@ -56,10 +57,11 @@ public class ContributionRankService {
      * @throws SelectException 用户不存在异常
      */
     public UserContribPointVo getUserContribPointByUserId(Integer userId) throws SelectException {
-        long rank = getRankByUserId(userId);
-        Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, userId);
+        UserRoughInfoVo userInfoVo = userInfoService.getUserInfoVoByUserId(userId);
+        long rank = getRankByUserInfoVo(userInfoVo);
+        Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, userInfoVo);
         UserContribPointVo userContribPointVo = new UserContribPointVo();
-        userContribPointVo.setUserId(userId);
+        userContribPointVo.setUser(userInfoVo);
         userContribPointVo.setContribPoint(BigDecimal.valueOf(contribPoint));
         userContribPointVo.setRank(rank);
         return userContribPointVo;

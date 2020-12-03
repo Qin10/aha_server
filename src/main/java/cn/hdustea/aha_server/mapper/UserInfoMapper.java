@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.UserInfo;
+import cn.hdustea.aha_server.vo.UserRoughInfoVo;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -22,4 +23,6 @@ public interface UserInfoMapper {
     int updateByPrimaryKey(UserInfo record);
 
     int updateAvatarUrlByUserId(@Param("updatedAvatarUrl") String updatedAvatarUrl, @Param("userId") Integer userId);
+
+    UserRoughInfoVo selectVoByPrimaryKey(Integer userId);
 }

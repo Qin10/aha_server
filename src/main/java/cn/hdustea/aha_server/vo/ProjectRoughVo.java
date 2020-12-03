@@ -17,10 +17,7 @@ public class ProjectRoughVo {
      */
     private Integer id;
 
-    /**
-     * 团队创建者用户id
-     */
-    private Integer creatorUserId;
+    private UserRoughInfoVo creatorUser;
 
     /**
      * 项目名称

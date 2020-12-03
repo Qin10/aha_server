@@ -190,7 +190,7 @@ public class ProjectService {
      * @throws InsertException 插入异常
      */
     public void saveProjectMemberByProjectId(ProjectMember projectMember, int projectId) throws InsertException, SelectException {
-        userService.getExistUserById(projectMember.getMemberUserId());
+        userService.getExistUserVoById(projectMember.getMemberUserId());
         projectMember.setProjectId(projectId);
         try {
             projectMemberMapper.insert(projectMember);

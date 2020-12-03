@@ -442,7 +442,14 @@ id|int|否|竞赛标签id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":[{
-		"userId":"int //用户id",
+		"user":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校",
+			"trueName":"string //用户真实姓名"
+		},
 		"contribPoint":"double //贡献点",
 		"rank":"long //排名"
 	}],
@@ -465,7 +472,14 @@ id|int|否|竞赛标签id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":{
-		"userId":"int //用户id",
+		"user":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校",
+			"trueName":"string //用户真实姓名"
+		},
 		"contribPoint":"double //贡献点",
 		"rank":"long //排名"
 	},
@@ -1505,7 +1519,14 @@ orderBy|string|否|排序方式
 		"pageSize":"int //分页大小",
 		"pageData":[{
 			"id":"int //项目id",
-			"creatorUserId":"int //团队创建者用户id",
+			"creatorUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"trueName":"string //用户真实姓名"
+			},
 			"name":"string //项目名称",
 			"read":"int //点击率",
 			"collect":"int //收藏数量",
@@ -1541,7 +1562,14 @@ projectId|int|否|项目id
 	"msg":"string //响应消息",
 	"data":{
 		"id":"int //项目id",
-		"creatorUserId":"int //团队创建者用户id",
+		"creatorUser":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校",
+			"trueName":"string //用户真实姓名"
+		},
 		"name":"string //团队名称",
 		"avatarUrl":"string //团队头像url",
 		"tags":"string //项目标签",
@@ -1563,11 +1591,14 @@ projectId|int|否|项目id
 		"meaning":"double //项目资源完整程度，决定贡献点",
 		"passed":"boolean //是否通过审核",
 		"members":[{
-			"memberUserId":"int //团队成员用户id",
-			"nickname":"string //成员昵称",
-			"trueName":"string //成员真实姓名",
-			"avatarUrl":"string //成员头像url",
-			"school":"string //成员所在学校",
+			"memberUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"trueName":"string //用户真实姓名"
+			},
 			"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 			"job":"string //团队成员职务",
 			"editable":"boolean //成员是否可编辑项目信息"
@@ -1730,11 +1761,14 @@ projectId|int|否|项目id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":[{
-		"memberUserId":"int //团队成员用户id",
-		"nickname":"string //成员昵称",
-		"trueName":"string //成员真实姓名",
-		"avatarUrl":"string //成员头像url",
-		"school":"string //成员所在学校",
+		"memberUser":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校",
+			"trueName":"string //用户真实姓名"
+		},
 		"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 		"job":"string //团队成员职务",
 		"editable":"boolean //成员是否可编辑项目信息"

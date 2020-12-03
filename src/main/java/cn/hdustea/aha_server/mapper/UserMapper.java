@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.vo.UserManagementVo;
+import cn.hdustea.aha_server.vo.UserVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface UserMapper {
     int insertSelective(User record);
 
     User selectByPrimaryKey(Integer id);
+
+    UserVo selectVoByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(User record);
 

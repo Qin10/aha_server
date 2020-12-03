@@ -9,10 +9,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class UserContribPointVo {
-    /**
-     * 用户id
-     */
-    private Integer userId;
+    private UserRoughInfoVo user;
     /**
      * 贡献点
      */

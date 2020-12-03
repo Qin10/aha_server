@@ -21,9 +21,7 @@
         <result column="ui_comp_tags" property="compTags"/>
     </resultMap>
     <resultMap id="RoughResultMap" type="cn.hdustea.aha_server.vo.UserRoughInfoVo">
-        <!--@mbg.generated-->
-        <!--@Table user_info-->
-        <result column="u_id" property="userId"/>
+        <result column="ui_user_id" property="userId"/>
         <result column="ui_nickname" property="nickname"/>
         <result column="ui_gender" property="gender"/>
         <result column="ui_avatar_url" property="avatarUrl"/>
@@ -235,4 +233,11 @@
         set ui_avatar_url=#{updatedAvatarUrl}
         where ui_user_id = #{userId}
     </update>
+
+    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="RoughResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_info
+        where ui_user_id = #{userId}
+    </select>
 </mapper>

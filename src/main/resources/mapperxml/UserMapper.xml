@@ -2,8 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.UserMapper">
     <resultMap id="selectUserIdAndContribPointResult" type="cn.hdustea.aha_server.vo.UserContribPointVo">
-        <result column="u_id" property="userId"/>
         <result column="u_contrib_point" property="contribPoint"/>
+        <association property="user" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" column="u_id"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectVoByPrimaryKey"/>
     </resultMap>
     <resultMap id="ManagementVoResultMap" type="cn.hdustea.aha_server.vo.UserManagementVo">
         <!--@mbg.generated-->
@@ -33,6 +34,17 @@
         <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
                      select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
+    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.UserVo">
+        <id column="u_id" property="id"/>
+        <result column="u_password" property="password"/>
+        <result column="u_created_time" property="createdTime"/>
+        <result column="u_student_rec_filename" property="studentRecFilename"/>
+        <result column="u_contrib_point" property="contribPoint"/>
+        <result column="u_signed_notice" property="signedNotice"/>
+        <result column="u_signed_contract" property="signedContract"/>
+        <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
+                     select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
+    </resultMap>
     <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.User">
         <!--@mbg.generated-->
         <!--@Table `user`-->
@@ -44,8 +56,6 @@
         <result column="u_signed_notice" property="signedNotice"/>
         <result column="u_signed_contract" property="signedContract"/>
         <result column="u_role_id" property="roleId"/>
-        <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
-                     select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -59,6 +69,14 @@
         from `user`
         where u_id = #{id}
     </select>
+
+    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `user`
+        where u_id = #{id}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete

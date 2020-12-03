@@ -38,7 +38,7 @@ public class ResumeService {
      * @throws SelectException 用户不存在异常
      */
     public void updateResumeByUserId(Resume resume, Integer userId) throws SelectException {
-        userService.getExistUserById(userId);
+        userService.getExistUserVoById(userId);
         resume.setUserId(userId);
         Resume possibleResume = resumeDao.findByUserId(userId);
         if (possibleResume != null) {

@@ -21,10 +21,7 @@ public class ProjectDetailVo {
      */
     private Integer id;
 
-    /**
-     * 团队创建者用户id
-     */
-    private Integer creatorUserId;
+    private UserRoughInfoVo creatorUser;
 
     /**
      * 团队名称

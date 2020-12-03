@@ -18,6 +18,7 @@ import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckExc
 import cn.hdustea.aha_server.util.*;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
+import cn.hdustea.aha_server.vo.UserVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
@@ -77,9 +78,9 @@ public class AuthService {
             throw new AccountNotFoundException("用户不存在！");
         }
 
-        User user = userService.getUserById(oauth.getUserId());
-        if (EncryptUtil.getSHA256(phoneLoginUserDto.getPassword()).equals(user.getPassword())) {
-            return excuteLoginByUserId(user.getId());
+        UserVo userVo = userService.getUserVoById(oauth.getUserId());
+        if (EncryptUtil.getSHA256(phoneLoginUserDto.getPassword()).equals(userVo.getPassword())) {
+            return excuteLoginByUserId(userVo.getId());
         } else {
             throw new InvalidPasswordException("用户名或密码错误！");
         }
@@ -179,13 +180,13 @@ public class AuthService {
      * @throws UpdateException 更新异常
      */
     public String signNotice(Integer userId) throws UpdateException {
-        User user = userService.getUserById(userId);
-        if (user.getSignedNotice()) {
+        UserVo userVo = userService.getUserVoById(userId);
+        if (userVo.getSignedNotice()) {
             throw new UpdateException("已经签署过服务协议！");
         }
-        userService.updatesignedNotice(user.getId(), true);
-        user.setSignedNotice(true);
-        return signToken(user);
+        userService.updatesignedNotice(userVo.getId(), true);
+        userVo.setSignedNotice(true);
+        return signToken(userVo);
     }
 
     /**
@@ -200,18 +201,18 @@ public class AuthService {
      */
     @Transactional(rollbackFor = Exception.class)
     public String signContract(Integer userId, MultipartFile file, Contract contract) throws IOException, UpdateException, InsertException {
-        User user = userService.getUserById(userId);
-        if (user.getSignedContract()) {
+        UserVo userVo = userService.getUserVoById(userId);
+        if (userVo.getSignedContract()) {
             throw new UpdateException("已经签署过合同！");
         }
-        contract.setUserId(user.getId());
+        contract.setUserId(userVo.getId());
         String filename = FileUtil.upload(file, fileUploadPathConfig.getContractSignaturePath());
         contract.setSignatureFilename(filename);
         contract.setSignTime(new Date());
         contractService.saveContract(contract);
-        userService.updateSignedContract(user.getId(), true);
-        user.setSignedContract(true);
-        return signToken(user);
+        userService.updateSignedContract(userVo.getId(), true);
+        userVo.setSignedContract(true);
+        return signToken(userVo);
     }
 
     /**
@@ -249,7 +250,7 @@ public class AuthService {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
             userInfo.setNickname(wechatRegisterUserDto.getNickname());
-            if (wechatRegisterUserDto.getAvatarUrl() != null) {
+            if (wechatRegisterUserDto.getAvatarUrl() != null && !wechatRegisterUserDto.getAvatarUrl().equals("")) {
                 userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
             } else {
                 userInfo.setAvatarUrl(wechatRegisterUserDto.getAvatarUrl());
@@ -294,14 +295,14 @@ public class AuthService {
     /**
      * 签署token令牌
      *
-     * @param user 用户私有信息
+     * @param userVo 用户私有信息封装
      * @return token令牌
      */
-    private String signToken(User user) {
-        JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(user);
+    private String signToken(UserVo userVo) {
+        JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(userVo);
 
         String token = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
-        redisUtil.set(REFRESH_TOKEN_PREFIX + user.getId(), token, jwtConfig.getRefreshTokenExpireTime());
+        redisUtil.set(REFRESH_TOKEN_PREFIX + userVo.getId(), token, jwtConfig.getRefreshTokenExpireTime());
         return token;
     }
 
@@ -313,12 +314,12 @@ public class AuthService {
      * @throws SelectException 用户未找到异常
      */
     private TokenAndPersonalUserInfoVo excuteLoginByUserId(int userId) throws SelectException {
-        User user = userService.getExistUserById(userId);
-        messageService.saveAllNoticeNotReadByReceiverUserId(user.getId());
-        String token = signToken(user);
+        UserVo userVo = userService.getExistUserVoById(userId);
+        messageService.saveAllNoticeNotReadByReceiverUserId(userVo.getId());
+        String token = signToken(userVo);
 
-        PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(user.getId());
-        MDC.put("userId", user.getId().toString());
+        PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(userVo.getId());
+        MDC.put("userId", userVo.getId().toString());
         MDC.put("ip", IpUtil.getIpAddr(request));
         return new TokenAndPersonalUserInfoVo(token, personalUserInfo);
     }

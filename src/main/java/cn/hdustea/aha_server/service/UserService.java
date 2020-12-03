@@ -6,6 +6,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.SelectException
 import cn.hdustea.aha_server.mapper.UserMapper;
 import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.UserManagementVo;
+import cn.hdustea.aha_server.vo.UserVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -31,12 +32,12 @@ public class UserService {
      * @return 用户
      * @throws SelectException 查询异常
      */
-    public User getExistUserById(int id) throws SelectException {
-        User user = userMapper.selectByPrimaryKey(id);
-        if (user == null) {
+    public UserVo getExistUserVoById(int id) throws SelectException {
+        UserVo userVo = userMapper.selectVoByPrimaryKey(id);
+        if (userVo == null) {
             throw new SelectException("用户不存在！");
         } else {
-            return user;
+            return userVo;
         }
     }
 
@@ -46,8 +47,8 @@ public class UserService {
      * @param id 用户id
      * @return 用户
      */
-    public User getUserById(int id) {
-        return userMapper.selectByPrimaryKey(id);
+    public UserVo getUserVoById(int id) {
+        return userMapper.selectVoByPrimaryKey(id);
     }
 
     /**

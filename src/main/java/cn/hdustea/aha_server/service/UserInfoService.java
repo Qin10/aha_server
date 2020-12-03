@@ -1,10 +1,11 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.UserInfoMapper;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
+import cn.hdustea.aha_server.vo.UserRoughInfoVo;
+import cn.hdustea.aha_server.vo.UserVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -31,6 +32,10 @@ public class UserInfoService {
         return userInfoMapper.selectByPrimaryKey(userId);
     }
 
+    public UserRoughInfoVo getUserInfoVoByUserId(Integer userId) {
+        return userInfoMapper.selectVoByPrimaryKey(userId);
+    }
+
     /**
      * 根据用户id获取用户个人详细信息
      *
@@ -38,13 +43,13 @@ public class UserInfoService {
      * @return 用户个人详细信息
      */
     public PersonalUserInfoVo getPersonalUserInfo(Integer userId) {
-        User user = userService.getUserById(userId);
+        UserVo userVo = userService.getUserVoById(userId);
         UserInfo userInfo = getUserInfoByUserId(userId);
         PersonalUserInfoVo personalUserInfoVo = new PersonalUserInfoVo();
-        personalUserInfoVo.setContribPoint(user.getContribPoint());
-        personalUserInfoVo.setSignedNotice(user.getSignedNotice());
-        personalUserInfoVo.setSignedContract(user.getSignedContract());
-        personalUserInfoVo.setRole(user.getRole());
+        personalUserInfoVo.setContribPoint(userVo.getContribPoint());
+        personalUserInfoVo.setSignedNotice(userVo.getSignedNotice());
+        personalUserInfoVo.setSignedContract(userVo.getSignedContract());
+        personalUserInfoVo.setRole(userVo.getRole());
         personalUserInfoVo.setUserInfo(userInfo);
         return personalUserInfoVo;
     }
@@ -77,7 +82,7 @@ public class UserInfoService {
      * @throws SelectException 用户未找到异常
      */
     public void updateUserInfoByUserId(UserInfo userInfo, int userId) throws SelectException {
-        User user = userService.getExistUserById(userId);
-        updateUserInfoByUserId(userInfo, user.getId());
+        UserVo userVo = userService.getExistUserVoById(userId);
+        updateUserInfoByUserId(userInfo, userVo.getId());
     }
 }
