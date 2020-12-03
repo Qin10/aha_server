@@ -19,6 +19,11 @@ public class MessageText {
     private Integer senderUserId;
 
     /**
+     * 信件标题
+     */
+    private String title;
+
+    /**
      * 信件内容
      */
     private String content;

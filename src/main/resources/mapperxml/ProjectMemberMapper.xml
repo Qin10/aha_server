@@ -18,7 +18,7 @@
         <result column="pm_editable" property="editable"/>
         <association property="memberUser" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo"
                      column="pm_member_user_id"
-                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectVoByPrimaryKey"/>
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

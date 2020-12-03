@@ -59,7 +59,7 @@ Content-Type: application/json
 }
 
 ###签署服务协议
-GET http://{{host}}/sign/notice
+POST http://{{host}}/sign/notice
 Authorization:{{auth_token}}
 
 > {% client.global.set("auth_token",response.body.data.token);%}
@@ -163,7 +163,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目列表
-GET http://{{host}}/project?pageNum=1&pageSize=5&userId=54&sortBy=awardLevel&orderBy=desc
+GET http://{{host}}/project?pageNum=1&pageSize=5&userId=55&sortBy=awardLevel&orderBy=desc
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -418,8 +418,9 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "receiverUserId": 49,
-  "content": "第一条站内信！"
+  "receiverUserId": 54,
+  "title": "你好呀，15382355341",
+  "content": "这里是13819154341！"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

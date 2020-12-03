@@ -12,11 +12,17 @@
     </resultMap>
     <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.MessageVo">
         <id column="m_id" property="id"/>
-        <result column="mt_sender_user_id" property="senderUserId"/>
         <result column="mt_type" property="type"/>
         <result column="m_status" property="status"/>
         <result column="m_receive_date" property="receiveDate"/>
+        <result column="mt_title" property="title"/>
         <result column="mt_content" property="content"/>
+        <association property="senderUser" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo"
+                     column="mt_sender_user_id"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+        <association property="receiverUser" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo"
+                     column="m_receiver_user_id"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

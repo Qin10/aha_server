@@ -18,10 +18,14 @@ public class MessageVo {
     private int id;
 
     /**
-     * 发信人用户id
+     * 发信人用户
      */
-    private Integer senderUserId;
+    private UserRoughInfoVo senderUser;
 
+    /**
+     * 收信人用户
+     */
+    private UserRoughInfoVo receiverUser;
     /**
      * 类型
      */
@@ -37,6 +41,11 @@ public class MessageVo {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date receiveDate;
+
+    /**
+     * 信件标题
+     */
+    private String title;
 
     /**
      * 信件内容

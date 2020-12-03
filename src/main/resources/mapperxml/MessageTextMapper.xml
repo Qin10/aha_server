@@ -1,101 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.MessageTextMapper">
-  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.MessageText">
-    <!--@mbg.generated-->
-    <!--@Table `message_text`-->
-    <id column="mt_id" property="id" />
-    <result column="mt_sender_user_id" property="senderUserId" />
-    <result column="mt_content" property="content" />
-    <result column="mt_type" property="type" />
-    <result column="mt_post_date" property="postDate" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    mt_id, mt_sender_user_id, mt_content, mt_type, mt_post_date
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from `message_text`
-    where mt_id = #{id}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from `message_text`
-    where mt_id = #{id}
-  </delete>
-  <insert id="insert" keyColumn="mt_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.MessageText" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into `message_text` (mt_sender_user_id, mt_content, mt_type, mt_post_date)
-    values (#{senderUserId}, #{content}, #{type}, #{postDate})
-  </insert>
-  <insert id="insertSelective" keyColumn="mt_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.MessageText" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into `message_text`
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="senderUserId != null">
-        mt_sender_user_id,
-      </if>
-      <if test="content != null">
-        mt_content,
-      </if>
-      <if test="type != null">
-        mt_type,
-      </if>
-      <if test="postDate != null">
-        mt_post_date,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="senderUserId != null">
-        #{senderUserId},
-      </if>
-      <if test="content != null">
-        #{content},
-      </if>
-      <if test="type != null">
-        #{type},
-      </if>
-      <if test="postDate != null">
-        #{postDate},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.MessageText">
-    <!--@mbg.generated-->
-    update `message_text`
-    <set>
-      <if test="senderUserId != null">
-        mt_sender_user_id = #{senderUserId},
-      </if>
-      <if test="content != null">
-        mt_content = #{content},
-      </if>
-      <if test="type != null">
-        mt_type = #{type},
-      </if>
-      <if test="postDate != null">
-        mt_post_date = #{postDate},
-      </if>
-    </set>
-    where mt_id = #{id}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.MessageText">
-    <!--@mbg.generated-->
-    update `message_text`
-    set mt_sender_user_id = #{senderUserId},
-      mt_content = #{content},
-      mt_type = #{type},
-      mt_post_date = #{postDate}
-    where mt_id = #{id}
-  </update>
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.MessageText">
+        <!--@mbg.generated-->
+        <!--@Table `message_text`-->
+        <id column="mt_id" property="id"/>
+        <result column="mt_sender_user_id" property="senderUserId"/>
+        <result column="mt_title" property="title"/>
+        <result column="mt_content" property="content"/>
+        <result column="mt_type" property="type"/>
+        <result column="mt_post_date" property="postDate"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        mt_id, mt_sender_user_id, mt_title, mt_content, mt_type, mt_post_date
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from `message_text`
+        where mt_id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from `message_text`
+        where mt_id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="mt_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.MessageText"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into `message_text` (mt_sender_user_id, mt_title, mt_content, mt_type, mt_post_date)
+        values (#{senderUserId}, #{title}, #{content}, #{type}, #{postDate})
+    </insert>
+    <insert id="insertSelective" keyColumn="mt_id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.MessageText" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into `message_text`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="senderUserId != null">
+                mt_sender_user_id,
+            </if>
+            <if test="title != null">
+                mt_title,
+            </if>
+            <if test="content != null">
+                mt_content,
+            </if>
+            <if test="type != null">
+                mt_type,
+            </if>
+            <if test="postDate != null">
+                mt_post_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="senderUserId != null">
+                #{senderUserId},
+            </if>
+            <if test="title != null">
+                #{title},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="postDate != null">
+                #{postDate},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.MessageText">
+        <!--@mbg.generated-->
+        update `message_text`
+        <set>
+            <if test="senderUserId != null">
+                mt_sender_user_id = #{senderUserId},
+            </if>
+            <if test="title != null and title != ''">
+                mt_title = #{title},
+            </if>
+            <if test="content != null">
+                mt_content = #{content},
+            </if>
+            <if test="type != null">
+                mt_type = #{type},
+            </if>
+            <if test="postDate != null">
+                mt_post_date = #{postDate},
+            </if>
+        </set>
+        where mt_id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.MessageText">
+        <!--@mbg.generated-->
+        update `message_text`
+        set mt_sender_user_id = #{senderUserId},
+            mt_title          = #{title},
+            mt_content        = #{content},
+            mt_type           = #{type},
+            mt_post_date      = #{postDate}
+        where mt_id = #{id}
+    </update>
 
     <!--auto generated by MybatisCodeHelper on 2020-11-28-->
     <select id="selectAllNoticeNotReadByReceiveUserId" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List" />
+        <include refid="Base_Column_List"/>
         from message_text mt
         where (mt.mt_type = 2
                 or mt_type = 3)

@@ -135,6 +135,7 @@ public class MessageService {
         Message message = new Message();
         MessageText messageText = new MessageText();
         messageText.setSenderUserId(senderUserId);
+        messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_PRIVATE.getValue());
         messageTextMapper.insertSelective(messageText);
@@ -153,6 +154,7 @@ public class MessageService {
     public void sendSystemMessage(MessageDto messageDto) {
         Message message = new Message();
         MessageText messageText = new MessageText();
+        messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_SYSTEM.getValue());
         messageTextMapper.insertSelective(messageText);
@@ -185,6 +187,7 @@ public class MessageService {
     public void sendNoticeMessage(MessageDto messageDto, int senderUserId) {
         MessageText messageText = new MessageText();
         messageText.setSenderUserId(senderUserId);
+        messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_NOTICE.getValue());
         messageText.setPostDate(new Date());
@@ -198,6 +201,7 @@ public class MessageService {
      */
     public void sendSystemNoticeMessage(MessageDto messageDto) {
         MessageText messageText = new MessageText();
+        messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
         messageText.setType(MessageType.TYPE_SYSTEM_NOTICE.getValue());
         messageText.setPostDate(new Date());

@@ -34,7 +34,7 @@
         <result column="p_award_time" property="awardTime"/>
         <association property="creatorUser" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo"
                      column="p_creator_user_id"
-                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectVoByPrimaryKey"/>
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
     </resultMap>
     <resultMap id="DetailResultMap" type="cn.hdustea.aha_server.vo.ProjectDetailVo">
         <!--@mbg.generated-->
@@ -55,7 +55,7 @@
         <result column="p_passed" property="passed"/>
         <association property="creatorUser" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo"
                      column="p_creator_user_id"
-                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectVoByPrimaryKey"/>
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
         <association property="competition" javaType="cn.hdustea.aha_server.entity.Competition" column="p_comp_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionMapper.selectByPrimaryKey"/>
         <collection property="members" ofType="cn.hdustea.aha_server.vo.ProjectMemberVo" column="p_id"

@@ -1251,6 +1251,7 @@ userId|int|否|用户id
 
 ```json
 {
+	"title":"string //信件标题",
 	"content":"string //信件内容【必须】"
 }
 ```
@@ -1278,6 +1279,7 @@ userId|int|否|用户id
 ```json
 {
 	"receiverUserId":"int //收件人用户id",
+	"title":"string //信件标题",
 	"content":"string //信件内容【必须】"
 }
 ```
@@ -1345,10 +1347,24 @@ type|string|否|消息类型(system:系统消息,private:私信)
 		"pageSize":"int //分页大小",
 		"pageData":[{
 			"id":"int //站内信id",
-			"senderUserId":"int //发信人用户id",
+			"senderUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校"
+			},
+			"receiverUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校"
+			},
 			"type":"int //类型",
 			"status":"int //阅读状态",
 			"receiveDate":"date //收件时间",
+			"title":"string //信件标题",
 			"content":"string //信件内容"
 		}]
 	},
@@ -1377,10 +1393,24 @@ senderUserId|int|否|对方用户id
 	"msg":"string //响应消息",
 	"data":[{
 		"id":"int //站内信id",
-		"senderUserId":"int //发信人用户id",
+		"senderUser":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校"
+		},
+		"receiverUser":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校"
+		},
 		"type":"int //类型",
 		"status":"int //阅读状态",
 		"receiveDate":"date //收件时间",
+		"title":"string //信件标题",
 		"content":"string //信件内容"
 	}],
 	"time":"string //响应时间"
@@ -1447,6 +1477,7 @@ messageId|int|否|站内信id
 ```json
 {
 	"receiverUserId":"int //收件人用户id",
+	"title":"string //信件标题",
 	"content":"string //信件内容【必须】"
 }
 ```

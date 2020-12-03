@@ -4,7 +4,7 @@
     <resultMap id="selectUserIdAndContribPointResult" type="cn.hdustea.aha_server.vo.UserContribPointVo">
         <result column="u_contrib_point" property="contribPoint"/>
         <association property="user" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" column="u_id"
-                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectVoByPrimaryKey"/>
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
     </resultMap>
     <resultMap id="ManagementVoResultMap" type="cn.hdustea.aha_server.vo.UserManagementVo">
         <!--@mbg.generated-->
