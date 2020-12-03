@@ -40,6 +40,8 @@ Content-Type: application/json
   "password": "114514"
 }
 
+> {% client.global.set("auth_token",response.body.data.token);%}
+
 ###绑定手机号
 POST http://{{host}}/bind/phone
 Authorization:{{auth_token}}
@@ -49,17 +51,6 @@ Content-Type: application/json
   "phone": "15382355341",
   "code": "1234"
 }
-
-###用户登录
-POST http://{{host}}/login/phone
-Content-Type: application/json
-
-{
-  "phone": "15382355341",
-  "password": "114514"
-}
-
-> {% client.global.set("auth_token",response.body.data.token);%}
 
 ###签署服务协议
 GET http://{{host}}/sign/notice
@@ -166,7 +157,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目列表
-GET http://{{host}}/project?pageNum=1&pageSize=5&userId=49
+GET http://{{host}}/project?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -219,9 +210,9 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "基于大数据的叽咕叽咕叽咕诱捕系统",
+  "name": "第一个项目",
   "compId": 1,
-  "intro": "叽咕叽咕叽咕",
+  "intro": "第一个项目！",
   "awardLevel": 11,
   "awardTime": "2019-06"
 }
@@ -448,5 +439,16 @@ Content-Type: application/json
 ###获取全部竞赛信息
 GET http://{{host}}/competition
 Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###添加竞赛标签
+POST http://{{host}}/admin/competition/tag
+Content-Type: application/json
+Authorization: {{auth_token}}
+
+{
+  "name": "创新创业类"
+}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

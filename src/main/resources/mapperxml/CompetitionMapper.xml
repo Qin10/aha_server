@@ -39,12 +39,14 @@
         from competition
         where co_id = #{id}
     </delete>
-    <insert id="insert" parameterType="cn.hdustea.aha_server.entity.Competition">
+    <insert id="insert" keyColumn="co_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Competition"
+            useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into competition (co_id, co_comp_tag_id, co_name, co_intro, co_pic_url)
         values (#{id}, #{compTagId}, #{name}, #{intro}, #{picUrl})
     </insert>
-    <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.Competition">
+    <insert id="insertSelective" keyColumn="co_id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.Competition" useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into competition
         <trim prefix="(" suffix=")" suffixOverrides=",">
