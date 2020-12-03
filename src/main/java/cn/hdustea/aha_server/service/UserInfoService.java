@@ -33,7 +33,7 @@ public class UserInfoService {
     }
 
     public UserRoughInfoVo getUserInfoVoByUserId(Integer userId) {
-        return userInfoMapper.selectVoByPrimaryKey(userId);
+        return userInfoMapper.selectRoughVoByPrimaryKey(userId);
     }
 
     /**

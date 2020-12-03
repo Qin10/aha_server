@@ -24,5 +24,5 @@ public interface UserInfoMapper {
 
     int updateAvatarUrlByUserId(@Param("updatedAvatarUrl") String updatedAvatarUrl, @Param("userId") Integer userId);
 
-    UserRoughInfoVo selectVoByPrimaryKey(Integer userId);
+    UserRoughInfoVo selectRoughVoByPrimaryKey(Integer userId);
 }

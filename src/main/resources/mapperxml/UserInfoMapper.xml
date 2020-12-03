@@ -26,7 +26,6 @@
         <result column="ui_gender" property="gender"/>
         <result column="ui_avatar_url" property="avatarUrl"/>
         <result column="ui_school" property="school"/>
-        <result column="ui_true_name" property="trueName"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
@@ -234,7 +233,7 @@
         where ui_user_id = #{userId}
     </update>
 
-    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="RoughResultMap">
+    <select id="selectRoughVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="RoughResultMap">
         select
         <include refid="Base_Column_List"/>
         from user_info

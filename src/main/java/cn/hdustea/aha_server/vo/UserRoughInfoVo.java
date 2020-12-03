@@ -34,9 +34,4 @@ public class UserRoughInfoVo {
      * 用户学校
      */
     private String school;
-
-    /**
-     * 用户真实姓名
-     */
-    private String trueName;
 }
