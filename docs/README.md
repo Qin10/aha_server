@@ -1590,7 +1590,7 @@ content|string|否|返回实体(json)
 
 **请求URL**
 
-/project/getAllProjectPageable `GET` 
+/project `GET` 
 
 **请求参数**
 
