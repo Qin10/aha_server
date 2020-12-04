@@ -32,6 +32,10 @@
 				"id":"int //角色id",
 				"name":"string //角色名称"
 			},
+			"oauths":[{
+				"oauthType":"string //授权类型",
+				"oauthId":"string //授权码"
+			}],
 			"userInfo":{
 				"userId":"int //用户id(外键)",
 				"nickname":"string //用户昵称",
@@ -90,6 +94,10 @@
 				"id":"int //角色id",
 				"name":"string //角色名称"
 			},
+			"oauths":[{
+				"oauthType":"string //授权类型",
+				"oauthId":"string //授权码"
+			}],
 			"userInfo":{
 				"userId":"int //用户id(外键)",
 				"nickname":"string //用户昵称",
@@ -277,8 +285,8 @@ code|string|否|小程序请求码
 {
 	"nickname":"string //昵称【必须】",
 	"signedNotice":"boolean //是否同意服务协议",
-    "avatarUrl": "string //用户头像URL",
-	"code":"string //微信code【必须】"
+	"code":"string //微信code【必须】",
+	"avatarUrl":"string //头像URL"
 }
 ```
 
@@ -298,6 +306,10 @@ code|string|否|小程序请求码
 				"id":"int //角色id",
 				"name":"string //角色名称"
 			},
+			"oauths":[{
+				"oauthType":"string //授权类型",
+				"oauthId":"string //授权码"
+			}],
 			"userInfo":{
 				"userId":"int //用户id(外键)",
 				"nickname":"string //用户昵称",
@@ -514,6 +526,59 @@ filename|string|否|文件名
 }
 ```
 # 后台管理相关请求
+## 分页获取所有项目粗略信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+userId|int|否|用户id
+compId|int|否|竞赛id
+awardLevel|int|否|获奖级别
+sortBy|string|否|排序关键字
+orderBy|string|否|排序方式
+passed|boolean|否|是否通过审核
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //项目id",
+			"creatorUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校"
+			},
+			"name":"string //项目名称",
+			"read":"int //点击率",
+			"collect":"int //收藏数量",
+			"avatarUrl":"string //团队头像url",
+			"tags":"string //项目标签",
+			"compId":"int //赛事id(外键)",
+			"awardLevel":"int //项目获奖级别",
+			"awardTime":"date //项目获奖时间",
+			"passed":"boolean //是否通过审核"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
 ## 获取项目资源文件oss下载签名
 
 *作者: STEA_YY*
@@ -1525,7 +1590,7 @@ content|string|否|返回实体(json)
 
 **请求URL**
 
-/project `GET` 
+/project/getAllProjectPageable `GET` 
 
 **请求参数**
 
@@ -1555,8 +1620,7 @@ orderBy|string|否|排序方式
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校",
-				"trueName":"string //用户真实姓名"
+				"school":"string //用户学校"
 			},
 			"name":"string //项目名称",
 			"read":"int //点击率",
@@ -1565,7 +1629,59 @@ orderBy|string|否|排序方式
 			"tags":"string //项目标签",
 			"compId":"int //赛事id(外键)",
 			"awardLevel":"int //项目获奖级别",
-			"awardTime":"date //项目获奖时间"
+			"awardTime":"date //项目获奖时间",
+			"passed":"boolean //是否通过审核"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 分页获取登录用户所有项目粗略信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/me `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+compId|int|否|竞赛id
+awardLevel|int|否|获奖级别
+sortBy|string|否|排序关键字
+orderBy|string|否|排序方式
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //项目id",
+			"creatorUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校"
+			},
+			"name":"string //项目名称",
+			"read":"int //点击率",
+			"collect":"int //收藏数量",
+			"avatarUrl":"string //团队头像url",
+			"tags":"string //项目标签",
+			"compId":"int //赛事id(外键)",
+			"awardLevel":"int //项目获奖级别",
+			"awardTime":"date //项目获奖时间",
+			"passed":"boolean //是否通过审核"
 		}]
 	},
 	"time":"string //响应时间"

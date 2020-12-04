@@ -50,7 +50,7 @@ public class ProjectController {
      *
      * @param pageNum    页码
      * @param pageSize   分页大小
-     * @param userId      用户id
+     * @param userId     用户id
      * @param compId     竞赛id
      * @param awardLevel 获奖级别
      * @param sortBy     排序关键字
@@ -60,6 +60,26 @@ public class ProjectController {
     @RequiresLogin
     @GetMapping()
     public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
+        Boolean passed = true;
+        PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, userId, compId, awardLevel, sortBy, orderBy, passed);
+        return new ResponseBean<>(200, "succ", projectRoughVos);
+    }
+
+    /**
+     * 分页获取登录用户所有项目粗略信息
+     *
+     * @param pageNum    页码
+     * @param pageSize   分页大小
+     * @param compId     竞赛id
+     * @param awardLevel 获奖级别
+     * @param sortBy     排序关键字
+     * @param orderBy    排序方式
+     */
+    @RequestLimit(time = 5)
+    @RequiresLogin
+    @GetMapping("/me")
+    public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllPersonalProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
         Boolean passed = null;
         PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, userId, compId, awardLevel, sortBy, orderBy, passed);
         return new ResponseBean<>(200, "succ", projectRoughVos);
@@ -172,7 +192,7 @@ public class ProjectController {
      *
      * @param projectMember 修改的项目成员
      * @param projectId     项目id
-     * @param memberUserId   成员用户id
+     * @param memberUserId  成员用户id
      */
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/member/{projectId}/{memberUserId}")
@@ -205,7 +225,7 @@ public class ProjectController {
     /**
      * 删除项目成员
      *
-     * @param projectId   项目id
+     * @param projectId    项目id
      * @param memberUserId 成员用户id
      */
     @RequiresLogin

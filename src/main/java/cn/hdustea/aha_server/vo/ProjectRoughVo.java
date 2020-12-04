@@ -59,4 +59,10 @@ public class ProjectRoughVo {
      */
     @JsonFormat(pattern = "yyyy-MM")
     private Date awardTime;
+
+    /**
+     * 是否通过审核
+     */
+    private Boolean passed;
+
 }

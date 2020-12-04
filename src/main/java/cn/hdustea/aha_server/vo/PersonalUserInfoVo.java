@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.entity.UserInfo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 登录用户获取个人信息DTO
@@ -29,6 +30,10 @@ public class PersonalUserInfoVo {
      * 用户角色
      */
     private Role role;
+    /**
+     * 用户授权信息
+     */
+    private List<OauthVo> oauths;
     /**
      * 用户详细信息
      */

@@ -2,9 +2,11 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.mapper.OauthMapper;
 import cn.hdustea.aha_server.entity.Oauth;
+import cn.hdustea.aha_server.vo.OauthVo;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 第三方登录的服务类
@@ -36,6 +38,10 @@ public class OauthService {
      */
     public Oauth getOauthByOauthTypeAndUserId(String oauthType, Integer userId) {
         return oauthMapper.selectByPrimaryKey(userId, oauthType);
+    }
+
+    public List<OauthVo> getAllOauthVoByUserId(Integer userId){
+        return oauthMapper.selectAllVoByUserId(userId);
     }
 
     /**

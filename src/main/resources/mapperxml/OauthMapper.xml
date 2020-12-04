@@ -10,6 +10,10 @@
     <result column="oa_unionid" property="unionid" />
     <result column="oa_credential" property="credential" />
   </resultMap>
+  <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.OauthVo">
+    <id column="oa_oauth_type" property="oauthType" />
+    <result column="oa_oauth_id" property="oauthId" />
+  </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
     oa_user_id, oa_oauth_type, oa_oauth_id, oa_unionid, oa_credential
@@ -106,4 +110,12 @@
         where oa_oauth_type = #{oauthType}
           and oa_oauth_id = #{oauthId}
     </select>
+
+  <select id="selectAllVoByUserId" resultMap="VoResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from oauth
+    where oa_user_id = #{userId}
+  </select>
 </mapper>

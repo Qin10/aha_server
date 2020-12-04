@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.MessageDto;
 import cn.hdustea.aha_server.dto.ProjectCheckDto;
@@ -9,10 +10,7 @@ import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.*;
-import cn.hdustea.aha_server.vo.PageVo;
-import cn.hdustea.aha_server.vo.ResponseBean;
-import cn.hdustea.aha_server.vo.UrlVo;
-import cn.hdustea.aha_server.vo.UserManagementVo;
+import cn.hdustea.aha_server.vo.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,11 +43,31 @@ public class ManagementController {
     private MessageService messageService;
 
     /**
+     * 分页获取所有项目粗略信息
+     *
+     * @param pageNum    页码
+     * @param pageSize   分页大小
+     * @param userId     用户id
+     * @param compId     竞赛id
+     * @param awardLevel 获奖级别
+     * @param sortBy     排序关键字
+     * @param orderBy    排序方式
+     * @param passed     是否通过审核
+     */
+    @RequestLimit(time = 5)
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/project")
+    public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy, @RequestParam(value = "passed", required = false) Boolean passed) throws SelectException {
+        PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, userId, compId, awardLevel, sortBy, orderBy, passed);
+        return new ResponseBean<>(200, "succ", projectRoughVos);
+    }
+
+    /**
      * 获取项目资源文件oss下载签名
      *
      * @param projectResourceId 项目资源id
      */
-    @RequiresLogin
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/project/resource/{projectResourceId}/sign/download")
     public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
         String url = projectResourceService.signDownloadProjectResourceByid(projectResourceId);

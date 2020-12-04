@@ -1,7 +1,10 @@
 package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.Oauth;
+import cn.hdustea.aha_server.vo.OauthVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * ${description}
@@ -26,4 +29,6 @@ public interface OauthMapper {
     Oauth selectByPrimaryKey(Integer id);
 
     Oauth selectByOauthTypeAndOauthId(@Param("oauthType") String oauthType, @Param("oauthId") String oauthId);
+
+    List<OauthVo> selectAllVoByUserId(Integer userId);
 }

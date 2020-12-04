@@ -76,7 +76,7 @@ Content-Type: application/json
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###获取用户个人信息
-GET http://{{host}}/userInfo/49
+GET http://{{host}}/userInfo/55
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
