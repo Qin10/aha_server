@@ -2,8 +2,9 @@ package cn.hdustea.aha_server.interceptor;
 
 import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.constants.RedisConstants;
+import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.*;
 import cn.hdustea.aha_server.util.IpUtil;
@@ -22,8 +23,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-
-import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 
 /**
  * 鉴权拦截器
@@ -126,10 +125,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
      * @return 是否刷新成功
      */
     protected boolean refreshToken(String token, JwtPayloadDto jwtPayloadDto) {
-        String possibleToken = (String) redisUtil.get(REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount());
+        String possibleToken = (String) redisUtil.get(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount());
         if (possibleToken != null && possibleToken.equals(token)) {
             String newToken = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
-            redisUtil.set(REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
+            redisUtil.set(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletResponse response;
             if (requestAttributes != null) {

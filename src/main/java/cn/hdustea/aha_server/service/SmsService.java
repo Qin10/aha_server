@@ -1,15 +1,15 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.constants.OauthTypes;
+import cn.hdustea.aha_server.constants.RedisConstants;
+import cn.hdustea.aha_server.constants.SmsConstants;
 import cn.hdustea.aha_server.entity.Oauth;
-import cn.hdustea.aha_server.enums.OauthType;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageSendException;
 import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Random;
-
-import static cn.hdustea.aha_server.util.RedisUtil.*;
 
 /**
  * 短信服务类
@@ -24,10 +24,6 @@ public class SmsService {
     private OauthService oauthService;
     private static final int MESSAGE_EXPIRED_TIME = 60 * 5;
 
-    public static final int REGISTER_MESSAGE = 0;
-    public static final int CHANGE_PASSWORD_MESSAGE = 1;
-    public static final int BIND_PHONE_MESSAGE = 2;
-
     /**
      * 向目标手机号发送验证码短信
      *
@@ -36,28 +32,28 @@ public class SmsService {
      */
     public boolean sendSmsCode(String phone, String type) throws MessageSendException {
 //        String code = makeSmsCode(4);
-        Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.PHONE.getValue(), phone);
+        Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.PHONE, phone);
         String code = "1234";
         switch (type) {
             case "register": {
                 if (oauth != null) {
                     throw new MessageSendException("该手机号已被注册！");
                 }
-                redisUtil.set(REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                redisUtil.set(RedisConstants.REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             case "changePassword": {
                 if (oauth == null) {
                     throw new MessageSendException("用户不存在！");
                 }
-                redisUtil.set(CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                redisUtil.set(RedisConstants.CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             case "bindPhone": {
                 if (oauth != null) {
                     throw new MessageSendException("该账号已被绑定！");
                 }
-                redisUtil.set(BIND_PHONE_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                redisUtil.set(RedisConstants.BIND_PHONE_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             default: {
@@ -93,16 +89,16 @@ public class SmsService {
     public boolean verifySmsCode(String phone, String code, int type) {
         String possibleCode = null;
         switch (type) {
-            case REGISTER_MESSAGE: {
-                possibleCode = (String) redisUtil.get(REGISTER_MESSAGE_CODE_PREFIX + phone);
+            case SmsConstants.REGISTER_MESSAGE: {
+                possibleCode = (String) redisUtil.get(RedisConstants.REGISTER_MESSAGE_CODE_PREFIX + phone);
                 break;
             }
-            case CHANGE_PASSWORD_MESSAGE: {
-                possibleCode = (String) redisUtil.get(CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone);
+            case SmsConstants.CHANGE_PASSWORD_MESSAGE: {
+                possibleCode = (String) redisUtil.get(RedisConstants.CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone);
                 break;
             }
-            case BIND_PHONE_MESSAGE: {
-                possibleCode = (String) redisUtil.get(BIND_PHONE_MESSAGE_CODE_PREFIX + phone);
+            case SmsConstants.BIND_PHONE_MESSAGE: {
+                possibleCode = (String) redisUtil.get(RedisConstants.BIND_PHONE_MESSAGE_CODE_PREFIX + phone);
                 break;
             }
         }

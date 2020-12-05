@@ -3,9 +3,11 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JWTConfig;
 import cn.hdustea.aha_server.config.WechatConfig;
+import cn.hdustea.aha_server.constants.OauthTypes;
+import cn.hdustea.aha_server.constants.RedisConstants;
+import cn.hdustea.aha_server.constants.SmsConstants;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.*;
-import cn.hdustea.aha_server.enums.OauthType;
 import cn.hdustea.aha_server.exception.apiException.AuthorizationException;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.AccountNotFoundException;
@@ -30,8 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
-
-import static cn.hdustea.aha_server.util.RedisUtil.REFRESH_TOKEN_PREFIX;
 
 /**
  * 授权鉴权服务类
@@ -73,7 +73,7 @@ public class AuthService {
      * @throws Exception 向上抛出异常
      */
     public TokenAndPersonalUserInfoVo loginByPhone(PhoneLoginUserDto phoneLoginUserDto) throws Exception {
-        Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.PHONE.getValue(), phoneLoginUserDto.getPhone());
+        Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.PHONE, phoneLoginUserDto.getPhone());
         if (oauth == null) {
             throw new AccountNotFoundException("用户不存在！");
         }
@@ -95,19 +95,19 @@ public class AuthService {
      * @throws MessageCheckException  短信校验异常
      */
     public void bindPhone(PhoneBindDto phoneBindDto, Integer userId) throws AuthorizationException, MessageCheckException {
-        boolean SmsVerifyResult = smsService.verifySmsCode(phoneBindDto.getPhone(), phoneBindDto.getCode(), SmsService.BIND_PHONE_MESSAGE);
+        boolean SmsVerifyResult = smsService.verifySmsCode(phoneBindDto.getPhone(), phoneBindDto.getCode(), SmsConstants.BIND_PHONE_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
-        if (oauthService.getOauthByOauthTypeAndUserId(OauthType.PHONE.getValue(), userId) != null) {
+        if (oauthService.getOauthByOauthTypeAndUserId(OauthTypes.PHONE, userId) != null) {
             throw new AuthorizationException("您已绑定过手机号！");
         }
-        if (oauthService.getOauthByOauthTypeAndOauthId(OauthType.PHONE.getValue(), phoneBindDto.getPhone()) != null) {
+        if (oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.PHONE, phoneBindDto.getPhone()) != null) {
             throw new AuthorizationException("该手机号已被绑定过！");
         }
         Oauth oauth = new Oauth();
         oauth.setUserId(userId);
-        oauth.setOauthType(OauthType.PHONE.getValue());
+        oauth.setOauthType(OauthTypes.PHONE);
         oauth.setOauthId(phoneBindDto.getPhone());
         oauthService.saveOauth(oauth);
     }
@@ -122,11 +122,11 @@ public class AuthService {
      */
     @Transactional(rollbackFor = Exception.class)
     public TokenAndPersonalUserInfoVo registerByPhone(PhoneRegisterUserDto phoneRegisterUserDto) throws DaoException, MessageCheckException {
-        boolean SmsVerifyResult = smsService.verifySmsCode(phoneRegisterUserDto.getPhone(), phoneRegisterUserDto.getCode(), SmsService.REGISTER_MESSAGE);
+        boolean SmsVerifyResult = smsService.verifySmsCode(phoneRegisterUserDto.getPhone(), phoneRegisterUserDto.getCode(), SmsConstants.REGISTER_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
-        Oauth possibleOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.PHONE.getValue(), phoneRegisterUserDto.getPhone());
+        Oauth possibleOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.PHONE, phoneRegisterUserDto.getPhone());
         if (possibleOauth != null) {
             throw new AccountExistedException();
         }
@@ -143,7 +143,7 @@ public class AuthService {
         userInfoService.saveUserInfo(userInfo);
         Oauth oauth = new Oauth();
         oauth.setUserId(user.getId());
-        oauth.setOauthType(OauthType.PHONE.getValue());
+        oauth.setOauthType(OauthTypes.PHONE);
         oauth.setOauthId(phoneRegisterUserDto.getPhone());
         oauthService.saveOauth(oauth);
         Resume resume = new Resume();
@@ -160,11 +160,11 @@ public class AuthService {
      * @throws AccountNotFoundException 用户不存在异常
      */
     public void changePasswordByPhone(PhoneChangePasswordDto phoneChangePasswordDto, String phone) throws MessageCheckException, AccountNotFoundException {
-        boolean SmsVerifyResult = smsService.verifySmsCode(phone, phoneChangePasswordDto.getCode(), SmsService.CHANGE_PASSWORD_MESSAGE);
+        boolean SmsVerifyResult = smsService.verifySmsCode(phone, phoneChangePasswordDto.getCode(), SmsConstants.CHANGE_PASSWORD_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
         }
-        Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.PHONE.getValue(), phone);
+        Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.PHONE, phone);
         if (oauth == null) {
             throw new AccountNotFoundException("用户不存在！");
         }
@@ -238,7 +238,7 @@ public class AuthService {
         if (openid == null) {
             throw new AuthorizationException("非法授权码！");
         }
-        Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthType.WECHAT.getValue(), openid);
+        Oauth wechatOauth = oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.WECHAT, openid);
         if (wechatOauth != null) {
             return excuteLoginByUserId(wechatOauth.getUserId());
         } else {
@@ -258,7 +258,7 @@ public class AuthService {
             userInfoService.saveUserInfo(userInfo);
             Oauth oauth = new Oauth();
             oauth.setUserId(user.getId());
-            oauth.setOauthType(OauthType.WECHAT.getValue());
+            oauth.setOauthType(OauthTypes.WECHAT);
             oauth.setOauthId(openid);
             oauthService.saveOauth(oauth);
             Resume resume = new Resume();
@@ -279,15 +279,15 @@ public class AuthService {
         if (openid == null) {
             throw new AuthorizationException("非法授权码！");
         }
-        if (oauthService.getOauthByOauthTypeAndUserId(OauthType.WECHAT.getValue(), userId) != null) {
+        if (oauthService.getOauthByOauthTypeAndUserId(OauthTypes.WECHAT, userId) != null) {
             throw new AuthorizationException("您已绑定过微信账号！");
         }
-        if (oauthService.getOauthByOauthTypeAndOauthId(OauthType.WECHAT.getValue(), openid) != null) {
+        if (oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.WECHAT, openid) != null) {
             throw new AuthorizationException("该微信账号已被绑定过！");
         }
         Oauth oauth = new Oauth();
         oauth.setUserId(userId);
-        oauth.setOauthType(OauthType.WECHAT.getValue());
+        oauth.setOauthType(OauthTypes.WECHAT);
         oauth.setOauthId(openid);
         oauthService.saveOauth(oauth);
     }
@@ -302,7 +302,7 @@ public class AuthService {
         JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(userVo);
 
         String token = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
-        redisUtil.set(REFRESH_TOKEN_PREFIX + userVo.getId(), token, jwtConfig.getRefreshTokenExpireTime());
+        redisUtil.set(RedisConstants.REFRESH_TOKEN_PREFIX + userVo.getId(), token, jwtConfig.getRefreshTokenExpireTime());
         return token;
     }
 

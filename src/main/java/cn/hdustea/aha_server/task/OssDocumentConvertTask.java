@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.task;
 
 import cn.hdustea.aha_server.config.AliyunOSSConfig;
+import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
@@ -40,7 +41,7 @@ public class OssDocumentConvertTask {
      */
     @Scheduled(fixedDelay = 1000)
     public void runConvertTask() throws ClientException {
-        DocumentConvertInfoDto runningDocumentConvertInfoDto = (DocumentConvertInfoDto) redisUtil.get(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
+        DocumentConvertInfoDto runningDocumentConvertInfoDto = (DocumentConvertInfoDto) redisUtil.get(RedisConstants.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
         if (runningDocumentConvertInfoDto != null) {
             GetOfficeConversionTaskRequest conversionTaskRequest = new GetOfficeConversionTaskRequest();
             conversionTaskRequest.setProject("aha-document-preview");
@@ -49,7 +50,7 @@ public class OssDocumentConvertTask {
             if (conversionTaskResponse.getStatus().equals("Running")) {
                 return;
             } else {
-                redisUtil.del(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
+                redisUtil.del(RedisConstants.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
                 if (conversionTaskResponse.getStatus().equals("Finished")) {
                     String previewUrl = "https://" +
                             aliyunOSSConfig.getPublicBucketName() +
@@ -65,7 +66,7 @@ public class OssDocumentConvertTask {
                 }
             }
         }
-        DocumentConvertInfoDto documentConvertInfoDto = (DocumentConvertInfoDto) redisUtil.lPop(RedisUtil.DOCUMENT_CONVERT_LIST_KEY);
+        DocumentConvertInfoDto documentConvertInfoDto = (DocumentConvertInfoDto) redisUtil.lPop(RedisConstants.DOCUMENT_CONVERT_LIST_KEY);
         if (documentConvertInfoDto != null) {
             String filename = documentConvertInfoDto.getSrcFilename();
             log.info("已收到转换请求，预备开始转换：" + filename);
@@ -102,7 +103,7 @@ public class OssDocumentConvertTask {
         if (taskResponse.getStatus().equals("Running")) {
             log.info(documentConvertInfoDto.getSrcFilename() + "的转换已经开始，任务id为：" + taskResponse.getTaskId());
             documentConvertInfoDto.setTaskId(taskResponse.getTaskId());
-            redisUtil.set(RedisUtil.DOCUMENT_CONVERT_RUNNING_TASK_KEY, documentConvertInfoDto);
+            redisUtil.set(RedisConstants.DOCUMENT_CONVERT_RUNNING_TASK_KEY, documentConvertInfoDto);
         }
     }
 }

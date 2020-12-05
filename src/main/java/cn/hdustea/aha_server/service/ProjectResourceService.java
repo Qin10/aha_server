@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.entity.ProjectResource;
@@ -73,7 +74,7 @@ public class ProjectResourceService {
             DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
             documentConvertInfoDto.setProjectResourceId(projectResourceId);
             documentConvertInfoDto.setSrcFilename(projectResourceDto.getFilename());
-            redisUtil.lPush(RedisUtil.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
+            redisUtil.lPush(RedisConstants.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
         }
         return projectResourceId;
     }

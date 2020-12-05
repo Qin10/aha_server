@@ -1535,7 +1535,7 @@ messageId|int|否|站内信id
 
 **请求URL**
 
-/message/sendPrivateMessage `POST` 
+/message `POST` 
 
 **请求体**
 

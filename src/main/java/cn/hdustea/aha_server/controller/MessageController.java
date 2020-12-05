@@ -1,8 +1,8 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.constants.MessageConstants;
 import cn.hdustea.aha_server.dto.MessageDto;
-import cn.hdustea.aha_server.enums.MessageType;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.MessageService;
@@ -67,7 +67,7 @@ public class MessageController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         List<MessageVo> messageVos = messageService.getAllMessageVoInCommunicationBySenderUserIdAndReceiverUserId(userId, senderUserId);
         if (!messageVos.isEmpty()) {
-            messageService.changeMessageStatusByReceiverUserIdAndSenderUserId(MessageType.STATUS_READ.getValue(), userId, senderUserId);
+            messageService.changeMessageStatusByReceiverUserIdAndSenderUserId(MessageConstants.STATUS_READ, userId, senderUserId);
         }
         return new ResponseBean<>(200, "succ", messageVos);
     }
@@ -83,8 +83,8 @@ public class MessageController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         MessageVo messageVo = messageService.getMessageVoByIdAndReceiverUserId(messageId, userId);
         if (messageVo != null) {
-            if (messageVo.getStatus() == MessageType.STATUS_NOT_READ.getValue()) {
-                messageService.changeMessageStatusById(MessageType.STATUS_READ.getValue(), messageId);
+            if (messageVo.getStatus() == MessageConstants.STATUS_NOT_READ) {
+                messageService.changeMessageStatusById(MessageConstants.STATUS_READ, messageId);
             }
         }
         return new ResponseBean<>(200, "succ", messageVo);
@@ -100,7 +100,7 @@ public class MessageController {
     public ResponseBean<Object> deleteMessageVoById(@PathVariable("messageId") int messageId) throws PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (messageService.isReceiver(userId, messageId)) {
-            messageService.changeMessageStatusById(MessageType.STATUS_DELETED.getValue(), messageId);
+            messageService.changeMessageStatusById(MessageConstants.STATUS_DELETED, messageId);
         } else {
             throw new PermissionDeniedException();
         }

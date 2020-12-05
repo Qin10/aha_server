@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
@@ -30,7 +31,7 @@ public class ContributionRankService {
      * @return 排行榜列表
      */
     public List<UserContribPointVo> getRankList() {
-        Set<ZSetOperations.TypedTuple<Object>> tuples = redisUtil.zSGetTuple(RedisUtil.CONTRIBUTION_RANK_KEY, 0, 99);
+        Set<ZSetOperations.TypedTuple<Object>> tuples = redisUtil.zSGetTuple(RedisConstants.CONTRIBUTION_RANK_KEY, 0, 99);
         return redisUtil.tupleToUserContribPoint(tuples);
     }
 
@@ -42,7 +43,7 @@ public class ContributionRankService {
      * @throws SelectException 用户不存在异常
      */
     public long getRankByUserInfoVo(UserRoughInfoVo userInfoVo) throws SelectException {
-        Long rank = redisUtil.zSGetRank(RedisUtil.CONTRIBUTION_RANK_KEY, userInfoVo);
+        Long rank = redisUtil.zSGetRank(RedisConstants.CONTRIBUTION_RANK_KEY, userInfoVo);
         if (rank == null) {
             throw new SelectException("未查询到排名!");
         }
@@ -59,7 +60,7 @@ public class ContributionRankService {
     public UserContribPointVo getUserContribPointByUserId(Integer userId) throws SelectException {
         UserRoughInfoVo userInfoVo = userInfoService.getUserInfoVoByUserId(userId);
         long rank = getRankByUserInfoVo(userInfoVo);
-        Double contribPoint = redisUtil.zSGetScore(RedisUtil.CONTRIBUTION_RANK_KEY, userInfoVo);
+        Double contribPoint = redisUtil.zSGetScore(RedisConstants.CONTRIBUTION_RANK_KEY, userInfoVo);
         UserContribPointVo userContribPointVo = new UserContribPointVo();
         userContribPointVo.setUser(userInfoVo);
         userContribPointVo.setContribPoint(BigDecimal.valueOf(contribPoint));

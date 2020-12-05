@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
+import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.entity.ProjectMember;
@@ -60,8 +61,7 @@ public class ProjectController {
     @RequiresLogin
     @GetMapping()
     public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
-        Boolean passed = true;
-        PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, userId, compId, awardLevel, sortBy, orderBy, passed);
+        PageVo<List<ProjectRoughVo>> projectRoughVos = projectService.getAllProjectRoughInfoPagable(pageNum, pageSize, userId, compId, awardLevel, sortBy, orderBy, true);
         return new ResponseBean<>(200, "succ", projectRoughVos);
     }
 
@@ -381,9 +381,9 @@ public class ProjectController {
      * @param projectId 项目id
      */
     private void incrReadByProjectId(int projectId, Integer userId) {
-        if (redisUtil.get(RedisUtil.USER_PROJECT_READ_PREFIX + userId + ":" + projectId) == null) {
-            redisUtil.hincr(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId), 1);
-            redisUtil.set(RedisUtil.USER_PROJECT_READ_PREFIX + userId + ":" + projectId, true, 600);
+        if (redisUtil.get(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId) == null) {
+            redisUtil.hincr(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId), 1);
+            redisUtil.set(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId, true, 600);
         }
     }
 }

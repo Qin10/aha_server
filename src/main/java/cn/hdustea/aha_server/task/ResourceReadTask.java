@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.task;
 
+import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
@@ -32,7 +33,7 @@ public class ResourceReadTask {
     @Async
     public void updateResourceRead() {
         log.debug("Project Read Task is Running");
-        Map<Object, Object> projectReadMap = redisUtil.hmget(RedisUtil.PROJECT_READ_KEY);
+        Map<Object, Object> projectReadMap = redisUtil.hmget(RedisConstants.PROJECT_READ_KEY);
         for (Map.Entry<Object, Object> entry : projectReadMap.entrySet()) {
             Integer projectId = Integer.parseInt((String) entry.getKey());
             Integer read = (Integer) entry.getValue();
@@ -42,7 +43,7 @@ public class ResourceReadTask {
                     int updatedRead = project.getRead() + read;
                     projectMapper.updateReadById(updatedRead, projectId);
                 }
-                redisUtil.hdel(RedisUtil.PROJECT_READ_KEY, Integer.toString(projectId));
+                redisUtil.hdel(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId));
             }
         }
     }

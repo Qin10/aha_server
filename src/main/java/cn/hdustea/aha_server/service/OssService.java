@@ -45,6 +45,7 @@ public class OssService {
         Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
         PolicyConditions policyConditions = new PolicyConditions();
         policyConditions.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
+        policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, aliyunOSSConfig.getMaxSize());
         String policyStr = oss.generatePostPolicy(expiration, policyConditions);
         String policyBase64 = JacksonUtil.toBase64String(policyStr.getBytes());
         String signature = oss.calculatePostSignature(policyStr);

@@ -1,9 +1,9 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.constants.MessageConstants;
 import cn.hdustea.aha_server.dto.MessageDto;
 import cn.hdustea.aha_server.entity.Message;
 import cn.hdustea.aha_server.entity.MessageText;
-import cn.hdustea.aha_server.enums.MessageType;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.MessageMapper;
 import cn.hdustea.aha_server.mapper.MessageTextMapper;
@@ -53,11 +53,11 @@ public class MessageService {
         if (type != null) {
             switch (type) {
                 case "system": {
-                    currentType = MessageType.TYPE_SYSTEM.getValue();
+                    currentType = MessageConstants.TYPE_SYSTEM;
                     break;
                 }
                 case "private": {
-                    currentType = MessageType.TYPE_PRIVATE.getValue();
+                    currentType = MessageConstants.TYPE_PRIVATE;
                     break;
                 }
                 default: {
@@ -106,11 +106,11 @@ public class MessageService {
         if (type != null) {
             switch (type) {
                 case "system": {
-                    currentType = MessageType.TYPE_SYSTEM.getValue();
+                    currentType = MessageConstants.TYPE_SYSTEM;
                     break;
                 }
                 case "private": {
-                    currentType = MessageType.TYPE_PRIVATE.getValue();
+                    currentType = MessageConstants.TYPE_PRIVATE;
                     break;
                 }
                 default: {
@@ -118,7 +118,7 @@ public class MessageService {
                 }
             }
         }
-        return messageMapper.countByReceiverUserIdAndStatusAndType(receiverUserId, MessageType.STATUS_NOT_READ.getValue(), currentType);
+        return messageMapper.countByReceiverUserIdAndStatusAndType(receiverUserId, MessageConstants.STATUS_NOT_READ, currentType);
     }
 
     /**
@@ -137,7 +137,7 @@ public class MessageService {
         messageText.setSenderUserId(senderUserId);
         messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
-        messageText.setType(MessageType.TYPE_PRIVATE.getValue());
+        messageText.setType(MessageConstants.TYPE_PRIVATE);
         messageTextMapper.insertSelective(messageText);
         message.setTextId(messageText.getId());
         message.setReceiverUserId(messageDto.getReceiverUserId());
@@ -156,7 +156,7 @@ public class MessageService {
         MessageText messageText = new MessageText();
         messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
-        messageText.setType(MessageType.TYPE_SYSTEM.getValue());
+        messageText.setType(MessageConstants.TYPE_SYSTEM);
         messageTextMapper.insertSelective(messageText);
         message.setTextId(messageText.getId());
         message.setReceiverUserId(messageDto.getReceiverUserId());
@@ -189,7 +189,7 @@ public class MessageService {
         messageText.setSenderUserId(senderUserId);
         messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
-        messageText.setType(MessageType.TYPE_NOTICE.getValue());
+        messageText.setType(MessageConstants.TYPE_NOTICE);
         messageText.setPostDate(new Date());
         messageTextMapper.insertSelective(messageText);
     }
@@ -203,7 +203,7 @@ public class MessageService {
         MessageText messageText = new MessageText();
         messageText.setTitle(messageDto.getTitle());
         messageText.setContent(messageDto.getContent());
-        messageText.setType(MessageType.TYPE_SYSTEM_NOTICE.getValue());
+        messageText.setType(MessageConstants.TYPE_SYSTEM_NOTICE);
         messageText.setPostDate(new Date());
         messageTextMapper.insertSelective(messageText);
     }
@@ -278,7 +278,7 @@ public class MessageService {
             message.setReceiverUserId(receiverUserId);
             message.setTextId(messageText.getId());
             message.setReceiveDate(messageText.getPostDate());
-            message.setStatus(MessageType.STATUS_NOT_READ.getValue());
+            message.setStatus(MessageConstants.STATUS_NOT_READ);
             messages.add(message);
         }
         if (!messages.isEmpty()) {
