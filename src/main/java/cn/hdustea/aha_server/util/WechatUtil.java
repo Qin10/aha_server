@@ -25,6 +25,6 @@ public class WechatUtil {
                 code;
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(requestUrlBuilder, null, String.class);
         String responseStr = responseEntity.getBody();
-        return JacksonUtil.json2pojo(responseStr, WechatDto.class);
+        return JacksonUtil.jsonToPojo(responseStr, WechatDto.class);
     }
 }

@@ -33,7 +33,7 @@ public class ResourceReadTask {
     @Async
     public void updateResourceRead() {
         log.debug("Project Read Task is Running");
-        Map<Object, Object> projectReadMap = redisUtil.hmget(RedisConstants.PROJECT_READ_KEY);
+        Map<Object, Object> projectReadMap = redisUtil.hGetMap(RedisConstants.PROJECT_READ_KEY);
         for (Map.Entry<Object, Object> entry : projectReadMap.entrySet()) {
             Integer projectId = Integer.parseInt((String) entry.getKey());
             Integer read = (Integer) entry.getValue();
@@ -43,7 +43,7 @@ public class ResourceReadTask {
                     int updatedRead = project.getRead() + read;
                     projectMapper.updateReadById(updatedRead, projectId);
                 }
-                redisUtil.hdel(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId));
+                redisUtil.hDel(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId));
             }
         }
     }

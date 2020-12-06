@@ -16,7 +16,7 @@ import java.util.Date;
  *
  * @author STEA_YY
  **/
-public class JWTUtil {
+public class JwtUtil {
 
     /**
      * 校验token是否正确

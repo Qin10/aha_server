@@ -382,7 +382,7 @@ public class ProjectController {
      */
     private void incrReadByProjectId(int projectId, Integer userId) {
         if (redisUtil.get(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId) == null) {
-            redisUtil.hincr(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId), 1);
+            redisUtil.hIncr(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId), 1);
             redisUtil.set(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId, true, 600);
         }
     }

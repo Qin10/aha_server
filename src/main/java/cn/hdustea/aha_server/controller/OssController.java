@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.exception.apiException.ForbiddenException;
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.util.JacksonUtil;
 import cn.hdustea.aha_server.vo.ResponseBean;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,12 +30,12 @@ public class OssController {
      * @param content  返回实体(json)
      */
     @PostMapping("/green/callback")
-    public ResponseBean<Object> freezeProjectResource(String checksum, String content) throws Exception {
+    public ResponseBean<Object> freezeProjectResource(String checksum, String content) throws ForbiddenException, JsonProcessingException {
         boolean verified = ossService.verifyOssGreenCallback(checksum, content);
         if (!verified) {
             throw new ForbiddenException("checksum校验失败！");
         }
-        Map<String, Object> responseMap = JacksonUtil.json2map(content);
+        Map<String, Object> responseMap = JacksonUtil.jsonToMap(content);
         ossService.freezeProjectResource(responseMap.get("object").toString(), (Boolean) responseMap.get("freezed"));
         return new ResponseBean<>(200, "succ", null);
     }

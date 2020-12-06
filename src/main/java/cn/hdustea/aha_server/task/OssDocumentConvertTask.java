@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.task;
 
-import cn.hdustea.aha_server.config.AliyunOSSConfig;
+import cn.hdustea.aha_server.config.AliyunOssConfig;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 @Slf4j
 public class OssDocumentConvertTask {
     @Resource
-    private AliyunOSSConfig aliyunOSSConfig;
+    private AliyunOssConfig aliyunOssConfig;
     @Resource
     private IAcsClient iAcsClient;
     @Resource
@@ -53,9 +53,9 @@ public class OssDocumentConvertTask {
                 redisUtil.del(RedisConstants.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
                 if (conversionTaskResponse.getStatus().equals("Finished")) {
                     String previewUrl = "https://" +
-                            aliyunOSSConfig.getPublicBucketName() +
+                            aliyunOssConfig.getPublicBucketName() +
                             "." +
-                            aliyunOSSConfig.getEndpoint() +
+                            aliyunOssConfig.getEndpoint() +
                             "/" +
                             runningDocumentConvertInfoDto.getTargetFilePath() +
                             "1.pdf";
@@ -78,7 +78,7 @@ public class OssDocumentConvertTask {
                 targetPath = "preview_files/";
             }
             documentConvertInfoDto.setTargetFilePath(targetPath);
-            convertDocument(aliyunOSSConfig.getPrivateBucketName(), aliyunOSSConfig.getPublicBucketName(), documentConvertInfoDto);
+            convertDocument(aliyunOssConfig.getPrivateBucketName(), aliyunOssConfig.getPublicBucketName(), documentConvertInfoDto);
         }
 
     }

@@ -2,13 +2,13 @@ package cn.hdustea.aha_server.interceptor;
 
 import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.config.JwtConfig;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.*;
 import cn.hdustea.aha_server.util.IpUtil;
-import cn.hdustea.aha_server.util.JWTUtil;
+import cn.hdustea.aha_server.util.JwtUtil;
 import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -34,7 +34,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     @Resource
     private RedisUtil redisUtil;
     @Resource
-    private JWTConfig jwtConfig;
+    private JwtConfig jwtConfig;
 
     /**
      * 处理鉴权请求
@@ -69,9 +69,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 if (token == null) {
                     throw new TokenNotFoundException("无token，请重新登录");
                 }
-                JwtPayloadDto jwtPayloadDto = JWTUtil.getPayload(token);
+                JwtPayloadDto jwtPayloadDto = JwtUtil.getPayload(token);
                 try {
-                    boolean verify = JWTUtil.verify(token, jwtPayloadDto, jwtConfig.getSecret());
+                    boolean verify = JwtUtil.verify(token, jwtPayloadDto, jwtConfig.getSecret());
                     if (!verify) {
                         throw new TokenCheckException();
                     }
@@ -127,7 +127,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
     protected boolean refreshToken(String token, JwtPayloadDto jwtPayloadDto) {
         String possibleToken = (String) redisUtil.get(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount());
         if (possibleToken != null && possibleToken.equals(token)) {
-            String newToken = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
+            String newToken = JwtUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
             redisUtil.set(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletResponse response;

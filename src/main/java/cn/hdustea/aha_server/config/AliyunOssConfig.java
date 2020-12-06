@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
  **/
 @ConfigurationProperties("aliyun-oss")
 @Data
-public class AliyunOSSConfig {
+public class AliyunOssConfig {
     private String aliyunUid;
     private String endpoint;
     private String accessKeyId;
@@ -29,7 +29,7 @@ public class AliyunOSSConfig {
     private String greenCallbackSeed;
 
     @Bean
-    public OSS OSS() {
+    public OSS oss() {
         return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     }
 

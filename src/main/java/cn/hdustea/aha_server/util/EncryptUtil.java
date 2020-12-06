@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.util;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 
 import java.nio.charset.StandardCharsets;
@@ -12,7 +13,13 @@ import java.security.NoSuchAlgorithmException;
  * @author STEA_YY
  **/
 public class EncryptUtil {
-    public static String getSHA256(String sourceStr) {
+    /**
+     * SHA256散列
+     *
+     * @param sourceStr 目标字符串
+     * @return 散列结果
+     */
+    public static String getSha256(String sourceStr) {
         MessageDigest messageDigest;
         try {
             messageDigest = MessageDigest.getInstance("SHA-256");
@@ -21,5 +28,15 @@ public class EncryptUtil {
         }
         messageDigest.update(sourceStr.getBytes(StandardCharsets.UTF_8));
         return Hex.encodeHexString(messageDigest.digest());
+    }
+
+    /**
+     * 二进制数据转base64
+     *
+     * @param binaryData 二进制数据
+     * @return base64字符串
+     */
+    public static String toBase64String(byte[] binaryData) {
+        return new String(Base64.encodeBase64(binaryData));
     }
 }

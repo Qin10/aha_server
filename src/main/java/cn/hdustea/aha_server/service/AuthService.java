@@ -1,7 +1,7 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
-import cn.hdustea.aha_server.config.JWTConfig;
+import cn.hdustea.aha_server.config.JwtConfig;
 import cn.hdustea.aha_server.config.WechatConfig;
 import cn.hdustea.aha_server.constants.OauthTypes;
 import cn.hdustea.aha_server.constants.RedisConstants;
@@ -55,7 +55,7 @@ public class AuthService {
     @Resource
     private SmsService smsService;
     @Resource
-    private JWTConfig jwtConfig;
+    private JwtConfig jwtConfig;
     @Resource
     private FileUploadPathConfig fileUploadPathConfig;
     @Resource
@@ -79,7 +79,7 @@ public class AuthService {
         }
 
         UserVo userVo = userService.getUserVoById(oauth.getUserId());
-        if (EncryptUtil.getSHA256(phoneLoginUserDto.getPassword()).equals(userVo.getPassword())) {
+        if (EncryptUtil.getSha256(phoneLoginUserDto.getPassword()).equals(userVo.getPassword())) {
             return excuteLoginByUserId(userVo.getId());
         } else {
             throw new InvalidPasswordException("用户名或密码错误！");
@@ -131,7 +131,7 @@ public class AuthService {
             throw new AccountExistedException();
         }
         User user = new User();
-        user.setPassword(EncryptUtil.getSHA256((phoneRegisterUserDto.getPassword())));
+        user.setPassword(EncryptUtil.getSha256((phoneRegisterUserDto.getPassword())));
         user.setSignedNotice(phoneRegisterUserDto.isSignedNotice());
         user.setRoleId(1);
         user.setCreatedTime(new Timestamp(System.currentTimeMillis()));
@@ -168,7 +168,7 @@ public class AuthService {
         if (oauth == null) {
             throw new AccountNotFoundException("用户不存在！");
         }
-        String encodedPassword = EncryptUtil.getSHA256(phoneChangePasswordDto.getNewPassword());
+        String encodedPassword = EncryptUtil.getSha256(phoneChangePasswordDto.getNewPassword());
         userService.updatePassword(oauth.getUserId(), encodedPassword);
     }
 
@@ -299,9 +299,9 @@ public class AuthService {
      * @return token令牌
      */
     private String signToken(UserVo userVo) {
-        JwtPayloadDto jwtPayloadDto = JWTUtil.packagePayload(userVo);
+        JwtPayloadDto jwtPayloadDto = JwtUtil.packagePayload(userVo);
 
-        String token = JWTUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
+        String token = JwtUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
         redisUtil.set(RedisConstants.REFRESH_TOKEN_PREFIX + userVo.getId(), token, jwtConfig.getRefreshTokenExpireTime());
         return token;
     }

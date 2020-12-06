@@ -1,8 +1,7 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.config.AliyunOSSConfig;
+import cn.hdustea.aha_server.config.AliyunOssConfig;
 import cn.hdustea.aha_server.util.EncryptUtil;
-import cn.hdustea.aha_server.util.JacksonUtil;
 import cn.hdustea.aha_server.vo.OssPolicyVo;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.MatchMode;
@@ -25,7 +24,7 @@ public class OssService {
     @Resource
     private ProjectResourceService projectResourceService;
     @Resource
-    private AliyunOSSConfig aliyunOSSConfig;
+    private AliyunOssConfig aliyunOssConfig;
 
     /**
      * 签名oss上传文件请求
@@ -37,21 +36,21 @@ public class OssService {
     public OssPolicyVo signUpload(String dir, boolean isPrivate) {
         String bucketName;
         if (isPrivate) {
-            bucketName = aliyunOSSConfig.getPrivateBucketName();
+            bucketName = aliyunOssConfig.getPrivateBucketName();
         } else {
-            bucketName = aliyunOSSConfig.getPublicBucketName();
+            bucketName = aliyunOssConfig.getPublicBucketName();
         }
-        String host = "http://" + bucketName + "." + aliyunOSSConfig.getEndpoint();
-        Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
+        String host = "http://" + bucketName + "." + aliyunOssConfig.getEndpoint();
+        Date expiration = new Date(new Date().getTime() + aliyunOssConfig.getExpireTime() * 1000);
         PolicyConditions policyConditions = new PolicyConditions();
         policyConditions.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
-        policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, aliyunOSSConfig.getMaxSize());
+        policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, aliyunOssConfig.getMaxSize());
         String policyStr = oss.generatePostPolicy(expiration, policyConditions);
-        String policyBase64 = JacksonUtil.toBase64String(policyStr.getBytes());
+        String policyBase64 = EncryptUtil.toBase64String(policyStr.getBytes());
         String signature = oss.calculatePostSignature(policyStr);
         OssPolicyVo ossPolicyVo = new OssPolicyVo();
         ossPolicyVo.setHost(host);
-        ossPolicyVo.setAccessid(aliyunOSSConfig.getAccessKeyId());
+        ossPolicyVo.setAccessid(aliyunOssConfig.getAccessKeyId());
         ossPolicyVo.setPolicy(policyBase64);
         ossPolicyVo.setDir(dir);
         ossPolicyVo.setSignature(signature);
@@ -66,8 +65,8 @@ public class OssService {
      * @return 访问URL
      */
     public URL signDownload(String filename) {
-        Date expiration = new Date(new Date().getTime() + aliyunOSSConfig.getExpireTime() * 1000);
-        return oss.generatePresignedUrl(aliyunOSSConfig.getPrivateBucketName(), filename, expiration);
+        Date expiration = new Date(new Date().getTime() + aliyunOssConfig.getExpireTime() * 1000);
+        return oss.generatePresignedUrl(aliyunOssConfig.getPrivateBucketName(), filename, expiration);
     }
 
     /**
@@ -78,9 +77,9 @@ public class OssService {
      */
     public String buildPublicDownloadUrl(String filename) {
         return "https://" +
-                aliyunOSSConfig.getPublicBucketName() +
+                aliyunOssConfig.getPublicBucketName() +
                 "." +
-                aliyunOSSConfig.getEndpoint() +
+                aliyunOssConfig.getEndpoint() +
                 "/" +
                 filename;
     }
@@ -103,8 +102,8 @@ public class OssService {
      * @return 校验结果
      */
     public boolean verifyOssGreenCallback(String checksum, String content) {
-        String payload = aliyunOSSConfig.getAliyunUid() + aliyunOSSConfig.getGreenCallbackSeed() + content;
-        String generatedChecksum = EncryptUtil.getSHA256(payload);
+        String payload = aliyunOssConfig.getAliyunUid() + aliyunOssConfig.getGreenCallbackSeed() + content;
+        String generatedChecksum = EncryptUtil.getSha256(payload);
         return generatedChecksum.equals(checksum);
     }
 }

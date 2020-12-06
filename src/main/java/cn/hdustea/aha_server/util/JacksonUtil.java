@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.codec.binary.Base64;
 
 import java.util.Map;
 
@@ -17,46 +16,39 @@ public class JacksonUtil {
 
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
-    private JacksonUtil() {
-
-    }
-
-    public static ObjectMapper getInstance() {
-        return objectMapper;
-    }
-
     /**
      * javaBean、列表数组转换为json字符串
+     *
+     * @param obj 待转化对象
+     * @return json字符串
      */
-    public static String obj2json(Object obj) throws Exception {
+    public static String objToJson(Object obj) throws Exception {
         return objectMapper.writeValueAsString(obj);
     }
 
     /**
-     * json 转JavaBean
+     * json转换为JavaBean
+     *
+     * @param jsonString json字符串
+     * @param clazz      目标类型
+     * @return 目标Javabean
      */
 
-    public static <T> T json2pojo(String jsonString, Class<T> clazz) throws JsonProcessingException {
+    public static <T> T jsonToPojo(String jsonString, Class<T> clazz) throws JsonProcessingException {
         objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
         return objectMapper.readValue(jsonString, clazz);
     }
 
     /**
-     * json字符串转换为map
+     * json字符串转换为Map
+     *
+     * @param jsonString json字符串
+     * @return 目标Map
      */
-    public static <T> Map<String, Object> json2map(String jsonString) throws Exception {
+    @SuppressWarnings("unchecked")
+    public static <T> Map<String, T> jsonToMap(String jsonString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
         return mapper.readValue(jsonString, Map.class);
-    }
-
-    /**
-     * 二进制数据转base64
-     *
-     * @param binaryData 二进制数据
-     * @return base64字符串
-     */
-    public static String toBase64String(byte[] binaryData) {
-        return new String(Base64.encodeBase64(binaryData));
     }
 }
