@@ -1,29 +1,25 @@
 package cn.hdustea.aha_server.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 /**
- * 项目资源实体类
- *
- * @author STEA_YY
- **/
+* ${description}
+*
+* @author STEA_YY
+**/
 
+/**
+ * 团队资源表，一个团队对应多个资源，资源表包括了资源文件名称，类别，阅读量等
+ */
 @Data
 public class ProjectResource {
-
-    /**
-     * 项目资源id
-     */
     private Integer id;
 
     /**
-     * 团队id(外键)
+     * 项目id(外键)
      */
-    @JsonIgnore
     private Integer projectId;
 
     /**
@@ -50,4 +46,14 @@ public class ProjectResource {
      * 资源是否被冻结
      */
     private Boolean freezed;
+
+    /**
+     * 资源平均分
+     */
+    private BigDecimal score;
+
+    /**
+     * 评分人数
+     */
+    private Integer scoreCount;
 }

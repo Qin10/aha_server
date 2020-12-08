@@ -6,6 +6,7 @@ import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
+import cn.hdustea.aha_server.dto.ProjectResourceScoreDto;
 import cn.hdustea.aha_server.entity.ProjectMember;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
@@ -373,6 +374,21 @@ public class ProjectController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         boolean result = projectService.hasCollected(projectId, userId);
         return new ResponseBean<>(200, "succ", result);
+    }
+
+    @RequiresLogin
+    @GetMapping("/score/{projectResourceId}")
+    public ResponseBean<List<ProjectResourceScoreVo>> getAllResourceScoreById(@PathVariable("projectResourceId") int projectResourceId) {
+        List<ProjectResourceScoreVo> projectResourceScoreVos = projectResourceService.getAllResourceScoreById(projectResourceId);
+        return new ResponseBean<>(200, "succ", projectResourceScoreVos);
+    }
+
+    @RequiresLogin
+    @PostMapping("/score/{projectResourceId}")
+    public ResponseBean<Object> saveResourceScore(@RequestBody ProjectResourceScoreDto projectResourceScoreDto, @PathVariable("projectResourceId") int projectResourceId) throws InsertException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        projectResourceService.saveResourceScore(projectResourceScoreDto, projectResourceId, userId);
+        return new ResponseBean<>(200, "succ", null);
     }
 
     /**

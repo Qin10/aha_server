@@ -1,7 +1,8 @@
 package cn.hdustea.aha_server.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 /**
  * 项目资源Vo
@@ -35,4 +36,14 @@ public class ProjectResourceVo {
      * 资源文件下载量
      */
     private Integer download;
+
+    /**
+     * 资源平均分
+     */
+    private BigDecimal score;
+
+    /**
+     * 评分人数
+     */
+    private Integer scoreCount;
 }

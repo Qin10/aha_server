@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hdustea.aha_server.mapper.FinancialOrderMapper">
+  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.FinancialOrder">
+    <!--@mbg.generated-->
+    <!--@Table financial_order-->
+    <id column="fo_id" property="id" />
+    <result column="fo_user_id" property="userId" />
+    <result column="fo_pay_channel" property="payChannel" />
+    <result column="fo_pay_number" property="payNumber" />
+    <result column="fo_discount" property="discount" />
+    <result column="fo_price" property="price" />
+    <result column="fo_status" property="status" />
+    <result column="fo_create_time" property="createTime" />
+    <result column="fo_pay_time" property="payTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    fo_id, fo_user_id, fo_pay_channel, fo_pay_number, fo_discount, fo_price, fo_status, 
+    fo_create_time, fo_pay_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from financial_order
+    where fo_id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from financial_order
+    where fo_id = #{id}
+  </delete>
+  <insert id="insert" keyColumn="fo_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.FinancialOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into financial_order (fo_user_id, fo_pay_channel, fo_pay_number, fo_discount, fo_price, fo_status, 
+      fo_create_time, fo_pay_time)
+    values (#{userId}, #{payChannel}, #{payNumber}, #{discount}, #{price}, #{status}, 
+      #{createTime}, #{payTime})
+  </insert>
+  <insert id="insertSelective" keyColumn="fo_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.FinancialOrder" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into financial_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        fo_user_id,
+      </if>
+      <if test="payChannel != null">
+        fo_pay_channel,
+      </if>
+      <if test="payNumber != null">
+        fo_pay_number,
+      </if>
+      <if test="discount != null">
+        fo_discount,
+      </if>
+      <if test="price != null">
+        fo_price,
+      </if>
+      <if test="status != null">
+        fo_status,
+      </if>
+      <if test="createTime != null">
+        fo_create_time,
+      </if>
+      <if test="payTime != null">
+        fo_pay_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="payChannel != null">
+        #{payChannel},
+      </if>
+      <if test="payNumber != null">
+        #{payNumber},
+      </if>
+      <if test="discount != null">
+        #{discount},
+      </if>
+      <if test="price != null">
+        #{price},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="payTime != null">
+        #{payTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.FinancialOrder">
+    <!--@mbg.generated-->
+    update financial_order
+    <set>
+      <if test="userId != null">
+        fo_user_id = #{userId},
+      </if>
+      <if test="payChannel != null">
+        fo_pay_channel = #{payChannel},
+      </if>
+      <if test="payNumber != null">
+        fo_pay_number = #{payNumber},
+      </if>
+      <if test="discount != null">
+        fo_discount = #{discount},
+      </if>
+      <if test="price != null">
+        fo_price = #{price},
+      </if>
+      <if test="status != null">
+        fo_status = #{status},
+      </if>
+      <if test="createTime != null">
+        fo_create_time = #{createTime},
+      </if>
+      <if test="payTime != null">
+        fo_pay_time = #{payTime},
+      </if>
+    </set>
+    where fo_id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.FinancialOrder">
+    <!--@mbg.generated-->
+    update financial_order
+    set fo_user_id = #{userId},
+      fo_pay_channel = #{payChannel},
+      fo_pay_number = #{payNumber},
+      fo_discount = #{discount},
+      fo_price = #{price},
+      fo_status = #{status},
+      fo_create_time = #{createTime},
+      fo_pay_time = #{payTime}
+    where fo_id = #{id}
+  </update>
+</mapper>

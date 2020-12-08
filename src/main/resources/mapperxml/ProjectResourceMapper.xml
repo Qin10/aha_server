@@ -11,23 +11,26 @@
         <result column="pr_preview_url" property="previewUrl"/>
         <result column="pr_download" property="download"/>
         <result column="pr_freezed" property="freezed"/>
+        <result column="pr_score" property="score"/>
+        <result column="pr_score_count" property="scoreCount"/>
     </resultMap>
     <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.ProjectResourceVo">
-        <!--@mbg.generated-->
-        <!--@Table project_resource-->
         <id column="pr_id" property="id"/>
         <result column="pr_name" property="name"/>
         <result column="pr_filename" property="filename"/>
         <result column="pr_preview_url" property="previewUrl"/>
         <result column="pr_download" property="download"/>
+        <result column="pr_score" property="score"/>
+        <result column="pr_score_count" property="scoreCount"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        pr_id, pr_project_id, pr_name, pr_filename, pr_preview_url, pr_download, pr_freezed
+        pr_id, pr_project_id, pr_name, pr_filename, pr_preview_url, pr_download, pr_freezed,
+        pr_score, pr_score_count
     </sql>
     <sql id="Vo_Column_List">
         <!--@mbg.generated-->
-        pr_id, pr_name, pr_filename, pr_preview_url, pr_download
+        pr_id, pr_name, pr_filename, pr_preview_url, pr_download, pr_score, pr_score_count
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -45,8 +48,10 @@
     <insert id="insert" keyColumn="pr_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ProjectResource"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into project_resource (pr_project_id, pr_name, pr_filename)
-        values (#{projectId}, #{name}, #{filename})
+        insert into project_resource (pr_project_id, pr_name, pr_filename, pr_preview_url, pr_download, pr_freezed,
+                                      pr_score, pr_score_count)
+        values (#{projectId}, #{name}, #{filename}, #{previewUrl}, #{download}, #{freezed},
+                #{score}, #{scoreCount})
     </insert>
     <insert id="insertSelective" keyColumn="pr_id" keyProperty="id"
             parameterType="cn.hdustea.aha_server.entity.ProjectResource" useGeneratedKeys="true">
@@ -62,6 +67,21 @@
             <if test="filename != null">
                 pr_filename,
             </if>
+            <if test="previewUrl != null">
+                pr_preview_url,
+            </if>
+            <if test="download != null">
+                pr_download,
+            </if>
+            <if test="freezed != null">
+                pr_freezed,
+            </if>
+            <if test="score != null">
+                pr_score,
+            </if>
+            <if test="scoreCount != null">
+                pr_score_count,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="projectId != null">
@@ -72,6 +92,21 @@
             </if>
             <if test="filename != null">
                 #{filename},
+            </if>
+            <if test="previewUrl != null">
+                #{previewUrl},
+            </if>
+            <if test="download != null">
+                #{download},
+            </if>
+            <if test="freezed != null">
+                #{freezed},
+            </if>
+            <if test="score != null">
+                #{score},
+            </if>
+            <if test="scoreCount != null">
+                #{scoreCount},
             </if>
         </trim>
     </insert>
@@ -88,15 +123,35 @@
             <if test="filename != null">
                 pr_filename = #{filename},
             </if>
+            <if test="previewUrl != null">
+                pr_preview_url = #{previewUrl},
+            </if>
+            <if test="download != null">
+                pr_download = #{download},
+            </if>
+            <if test="freezed != null">
+                pr_freezed = #{freezed},
+            </if>
+            <if test="score != null">
+                pr_score = #{score},
+            </if>
+            <if test="scoreCount != null">
+                pr_score_count = #{scoreCount},
+            </if>
         </set>
         where pr_id = #{id}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ProjectResource">
         <!--@mbg.generated-->
         update project_resource
-        set pr_project_id = #{projectId},
-            pr_name       = #{name},
-            pr_filename   = #{filename}
+        set pr_project_id  = #{projectId},
+            pr_name        = #{name},
+            pr_filename    = #{filename},
+            pr_preview_url = #{previewUrl},
+            pr_download    = #{download},
+            pr_freezed     = #{freezed},
+            pr_score       = #{score},
+            pr_score_count = #{scoreCount}
         where pr_id = #{id}
     </update>
 
@@ -108,30 +163,12 @@
         where pr_project_id = #{projectId}
     </select>
 
-    <select id="selectVoByPrimaryKeyAndNotFreezed" parameterType="java.lang.Integer" resultMap="VoResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Vo_Column_List"/>
-        from project_resource
-        where pr_id = #{id}
-        and pr_freezed = false
-    </select>
-
-    <select id="selectVoByPrimaryKeyAndFreezed" parameterType="java.lang.Integer" resultMap="VoResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Vo_Column_List"/>
-        from project_resource
-        where pr_id = #{id}
-          and pr_freezed = true
-    </select>
-
     <select id="selectAllVoByProjectIdAndNotFreezed" resultMap="VoResultMap">
         select
         <include refid="Vo_Column_List"/>
         from project_resource
         where pr_project_id = #{projectId}
-        and pr_freezed = false
+          and pr_freezed = false
     </select>
 
     <select id="selectAllVoByProjectIdAndFreezed" resultMap="VoResultMap">
@@ -156,18 +193,25 @@
         where pr_id = #{id}
     </update>
 
-<!--auto generated by MybatisCodeHelper on 2020-11-25-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-25-->
     <update id="updateFreezedByFilename">
         update project_resource
         set pr_freezed=#{updatedFreezed}
-        where pr_filename=#{filename}
+        where pr_filename = #{filename}
     </update>
 
-<!--auto generated by MybatisCodeHelper on 2020-11-25-->
+    <!--auto generated by MybatisCodeHelper on 2020-11-25-->
     <select id="selectByFilename" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from project_resource
-        where pr_filename=#{filename}
+        where pr_filename = #{filename}
     </select>
+
+<!--auto generated by MybatisCodeHelper on 2020-12-07-->
+    <update id="updateScoreAndScoreCountById">
+        update project_resource
+        set pr_score=#{updatedScore}, pr_score_count=#{updatedScoreCount}
+        where pr_id=#{id}
+    </update>
 </mapper>
