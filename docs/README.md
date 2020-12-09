@@ -437,6 +437,156 @@ id|int|否|竞赛标签id
 	"time":"string //响应时间"
 }
 ```
+# 贡献点订单类请求
+## 获取订单信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/order/{orderId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+orderId|int|否|订单号
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"id":"int //订单号",
+		"user":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校"
+		},
+		"price":"double //订单总价",
+		"status":"int //订单状态",
+		"createTime":"date //订单创建时间",
+		"payTime":"date //订单支付时间",
+		"orderResources":[{
+			"resource":{
+				"id":"int //项目资源id",
+				"projectId":"int //项目id(外键)",
+				"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+				"filename":"string //保存在oss里的资源文件名(包括前缀)",
+				"previewUrl":"string //保存在oss里的预览文件地址",
+				"download":"int //资源文件下载量",
+				"score":"double //资源平均分",
+				"scoreCount":"int //评分人数"
+			},
+			"discount":"double //资源折扣",
+			"price":"double //贡献点小计"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 获取用户全部订单信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/order/me `GET` 
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //订单号",
+		"user":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校"
+		},
+		"price":"double //订单总价",
+		"status":"int //订单状态",
+		"createTime":"date //订单创建时间",
+		"payTime":"date //订单支付时间",
+		"orderResources":[{
+			"resource":{
+				"id":"int //项目资源id",
+				"projectId":"int //项目id(外键)",
+				"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+				"filename":"string //保存在oss里的资源文件名(包括前缀)",
+				"previewUrl":"string //保存在oss里的预览文件地址",
+				"download":"int //资源文件下载量",
+				"score":"double //资源平均分",
+				"scoreCount":"int //评分人数"
+			},
+			"discount":"double //资源折扣",
+			"price":"double //贡献点小计"
+		}]
+	}],
+	"time":"string //响应时间"
+}
+```
+## 创建订单
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/order `POST` 
+
+**请求体**
+
+```json
+{
+	"projectId":"int //项目id【必须】",
+	"resourceIds":"int[] //项目资源id数组【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"int //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 对订单进行操作
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/order/{orderId} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+orderId|int|否|订单号
+action|string|否|操作，取值pay、cancel
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 贡献点排名相关请求
 ## 获取贡献点总排行榜
 
@@ -2302,6 +2452,104 @@ projectId|int|否|项目id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":"boolean //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 查看项目资源全部评价信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/score/{projectResourceId} `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"user":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校"
+		},
+		"resourceId":"int //项目资源id",
+		"score":"double //资源评分",
+		"comment":"string //评论"
+	}],
+	"time":"string //响应时间"
+}
+```
+## 评价项目资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/score/{projectResourceId} `POST` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+**请求体**
+
+```json
+{
+	"score":"double //资源评分",
+	"comment":"string //评论"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 查看全部已购资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/resource/purchased `GET` 
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"resource":{
+			"id":"int //项目资源id",
+			"projectId":"int //项目id(外键)",
+			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+			"filename":"string //保存在oss里的资源文件名(包括前缀)",
+			"previewUrl":"string //保存在oss里的预览文件地址",
+			"download":"int //资源文件下载量",
+			"score":"double //资源平均分",
+			"scoreCount":"int //评分人数"
+		},
+		"purchaseTime":"date //购买时间"
+	}],
 	"time":"string //响应时间"
 }
 ```

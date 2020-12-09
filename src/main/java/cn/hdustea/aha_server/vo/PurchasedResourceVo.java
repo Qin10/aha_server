@@ -11,6 +11,13 @@ import java.util.Date;
  **/
 @Data
 public class PurchasedResourceVo {
+    /**
+     * 购买的资源
+     */
     private ProjectResourceVo resource;
+
+    /**
+     * 购买时间
+     */
     private Date purchaseTime;
 }

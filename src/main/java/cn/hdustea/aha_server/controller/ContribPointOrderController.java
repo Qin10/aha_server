@@ -25,6 +25,11 @@ public class ContribPointOrderController {
     @Resource
     private ContribPointOrderService contribPointOrderService;
 
+    /**
+     * 获取订单信息
+     *
+     * @param orderId 订单号
+     */
     @RequiresLogin
     @GetMapping("/{orderId}")
     public ResponseBean<ContribPointOrderVo> getOrderVoById(@PathVariable("orderId") int orderId) {
@@ -32,6 +37,9 @@ public class ContribPointOrderController {
         return new ResponseBean<>(200, "succ", contribPointOrderVo);
     }
 
+    /**
+     * 获取用户全部订单信息
+     */
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean<List<ContribPointOrderVo>> getAllPersonalOrderVo() {
@@ -40,6 +48,11 @@ public class ContribPointOrderController {
         return new ResponseBean<>(200, "succ", ContribPointOrderVos);
     }
 
+    /**
+     * 创建订单
+     *
+     * @param contribPointOrderResourcesDto 购买资源列表
+     */
     @RequiresLogin
     @PostMapping()
     public ResponseBean<Integer> createOrder(@RequestBody @Validated ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException {
@@ -48,6 +61,12 @@ public class ContribPointOrderController {
         return new ResponseBean<>(200, "succ", orderId);
     }
 
+    /**
+     * 对订单进行操作
+     *
+     * @param orderId 订单号
+     * @param action  操作，取值pay、cancel
+     */
     @RequiresLogin
     @PutMapping("/{orderId}")
     public ResponseBean<Object> operateOrder(@PathVariable("orderId") int orderId, @RequestParam("action") String action) throws UpdateException {

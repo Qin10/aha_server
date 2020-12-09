@@ -43,5 +43,8 @@ public class ContribPointOrderVo {
      */
     private Date payTime;
 
+    /**
+     * 订单对应项目资源
+     */
     private List<OrderProjectResourceVo> orderResources;
 }

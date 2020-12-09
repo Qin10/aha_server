@@ -380,6 +380,11 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", result);
     }
 
+    /**
+     * 查看项目资源全部评价信息
+     *
+     * @param projectResourceId 项目资源id
+     */
     @RequiresLogin
     @GetMapping("/score/{projectResourceId}")
     public ResponseBean<List<ProjectResourceScoreVo>> getAllResourceScoreById(@PathVariable("projectResourceId") int projectResourceId) {
@@ -387,6 +392,12 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", projectResourceScoreVos);
     }
 
+    /**
+     * 评价项目资源
+     *
+     * @param projectResourceScoreDto 资源评分信息
+     * @param projectResourceId       项目资源id
+     */
     @RequiresLogin
     @PostMapping("/score/{projectResourceId}")
     public ResponseBean<Object> saveResourceScore(@RequestBody ProjectResourceScoreDto projectResourceScoreDto, @PathVariable("projectResourceId") int projectResourceId) throws InsertException {
@@ -395,6 +406,9 @@ public class ProjectController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 查看全部已购资源
+     */
     @RequiresLogin
     @GetMapping("/resource/purchased")
     public ResponseBean<List<PurchasedResourceVo>> getAllPurchasedResource() {
