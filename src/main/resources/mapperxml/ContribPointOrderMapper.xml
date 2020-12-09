@@ -1,105 +1,140 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.ContribPointOrderMapper">
-  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.ContribPointOrder">
-    <!--@mbg.generated-->
-    <!--@Table contrib_point_order-->
-    <id column="cor_id" property="id" />
-    <result column="cor_user_id" property="userId" />
-    <result column="cor_price" property="price" />
-    <result column="cor_status" property="status" />
-    <result column="cor_create_time" property="createTime" />
-    <result column="cor_pay_time" property="payTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    cor_id, cor_user_id, cor_price, cor_status, cor_create_time, cor_pay_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from contrib_point_order
-    where cor_id = #{id}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from contrib_point_order
-    where cor_id = #{id}
-  </delete>
-  <insert id="insert" keyColumn="cor_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ContribPointOrder" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into contrib_point_order (cor_user_id, cor_price, cor_status, cor_create_time, cor_pay_time)
-    values (#{userId}, #{price}, #{status}, #{createTime}, #{payTime})
-  </insert>
-  <insert id="insertSelective" keyColumn="cor_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ContribPointOrder" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into contrib_point_order
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        cor_user_id,
-      </if>
-      <if test="price != null">
-        cor_price,
-      </if>
-      <if test="status != null">
-        cor_status,
-      </if>
-      <if test="createTime != null">
-        cor_create_time,
-      </if>
-      <if test="payTime != null">
-        cor_pay_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId},
-      </if>
-      <if test="price != null">
-        #{price},
-      </if>
-      <if test="status != null">
-        #{status},
-      </if>
-      <if test="createTime != null">
-        #{createTime},
-      </if>
-      <if test="payTime != null">
-        #{payTime},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.ContribPointOrder">
-    <!--@mbg.generated-->
-    update contrib_point_order
-    <set>
-      <if test="userId != null">
-        cor_user_id = #{userId},
-      </if>
-      <if test="price != null">
-        cor_price = #{price},
-      </if>
-      <if test="status != null">
-        cor_status = #{status},
-      </if>
-      <if test="createTime != null">
-        cor_create_time = #{createTime},
-      </if>
-      <if test="payTime != null">
-        cor_pay_time = #{payTime},
-      </if>
-    </set>
-    where cor_id = #{id}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ContribPointOrder">
-    <!--@mbg.generated-->
-    update contrib_point_order
-    set cor_user_id = #{userId},
-      cor_price = #{price},
-      cor_status = #{status},
-      cor_create_time = #{createTime},
-      cor_pay_time = #{payTime}
-    where cor_id = #{id}
-  </update>
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.ContribPointOrder">
+        <!--@mbg.generated-->
+        <!--@Table contrib_point_order-->
+        <id column="cor_id" property="id"/>
+        <result column="cor_user_id" property="userId"/>
+        <result column="cor_price" property="price"/>
+        <result column="cor_status" property="status"/>
+        <result column="cor_create_time" property="createTime"/>
+        <result column="cor_pay_time" property="payTime"/>
+    </resultMap>
+    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.ContribPointOrderVo">
+        <id column="cor_id" property="id"/>
+        <result column="cor_price" property="price"/>
+        <result column="cor_status" property="status"/>
+        <result column="cor_create_time" property="createTime"/>
+        <result column="cor_pay_time" property="payTime"/>
+        <association property="user" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" column="cor_user_id"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+        <collection property="orderResources" ofType="cn.hdustea.aha_server.vo.OrderProjectResourceVo" column="cor_id"
+                    select="cn.hdustea.aha_server.mapper.OrderProjectResourceMapper.selectAllVoByOrderId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        cor_id, cor_user_id, cor_price, cor_status, cor_create_time, cor_pay_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from contrib_point_order
+        where cor_id = #{id}
+    </select>
+    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from contrib_point_order
+        where cor_id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from contrib_point_order
+        where cor_id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="cor_id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.ContribPointOrder" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into contrib_point_order (cor_user_id, cor_price, cor_status, cor_create_time, cor_pay_time)
+        values (#{userId}, #{price}, #{status}, #{createTime}, #{payTime})
+    </insert>
+    <insert id="insertSelective" keyColumn="cor_id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.ContribPointOrder" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into contrib_point_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                cor_user_id,
+            </if>
+            <if test="price != null">
+                cor_price,
+            </if>
+            <if test="status != null">
+                cor_status,
+            </if>
+            <if test="createTime != null">
+                cor_create_time,
+            </if>
+            <if test="payTime != null">
+                cor_pay_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="price != null">
+                #{price},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="payTime != null">
+                #{payTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.ContribPointOrder">
+        <!--@mbg.generated-->
+        update contrib_point_order
+        <set>
+            <if test="userId != null">
+                cor_user_id = #{userId},
+            </if>
+            <if test="price != null">
+                cor_price = #{price},
+            </if>
+            <if test="status != null">
+                cor_status = #{status},
+            </if>
+            <if test="createTime != null">
+                cor_create_time = #{createTime},
+            </if>
+            <if test="payTime != null">
+                cor_pay_time = #{payTime},
+            </if>
+        </set>
+        where cor_id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ContribPointOrder">
+        <!--@mbg.generated-->
+        update contrib_point_order
+        set cor_user_id     = #{userId},
+            cor_price       = #{price},
+            cor_status      = #{status},
+            cor_create_time = #{createTime},
+            cor_pay_time    = #{payTime}
+        where cor_id = #{id}
+    </update>
+
+<!--auto generated by MybatisCodeHelper on 2020-12-08-->
+    <select id="selectAllByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from contrib_point_order
+        where cor_user_id=#{userId}
+    </select>
+
+    <select id="selectAllVoByUserId" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from contrib_point_order
+        where cor_user_id=#{userId}
+    </select>
 </mapper>

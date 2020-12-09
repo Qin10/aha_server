@@ -1,10 +1,6 @@
 package cn.hdustea.aha_server.mapper;
-import cn.hdustea.aha_server.entity.ProjectResource;
-import cn.hdustea.aha_server.vo.ProjectResourceVo;
-import org.apache.ibatis.annotations.Param;
 
-import java.math.BigDecimal;
-import java.util.List;
+import cn.hdustea.aha_server.entity.ProjectResource;import cn.hdustea.aha_server.vo.ProjectResourceVo;import org.apache.ibatis.annotations.Param;import java.math.BigDecimal;import java.util.List;
 
 /**
  * ${description}
@@ -19,6 +15,8 @@ public interface ProjectResourceMapper {
     int insertSelective(ProjectResource record);
 
     ProjectResource selectByPrimaryKey(Integer id);
+
+    ProjectResourceVo selectVoByPrimaryKey(Integer id);
 
     int updateByPrimaryKeySelective(ProjectResource record);
 
@@ -38,5 +36,5 @@ public interface ProjectResourceMapper {
 
     ProjectResource selectByFilename(@Param("filename") String filename);
 
-    int updateScoreAndScoreCountById(@Param("updatedScore")BigDecimal updatedScore,@Param("updatedScoreCount")Integer updatedScoreCount,@Param("id")Integer id);
+    int updateScoreAndScoreCountById(@Param("updatedScore") BigDecimal updatedScore, @Param("updatedScoreCount") Integer updatedScoreCount, @Param("id") Integer id);
 }

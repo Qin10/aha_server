@@ -18,6 +18,11 @@ public class ProjectResourceVo {
     private Integer id;
 
     /**
+     * 项目id(外键)
+     */
+    private Integer projectId;
+
+    /**
      * 资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)
      */
     private String name;

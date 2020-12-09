@@ -1,89 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.OrderProjectResourceMapper">
-  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.OrderProjectResource">
-    <!--@mbg.generated-->
-    <!--@Table order_project_resource-->
-    <id column="opr_order_id" property="orderId" />
-    <id column="opr_resource_id" property="resourceId" />
-    <result column="opr_discount" property="discount" />
-    <result column="opr_price" property="price" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    opr_order_id, opr_resource_id, opr_discount, opr_price
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from order_project_resource
-    where opr_order_id = #{orderId}
-      and opr_resource_id = #{resourceId}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="map">
-    <!--@mbg.generated-->
-    delete from order_project_resource
-    where opr_order_id = #{orderId}
-      and opr_resource_id = #{resourceId}
-  </delete>
-  <insert id="insert" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
-    <!--@mbg.generated-->
-    insert into order_project_resource (opr_order_id, opr_resource_id, opr_discount, opr_price)
-    values (#{orderId}, #{resourceId}, #{discount}, #{price})
-  </insert>
-  <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
-    <!--@mbg.generated-->
-    insert into order_project_resource
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="orderId != null">
-        opr_order_id,
-      </if>
-      <if test="resourceId != null">
-        opr_resource_id,
-      </if>
-      <if test="discount != null">
-        opr_discount,
-      </if>
-      <if test="price != null">
-        opr_price,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="orderId != null">
-        #{orderId},
-      </if>
-      <if test="resourceId != null">
-        #{resourceId},
-      </if>
-      <if test="discount != null">
-        #{discount},
-      </if>
-      <if test="price != null">
-        #{price},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
-    <!--@mbg.generated-->
-    update order_project_resource
-    <set>
-      <if test="discount != null">
-        opr_discount = #{discount},
-      </if>
-      <if test="price != null">
-        opr_price = #{price},
-      </if>
-    </set>
-    where opr_order_id = #{orderId}
-      and opr_resource_id = #{resourceId}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
-    <!--@mbg.generated-->
-    update order_project_resource
-    set opr_discount = #{discount},
-      opr_price = #{price}
-    where opr_order_id = #{orderId}
-      and opr_resource_id = #{resourceId}
-  </update>
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.OrderProjectResource">
+        <!--@mbg.generated-->
+        <!--@Table order_project_resource-->
+        <id column="opr_order_id" property="orderId"/>
+        <id column="opr_resource_id" property="resourceId"/>
+        <result column="opr_discount" property="discount"/>
+        <result column="opr_price" property="price"/>
+    </resultMap>
+    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.OrderProjectResourceVo">
+        <result column="opr_discount" property="discount"/>
+        <result column="opr_price" property="price"/>
+        <association property="resource" javaType="cn.hdustea.aha_server.vo.ProjectResourceVo" column="opr_resource_id"
+                     select="cn.hdustea.aha_server.mapper.ProjectResourceMapper.selectVoByPrimaryKey"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        opr_order_id, opr_resource_id, opr_discount, opr_price
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from order_project_resource
+        where opr_order_id = #{orderId}
+          and opr_resource_id = #{resourceId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="map">
+        <!--@mbg.generated-->
+        delete
+        from order_project_resource
+        where opr_order_id = #{orderId}
+          and opr_resource_id = #{resourceId}
+    </delete>
+    <insert id="insert" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
+        <!--@mbg.generated-->
+        insert into order_project_resource (opr_order_id, opr_resource_id, opr_discount, opr_price)
+        values (#{orderId}, #{resourceId}, #{discount}, #{price})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
+        <!--@mbg.generated-->
+        insert into order_project_resource
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                opr_order_id,
+            </if>
+            <if test="resourceId != null">
+                opr_resource_id,
+            </if>
+            <if test="discount != null">
+                opr_discount,
+            </if>
+            <if test="price != null">
+                opr_price,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderId != null">
+                #{orderId},
+            </if>
+            <if test="resourceId != null">
+                #{resourceId},
+            </if>
+            <if test="discount != null">
+                #{discount},
+            </if>
+            <if test="price != null">
+                #{price},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
+        <!--@mbg.generated-->
+        update order_project_resource
+        <set>
+            <if test="discount != null">
+                opr_discount = #{discount},
+            </if>
+            <if test="price != null">
+                opr_price = #{price},
+            </if>
+        </set>
+        where opr_order_id = #{orderId}
+          and opr_resource_id = #{resourceId}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.OrderProjectResource">
+        <!--@mbg.generated-->
+        update order_project_resource
+        set opr_discount = #{discount},
+            opr_price    = #{price}
+        where opr_order_id = #{orderId}
+          and opr_resource_id = #{resourceId}
+    </update>
+
+    <!--auto generated by MybatisCodeHelper on 2020-12-08-->
+    <select id="selectAllByOrderId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_project_resource
+        where opr_order_id = #{orderId}
+    </select>
+
+    <select id="selectAllVoByOrderId" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from order_project_resource
+        where opr_order_id = #{orderId}
+    </select>
 </mapper>

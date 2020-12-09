@@ -1,26 +1,27 @@
-package cn.hdustea.aha_server.entity;
+package cn.hdustea.aha_server.vo;
 
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
- * ${description}
+ * 贡献点订单VO
  *
  * @author STEA_YY
  **/
 @Data
-public class ContribPointOrder {
+public class ContribPointOrderVo {
     /**
      * 订单号
      */
     private Integer id;
 
     /**
-     * 用户id
+     * 用户
      */
-    private Integer userId;
+    private UserRoughInfoVo user;
 
     /**
      * 订单总价
@@ -41,4 +42,6 @@ public class ContribPointOrder {
      * 订单支付时间
      */
     private Date payTime;
+
+    private List<OrderProjectResourceVo> orderResources;
 }

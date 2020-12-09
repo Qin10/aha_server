@@ -6,12 +6,15 @@ import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.dto.ProjectResourceScoreDto;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.entity.ProjectResourceScore;
+import cn.hdustea.aha_server.entity.PurchasedResource;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceScoreMapper;
+import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
 import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.vo.ProjectResourceScoreVo;
+import cn.hdustea.aha_server.vo.PurchasedResourceVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,6 +37,8 @@ public class ProjectResourceService {
     private ProjectResourceMapper projectResourceMapper;
     @Resource
     private ProjectResourceScoreMapper projectResourceScoreMapper;
+    @Resource
+    private PurchasedResourceMapper purchasedResourceMapper;
     @Resource
     private OssService ossService;
     @Resource
@@ -150,5 +155,14 @@ public class ProjectResourceService {
 
     public List<ProjectResourceScoreVo> getAllResourceScoreById(int resourceId) {
         return projectResourceScoreMapper.selectAllVoByResourceId(resourceId);
+    }
+
+    public boolean purchasedResource(int userId, int resourceId) {
+        PurchasedResource purchasedResource = purchasedResourceMapper.selectByUserIdAndResourceId(userId, resourceId);
+        return purchasedResource != null;
+    }
+
+    public List<PurchasedResourceVo> getAllPurchasedResourceVoByUserId(int userId) {
+        return purchasedResourceMapper.selectAllVoByUserId(userId);
     }
 }

@@ -163,13 +163,40 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目列表
-GET http://{{host}}/project?pageNum=1&pageSize=5&userId=55&sortBy=awardLevel&orderBy=desc
+GET http://{{host}}/project?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET http://{{host}}/project/70
+GET http://{{host}}/project/79
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###提交订单
+POST http://{{host}}/order
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "projectId": 79,
+  "resourceIds": [
+    78,
+    79
+  ]
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###支付订单
+PUT http://{{host}}/order/5?action=pay
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取全部已购买资源
+GET http://{{host}}/project/resource/purchased
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

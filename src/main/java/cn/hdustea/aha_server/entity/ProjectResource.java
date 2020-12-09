@@ -56,4 +56,14 @@ public class ProjectResource {
      * 评分人数
      */
     private Integer scoreCount;
+
+    /**
+     * 资源价格
+     */
+    private BigDecimal price;
+
+    /**
+     * 资源折扣
+     */
+    private BigDecimal discount;
 }

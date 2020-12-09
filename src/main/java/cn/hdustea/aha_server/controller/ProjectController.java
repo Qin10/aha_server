@@ -311,7 +311,11 @@ public class ProjectController {
     @RequestLimit()
     @RequiresLogin
     @GetMapping("/resource/{projectResourceId}/sign/download")
-    public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
+    public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
+            throw new PermissionDeniedException("您尚未购买本资源！");
+        }
         String url = projectResourceService.signDownloadProjectResourceByid(projectResourceId);
         UrlVo urlVo = new UrlVo();
         urlVo.setUrl(url);
@@ -389,6 +393,14 @@ public class ProjectController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         projectResourceService.saveResourceScore(projectResourceScoreDto, projectResourceId, userId);
         return new ResponseBean<>(200, "succ", null);
+    }
+
+    @RequiresLogin
+    @GetMapping("/resource/purchased")
+    public ResponseBean<List<PurchasedResourceVo>> getAllPurchasedResource() {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        List<PurchasedResourceVo> purchasedResourceVos = projectResourceService.getAllPurchasedResourceVoByUserId(userId);
+        return new ResponseBean<>(200, "succ", purchasedResourceVos);
     }
 
     /**

@@ -1,7 +1,10 @@
 package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.OrderProjectResource;
+import cn.hdustea.aha_server.vo.OrderProjectResourceVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * ${description}
@@ -20,4 +23,8 @@ public interface OrderProjectResourceMapper {
     int updateByPrimaryKeySelective(OrderProjectResource record);
 
     int updateByPrimaryKey(OrderProjectResource record);
+
+    List<OrderProjectResource> selectAllByOrderId(@Param("orderId")Integer orderId);
+
+    List<OrderProjectResourceVo> selectAllVoByOrderId(@Param("orderId")Integer orderId);
 }

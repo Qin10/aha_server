@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -179,5 +180,9 @@ public class UserService {
      */
     public void updateSignedContract(Integer id, boolean signedContract) {
         userMapper.updateSignedContractById(signedContract, id);
+    }
+
+    public void updateDescContribPoint(Integer id, BigDecimal descContribPoint) {
+        userMapper.updateDecContribPointById(descContribPoint, id);
     }
 }
