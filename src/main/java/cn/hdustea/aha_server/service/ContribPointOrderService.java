@@ -1,13 +1,12 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.constants.ContribPointLogConstants;
 import cn.hdustea.aha_server.constants.ContribPointOrderConstants;
 import cn.hdustea.aha_server.dto.ContribPointOrderResourcesDto;
-import cn.hdustea.aha_server.entity.ContribPointOrder;
-import cn.hdustea.aha_server.entity.OrderProjectResource;
-import cn.hdustea.aha_server.entity.ProjectResource;
-import cn.hdustea.aha_server.entity.PurchasedResource;
+import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
+import cn.hdustea.aha_server.mapper.ContribPointLogMapper;
 import cn.hdustea.aha_server.mapper.ContribPointOrderMapper;
 import cn.hdustea.aha_server.mapper.OrderProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
@@ -35,6 +34,8 @@ public class ContribPointOrderService {
     @Resource
     private OrderProjectResourceMapper orderProjectResourceMapper;
     @Resource
+    private ContribPointLogMapper contribPointLogMapper;
+    @Resource
     private UserService userService;
     @Resource
     private ProjectResourceService projectResourceService;
@@ -55,25 +56,25 @@ public class ContribPointOrderService {
         contribPointOrder.setStatus(0);
         contribPointOrder.setUserId(userId);
         contribPointOrderMapper.insertSelective(contribPointOrder);
-            for (Integer resourceId : contribPointOrderResourcesDto.getResourceIds()) {
-                ProjectResource projectResource = projectResourceService.getProjectResourceById(resourceId);
-                if (projectResource == null) {
-                    throw new InsertException("资源id=" + resourceId + "不存在！");
-                }
-                if (!projectResource.getProjectId().equals(contribPointOrderResourcesDto.getProjectId())){
-                    throw new InsertException("资源id=" + resourceId + "不属于指定项目！");
-                }
-                if (purchasedResourceMapper.selectByUserIdAndResourceId(userId, resourceId) != null) {
-                    throw new InsertException("您已购买过该资源！");
-                }
-                OrderProjectResource orderProjectResource = new OrderProjectResource();
-                orderProjectResource.setOrderId(contribPointOrder.getId());
-                orderProjectResource.setResourceId(projectResource.getId());
-                orderProjectResource.setPrice(projectResource.getPrice());
-                orderProjectResource.setDiscount(projectResource.getDiscount());
-                orderProjectResourceMapper.insertSelective(orderProjectResource);
-                totalPrice = totalPrice.add(orderProjectResource.getPrice().multiply(BigDecimal.valueOf(1).subtract(orderProjectResource.getDiscount())));
+        for (Integer resourceId : contribPointOrderResourcesDto.getResourceIds()) {
+            ProjectResource projectResource = projectResourceService.getProjectResourceById(resourceId);
+            if (projectResource == null) {
+                throw new InsertException("资源id=" + resourceId + "不存在！");
             }
+            if (!projectResource.getProjectId().equals(contribPointOrderResourcesDto.getProjectId())) {
+                throw new InsertException("资源id=" + resourceId + "不属于指定项目！");
+            }
+            if (purchasedResourceMapper.selectByUserIdAndResourceId(userId, resourceId) != null) {
+                throw new InsertException("您已购买过该资源！");
+            }
+            OrderProjectResource orderProjectResource = new OrderProjectResource();
+            orderProjectResource.setOrderId(contribPointOrder.getId());
+            orderProjectResource.setResourceId(projectResource.getId());
+            orderProjectResource.setPrice(projectResource.getPrice());
+            orderProjectResource.setDiscount(projectResource.getDiscount());
+            orderProjectResourceMapper.insertSelective(orderProjectResource);
+            totalPrice = totalPrice.add(orderProjectResource.getPrice().multiply(BigDecimal.valueOf(1).subtract(orderProjectResource.getDiscount())));
+        }
 
         contribPointOrder.setPrice(totalPrice);
         contribPointOrderMapper.updateByPrimaryKeySelective(contribPointOrder);
@@ -97,15 +98,22 @@ public class ContribPointOrderService {
             throw new UpdateException("用户贡献点余额不足！");
         }
         userService.updateDescContribPoint(userId, contribPointOrder.getPrice());
+        Date payTime = new Date();
+        ContribPointLog contribPointLog = new ContribPointLog();
+        contribPointLog.setUserId(userId);
+        contribPointLog.setSource(ContribPointLogConstants.FROM_PAY_RESOURCE);
+        contribPointLog.setAmount(contribPointOrder.getPrice().negate());
+        contribPointLog.setTime(payTime);
+        contribPointLogMapper.insertSelective(contribPointLog);
         contribPointOrder.setStatus(ContribPointOrderConstants.STATUS_PAID);
-        contribPointOrder.setPayTime(new Date());
+        contribPointOrder.setPayTime(payTime);
         contribPointOrderMapper.updateByPrimaryKeySelective(contribPointOrder);
         List<OrderProjectResource> orderProjectResources = orderProjectResourceMapper.selectAllByOrderId(orderId);
         for (OrderProjectResource orderProjectResource : orderProjectResources) {
             PurchasedResource purchasedResource = new PurchasedResource();
             purchasedResource.setUserId(userId);
             purchasedResource.setResourceId(orderProjectResource.getResourceId());
-            purchasedResource.setPurchaseTime(contribPointOrder.getPayTime());
+            purchasedResource.setPurchaseTime(payTime);
             purchasedResourceMapper.insertSelective(purchasedResource);
         }
     }
