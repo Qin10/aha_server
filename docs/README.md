@@ -968,13 +968,17 @@ projectResourceId|int|否|项目资源id
 
 ```json
 {
-	"id":"int //项目资源id",
-	"projectId":"int //团队id(外键)",
+	"id":"int",
+	"projectId":"int //项目id(外键)",
 	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
 	"filename":"string //保存在oss里的资源文件名(包括前缀)",
 	"previewUrl":"string //保存在oss里的预览文件地址",
 	"download":"int //资源文件下载量",
-	"freezed":"boolean //资源是否被冻结"
+	"freezed":"boolean //资源是否被冻结",
+	"score":"double //资源平均分",
+	"scoreCount":"int //评分人数",
+	"price":"double //资源价格",
+	"discount":"double //资源折扣"
 }
 ```
 
@@ -1864,8 +1868,7 @@ projectId|int|否|项目id
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校",
-			"trueName":"string //用户真实姓名"
+			"school":"string //用户学校"
 		},
 		"name":"string //团队名称",
 		"avatarUrl":"string //团队头像url",
@@ -1893,8 +1896,7 @@ projectId|int|否|项目id
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校",
-				"trueName":"string //用户真实姓名"
+				"school":"string //用户学校"
 			},
 			"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 			"job":"string //团队成员职务",
@@ -1902,10 +1904,13 @@ projectId|int|否|项目id
 		}],
 		"resources":[{
 			"id":"int //项目资源id",
+			"projectId":"int //项目id(外键)",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"previewUrl":"string //保存在oss里的预览文件地址",
-			"download":"int //资源文件下载量"
+			"download":"int //资源文件下载量",
+			"score":"double //资源平均分",
+			"scoreCount":"int //评分人数"
 		}]
 	},
 	"time":"string //响应时间"
@@ -2226,10 +2231,13 @@ projectId|int|否|项目id
 	"msg":"string //响应消息",
 	"data":[{
 		"id":"int //项目资源id",
+		"projectId":"int //项目id(外键)",
 		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
 		"filename":"string //保存在oss里的资源文件名(包括前缀)",
 		"previewUrl":"string //保存在oss里的预览文件地址",
-		"download":"int //资源文件下载量"
+		"download":"int //资源文件下载量",
+		"score":"double //资源平均分",
+		"scoreCount":"int //评分人数"
 	}],
 	"time":"string //响应时间"
 }
