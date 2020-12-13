@@ -25,10 +25,13 @@
         <result column="pr_download" property="download"/>
         <result column="pr_score" property="score"/>
         <result column="pr_score_count" property="scoreCount"/>
+        <result column="pr_price" property="price"/>
+        <result column="pr_discount" property="discount"/>
     </resultMap>
     <sql id="Vo_Column_List">
         <!--@mbg.generated-->
-        pr_id, pr_project_id, pr_name, pr_filename, pr_preview_url, pr_download, pr_score, pr_score_count
+        pr_id, pr_project_id, pr_name, pr_filename, pr_preview_url, pr_download, pr_score, pr_score_count, pr_price,
+        pr_discount
     </sql>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->

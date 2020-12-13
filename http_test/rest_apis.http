@@ -500,7 +500,6 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
-
 ###添加竞赛标签
 POST http://{{host}}/admin/competition/tag
 Content-Type: application/json
