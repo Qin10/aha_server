@@ -2,10 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.dto.MessageDto;
-import cn.hdustea.aha_server.dto.ProjectCheckDto;
-import cn.hdustea.aha_server.dto.ProjectDto;
-import cn.hdustea.aha_server.dto.UserDto;
+import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
@@ -86,6 +83,19 @@ public class ManagementController {
     @PostMapping("/project/check/{projectId}")
     public ResponseBean<Object> checkProject(@PathVariable("projectId") int projectId, @RequestBody ProjectCheckDto projectCheckDto) throws UpdateException {
         projectService.checkProjectByProjectId(projectCheckDto, projectId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 审核项目资源
+     *
+     * @param resourceId              项目资源id
+     * @param projectResourceCheckDto 项目资源审核相关信息
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PostMapping("/project/resource/check/{resourceId}")
+    public ResponseBean<Object> checkProjectResource(@PathVariable("resourceId") int resourceId, @RequestBody ProjectResourceCheckDto projectResourceCheckDto) throws UpdateException {
+        projectResourceService.checkResourceByResourceId(projectResourceCheckDto, resourceId);
         return new ResponseBean<>(200, "succ", null);
     }
 

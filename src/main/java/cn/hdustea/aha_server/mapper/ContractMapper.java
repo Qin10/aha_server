@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.Contract;import org.apache.ibatis.annotations.Param;
 
 /**
- * ${description}
+ * 合同表mapper
  *
  * @author STEA_YY
  **/

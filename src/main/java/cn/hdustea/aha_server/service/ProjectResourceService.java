@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
+import cn.hdustea.aha_server.dto.ProjectResourceCheckDto;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.dto.ProjectResourceScoreDto;
 import cn.hdustea.aha_server.entity.ProjectResource;
@@ -9,6 +10,7 @@ import cn.hdustea.aha_server.entity.ProjectResourceScore;
 import cn.hdustea.aha_server.entity.PurchasedResource;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
+import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceScoreMapper;
 import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
@@ -164,5 +166,13 @@ public class ProjectResourceService {
 
     public List<PurchasedResourceVo> getAllPurchasedResourceVoByUserId(int userId) {
         return purchasedResourceMapper.selectAllVoByUserId(userId);
+    }
+
+    public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException {
+        ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
+        if (projectResource == null) {
+            throw new UpdateException("项目资源不存在！");
+        }
+        projectResourceMapper.updatePriceAndDiscountById(projectResourceCheckDto.getPrice(), projectResourceCheckDto.getDiscount(), resourceId);
     }
 }

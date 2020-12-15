@@ -1,9 +1,13 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.Message;import cn.hdustea.aha_server.vo.MessageVo;import org.apache.ibatis.annotations.Param;import java.util.List;
+import cn.hdustea.aha_server.entity.Message;
+import cn.hdustea.aha_server.vo.MessageVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
- * ${description}
+ * 站内信记录表mapper
  *
  * @author STEA_YY
  **/

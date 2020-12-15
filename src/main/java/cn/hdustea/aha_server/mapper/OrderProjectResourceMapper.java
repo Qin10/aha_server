@@ -7,10 +7,10 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * ${description}
+ *
+ * @author STEA_YY
+ **/
 public interface OrderProjectResourceMapper {
     int deleteByPrimaryKey(@Param("orderId") Integer orderId, @Param("resourceId") Integer resourceId);
 
@@ -24,7 +24,7 @@ public interface OrderProjectResourceMapper {
 
     int updateByPrimaryKey(OrderProjectResource record);
 
-    List<OrderProjectResource> selectAllByOrderId(@Param("orderId")Integer orderId);
+    List<OrderProjectResource> selectAllByOrderId(@Param("orderId") Integer orderId);
 
-    List<OrderProjectResourceVo> selectAllVoByOrderId(@Param("orderId")Integer orderId);
+    List<OrderProjectResourceVo> selectAllVoByOrderId(@Param("orderId") Integer orderId);
 }

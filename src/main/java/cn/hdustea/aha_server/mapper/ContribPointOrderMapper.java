@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
- * ${description}
+ * 贡献点订单表mapper
  *
  * @author STEA_YY
  **/

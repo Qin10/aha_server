@@ -788,6 +788,39 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
+## 审核项目资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/resource/check/{resourceId} `POST` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+resourceId|int|否|项目资源id
+
+**请求体**
+
+```json
+{
+	"price":"double //资源价格【必须】",
+	"discount":"double //资源折扣【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 ## 修改项目详细信息
 
 *作者: STEA_YY*

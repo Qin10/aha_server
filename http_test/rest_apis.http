@@ -339,14 +339,16 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST http://{{host}}/project/resource/70
+POST http://{{host}}/project/resource/78
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
   "type": 1,
   "name": "项目咕叽书",
-  "filename": "aaab.doc"
+  "filename": "aaab.doc",
+  "price": 10.0,
+  "discount": 0.0
 }
 
 ###修改项目资源
@@ -521,5 +523,11 @@ Authorization: {{auth_token}}
   "compTagId": 1,
   "intro": "”中国大学生服务外包创新创业大赛“（以下简称大赛），是响应国家关于鼓励服务外包产业发展、加强服务外包人才培养的相关战略举措与号召，举办的每年一届的全国性竞赛。大赛均由中华人民共和国教育部、中华人民共和国商务部和无锡市人民政府联合主办，由国家服务外包人力资源研究院、无锡市商务局、无锡市教育局、江南大学承办。大赛的主要目的是搭建产学结合的大学生服务外包创新创业能力展示平台；促进校企交流，促进高等教育为服务经济发展提供人才保障；宣传服务经济，提升社会公众对服务外包产业发展的关注度和重视度。参赛队伍均来自中国国内高等院校，以本科生为主，自由组队。大赛开放方式竞赛，经过报名参赛、自主选题、分散备赛和集中答辩的环节，评选出相应的优秀团队。大赛在选题上呼应服务外包产业，关注服务科学；在形式上，注重学生的团队协作，在虚拟的商业环境中解决问题。赛题一方面来源于现代服务产业企业的现实需求，鼓励学生综合考虑业务模型、技术方案、商业运营等各种因素，提供完整方案，立足实际情况创新应用；另一方面，大赛还鼓励参赛团队提出有创造力的创意项目，在优秀方案的基础上实现创业，增强大学生的创新创业意识。在评审环节过程与结果并重，增强能力培养导向，尤其关注团队的综合素质、学习能力与问题解决能力。往届大赛吸引了超过五百所高校和数十家产业代表企业积极参与，收到了良好的产业影响和社会效果，在全国高校与企业中的影响力也不断提升。我们将为大赛推动产业发展，加快人才培养和宣传及服务经济的目标不断努力奋斗。努力将大赛逐步发展成广受欢迎的国际性一流竞赛。"
 }
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###查看用户项目
+GET http://{{host}}/project/me?pageNum=1&pageSize=5
+Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

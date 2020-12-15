@@ -3,10 +3,10 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.FinancialOrder;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * 财务订单表mapper
+ *
+ * @author STEA_YY
+ **/
 public interface FinancialOrderMapper {
     int deleteByPrimaryKey(Integer id);
 

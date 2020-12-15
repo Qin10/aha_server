@@ -3,10 +3,10 @@ package cn.hdustea.aha_server.mapper;
 import cn.hdustea.aha_server.entity.ContribPointLog;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * 贡献点变动日志mapper
+ *
+ * @author STEA_YY
+ **/
 public interface ContribPointLogMapper {
     int deleteByPrimaryKey(Integer id);
 
