@@ -167,13 +167,13 @@ public class ManagementController {
     /**
      * 修改项目资源信息
      *
-     * @param projectResource   项目资源信息
-     * @param projectResourceId 项目资源id
+     * @param projectResourceUpdateDto 项目资源信息
+     * @param projectResourceId        项目资源id
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/project/resource/{projectResourceId}")
-    public ResponseBean<Object> updateProjectResourceById(@RequestBody ProjectResource projectResource, @PathVariable("projectResourceId") int projectResourceId) {
-        projectResourceService.updateProjectResourceById(projectResource, projectResourceId);
+    public ResponseBean<Object> updateProjectResourceById(@RequestBody ProjectResourceUpdateDto projectResourceUpdateDto, @PathVariable("projectResourceId") int projectResourceId) {
+        projectResourceService.updateProjectResourceById(projectResourceUpdateDto, projectResourceId);
         return new ResponseBean<>(200, "succ", null);
     }
 

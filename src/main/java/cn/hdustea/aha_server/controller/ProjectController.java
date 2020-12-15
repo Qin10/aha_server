@@ -7,8 +7,8 @@ import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.ProjectDto;
 import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.dto.ProjectResourceScoreDto;
+import cn.hdustea.aha_server.dto.ProjectResourceUpdateDto;
 import cn.hdustea.aha_server.entity.ProjectMember;
-import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
@@ -287,6 +287,23 @@ public class ProjectController {
     }
 
     /**
+     * 更新项目资源
+     *
+     * @param projectResourceId        项目资源id
+     * @param projectResourceUpdateDto 项目资源信息
+     */
+    @RequiresLogin(requireSignContract = true)
+    @PutMapping("/resource/{projectResourceId}")
+    public ResponseBean<Object> updateProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestBody ProjectResourceUpdateDto projectResourceUpdateDto) throws PermissionDeniedException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectResourceService.hasPermission(userId, projectResourceId)) {
+            throw new PermissionDeniedException();
+        }
+        projectResourceService.updateProjectResourceById(projectResourceUpdateDto, projectResourceId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
      * 删除项目资源
      *
      * @param projectResourceId 项目资源id
@@ -295,8 +312,7 @@ public class ProjectController {
     @DeleteMapping("/resource/{projectResourceId}")
     public ResponseBean<Object> deleteProjectResourceById(@PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        ProjectResource possibleProjectResource = projectResourceService.getProjectResourceById(projectResourceId);
-        if (possibleProjectResource == null || !projectService.hasPermission(userId, possibleProjectResource.getProjectId())) {
+        if (!projectResourceService.hasPermission(userId, projectResourceId)) {
             throw new PermissionDeniedException();
         }
         projectResourceService.deleteProjectResourceById(projectResourceId);

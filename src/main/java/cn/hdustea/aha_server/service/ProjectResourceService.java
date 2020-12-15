@@ -1,10 +1,7 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.constants.RedisConstants;
-import cn.hdustea.aha_server.dto.DocumentConvertInfoDto;
-import cn.hdustea.aha_server.dto.ProjectResourceCheckDto;
-import cn.hdustea.aha_server.dto.ProjectResourceDto;
-import cn.hdustea.aha_server.dto.ProjectResourceScoreDto;
+import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.entity.ProjectResourceScore;
 import cn.hdustea.aha_server.entity.PurchasedResource;
@@ -43,6 +40,8 @@ public class ProjectResourceService {
     private PurchasedResourceMapper purchasedResourceMapper;
     @Resource
     private OssService ossService;
+    @Resource
+    private ProjectService projectService;
     @Resource
     private RedisUtil redisUtil;
 
@@ -99,10 +98,12 @@ public class ProjectResourceService {
     /**
      * 根据项目资源id更新项目资源
      *
-     * @param projectResource 更新的项目资源
-     * @param id              项目资源id
+     * @param projectResourceUpdateDto 更新的项目资源
+     * @param id                       项目资源id
      */
-    public void updateProjectResourceById(ProjectResource projectResource, int id) {
+    public void updateProjectResourceById(ProjectResourceUpdateDto projectResourceUpdateDto, int id) {
+        ProjectResource projectResource = new ProjectResource();
+        BeanUtils.copyProperties(projectResourceUpdateDto, projectResource);
         projectResource.setId(id);
         projectResourceMapper.updateByPrimaryKeySelective(projectResource);
     }
@@ -174,5 +175,13 @@ public class ProjectResourceService {
             throw new UpdateException("项目资源不存在！");
         }
         projectResourceMapper.updatePriceAndDiscountById(projectResourceCheckDto.getPrice(), projectResourceCheckDto.getDiscount(), resourceId);
+    }
+
+    public boolean hasPermission(int userId, int projectResourceId) {
+        ProjectResource projectResource = getProjectResourceById(projectResourceId);
+        if (projectResource == null) {
+            return false;
+        }
+        return projectService.hasPermission(userId, projectResource.getProjectId());
     }
 }
