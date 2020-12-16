@@ -3,7 +3,7 @@ package cn.hdustea.aha_server.task;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.entity.Project;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
-import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Slf4j
 public class ResourceReadTask {
     @javax.annotation.Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
     @javax.annotation.Resource
     private ProjectMapper projectMapper;
 
@@ -33,7 +33,7 @@ public class ResourceReadTask {
     @Async
     public void updateResourceRead() {
         log.debug("Project Read Task is Running");
-        Map<Object, Object> projectReadMap = redisUtil.hGetMap(RedisConstants.PROJECT_READ_KEY);
+        Map<Object, Object> projectReadMap = redisService.hGetMap(RedisConstants.PROJECT_READ_KEY);
         for (Map.Entry<Object, Object> entry : projectReadMap.entrySet()) {
             Integer projectId = Integer.parseInt((String) entry.getKey());
             Integer read = (Integer) entry.getValue();
@@ -43,7 +43,7 @@ public class ResourceReadTask {
                     int updatedRead = project.getRead() + read;
                     projectMapper.updateReadById(updatedRead, projectId);
                 }
-                redisUtil.hDel(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId));
+                redisService.hDel(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId));
             }
         }
     }

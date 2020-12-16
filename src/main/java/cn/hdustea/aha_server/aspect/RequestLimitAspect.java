@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestLimitAspect {
 //    @Resource
-//    private RedisUtil redisUtil;
+//    private RedisService redisUtil;
 //
 //    @Pointcut("@annotation(requestLimit)")
 //    public void pointCut(RequestLimit requestLimit) {
@@ -26,7 +26,7 @@ public class RequestLimitAspect {
 //            String ip = IpUtil.getIpAddr(request);
 //            String className = joinpoint.getTarget().getClass().getName();
 //            String methodName = joinpoint.getSignature().getName();
-//            String key = RedisUtil.REQUEST_LIMIT_PREFIX + ip + ":" + className + "." + methodName;
+//            String key = RedisService.REQUEST_LIMIT_PREFIX + ip + ":" + className + "." + methodName;
 //            Integer currentAmount = (Integer) redisUtil.get(key);
 //            if (currentAmount == null) {
 //                redisUtil.set(key, 1, requestLimit.time());

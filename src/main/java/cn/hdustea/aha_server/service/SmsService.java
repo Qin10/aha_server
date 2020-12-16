@@ -5,7 +5,6 @@ import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.constants.SmsConstants;
 import cn.hdustea.aha_server.entity.Oauth;
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageSendException;
-import cn.hdustea.aha_server.util.RedisUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +18,7 @@ import java.util.Random;
 @Service
 public class SmsService {
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
     @Resource
     private OauthService oauthService;
     private static final int MESSAGE_EXPIRED_TIME = 60 * 5;
@@ -39,21 +38,21 @@ public class SmsService {
                 if (oauth != null) {
                     throw new MessageSendException("该手机号已被注册！");
                 }
-                redisUtil.set(RedisConstants.REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                redisService.set(RedisConstants.REGISTER_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             case "changePassword": {
                 if (oauth == null) {
                     throw new MessageSendException("用户不存在！");
                 }
-                redisUtil.set(RedisConstants.CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                redisService.set(RedisConstants.CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             case "bindPhone": {
                 if (oauth != null) {
                     throw new MessageSendException("该账号已被绑定！");
                 }
-                redisUtil.set(RedisConstants.BIND_PHONE_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
+                redisService.set(RedisConstants.BIND_PHONE_MESSAGE_CODE_PREFIX + phone, code, MESSAGE_EXPIRED_TIME);
                 break;
             }
             default: {
@@ -90,15 +89,15 @@ public class SmsService {
         String possibleCode = null;
         switch (type) {
             case SmsConstants.REGISTER_MESSAGE: {
-                possibleCode = (String) redisUtil.get(RedisConstants.REGISTER_MESSAGE_CODE_PREFIX + phone);
+                possibleCode = (String) redisService.get(RedisConstants.REGISTER_MESSAGE_CODE_PREFIX + phone);
                 break;
             }
             case SmsConstants.CHANGE_PASSWORD_MESSAGE: {
-                possibleCode = (String) redisUtil.get(RedisConstants.CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone);
+                possibleCode = (String) redisService.get(RedisConstants.CHANGE_PASSWORD_MESSAGE_CODE_PREFIX + phone);
                 break;
             }
             case SmsConstants.BIND_PHONE_MESSAGE: {
-                possibleCode = (String) redisUtil.get(RedisConstants.BIND_PHONE_MESSAGE_CODE_PREFIX + phone);
+                possibleCode = (String) redisService.get(RedisConstants.BIND_PHONE_MESSAGE_CODE_PREFIX + phone);
                 break;
             }
         }

@@ -1,10 +1,10 @@
-package cn.hdustea.aha_server.util;
+package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.vo.UserRoughInfoVo;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit;
  *
  * @author 王赛超、STEA_YY
  */
-@Component
-public class RedisUtil {
+@Service
+public class RedisService {
 
     @Resource
     private RedisTemplate<String, Object> redisTemplate;

@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.util.RedisUtil;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.vo.UserRoughInfoVo;
 import org.springframework.data.redis.core.ZSetOperations;
@@ -21,7 +20,7 @@ import java.util.Set;
 @Service
 public class ContributionRankService {
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
     @Resource
     private UserInfoService userInfoService;
 
@@ -31,8 +30,8 @@ public class ContributionRankService {
      * @return 排行榜列表
      */
     public List<UserContribPointVo> getRankList() {
-        Set<ZSetOperations.TypedTuple<Object>> tuples = redisUtil.zGetTuple(RedisConstants.CONTRIBUTION_RANK_KEY, 0, 99);
-        return redisUtil.tupleToUserContribPoint(tuples);
+        Set<ZSetOperations.TypedTuple<Object>> tuples = redisService.zGetTuple(RedisConstants.CONTRIBUTION_RANK_KEY, 0, 99);
+        return redisService.tupleToUserContribPoint(tuples);
     }
 
     /**
@@ -43,7 +42,7 @@ public class ContributionRankService {
      * @throws SelectException 用户不存在异常
      */
     public long getRankByUserInfoVo(UserRoughInfoVo userInfoVo) throws SelectException {
-        Long rank = redisUtil.zGetRank(RedisConstants.CONTRIBUTION_RANK_KEY, userInfoVo);
+        Long rank = redisService.zGetRank(RedisConstants.CONTRIBUTION_RANK_KEY, userInfoVo);
         if (rank == null) {
             throw new SelectException("未查询到排名!");
         }
@@ -60,7 +59,7 @@ public class ContributionRankService {
     public UserContribPointVo getUserContribPointByUserId(Integer userId) throws SelectException {
         UserRoughInfoVo userInfoVo = userInfoService.getUserInfoVoByUserId(userId);
         long rank = getRankByUserInfoVo(userInfoVo);
-        Double contribPoint = redisUtil.zGetScore(RedisConstants.CONTRIBUTION_RANK_KEY, userInfoVo);
+        Double contribPoint = redisService.zGetScore(RedisConstants.CONTRIBUTION_RANK_KEY, userInfoVo);
         UserContribPointVo userContribPointVo = new UserContribPointVo();
         userContribPointVo.setUser(userInfoVo);
         userContribPointVo.setContribPoint(BigDecimal.valueOf(contribPoint));

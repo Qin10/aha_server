@@ -11,9 +11,9 @@ import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceScoreMapper;
 import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
-import cn.hdustea.aha_server.util.RedisUtil;
-import cn.hdustea.aha_server.vo.ProjectResourceScoreVo;
-import cn.hdustea.aha_server.vo.PurchasedResourceVo;
+import cn.hdustea.aha_server.vo.*;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +21,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ProjectResourceService {
     @Resource
     private ProjectService projectService;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
 
     /**
      * 根据项目资源id获取项目资源
@@ -53,6 +54,16 @@ public class ProjectResourceService {
      */
     public ProjectResource getProjectResourceById(int id) {
         return projectResourceMapper.selectByPrimaryKey(id);
+    }
+
+    /**
+     * 根据项目资源id获取项目资源VO
+     *
+     * @param id 项目资源id
+     * @return 项目资源
+     */
+    public ProjectResourceVo getProjectResourceVoById(int id) {
+        return projectResourceMapper.selectVoByPrimaryKey(id);
     }
 
     /**
@@ -90,7 +101,7 @@ public class ProjectResourceService {
             DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
             documentConvertInfoDto.setProjectResourceId(projectResourceId);
             documentConvertInfoDto.setSrcFilename(projectResourceDto.getFilename());
-            redisUtil.lPush(RedisConstants.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
+            redisService.lPush(RedisConstants.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
         }
         return projectResourceId;
     }
@@ -156,8 +167,14 @@ public class ProjectResourceService {
         }
     }
 
-    public List<ProjectResourceScoreVo> getAllResourceScoreById(int resourceId) {
-        return projectResourceScoreMapper.selectAllVoByResourceId(resourceId);
+    public PageVo<List<ProjectResourceScoreVo>> getAllResourceScorePagable(Integer pageNum, Integer pageSize, Integer projectId, Integer resourceId, BigDecimal lowestScore, BigDecimal highestScore) throws SelectException {
+        if ((projectId == null && resourceId == null) || (projectId != null && resourceId != null)) {
+            throw new SelectException("参数错误，projectId和resourceId有且只有一个字段为空！");
+        }
+        PageHelper.startPage(pageNum, pageSize);
+        List<ProjectResourceScoreVo> projectResourceScoreVos = projectResourceScoreMapper.selectAllVoByConditions(projectId, resourceId, highestScore, lowestScore);
+        PageInfo<ProjectResourceScoreVo> pageInfo = new PageInfo<>(projectResourceScoreVos);
+        return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
     public boolean purchasedResource(int userId, int resourceId) {

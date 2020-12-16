@@ -16,7 +16,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.SelectException
 import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.service.ProjectResourceService;
 import cn.hdustea.aha_server.service.ProjectService;
-import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.service.RedisService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +24,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public class ProjectController {
     @Resource
     private OssService ossService;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
     @Resource
     private UserOperationLogConfig userOperationLogConfig;
 
@@ -253,6 +254,18 @@ public class ProjectController {
     }
 
     /**
+     * 根据项目资源id获取项目资源
+     *
+     * @param projectResourceId 项目资源id
+     */
+    @RequiresLogin()
+    @GetMapping("/resource/{projectResourceId}")
+    public ResponseBean<ProjectResourceVo> getProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId) {
+        ProjectResourceVo projectResourceVo = projectResourceService.getProjectResourceVoById(projectResourceId);
+        return new ResponseBean<>(200, "succ", projectResourceVo);
+    }
+
+    /**
      * 获取oss私有资源上传签名(用于上传资源文件)
      *
      * @param projectId 项目id
@@ -397,14 +410,19 @@ public class ProjectController {
     }
 
     /**
-     * 查看项目资源全部评价信息
+     * 分页查看资源评价信息
      *
-     * @param projectResourceId 项目资源id
+     * @param pageNum      页码
+     * @param pageSize     分页大小
+     * @param projectId    项目id
+     * @param resourceId   项目资源id
+     * @param lowestScore  最低分
+     * @param highestScore 最高分
      */
     @RequiresLogin
-    @GetMapping("/score/{projectResourceId}")
-    public ResponseBean<List<ProjectResourceScoreVo>> getAllResourceScoreById(@PathVariable("projectResourceId") int projectResourceId) {
-        List<ProjectResourceScoreVo> projectResourceScoreVos = projectResourceService.getAllResourceScoreById(projectResourceId);
+    @GetMapping("/resource/score")
+    public ResponseBean<PageVo<List<ProjectResourceScoreVo>>> getAllResourceScoreById(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "projectId", required = false) Integer projectId, @RequestParam(value = "resourceId", required = false) Integer resourceId, @RequestParam(value = "lowestScore", required = false, defaultValue = "0.0") BigDecimal lowestScore, @RequestParam(value = "highestScore", required = false, defaultValue = "5.0") BigDecimal highestScore) throws SelectException {
+        PageVo<List<ProjectResourceScoreVo>> projectResourceScoreVos = projectResourceService.getAllResourceScorePagable(pageNum, pageSize, projectId, resourceId, lowestScore, highestScore);
         return new ResponseBean<>(200, "succ", projectResourceScoreVos);
     }
 
@@ -439,9 +457,9 @@ public class ProjectController {
      * @param projectId 项目id
      */
     private void incrReadByProjectId(int projectId, Integer userId) {
-        if (redisUtil.get(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId) == null) {
-            redisUtil.hIncr(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId), 1);
-            redisUtil.set(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId, true, 600);
+        if (redisService.get(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId) == null) {
+            redisService.hIncr(RedisConstants.PROJECT_READ_KEY, Integer.toString(projectId), 1);
+            redisService.set(RedisConstants.USER_PROJECT_READ_PREFIX + userId + ":" + projectId, true, 600);
         }
     }
 }

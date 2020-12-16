@@ -2,7 +2,7 @@ package cn.hdustea.aha_server.task;
 
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.mapper.UserMapper;
-import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.service.RedisService;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -23,7 +23,7 @@ public class ContribPointRankTask {
     @Resource
     private UserMapper userMapper;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
 
     /**
      * 更新排行榜
@@ -33,9 +33,9 @@ public class ContribPointRankTask {
     public void getRank() {
         log.debug("Contrib Rank Task is Running");
         List<UserContribPointVo> userContribPointVos = userMapper.selectIdAndContribPoint();
-        redisUtil.del(RedisConstants.CONTRIBUTION_RANK_KEY);
+        redisService.del(RedisConstants.CONTRIBUTION_RANK_KEY);
         for (UserContribPointVo userContribPointVo : userContribPointVos) {
-            redisUtil.zSet(RedisConstants.CONTRIBUTION_RANK_KEY, userContribPointVo.getUser(), userContribPointVo.getContribPoint().doubleValue());
+            redisService.zSet(RedisConstants.CONTRIBUTION_RANK_KEY, userContribPointVo.getUser(), userContribPointVo.getContribPoint().doubleValue());
         }
     }
 }

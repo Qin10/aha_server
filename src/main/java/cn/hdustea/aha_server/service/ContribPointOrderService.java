@@ -1,7 +1,9 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.constants.ContribPointLogConstants;
 import cn.hdustea.aha_server.constants.ContribPointOrderConstants;
+import cn.hdustea.aha_server.controller.ContribPointOrderController;
 import cn.hdustea.aha_server.dto.ContribPointOrderResourcesDto;
 import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
@@ -12,6 +14,7 @@ import cn.hdustea.aha_server.mapper.OrderProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
 import cn.hdustea.aha_server.vo.ContribPointOrderVo;
 import cn.hdustea.aha_server.vo.UserVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,7 @@ import java.util.List;
  * @author STEA_YY
  **/
 @Service
+@Slf4j(topic = "userOperationLog")
 public class ContribPointOrderService {
     @Resource
     private ContribPointOrderMapper contribPointOrderMapper;
@@ -39,6 +43,8 @@ public class ContribPointOrderService {
     private UserService userService;
     @Resource
     private ProjectResourceService projectResourceService;
+    @Resource
+    private UserOperationLogConfig userOperationLogConfig;
 
     public ContribPointOrderVo getContribPointOrderVoById(int id) {
         return contribPointOrderMapper.selectVoByPrimaryKey(id);
@@ -115,6 +121,7 @@ public class ContribPointOrderService {
             purchasedResource.setResourceId(orderProjectResource.getResourceId());
             purchasedResource.setPurchaseTime(payTime);
             purchasedResourceMapper.insertSelective(purchasedResource);
+            log.info(userOperationLogConfig.getFormat(), ContribPointOrderController.MODULE_NAME, "购买资源", "id=" + orderProjectResource.getResourceId());
         }
     }
 

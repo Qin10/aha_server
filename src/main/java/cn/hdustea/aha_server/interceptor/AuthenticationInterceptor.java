@@ -9,7 +9,7 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.*;
 import cn.hdustea.aha_server.util.IpUtil;
 import cn.hdustea.aha_server.util.JwtUtil;
-import cn.hdustea.aha_server.util.RedisUtil;
+import cn.hdustea.aha_server.service.RedisService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.slf4j.MDC;
@@ -32,7 +32,7 @@ import java.lang.reflect.Method;
 @Component
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
     @Resource
     private JwtConfig jwtConfig;
 
@@ -125,10 +125,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
      * @return 是否刷新成功
      */
     protected boolean refreshToken(String token, JwtPayloadDto jwtPayloadDto) {
-        String possibleToken = (String) redisUtil.get(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount());
+        String possibleToken = (String) redisService.get(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount());
         if (possibleToken != null && possibleToken.equals(token)) {
             String newToken = JwtUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
-            redisUtil.set(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
+            redisService.set(RedisConstants.REFRESH_TOKEN_PREFIX + jwtPayloadDto.getAccount(), newToken, jwtConfig.getRefreshTokenExpireTime());
             ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletResponse response;
             if (requestAttributes != null) {

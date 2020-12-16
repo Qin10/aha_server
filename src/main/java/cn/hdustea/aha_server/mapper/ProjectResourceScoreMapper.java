@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.entity.ProjectResourceScore;
 import cn.hdustea.aha_server.vo.ProjectResourceScoreVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -33,5 +34,5 @@ public interface ProjectResourceScoreMapper {
 
     Integer countByResourceId(@Param("resourceId") Integer resourceId);
 
-    List<ProjectResourceScoreVo> selectAllVoByResourceId(@Param("resourceId") Integer resourceId);
+    List<ProjectResourceScoreVo> selectAllVoByConditions(@Param("projectId") Integer projectId, @Param("resourceId") Integer resourceId, @Param("highestScore") BigDecimal highestScore, @Param("lowestScore") BigDecimal lowestScore);
 }

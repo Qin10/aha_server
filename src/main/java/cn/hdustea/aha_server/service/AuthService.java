@@ -51,7 +51,7 @@ public class AuthService {
     @Resource
     private OauthService oauthService;
     @Resource
-    private RedisUtil redisUtil;
+    private RedisService redisService;
     @Resource
     private SmsService smsService;
     @Resource
@@ -221,7 +221,7 @@ public class AuthService {
      * @param userId 用户id
      */
     public void logout(Integer userId) {
-        redisUtil.del(userId.toString());
+        redisService.del(userId.toString());
     }
 
     /**
@@ -302,7 +302,7 @@ public class AuthService {
         JwtPayloadDto jwtPayloadDto = JwtUtil.packagePayload(userVo);
 
         String token = JwtUtil.sign(jwtPayloadDto, jwtConfig.getSecret(), jwtConfig.getExpireTime());
-        redisUtil.set(RedisConstants.REFRESH_TOKEN_PREFIX + userVo.getId(), token, jwtConfig.getRefreshTokenExpireTime());
+        redisService.set(RedisConstants.REFRESH_TOKEN_PREFIX + userVo.getId(), token, jwtConfig.getRefreshTokenExpireTime());
         return token;
     }
 

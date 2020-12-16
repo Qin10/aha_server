@@ -169,7 +169,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET http://{{host}}/project/79
+GET http://{{host}}/project/78
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -213,6 +213,12 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
+###获取资源信息
+GET http://{{host}}/project/resource/78
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
 ###查看收藏资源列表
 GET http://{{host}}/project/collection
 Authorization: {{auth_token}}
@@ -237,8 +243,8 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
-###查看项目评论
-GET http://{{host}}/project/score/76
+###查看资源评论
+GET http://{{host}}/project/resource/score?pageNum=1&pageSize=5&projectId=78
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

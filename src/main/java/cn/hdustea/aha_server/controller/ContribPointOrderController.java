@@ -8,6 +8,7 @@ import cn.hdustea.aha_server.service.ContribPointOrderService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.ContribPointOrderVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,9 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/order")
+@Slf4j(topic = "userOperationLog")
 public class ContribPointOrderController {
+    public static final String MODULE_NAME = "贡献点订单模块";
     @Resource
     private ContribPointOrderService contribPointOrderService;
 

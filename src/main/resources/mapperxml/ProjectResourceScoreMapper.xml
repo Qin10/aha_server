@@ -139,4 +139,22 @@
         from project_resource_score
         where prs_resource_id = #{resourceId}
     </select>
+
+    <select id="selectAllVoByConditions" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project_resource_score prs
+                     join project_resource pr on pr.pr_id = prs.prs_resource_id
+        <where>
+            <if test="projectId != null and resourceId == null">
+                and pr_project_id = #{projectId}
+            </if>
+            <if test="resourceId != null">
+                and prs_resource_id = #{resourceId}
+            </if>
+            <if test="highestScore != null and lowestScore != null">
+                and prs_score between #{lowestScore} and #{highestScore}
+            </if>
+        </where>
+    </select>
 </mapper>
