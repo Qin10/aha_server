@@ -2563,19 +2563,24 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
-## 查看项目资源全部评价信息
+## 分页查看资源评价信息
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project/score/{projectResourceId} `GET` 
+/project/resource/score `GET` 
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
-projectResourceId|int|否|项目资源id
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+projectId|int|否|项目id
+resourceId|int|否|项目资源id
+lowestScore|double|否|最低分
+highestScore|double|否|最高分
 
 **返回结果**
 
@@ -2583,18 +2588,22 @@ projectResourceId|int|否|项目资源id
 {
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
-	"data":[{
-		"user":{
-			"userId":"int //用户id",
-			"nickname":"string //用户昵称",
-			"gender":"boolean //用户性别",
-			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
-		},
-		"resourceId":"int //项目资源id",
-		"score":"double //资源评分",
-		"comment":"string //评论"
-	}],
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"user":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校"
+			},
+			"resourceId":"int //项目资源id",
+			"score":"double //资源评分",
+			"comment":"string //评论"
+		}]
+	},
 	"time":"string //响应时间"
 }
 ```
