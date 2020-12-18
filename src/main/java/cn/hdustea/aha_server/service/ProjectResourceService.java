@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -156,6 +157,7 @@ public class ProjectResourceService {
         BeanUtils.copyProperties(projectResourceScoreDto, projectResourceScore);
         projectResourceScore.setResourceId(resourceId);
         projectResourceScore.setUserId(userId);
+        projectResourceScore.setTime(new Date());
         try {
             projectResourceScoreMapper.insertSelective(projectResourceScore);
         } catch (
@@ -167,11 +169,40 @@ public class ProjectResourceService {
         }
     }
 
-    public PageVo<List<ProjectResourceScoreVo>> getAllResourceScorePagable(Integer pageNum, Integer pageSize, Integer projectId, Integer resourceId, BigDecimal lowestScore, BigDecimal highestScore) throws SelectException {
+    public PageVo<List<ProjectResourceScoreVo>> getAllResourceScorePagable(Integer pageNum, Integer pageSize, Integer projectId, Integer resourceId, BigDecimal lowestScore, BigDecimal highestScore, String sortBy, String orderBy) throws SelectException {
         if ((projectId == null && resourceId == null) || (projectId != null && resourceId != null)) {
             throw new SelectException("参数错误，projectId和resourceId有且只有一个字段为空！");
         }
+        String currentSortBy;
+        String currentOrderBy;
+        switch (sortBy) {
+            case "time": {
+                currentSortBy = "prs_time";
+                break;
+            }
+            case "score": {
+                currentSortBy = "prs_score";
+                break;
+            }
+            default: {
+                throw new SelectException("'sortBy'参数取值错误！");
+            }
+        }
+        switch (orderBy) {
+            case "desc": {
+                currentOrderBy = "desc";
+                break;
+            }
+            case "asc": {
+                currentOrderBy = "asc";
+                break;
+            }
+            default: {
+                throw new SelectException("'orderBy'参数取值错误！");
+            }
+        }
         PageHelper.startPage(pageNum, pageSize);
+        PageHelper.orderBy(currentSortBy + " " + currentOrderBy);
         List<ProjectResourceScoreVo> projectResourceScoreVos = projectResourceScoreMapper.selectAllVoByConditions(projectId, resourceId, highestScore, lowestScore);
         PageInfo<ProjectResourceScoreVo> pageInfo = new PageInfo<>(projectResourceScoreVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());

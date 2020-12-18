@@ -5,46 +5,34 @@
         <!--@mbg.generated-->
         <!--@Table project_resource_score-->
         <id column="prs_user_id" property="userId"/>
-        <result column="prs_resource_id" property="resourceId"/>
+        <id column="prs_resource_id" property="resourceId"/>
         <result column="prs_score" property="score"/>
         <result column="prs_comment" property="comment"/>
-    </resultMap>
-    <resultMap id="AvgScoreMap" type="cn.hdustea.aha_server.dto.ResourceAvgScoreDto">
-        <result column="prs_resource_id" property="resourceId"/>
-        <result column="prs_score" property="score"/>
-    </resultMap>
-    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.ProjectResourceScoreVo">
-        <result column="prs_resource_id" property="resourceId"/>
-        <result column="prs_score" property="score"/>
-        <result column="prs_comment" property="comment"/>
-        <association property="user" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" column="prs_user_id"
-                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+        <result column="prs_time" property="time"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        prs_user_id, prs_resource_id, prs_score, prs_comment
+        prs_user_id, prs_resource_id, prs_score, prs_comment, prs_time
     </sql>
-    <sql id="Avg_Column_List">
-        prs_resource_id,
-        avg(prs_score) as prs_score
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
         <include refid="Base_Column_List"/>
         from project_resource_score
         where prs_user_id = #{userId}
+          and prs_resource_id = #{resourceId}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey" parameterType="map">
         <!--@mbg.generated-->
         delete
         from project_resource_score
         where prs_user_id = #{userId}
+          and prs_resource_id = #{resourceId}
     </delete>
     <insert id="insert" parameterType="cn.hdustea.aha_server.entity.ProjectResourceScore">
         <!--@mbg.generated-->
-        insert into project_resource_score (prs_user_id, prs_resource_id, prs_score, prs_comment)
-        values (#{userId}, #{resourceId}, #{score}, #{comment})
+        insert into project_resource_score (prs_user_id, prs_resource_id, prs_score, prs_comment, prs_time)
+        values (#{userId}, #{resourceId}, #{score}, #{comment}, #{time})
     </insert>
     <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.ProjectResourceScore">
         <!--@mbg.generated-->
@@ -62,6 +50,9 @@
             <if test="comment != null">
                 prs_comment,
             </if>
+            <if test="time != null">
+                prs_time,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="userId != null">
@@ -76,32 +67,53 @@
             <if test="comment != null">
                 #{comment},
             </if>
+            <if test="time != null">
+                #{time},
+            </if>
         </trim>
     </insert>
     <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.ProjectResourceScore">
         <!--@mbg.generated-->
         update project_resource_score
         <set>
-            <if test="resourceId != null">
-                prs_resource_id = #{resourceId},
-            </if>
             <if test="score != null">
                 prs_score = #{score},
             </if>
             <if test="comment != null">
                 prs_comment = #{comment},
             </if>
+            <if test="time != null">
+                prs_time = #{time},
+            </if>
         </set>
         where prs_user_id = #{userId}
+          and prs_resource_id = #{resourceId}
     </update>
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ProjectResourceScore">
         <!--@mbg.generated-->
         update project_resource_score
-        set prs_resource_id = #{resourceId},
-            prs_score       = #{score},
-            prs_comment     = #{comment}
+        set prs_score   = #{score},
+            prs_comment = #{comment},
+            prs_time    = #{time}
         where prs_user_id = #{userId}
+          and prs_resource_id = #{resourceId}
     </update>
+    <resultMap id="AvgScoreMap" type="cn.hdustea.aha_server.dto.ResourceAvgScoreDto">
+        <result column="prs_resource_id" property="resourceId"/>
+        <result column="prs_score" property="score"/>
+    </resultMap>
+    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.ProjectResourceScoreVo">
+        <result column="prs_resource_id" property="resourceId"/>
+        <result column="prs_score" property="score"/>
+        <result column="prs_comment" property="comment"/>
+        <result column="prs_time" property="time"/>
+        <association column="prs_user_id" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" property="user"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+    </resultMap>
+    <sql id="Avg_Column_List">
+        prs_resource_id,
+        avg(prs_score) as prs_score
+    </sql>
 
     <!--auto generated by MybatisCodeHelper on 2020-12-07-->
     <select id="selectAllByResourceId" resultMap="BaseResultMap">
@@ -129,13 +141,6 @@
     <!--auto generated by MybatisCodeHelper on 2020-12-07-->
     <select id="countByResourceId" resultType="java.lang.Integer">
         select count(1)
-        from project_resource_score
-        where prs_resource_id = #{resourceId}
-    </select>
-
-    <select id="selectAllVoByResourceId" resultMap="VoResultMap">
-        select
-        <include refid="Base_Column_List"/>
         from project_resource_score
         where prs_resource_id = #{resourceId}
     </select>

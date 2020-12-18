@@ -244,19 +244,19 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看资源评论
-GET http://{{host}}/project/resource/score?pageNum=1&pageSize=5&projectId=78
+GET http://{{host}}/project/resource/score?pageNum=1&pageSize=5&projectId=72
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###评论项目
-POST http://{{host}}/project/score/77
+POST http://{{host}}/project/score/89
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "score": 5.0,
-  "comment": "阿巴阿巴阿巴"
+  "score": 4.0,
+  "comment": "哈哈哈哈哈哈"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

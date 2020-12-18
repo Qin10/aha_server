@@ -418,11 +418,13 @@ public class ProjectController {
      * @param resourceId   项目资源id
      * @param lowestScore  最低分
      * @param highestScore 最高分
+     * @param sortBy       排序关键字,取值time、score
+     * @param orderBy      排序方式
      */
     @RequiresLogin
     @GetMapping("/resource/score")
-    public ResponseBean<PageVo<List<ProjectResourceScoreVo>>> getAllResourceScoreById(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "projectId", required = false) Integer projectId, @RequestParam(value = "resourceId", required = false) Integer resourceId, @RequestParam(value = "lowestScore", required = false, defaultValue = "0.0") BigDecimal lowestScore, @RequestParam(value = "highestScore", required = false, defaultValue = "5.0") BigDecimal highestScore) throws SelectException {
-        PageVo<List<ProjectResourceScoreVo>> projectResourceScoreVos = projectResourceService.getAllResourceScorePagable(pageNum, pageSize, projectId, resourceId, lowestScore, highestScore);
+    public ResponseBean<PageVo<List<ProjectResourceScoreVo>>> getAllResourceScoreById(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "projectId", required = false) Integer projectId, @RequestParam(value = "resourceId", required = false) Integer resourceId, @RequestParam(value = "lowestScore", required = false, defaultValue = "0.0") BigDecimal lowestScore, @RequestParam(value = "highestScore", required = false, defaultValue = "5.0") BigDecimal highestScore, @RequestParam(value = "sortBy", required = false, defaultValue = "time") String sortBy, @RequestParam(value = "orderBy", required = false, defaultValue = "desc") String orderBy) throws SelectException {
+        PageVo<List<ProjectResourceScoreVo>> projectResourceScoreVos = projectResourceService.getAllResourceScorePagable(pageNum, pageSize, projectId, resourceId, lowestScore, highestScore, sortBy, orderBy);
         return new ResponseBean<>(200, "succ", projectResourceScoreVos);
     }
 
@@ -434,8 +436,11 @@ public class ProjectController {
      */
     @RequiresLogin
     @PostMapping("/score/{projectResourceId}")
-    public ResponseBean<Object> saveResourceScore(@RequestBody ProjectResourceScoreDto projectResourceScoreDto, @PathVariable("projectResourceId") int projectResourceId) throws InsertException {
+    public ResponseBean<Object> saveResourceScore(@RequestBody @Validated ProjectResourceScoreDto projectResourceScoreDto, @PathVariable("projectResourceId") int projectResourceId) throws InsertException, PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
+            throw new PermissionDeniedException("您尚未购买本资源！");
+        }
         projectResourceService.saveResourceScore(projectResourceScoreDto, projectResourceId, userId);
         return new ResponseBean<>(200, "succ", null);
     }

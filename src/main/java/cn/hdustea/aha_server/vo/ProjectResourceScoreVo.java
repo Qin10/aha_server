@@ -3,6 +3,7 @@ package cn.hdustea.aha_server.vo;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * 资源评分VO
@@ -30,4 +31,9 @@ public class ProjectResourceScoreVo {
      * 评论
      */
     private String comment;
+
+    /**
+     * 评价时间
+     */
+    private Date time;
 }
