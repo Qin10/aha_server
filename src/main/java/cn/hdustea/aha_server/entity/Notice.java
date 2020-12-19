@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -26,16 +27,19 @@ public class Notice {
     /**
      * 公告开始日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
      * 公告投放开始日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date puttingStartTime;
 
     /**
      * 公告投放结束日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date puttingEndTime;
 
     /**

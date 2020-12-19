@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -35,5 +36,6 @@ public class ProjectResourceScoreVo {
     /**
      * 评价时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 }

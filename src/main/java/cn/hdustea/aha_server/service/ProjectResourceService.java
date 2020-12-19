@@ -226,11 +226,11 @@ public class ProjectResourceService {
         return purchasedResourceMapper.selectAllVoByUserId(userId);
     }
 
-    public PageVo<List<PurchasedResourceVo>> getAllPurchasedResourceVoByResourceId(int pageNum, int pageSize, int resourceId) {
+    public PageVo<List<PurchasedResourceManagementVo>> getAllPurchasedResourceVoByResourceId(int pageNum, int pageSize, int resourceId) {
         PageHelper.startPage(pageNum, pageSize);
         PageHelper.orderBy("pr_purchase_time desc");
-        List<PurchasedResourceVo> purchasedResourceVos = purchasedResourceMapper.selectAllVoByResourceId(resourceId);
-        PageInfo<PurchasedResourceVo> pageInfo = new PageInfo<>(purchasedResourceVos);
+        List<PurchasedResourceManagementVo> purchasedResourceVos = purchasedResourceMapper.selectAllManagementVoByResourceId(resourceId);
+        PageInfo<PurchasedResourceManagementVo> pageInfo = new PageInfo<>(purchasedResourceVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 

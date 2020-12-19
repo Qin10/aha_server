@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.CompetitionType;
 import cn.hdustea.aha_server.service.CompetitionService;
+import cn.hdustea.aha_server.vo.CompetitionVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,9 +42,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @GetMapping()
-    public ResponseBean<List<Competition>> getAllCompetition() {
-        List<Competition> competitions = competitionService.getAllCompetition();
-        return new ResponseBean<>(200, "succ", competitions);
+    public ResponseBean<List<CompetitionVo>> getAllCompetition() {
+        List<CompetitionVo> competitionVos = competitionService.getAllCompetitionVo();
+        return new ResponseBean<>(200, "succ", competitionVos);
     }
 
     /**

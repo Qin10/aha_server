@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.PurchasedResource;
+import cn.hdustea.aha_server.vo.PurchasedResourceManagementVo;
 import cn.hdustea.aha_server.vo.PurchasedResourceVo;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,5 +31,5 @@ public interface PurchasedResourceMapper {
 
     PurchasedResource selectByUserIdAndResourceId(@Param("userId") Integer userId, @Param("resourceId") Integer resourceId);
 
-    List<PurchasedResourceVo> selectAllVoByResourceId(@Param("resourceId")Integer resourceId);
+    List<PurchasedResourceManagementVo> selectAllManagementVoByResourceId(@Param("resourceId") Integer resourceId);
 }

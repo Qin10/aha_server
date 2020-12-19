@@ -110,10 +110,10 @@ public class ManagementController {
      * @param pageSize   分页大小
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @PostMapping("/project/resource/purchased/{resourceId}")
-    public ResponseBean<PageVo<List<PurchasedResourceVo>>> getAllPurchasedResourceByResourceId(@PathVariable("resourceId") int resourceId, @RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize) {
-        PageVo<List<PurchasedResourceVo>> purchasedResourceVos = projectResourceService.getAllPurchasedResourceVoByResourceId(pageNum, pageSize, resourceId);
-        return new ResponseBean<>(200, "succ", purchasedResourceVos);
+    @GetMapping("/project/resource/purchased/{resourceId}")
+    public ResponseBean<PageVo<List<PurchasedResourceManagementVo>>> getAllPurchasedResourceByResourceId(@PathVariable("resourceId") int resourceId, @RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize) {
+        PageVo<List<PurchasedResourceManagementVo>> purchasedResources = projectResourceService.getAllPurchasedResourceVoByResourceId(pageNum, pageSize, resourceId);
+        return new ResponseBean<>(200, "succ", purchasedResources);
     }
 
     /**

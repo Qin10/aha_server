@@ -503,7 +503,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取全部竞赛标签信息
-GET http://{{host}}/competition/tag
+GET http://{{host}}/competition/type
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -537,3 +537,31 @@ GET http://{{host}}/project/me?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###查看系统公告
+GET http://{{host}}/notice
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###发布系统公告
+POST http://{{host}}/admin/notice
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "测试公告",
+  "content": "测试公告",
+  "puttingStartTime": "2020-12-20 1:00:00",
+  "puttingEndTime": "2020-12-21 1:00:00",
+  "enable": true
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取资源购买记录
+GET http://{{host}}/admin/project/resource/purchased/78?pageNum=1&pageSize=5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
