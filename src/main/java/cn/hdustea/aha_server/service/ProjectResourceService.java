@@ -5,6 +5,7 @@ import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.entity.ProjectResourceScore;
 import cn.hdustea.aha_server.entity.PurchasedResource;
+import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
@@ -169,6 +170,14 @@ public class ProjectResourceService {
         }
     }
 
+    public void deleteResourceScore(int resourceId, int userId) throws DeleteException {
+        ProjectResourceScore projectResourceScore = projectResourceScoreMapper.selectByPrimaryKey(userId, resourceId);
+        if (projectResourceScore == null) {
+            throw new DeleteException("评论不存在！");
+        }
+        projectResourceScoreMapper.deleteByPrimaryKey(userId, resourceId);
+    }
+
     public PageVo<List<ProjectResourceScoreVo>> getAllResourceScorePagable(Integer pageNum, Integer pageSize, Integer projectId, Integer resourceId, BigDecimal lowestScore, BigDecimal highestScore, String sortBy, String orderBy) throws SelectException {
         if ((projectId == null && resourceId == null) || (projectId != null && resourceId != null)) {
             throw new SelectException("参数错误，projectId和resourceId有且只有一个字段为空！");
@@ -215,6 +224,14 @@ public class ProjectResourceService {
 
     public List<PurchasedResourceVo> getAllPurchasedResourceVoByUserId(int userId) {
         return purchasedResourceMapper.selectAllVoByUserId(userId);
+    }
+
+    public PageVo<List<PurchasedResourceVo>> getAllPurchasedResourceVoByResourceId(int pageNum, int pageSize, int resourceId) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.orderBy("pr_purchase_time desc");
+        List<PurchasedResourceVo> purchasedResourceVos = purchasedResourceMapper.selectAllVoByResourceId(resourceId);
+        PageInfo<PurchasedResourceVo> pageInfo = new PageInfo<>(purchasedResourceVos);
+        return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
     public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException {

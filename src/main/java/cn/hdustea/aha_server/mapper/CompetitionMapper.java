@@ -1,12 +1,9 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.Competition;
-import cn.hdustea.aha_server.vo.CompetitionVo;
-
-import java.util.List;
+import cn.hdustea.aha_server.entity.Competition;import cn.hdustea.aha_server.vo.CompetitionVo;import java.util.List;
 
 /**
- * 竞赛表mapper
+ * ${description}
  *
  * @author STEA_YY
  **/
@@ -26,6 +23,4 @@ public interface CompetitionMapper {
     List<Competition> selectAll();
 
     List<CompetitionVo> selectAllVo();
-
-    CompetitionVo selectVoByPrimaryKey(Integer id);
 }

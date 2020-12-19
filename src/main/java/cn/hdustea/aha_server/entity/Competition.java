@@ -3,21 +3,23 @@ package cn.hdustea.aha_server.entity;
 import lombok.Data;
 
 /**
- * 竞赛信息实体类
+ * ${description}
  *
  * @author STEA_YY
  **/
 @Data
 public class Competition {
-    /**
-     * 竞赛id
-     */
     private Integer id;
 
     /**
-     * 所属赛事标签（外键）
+     * 竞赛类别id(外键)
      */
-    private Integer compTagId;
+    private Integer typeId;
+
+    /**
+     * 竞赛级别
+     */
+    private Integer level;
 
     /**
      * 赛事名称

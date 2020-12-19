@@ -29,4 +29,6 @@ public interface PurchasedResourceMapper {
     List<PurchasedResourceVo> selectAllVoByUserId(@Param("userId") Integer userId);
 
     PurchasedResource selectByUserIdAndResourceId(@Param("userId") Integer userId, @Param("resourceId") Integer resourceId);
+
+    List<PurchasedResourceVo> selectAllVoByResourceId(@Param("resourceId")Integer resourceId);
 }

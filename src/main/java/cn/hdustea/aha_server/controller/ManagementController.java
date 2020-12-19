@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.*;
+import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.*;
@@ -38,6 +39,8 @@ public class ManagementController {
     private ContractService contractService;
     @Resource
     private MessageService messageService;
+    @Resource
+    private NoticeService noticeService;
 
     /**
      * 分页获取所有项目粗略信息
@@ -97,6 +100,20 @@ public class ManagementController {
     public ResponseBean<Object> checkProjectResource(@PathVariable("resourceId") int resourceId, @RequestBody ProjectResourceCheckDto projectResourceCheckDto) throws UpdateException {
         projectResourceService.checkResourceByResourceId(projectResourceCheckDto, resourceId);
         return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 分页获取项目购买记录
+     *
+     * @param resourceId 项目资源id
+     * @param pageNum    页码
+     * @param pageSize   分页大小
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PostMapping("/project/resource/purchased/{resourceId}")
+    public ResponseBean<PageVo<List<PurchasedResourceVo>>> getAllPurchasedResourceByResourceId(@PathVariable("resourceId") int resourceId, @RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize) {
+        PageVo<List<PurchasedResourceVo>> purchasedResourceVos = projectResourceService.getAllPurchasedResourceVoByResourceId(pageNum, pageSize, resourceId);
+        return new ResponseBean<>(200, "succ", purchasedResourceVos);
     }
 
     /**
@@ -190,6 +207,19 @@ public class ManagementController {
     }
 
     /**
+     * 删除资源评论
+     *
+     * @param projectResourceId 项目资源id
+     * @param userId            用户id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @DeleteMapping("/project/resource/score/{projectResourceId}")
+    public ResponseBean<Object> deleteResourceScore(@PathVariable("projectResourceId") int projectResourceId, @RequestParam("userId") Integer userId) throws DeleteException {
+        projectResourceService.deleteResourceScore(projectResourceId, userId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
      * 保存竞赛信息
      *
      * @param competition 竞赛信息
@@ -229,25 +259,25 @@ public class ManagementController {
     /**
      * 保存竞赛标签
      *
-     * @param competitionTag 竞赛标签
+     * @param competitionType 竞赛标签
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/competition/tag")
-    public ResponseBean<Object> saveCompetitionTag(@RequestBody @Validated CompetitionTag competitionTag) {
-        competitionService.saveCompetitionTag(competitionTag);
+    public ResponseBean<Object> saveCompetitionType(@RequestBody @Validated CompetitionType competitionType) {
+        competitionService.saveCompetitionType(competitionType);
         return new ResponseBean<>(200, "succ", null);
     }
 
     /**
      * 根据竞赛标签id更新竞赛标签
      *
-     * @param id             竞赛标签id
-     * @param competitionTag 更新的竞赛标签
+     * @param id              竞赛标签id
+     * @param competitionType 更新的竞赛标签
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PutMapping("/competition/tag/{id}")
-    public ResponseBean<Object> updateCompetitionTag(@PathVariable("id") int id, @RequestBody CompetitionTag competitionTag) {
-        competitionService.updateCompetitionTagById(competitionTag, id);
+    public ResponseBean<Object> updateCompetitionType(@PathVariable("id") int id, @RequestBody CompetitionType competitionType) {
+        competitionService.updateCompetitionTypeById(competitionType, id);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -258,8 +288,8 @@ public class ManagementController {
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/competition/tag/{id}")
-    public ResponseBean<Object> deleteCompetitionTag(@PathVariable("id") int id) {
-        competitionService.deleteCompetitionTagById(id);
+    public ResponseBean<Object> deleteCompetitionType(@PathVariable("id") int id) {
+        competitionService.deleteCompetitionTypeById(id);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -379,6 +409,31 @@ public class ManagementController {
     @PostMapping("/message/systemPrivate")
     public ResponseBean<Object> sendSystemMessage(@RequestBody MessageDto messageDto) {
         messageService.sendSystemMessage(messageDto);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 发布公告
+     *
+     * @param noticeDto 公告
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PostMapping("/notice")
+    public ResponseBean<Object> sendNotice(@RequestBody @Validated NoticeDto noticeDto) {
+        noticeService.saveNotice(noticeDto);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 修改公告
+     *
+     * @param noticeDto 公告
+     * @param noticeId  公告id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PutMapping("/notice/{noticeId}")
+    public ResponseBean<Object> sendNotice(@RequestBody @Validated NoticeDto noticeDto, @PathVariable("noticeId") Integer noticeId) {
+        noticeService.updateNoticeById(noticeDto, noticeId);
         return new ResponseBean<>(200, "succ", null);
     }
 }

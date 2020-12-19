@@ -435,13 +435,26 @@ public class ProjectController {
      * @param projectResourceId       项目资源id
      */
     @RequiresLogin
-    @PostMapping("/score/{projectResourceId}")
+    @PostMapping("/resource/score/{projectResourceId}")
     public ResponseBean<Object> saveResourceScore(@RequestBody @Validated ProjectResourceScoreDto projectResourceScoreDto, @PathVariable("projectResourceId") int projectResourceId) throws InsertException, PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
             throw new PermissionDeniedException("您尚未购买本资源！");
         }
         projectResourceService.saveResourceScore(projectResourceScoreDto, projectResourceId, userId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 删除项目资源评价
+     *
+     * @param projectResourceId 项目资源id
+     */
+    @RequiresLogin
+    @DeleteMapping("/resource/score/{projectResourceId}")
+    public ResponseBean<Object> deleteResourceScore(@PathVariable("projectResourceId") Integer projectResourceId) throws DeleteException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        projectResourceService.deleteResourceScore(projectResourceId, userId);
         return new ResponseBean<>(200, "succ", null);
     }
 

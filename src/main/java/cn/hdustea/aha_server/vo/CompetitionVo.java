@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.vo;
 
-import cn.hdustea.aha_server.entity.CompetitionTag;
+import cn.hdustea.aha_server.entity.CompetitionType;
 import lombok.Data;
 
 /**
@@ -16,16 +16,19 @@ public class CompetitionVo {
     private Integer id;
 
     /**
-     * 所属赛事标签（外键）
+     * 所属赛事类别
      */
-    private Integer compTagId;
-
-    private CompetitionTag competitionTag;
+    private CompetitionType competitionType;
 
     /**
      * 赛事名称
      */
     private String name;
+
+    /**
+     * 竞赛级别
+     */
+    private Integer level;
 
     /**
      * 赛事简介

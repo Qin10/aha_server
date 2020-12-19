@@ -1,9 +1,9 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.entity.Competition;
-import cn.hdustea.aha_server.entity.CompetitionTag;
+import cn.hdustea.aha_server.entity.CompetitionType;
 import cn.hdustea.aha_server.mapper.CompetitionMapper;
-import cn.hdustea.aha_server.mapper.CompetitionTagMapper;
+import cn.hdustea.aha_server.mapper.CompetitionTypeMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +19,7 @@ public class CompetitionService {
     @Resource
     private CompetitionMapper competitionMapper;
     @Resource
-    private CompetitionTagMapper competitionTagMapper;
+    private CompetitionTypeMapper competitionTypeMapper;
 
     public List<Competition> getAllCompetition() {
         return competitionMapper.selectAll();
@@ -53,8 +53,8 @@ public class CompetitionService {
      *
      * @return 竞赛标签列表
      */
-    public List<CompetitionTag> getAllCompetitionTag() {
-        return competitionTagMapper.selectAll();
+    public List<CompetitionType> getAllCompetitionType() {
+        return competitionTypeMapper.selectAll();
     }
 
     /**
@@ -63,28 +63,28 @@ public class CompetitionService {
      * @param id 竞赛标签id
      * @return 竞赛标签实体类
      */
-    public CompetitionTag getCompetitionTagById(int id) {
-        return competitionTagMapper.selectByPrimaryKey(id);
+    public CompetitionType getCompetitionTypeById(int id) {
+        return competitionTypeMapper.selectByPrimaryKey(id);
     }
 
     /**
      * 新建竞赛标签
      *
-     * @param competitionTag 竞赛标签实体类
+     * @param competitionType 竞赛标签实体类
      */
-    public void saveCompetitionTag(CompetitionTag competitionTag) {
-        competitionTagMapper.insertSelective(competitionTag);
+    public void saveCompetitionType(CompetitionType competitionType) {
+        competitionTypeMapper.insertSelective(competitionType);
     }
 
     /**
      * 修改竞赛标签
      *
-     * @param competitionTag 竞赛标签实体类
+     * @param competitionType 竞赛标签实体类
      * @param id             竞赛标签id
      */
-    public void updateCompetitionTagById(CompetitionTag competitionTag, int id) {
-        competitionTag.setId(id);
-        competitionTagMapper.updateByPrimaryKeySelective(competitionTag);
+    public void updateCompetitionTypeById(CompetitionType competitionType, int id) {
+        competitionType.setId(id);
+        competitionTypeMapper.updateByPrimaryKeySelective(competitionType);
     }
 
     /**
@@ -92,8 +92,8 @@ public class CompetitionService {
      *
      * @param id 竞赛标签id
      */
-    public void deleteCompetitionTagById(int id) {
-        competitionTagMapper.deleteByPrimaryKey(id);
+    public void deleteCompetitionTypeById(int id) {
+        competitionTypeMapper.deleteByPrimaryKey(id);
     }
 
 }

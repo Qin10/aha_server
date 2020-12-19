@@ -2,7 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.Competition;
-import cn.hdustea.aha_server.entity.CompetitionTag;
+import cn.hdustea.aha_server.entity.CompetitionType;
 import cn.hdustea.aha_server.service.CompetitionService;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,24 +47,24 @@ public class CompetitionController {
     }
 
     /**
-     * 根据id获取竞赛标签
+     * 根据id获取竞赛类别
      *
-     * @param id 竞赛标签id
+     * @param id 竞赛类别id
      */
     @RequiresLogin
-    @GetMapping("/tag/{id}")
-    public ResponseBean<CompetitionTag> getCompetitionTagById(@PathVariable("id") int id) {
-        CompetitionTag competitionTag = competitionService.getCompetitionTagById(id);
-        return new ResponseBean<>(200, "succ", competitionTag);
+    @GetMapping("/type/{id}")
+    public ResponseBean<CompetitionType> getCompetitionTypeById(@PathVariable("id") int id) {
+        CompetitionType competitionType = competitionService.getCompetitionTypeById(id);
+        return new ResponseBean<>(200, "succ", competitionType);
     }
 
     /**
-     * 获取所有竞赛标签
+     * 获取所有竞赛类别
      */
     @RequiresLogin
-    @GetMapping("/tag")
-    public ResponseBean<List<CompetitionTag>> getAllCompetitionTag() {
-        List<CompetitionTag> competitionTags = competitionService.getAllCompetitionTag();
-        return new ResponseBean<>(200, "succ", competitionTags);
+    @GetMapping("/type")
+    public ResponseBean<List<CompetitionType>> getAllCompetitionType() {
+        List<CompetitionType> competitionTypes = competitionService.getAllCompetitionType();
+        return new ResponseBean<>(200, "succ", competitionTypes);
     }
 }

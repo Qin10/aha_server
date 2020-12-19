@@ -5,7 +5,8 @@
         <!--@mbg.generated-->
         <!--@Table competition-->
         <id column="co_id" property="id"/>
-        <result column="co_comp_tag_id" property="compTagId"/>
+        <result column="co_type_id" property="typeId"/>
+        <result column="co_level" property="level"/>
         <result column="co_name" property="name"/>
         <result column="co_intro" property="intro"/>
         <result column="co_pic_url" property="picUrl"/>
@@ -14,17 +15,17 @@
         <!--@mbg.generated-->
         <!--@Table competition-->
         <id column="co_id" property="id"/>
-        <result column="co_comp_tag_id" property="compTagId"/>
+        <result column="co_level" property="level"/>
         <result column="co_name" property="name"/>
         <result column="co_intro" property="intro"/>
         <result column="co_pic_url" property="picUrl"/>
-        <association property="competitionTag" javaType="cn.hdustea.aha_server.entity.CompetitionTag"
-                     column="co_comp_tag_id"
-                     select="cn.hdustea.aha_server.mapper.CompetitionTagMapper.selectByPrimaryKey"/>
+        <association property="competitionType" javaType="cn.hdustea.aha_server.entity.CompetitionType"
+                     column="co_type_id"
+                     select="cn.hdustea.aha_server.mapper.CompetitionTypeMapper.selectByPrimaryKey"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        co_id, co_comp_tag_id, co_name, co_intro, co_pic_url
+        co_id, co_type_id, co_level, co_name, co_intro, co_pic_url
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -42,19 +43,19 @@
     <insert id="insert" keyColumn="co_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Competition"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into competition (co_id, co_comp_tag_id, co_name, co_intro, co_pic_url)
-        values (#{id}, #{compTagId}, #{name}, #{intro}, #{picUrl})
+        insert into competition (co_type_id, co_level, co_name, co_intro, co_pic_url)
+        values (#{typeId}, #{level}, #{name}, #{intro}, #{picUrl})
     </insert>
     <insert id="insertSelective" keyColumn="co_id" keyProperty="id"
             parameterType="cn.hdustea.aha_server.entity.Competition" useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into competition
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                co_id,
+            <if test="typeId != null">
+                co_type_id,
             </if>
-            <if test="compTagId != null">
-                co_comp_tag_id,
+            <if test="level != null">
+                co_level,
             </if>
             <if test="name != null">
                 co_name,
@@ -67,11 +68,11 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id},
+            <if test="typeId != null">
+                #{typeId},
             </if>
-            <if test="compTagId != null">
-                #{compTagId},
+            <if test="level != null">
+                #{level},
             </if>
             <if test="name != null">
                 #{name},
@@ -88,8 +89,11 @@
         <!--@mbg.generated-->
         update competition
         <set>
-            <if test="compTagId != null">
-                co_comp_tag_id = #{compTagId},
+            <if test="typeId != null">
+                co_type_id = #{typeId},
+            </if>
+            <if test="level != null">
+                co_level = #{level},
             </if>
             <if test="name != null">
                 co_name = #{name},
@@ -106,10 +110,11 @@
     <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Competition">
         <!--@mbg.generated-->
         update competition
-        set co_comp_tag_id = #{compTagId},
-            co_name        = #{name},
-            co_intro       = #{intro},
-            co_pic_url     = #{picUrl}
+        set co_type_id = #{typeId},
+            co_level   = #{level},
+            co_name    = #{name},
+            co_intro   = #{intro},
+            co_pic_url = #{picUrl}
         where co_id = #{id}
     </update>
 
@@ -124,13 +129,5 @@
         select
         <include refid="Base_Column_List"/>
         from competition
-    </select>
-
-    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from competition
-        where co_id = #{id}
     </select>
 </mapper>
