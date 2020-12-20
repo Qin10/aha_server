@@ -5,10 +5,10 @@ import cn.hdustea.aha_server.entity.CompetitionType;
 import java.util.List;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
+ * ${description}
+ *
+ * @author STEA_YY
+ **/
 public interface CompetitionTypeMapper {
     int deleteByPrimaryKey(Integer id);
 

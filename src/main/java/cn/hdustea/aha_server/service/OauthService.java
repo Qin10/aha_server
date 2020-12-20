@@ -40,7 +40,7 @@ public class OauthService {
         return oauthMapper.selectByPrimaryKey(userId, oauthType);
     }
 
-    public List<OauthVo> getAllOauthVoByUserId(Integer userId){
+    public List<OauthVo> getAllOauthVoByUserId(Integer userId) {
         return oauthMapper.selectAllVoByUserId(userId);
     }
 

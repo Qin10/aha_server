@@ -34,7 +34,7 @@ public class ResumeService {
      * 根据用户id修改简历
      *
      * @param resume 简历实体类
-     * @param userId  用户id
+     * @param userId 用户id
      * @throws SelectException 用户不存在异常
      */
     public void updateResumeByUserId(Resume resume, Integer userId) throws SelectException {

@@ -1,6 +1,9 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.Competition;import cn.hdustea.aha_server.vo.CompetitionVo;import java.util.List;
+import cn.hdustea.aha_server.entity.Competition;
+import cn.hdustea.aha_server.vo.CompetitionVo;
+
+import java.util.List;
 
 /**
  * ${description}

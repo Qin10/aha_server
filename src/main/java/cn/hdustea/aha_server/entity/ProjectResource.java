@@ -5,14 +5,10 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
-
-/**
- * 团队资源表，一个团队对应多个资源，资源表包括了资源文件名称，类别，阅读量等
- */
+ * 项目资源Mapper
+ *
+ * @author STEA_YY
+ **/
 @Data
 public class ProjectResource {
     private Integer id;

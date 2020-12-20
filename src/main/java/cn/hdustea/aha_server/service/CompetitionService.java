@@ -26,7 +26,7 @@ public class CompetitionService {
         return competitionMapper.selectAll();
     }
 
-    public List<CompetitionVo> getAllCompetitionVo(){
+    public List<CompetitionVo> getAllCompetitionVo() {
         return competitionMapper.selectAllVo();
     }
 
@@ -85,7 +85,7 @@ public class CompetitionService {
      * 修改竞赛标签
      *
      * @param competitionType 竞赛标签实体类
-     * @param id             竞赛标签id
+     * @param id              竞赛标签id
      */
     public void updateCompetitionTypeById(CompetitionType competitionType, int id) {
         competitionType.setId(id);

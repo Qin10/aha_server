@@ -1,4 +1,5 @@
 package cn.hdustea.aha_server.mapper;
+
 import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.vo.UserManagementVo;
@@ -42,5 +43,5 @@ public interface UserMapper {
 
     List<UserManagementVo> selectAllManagementVoByConditions(@Param("roleId") Integer roleId, @Param("signedNotice") Boolean signedNotice, @Param("signedContract") Boolean signedContract, @Param("typeId") Integer typeId, @Param("nicknameLike") String nicknameLike, @Param("trueNameLike") String trueNameLike);
 
-    int updateDecContribPointById(@Param("deductedContribPoint")BigDecimal deductedContribPoint,@Param("id")Integer id);
+    int updateDecContribPointById(@Param("deductedContribPoint") BigDecimal deductedContribPoint, @Param("id") Integer id);
 }

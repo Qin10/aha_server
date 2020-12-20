@@ -43,7 +43,6 @@ public interface ProjectResourceMapper {
 
     int updateScoreAndScoreCountById(@Param("updatedScore") BigDecimal updatedScore, @Param("updatedScoreCount") Integer updatedScoreCount, @Param("id") Integer id);
 
-    int updatePriceAndDiscountById(@Param("updatedPrice")BigDecimal updatedPrice,@Param("updatedDiscount")BigDecimal updatedDiscount,@Param("id")Integer id);
-
+    int updatePriceAndDiscountById(@Param("updatedPrice") BigDecimal updatedPrice, @Param("updatedDiscount") BigDecimal updatedDiscount, @Param("id") Integer id);
 
 }

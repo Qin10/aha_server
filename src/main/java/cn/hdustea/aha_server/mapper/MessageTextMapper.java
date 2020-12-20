@@ -1,6 +1,9 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.MessageText;import org.apache.ibatis.annotations.Param;import java.util.List;
+import cn.hdustea.aha_server.entity.MessageText;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * 站内信内容表mapper

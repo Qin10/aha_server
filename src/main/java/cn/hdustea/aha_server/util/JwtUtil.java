@@ -81,7 +81,7 @@ public class JwtUtil {
      * 生成签名,10分钟后过期
      *
      * @param jwtPayloadDto payload封装实体
-     * @param secret         秘钥
+     * @param secret        秘钥
      * @return 加密的token
      */
     public static String sign(JwtPayloadDto jwtPayloadDto, String secret, int expireTime) {

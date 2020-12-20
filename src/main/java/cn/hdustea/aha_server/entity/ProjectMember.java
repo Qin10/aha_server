@@ -5,14 +5,10 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 
 /**
-* ${description}
-*
-* @author STEA_YY
-**/
-
-/**
- * 团队成员表，一个团队对应多个成员，包括成员的手机号、顺位、角色、职位等信息
- */
+ * 项目成员Mapper
+ *
+ * @author STEA_YY
+ **/
 @Data
 public class ProjectMember {
     private Integer projectId;

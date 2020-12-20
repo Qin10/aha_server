@@ -20,7 +20,7 @@ public class NoticeService {
     @Resource
     private NoticeMapper noticeMapper;
 
-    public List<Notice> getAllNotice(Boolean enable,Date currentTime) {
+    public List<Notice> getAllNotice(Boolean enable, Date currentTime) {
         return noticeMapper.selectAllByConditions(enable, currentTime);
     }
 

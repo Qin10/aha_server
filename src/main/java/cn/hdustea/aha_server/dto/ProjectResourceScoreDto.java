@@ -18,8 +18,8 @@ public class ProjectResourceScoreDto {
     /**
      * 资源评分
      */
-    @DecimalMax(value = "5.0",message = "评分不能高于5分！")
-    @DecimalMin(value = "0.0",message = "评分不能低于0分！")
+    @DecimalMax(value = "5.0", message = "评分不能高于5分！")
+    @DecimalMin(value = "0.0", message = "评分不能低于0分！")
     @NotNull(message = "评分不能为空！")
     private BigDecimal score;
 
