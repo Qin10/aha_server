@@ -125,7 +125,13 @@
         select
         <include refid="Base_Column_List"/>
         from notice
-        where no_enable = #{enable}
-          and #{currentTime} between no_putting_start_time and no_putting_end_time
+        <where>
+            <if test="enable != null">
+                and no_enable = #{enable}
+            </if>
+            <if test="currentTime != null">
+                and #{currentTime} between no_putting_start_time and no_putting_end_time
+            </if>
+        </where>
     </select>
 </mapper>

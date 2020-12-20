@@ -41,6 +41,8 @@ public class ManagementController {
     private MessageService messageService;
     @Resource
     private NoticeService noticeService;
+    @Resource
+    private FeedbackService feedbackService;
 
     /**
      * 分页获取所有项目粗略信息
@@ -413,6 +415,16 @@ public class ManagementController {
     }
 
     /**
+     * 获取全部公告
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/notice")
+    public ResponseBean<List<Notice>> getAllNotice() {
+        List<Notice> notices = noticeService.getAllNotice(null, null);
+        return new ResponseBean<>(200, "succ", notices);
+    }
+
+    /**
      * 发布公告
      *
      * @param noticeDto 公告
@@ -434,6 +446,39 @@ public class ManagementController {
     @PutMapping("/notice/{noticeId}")
     public ResponseBean<Object> sendNotice(@RequestBody @Validated NoticeDto noticeDto, @PathVariable("noticeId") Integer noticeId) {
         noticeService.updateNoticeById(noticeDto, noticeId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 分页查看用户反馈
+     *
+     * @param pageNum      页码
+     * @param pageSize     分页大小
+     * @param userId       用户id
+     * @param status       处理状态
+     * @param type         反馈类型
+     * @param lowestLevel  最低级别
+     * @param highestLevel 最高级别
+     * @param sortBy       排序关键字，取值time、status、type、level、replyTime
+     * @param orderBy      排序方式，取值asc、desc
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/feedback")
+    public ResponseBean<PageVo<List<FeedbackVo>>> getAllPersonalFeedback(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "status", required = false) Integer status, @RequestParam(value = "type", required = false) Integer type, @RequestParam(value = "lowestLevel", required = false, defaultValue = "0") Integer lowestLevel, @RequestParam(value = "highestLevel", required = false, defaultValue = "5") Integer highestLevel, @RequestParam(value = "sortBy", required = false, defaultValue = "time") String sortBy, @RequestParam(value = "orderBy", required = false, defaultValue = "desc") String orderBy) throws SelectException {
+        PageVo<List<FeedbackVo>> feedbackVos = feedbackService.getAllFeedbackVoPagable(pageNum, pageSize, status, type, userId, lowestLevel, highestLevel, sortBy, orderBy);
+        return new ResponseBean<>(200, "succ", feedbackVos);
+    }
+
+    /**
+     * 管理员处理用户反馈
+     *
+     * @param feedbackId       反馈id
+     * @param feedbackAdminDto 反馈管理员回执
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PutMapping("/feedback/{feedbackId}")
+    public ResponseBean<Object> updateFeedbackById(@PathVariable("feedbackId") int feedbackId, @RequestBody FeedbackAdminDto feedbackAdminDto) {
+        feedbackService.replyFeedbackById(feedbackAdminDto, feedbackId);
         return new ResponseBean<>(200, "succ", null);
     }
 }

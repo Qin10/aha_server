@@ -1,8 +1,6 @@
 package cn.hdustea.aha_server.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -32,16 +30,12 @@ public class NoticeDto {
      * 公告投放开始日期
      */
     @NotNull(message = "公告投放开始日期不能为空")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date puttingStartTime;
 
     /**
      * 公告投放结束日期
      */
     @NotNull(message = "公告投放结束日期不能为空")
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date puttingEndTime;
 
     /**

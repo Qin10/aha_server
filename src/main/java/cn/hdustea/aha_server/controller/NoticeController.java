@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class NoticeController {
     @RequiresLogin
     @GetMapping
     public ResponseBean<List<Notice>> getAllNoticeEnabled() {
-        List<Notice> notices = noticeService.getAllNoticeEnabled();
+        List<Notice> notices = noticeService.getAllNotice(true, new Date());
         return new ResponseBean<>(200, "succ", notices);
     }
 }

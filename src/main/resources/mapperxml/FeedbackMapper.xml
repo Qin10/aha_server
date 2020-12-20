@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hdustea.aha_server.mapper.FeedbackMapper">
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.Feedback">
+        <!--@mbg.generated-->
+        <!--@Table feedback-->
+        <id column="fe_id" property="id"/>
+        <result column="fe_user_id" property="userId"/>
+        <result column="fe_time" property="time"/>
+        <result column="fe_type" property="type"/>
+        <result column="fe_content" property="content"/>
+        <result column="fe_status" property="status"/>
+        <result column="fe_reply" property="reply"/>
+        <result column="fe_reply_time" property="replyTime"/>
+        <result column="fe_level" property="level"/>
+    </resultMap>
+    <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.FeedbackVo">
+        <id column="fe_id" property="id"/>
+        <result column="fe_time" property="time"/>
+        <result column="fe_type" property="type"/>
+        <result column="fe_content" property="content"/>
+        <result column="fe_status" property="status"/>
+        <result column="fe_reply" property="reply"/>
+        <result column="fe_reply_time" property="replyTime"/>
+        <result column="fe_level" property="level"/>
+        <association property="user" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" column="fe_user_id"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        fe_id, fe_user_id, fe_time, fe_type, fe_content, fe_status, fe_reply, fe_reply_time,
+        fe_level
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from feedback
+        where fe_id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from feedback
+        where fe_id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="fe_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Feedback"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into feedback (fe_user_id, fe_time, fe_type, fe_content, fe_status, fe_reply, fe_reply_time,
+                              fe_level)
+        values (#{userId}, #{time}, #{type}, #{content}, #{status}, #{reply}, #{replyTime},
+                #{level})
+    </insert>
+    <insert id="insertSelective" keyColumn="fe_id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.Feedback" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                fe_user_id,
+            </if>
+            <if test="time != null">
+                fe_time,
+            </if>
+            <if test="type != null">
+                fe_type,
+            </if>
+            <if test="content != null">
+                fe_content,
+            </if>
+            <if test="status != null">
+                fe_status,
+            </if>
+            <if test="reply != null">
+                fe_reply,
+            </if>
+            <if test="replyTime != null">
+                fe_reply_time,
+            </if>
+            <if test="level != null">
+                fe_level,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="time != null">
+                #{time},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="reply != null">
+                #{reply},
+            </if>
+            <if test="replyTime != null">
+                #{replyTime},
+            </if>
+            <if test="level != null">
+                #{level},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.Feedback">
+        <!--@mbg.generated-->
+        update feedback
+        <set>
+            <if test="userId != null">
+                fe_user_id = #{userId},
+            </if>
+            <if test="time != null">
+                fe_time = #{time},
+            </if>
+            <if test="type != null">
+                fe_type = #{type},
+            </if>
+            <if test="content != null">
+                fe_content = #{content},
+            </if>
+            <if test="status != null">
+                fe_status = #{status},
+            </if>
+            <if test="reply != null">
+                fe_reply = #{reply},
+            </if>
+            <if test="replyTime != null">
+                fe_reply_time = #{replyTime},
+            </if>
+            <if test="level != null">
+                fe_level = #{level},
+            </if>
+        </set>
+        where fe_id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Feedback">
+        <!--@mbg.generated-->
+        update feedback
+        set fe_user_id    = #{userId},
+            fe_time       = #{time},
+            fe_type       = #{type},
+            fe_content    = #{content},
+            fe_status     = #{status},
+            fe_reply      = #{reply},
+            fe_reply_time = #{replyTime},
+            fe_level      = #{level}
+        where fe_id = #{id}
+    </update>
+
+    <!--auto generated by MybatisCodeHelper on 2020-12-20-->
+    <select id="selectAllVoByConditions" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from feedback
+        <where>
+            <if test="type != null">
+                and fe_type = #{type}
+            </if>
+            <if test="status != null">
+                and fe_status = #{status}
+            </if>
+            <if test="userId != null">
+                and fe_user_id = #{userId}
+            </if>
+            and fe_level between #{lowestLevel} and #{highestLevel}
+        </where>
+    </select>
+</mapper>

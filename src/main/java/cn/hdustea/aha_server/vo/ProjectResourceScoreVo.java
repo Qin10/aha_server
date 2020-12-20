@@ -36,6 +36,5 @@ public class ProjectResourceScoreVo {
     /**
      * 评价时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
 }

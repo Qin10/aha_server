@@ -659,6 +659,85 @@ action|string|否|操作，取值pay、cancel
 	"time":"string //响应时间"
 }
 ```
+# 反馈类请求
+## 分页获取用户全部反馈
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/feedback/me `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+status|int|否|处理状态
+type|int|否|类别
+lowestLevel|int|否|最低级别
+highestLevel|int|否|最高级别
+sortBy|string|否|排序关键字，取值time、status、type、level、replyTime
+orderBy|string|否|排序方式
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int",
+			"user":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校"
+			},
+			"time":"date //反馈时间",
+			"type":"int //反馈类型",
+			"content":"string //反馈内容",
+			"status":"int //反馈状态",
+			"reply":"string //反馈回复",
+			"replyTime":"date //反馈回复时间",
+			"level":"int //反馈问题级别"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 用户提交反馈
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/feedback `POST` 
+
+**请求体**
+
+```json
+{
+	"type":"int //反馈类型",
+	"content":"string //反馈内容"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 文件下载相关请求
 ## 获取oss签名，已弃用
 
@@ -1625,6 +1704,33 @@ userId|int|否|用户id
 	"time":"string //响应时间"
 }
 ```
+## 获取全部公告
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/notice `GET` 
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int",
+		"title":"string //公告标题",
+		"content":"string //公告内容",
+		"createTime":"date //公告开始日期",
+		"puttingStartTime":"date //公告投放开始日期",
+		"puttingEndTime":"date //公告投放结束日期",
+		"enable":"boolean //公告是否启用"
+	}],
+	"time":"string //响应时间"
+}
+```
 ## 发布公告
 
 *作者: STEA_YY*
@@ -1678,6 +1784,92 @@ noticeId|int|否|公告id
 	"puttingStartTime":"date //公告投放开始日期【必须】",
 	"puttingEndTime":"date //公告投放结束日期【必须】",
 	"enable":"boolean //公告是否启用【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 分页查看用户反馈
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/feedback `GET` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+userId|int|否|用户id
+status|int|否|处理状态
+type|int|否|反馈类型
+lowestLevel|int|否|最低级别
+highestLevel|int|否|最高级别
+sortBy|string|否|排序关键字，取值time、status、type、level、replyTime
+orderBy|string|否|排序方式，取值asc、desc
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int",
+			"user":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校"
+			},
+			"time":"date //反馈时间",
+			"type":"int //反馈类型",
+			"content":"string //反馈内容",
+			"status":"int //反馈状态",
+			"reply":"string //反馈回复",
+			"replyTime":"date //反馈回复时间",
+			"level":"int //反馈问题级别"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 管理员处理用户反馈
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/feedback/{feedbackId} `PUT` 
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+feedbackId|int|否|反馈id
+
+**请求体**
+
+```json
+{
+	"status":"int //反馈状态",
+	"reply":"string //反馈回复",
+	"level":"int //反馈问题级别"
 }
 ```
 
