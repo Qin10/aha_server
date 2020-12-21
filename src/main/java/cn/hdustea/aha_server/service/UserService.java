@@ -182,6 +182,12 @@ public class UserService {
         userMapper.updateSignedContractById(signedContract, id);
     }
 
+    /**
+     * 根据用户id减少贡献点
+     *
+     * @param id               用户id
+     * @param descContribPoint 减少的贡献点
+     */
     public void updateDescContribPoint(Integer id, BigDecimal descContribPoint) {
         userMapper.updateDecContribPointById(descContribPoint, id);
     }

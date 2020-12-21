@@ -46,14 +46,34 @@ public class ContribPointOrderService {
     @Resource
     private UserOperationLogConfig userOperationLogConfig;
 
+    /**
+     * 根据id获取贡献点订单VO
+     *
+     * @param id 贡献点订单表id
+     * @return 贡献点订单VO
+     */
     public ContribPointOrderVo getContribPointOrderVoById(int id) {
         return contribPointOrderMapper.selectVoByPrimaryKey(id);
     }
 
+    /**
+     * 根据用户id获取全部贡献点订单
+     *
+     * @param userId 用户id
+     * @return 贡献点订单列表
+     */
     public List<ContribPointOrderVo> getAllContribPointOrderVoByUserId(int userId) {
         return contribPointOrderMapper.selectAllVoByUserId(userId);
     }
 
+    /**
+     * 创建贡献点订单
+     *
+     * @param userId                        用户id
+     * @param contribPointOrderResourcesDto 订购资源列表DTO
+     * @return 贡献点订单id
+     * @throws InsertException 插入异常
+     */
     @Transactional(rollbackFor = {Exception.class})
     public int createOrder(int userId, ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException {
         BigDecimal totalPrice = BigDecimal.valueOf(0.0);
@@ -87,6 +107,13 @@ public class ContribPointOrderService {
         return contribPointOrder.getId();
     }
 
+    /**
+     * 支付贡献点订单
+     *
+     * @param userId  用户id
+     * @param orderId 贡献点订单id
+     * @throws UpdateException 更新异常
+     */
     @Transactional(rollbackFor = {Exception.class})
     public void payOrder(int userId, int orderId) throws UpdateException {
         UserVo userVo = userService.getUserVoById(userId);
@@ -125,6 +152,13 @@ public class ContribPointOrderService {
         }
     }
 
+    /**
+     * 取消贡献点订单
+     *
+     * @param userId  用户id
+     * @param orderId 贡献点订单id
+     * @throws UpdateException 更新异常
+     */
     @Transactional(rollbackFor = {Exception.class})
     public void cancelOrder(int userId, int orderId) throws UpdateException {
         ContribPointOrder contribPointOrder = contribPointOrderMapper.selectByPrimaryKey(orderId);
@@ -141,6 +175,14 @@ public class ContribPointOrderService {
         contribPointOrderMapper.updateByPrimaryKeySelective(contribPointOrder);
     }
 
+    /**
+     * 操作订单
+     *
+     * @param userId  用户id
+     * @param orderId 贡献点订单id
+     * @param action  操作(取值"pay","cancel")
+     * @throws UpdateException 更新异常
+     */
     public void operateOrder(int userId, int orderId, String action) throws UpdateException {
         switch (action) {
             case ContribPointOrderConstants.ACTION_PAY: {

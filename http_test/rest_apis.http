@@ -508,6 +508,12 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
+###根据id获取竞赛信息
+GET http://{{host}}/competition/5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
 ###添加竞赛标签
 POST http://{{host}}/admin/competition/tag
 Content-Type: application/json
@@ -582,7 +588,6 @@ Content-Type: application/json
   "level": 1
 }
 
-
 ###创建反馈
 POST http://{{host}}/feedback
 Authorization: {{auth_token}}
@@ -600,4 +605,3 @@ GET http://{{host}}/feedback/me?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
-

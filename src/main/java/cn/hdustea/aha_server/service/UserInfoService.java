@@ -36,6 +36,12 @@ public class UserInfoService {
         return userInfoMapper.selectByPrimaryKey(userId);
     }
 
+    /**
+     * 根据用户id获取用户公开信息VO
+     *
+     * @param userId 用户id
+     * @return 用户公开信息VO
+     */
     public UserRoughInfoVo getUserInfoVoByUserId(Integer userId) {
         return userInfoMapper.selectRoughVoByPrimaryKey(userId);
     }

@@ -153,6 +153,14 @@ public class ProjectResourceService {
         }
     }
 
+    /**
+     * 保存项目资源评价
+     *
+     * @param projectResourceScoreDto 项目资源评价
+     * @param resourceId              项目资源id
+     * @param userId                  用户id
+     * @throws InsertException 插入异常
+     */
     public void saveResourceScore(ProjectResourceScoreDto projectResourceScoreDto, int resourceId, int userId) throws InsertException {
         ProjectResourceScore projectResourceScore = new ProjectResourceScore();
         BeanUtils.copyProperties(projectResourceScoreDto, projectResourceScore);
@@ -170,6 +178,13 @@ public class ProjectResourceService {
         }
     }
 
+    /**
+     * 删除项目资源评价
+     *
+     * @param resourceId 项目资源id
+     * @param userId     用户id
+     * @throws DeleteException 删除异常
+     */
     public void deleteResourceScore(int resourceId, int userId) throws DeleteException {
         ProjectResourceScore projectResourceScore = projectResourceScoreMapper.selectByPrimaryKey(userId, resourceId);
         if (projectResourceScore == null) {
@@ -178,6 +193,20 @@ public class ProjectResourceService {
         projectResourceScoreMapper.deleteByPrimaryKey(userId, resourceId);
     }
 
+    /**
+     * 分页获取项目资源评价
+     *
+     * @param pageNum      页码
+     * @param pageSize     分页大小
+     * @param projectId    项目id
+     * @param resourceId   项目资源id
+     * @param lowestScore  最低分
+     * @param highestScore 最高分
+     * @param sortBy       排序关键字,取值time、score
+     * @param orderBy      排序方式
+     * @return 项目资源分页列表
+     * @throws SelectException 查询异常
+     */
     public PageVo<List<ProjectResourceScoreVo>> getAllResourceScorePagable(Integer pageNum, Integer pageSize, Integer projectId, Integer resourceId, BigDecimal lowestScore, BigDecimal highestScore, String sortBy, String orderBy) throws SelectException {
         if ((projectId == null && resourceId == null) || (projectId != null && resourceId != null)) {
             throw new SelectException("参数错误，projectId和resourceId有且只有一个字段为空！");
@@ -217,15 +246,36 @@ public class ProjectResourceService {
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
+    /**
+     * 判断用户是否购买了资源
+     *
+     * @param userId     用户id
+     * @param resourceId 项目资源id
+     * @return 是否购买
+     */
     public boolean purchasedResource(int userId, int resourceId) {
         PurchasedResource purchasedResource = purchasedResourceMapper.selectByUserIdAndResourceId(userId, resourceId);
         return purchasedResource != null;
     }
 
+    /**
+     * 获取用户全部已购资源
+     *
+     * @param userId 用户id
+     * @return 已购资源列表
+     */
     public List<PurchasedResourceVo> getAllPurchasedResourceVoByUserId(int userId) {
         return purchasedResourceMapper.selectAllVoByUserId(userId);
     }
 
+    /**
+     * 分页获取资源被购买记录
+     *
+     * @param pageNum    页码
+     * @param pageSize   分页大小
+     * @param resourceId 项目资源id
+     * @return 分页资源购买信息列表
+     */
     public PageVo<List<PurchasedResourceManagementVo>> getAllPurchasedResourceVoByResourceId(int pageNum, int pageSize, int resourceId) {
         PageHelper.startPage(pageNum, pageSize);
         PageHelper.orderBy("pr_purchase_time desc");
@@ -234,6 +284,13 @@ public class ProjectResourceService {
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
+    /**
+     * 审核项目资源
+     *
+     * @param projectResourceCheckDto 项目资源审核信息
+     * @param resourceId              项目资源id
+     * @throws UpdateException 更新异常
+     */
     public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException {
         ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
         if (projectResource == null) {
@@ -242,6 +299,13 @@ public class ProjectResourceService {
         projectResourceMapper.updatePriceAndDiscountById(projectResourceCheckDto.getPrice(), projectResourceCheckDto.getDiscount(), resourceId);
     }
 
+    /**
+     * 判断用户是否有权限编辑项目资源
+     *
+     * @param userId            用户id
+     * @param projectResourceId 项目资源id
+     * @return 是否有权限
+     */
     public boolean hasPermission(int userId, int projectResourceId) {
         ProjectResource projectResource = getProjectResourceById(projectResourceId);
         if (projectResource == null) {

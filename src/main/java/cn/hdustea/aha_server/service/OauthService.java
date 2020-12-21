@@ -40,6 +40,12 @@ public class OauthService {
         return oauthMapper.selectByPrimaryKey(userId, oauthType);
     }
 
+    /**
+     * 根据用户id获取全部第三方登录凭证VO
+     *
+     * @param userId 用户id
+     * @return 第三方登录凭证VO
+     */
     public List<OauthVo> getAllOauthVoByUserId(Integer userId) {
         return oauthMapper.selectAllVoByUserId(userId);
     }

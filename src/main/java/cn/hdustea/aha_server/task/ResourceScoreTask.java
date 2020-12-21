@@ -25,6 +25,9 @@ public class ResourceScoreTask {
     @Resource
     private ProjectResourceMapper projectResourceMapper;
 
+    /**
+     * 批量更新项目资源平均分和评价人数
+     */
     @Scheduled(cron = "0 0 * * * ?")
     @Transactional(rollbackFor = Exception.class)
     @Async

@@ -1,4 +1,4 @@
-package cn.hdustea.aha_server.enums;
+package cn.hdustea.aha_server.constants;
 
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.runtimeApiException;
 
-import cn.hdustea.aha_server.enums.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCode;
 import cn.hdustea.aha_server.exception.RuntimeApiException;
 
 /**

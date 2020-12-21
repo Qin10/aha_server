@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.enums.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCode;
 import cn.hdustea.aha_server.exception.ApiException;
 import cn.hdustea.aha_server.exception.RuntimeApiException;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
