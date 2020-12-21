@@ -565,3 +565,39 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
+###管理员获取反馈
+GET http://{{host}}/admin/feedback?pageNum=1&pageSize=5&userId=53
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员回复反馈
+PUT http://{{host}}/admin/feedback/6
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "reply": "好耶",
+  "status": 3,
+  "level": 1
+}
+
+
+###创建反馈
+POST http://{{host}}/feedback
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "content": "测试15382355341",
+  "type": 1
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取用户反馈
+GET http://{{host}}/feedback/me?pageNum=1&pageSize=5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+

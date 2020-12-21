@@ -39,7 +39,7 @@ public class FeedbackController {
      */
     @RequiresLogin
     @GetMapping("/me")
-    public ResponseBean<PageVo<List<FeedbackVo>>> getAllPersonalFeedback(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "status", required = false) Integer status, @RequestParam(value = "type", required = false) Integer type, @RequestParam(value = "lowestLevel", required = false, defaultValue = "0") Integer lowestLevel, @RequestParam(value = "highestLevel", required = false, defaultValue = "5") Integer highestLevel, @RequestParam(value = "sortBy", required = false, defaultValue = "time") String sortBy, @RequestParam(value = "orderBy", required = false, defaultValue = "desc") String orderBy) throws SelectException {
+    public ResponseBean<PageVo<List<FeedbackVo>>> getAllPersonalFeedback(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "status", required = false) Integer status, @RequestParam(value = "type", required = false) Integer type, @RequestParam(value = "lowestLevel", required = false) Integer lowestLevel, @RequestParam(value = "highestLevel", required = false) Integer highestLevel, @RequestParam(value = "sortBy", required = false, defaultValue = "time") String sortBy, @RequestParam(value = "orderBy", required = false, defaultValue = "desc") String orderBy) throws SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         PageVo<List<FeedbackVo>> feedbackVos = feedbackService.getAllFeedbackVoPagable(pageNum, pageSize, status, type, userId, lowestLevel, highestLevel, sortBy, orderBy);
         return new ResponseBean<>(200, "succ", feedbackVos);

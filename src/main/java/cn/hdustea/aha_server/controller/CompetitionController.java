@@ -1,9 +1,9 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
-import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.CompetitionType;
 import cn.hdustea.aha_server.service.CompetitionService;
+import cn.hdustea.aha_server.vo.CompetitionRoughVo;
 import cn.hdustea.aha_server.vo.CompetitionVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +32,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @GetMapping("/{id}")
-    public ResponseBean<Competition> getCompetitionById(@PathVariable("id") int id) {
-        Competition competition = competitionService.getCompetitionById(id);
-        return new ResponseBean<>(200, "succ", competition);
+    public ResponseBean<CompetitionVo> getCompetitionById(@PathVariable("id") int id) {
+        CompetitionVo competitionVo = competitionService.getCompetitionVoById(id);
+        return new ResponseBean<>(200, "succ", competitionVo);
     }
 
     /**
@@ -42,9 +42,9 @@ public class CompetitionController {
      */
     @RequiresLogin
     @GetMapping()
-    public ResponseBean<List<CompetitionVo>> getAllCompetition() {
-        List<CompetitionVo> competitionVos = competitionService.getAllCompetitionVo();
-        return new ResponseBean<>(200, "succ", competitionVos);
+    public ResponseBean<List<CompetitionRoughVo>> getAllCompetition() {
+        List<CompetitionRoughVo> competitionRoughVos = competitionService.getAllCompetitionVo();
+        return new ResponseBean<>(200, "succ", competitionRoughVos);
     }
 
     /**

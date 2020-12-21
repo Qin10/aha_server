@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.entity.Competition;
 import cn.hdustea.aha_server.entity.CompetitionType;
 import cn.hdustea.aha_server.mapper.CompetitionMapper;
 import cn.hdustea.aha_server.mapper.CompetitionTypeMapper;
+import cn.hdustea.aha_server.vo.CompetitionRoughVo;
 import cn.hdustea.aha_server.vo.CompetitionVo;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +23,12 @@ public class CompetitionService {
     @Resource
     private CompetitionTypeMapper competitionTypeMapper;
 
-    public List<Competition> getAllCompetition() {
-        return competitionMapper.selectAll();
+    public List<CompetitionRoughVo> getAllCompetitionVo() {
+        return competitionMapper.selectAllRoughVo();
     }
 
-    public List<CompetitionVo> getAllCompetitionVo() {
-        return competitionMapper.selectAllVo();
-    }
-
-    public Competition getCompetitionById(int id) {
-        return competitionMapper.selectByPrimaryKey(id);
+    public CompetitionVo getCompetitionVoById(int id) {
+        return competitionMapper.selectVoByPrimaryKey(id);
     }
 
     public void saveCompetition(Competition competition) {

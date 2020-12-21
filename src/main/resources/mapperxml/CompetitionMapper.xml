@@ -23,6 +23,15 @@
                      column="co_type_id"
                      select="cn.hdustea.aha_server.mapper.CompetitionTypeMapper.selectByPrimaryKey"/>
     </resultMap>
+    <resultMap id="RoughVoResultMap" type="cn.hdustea.aha_server.vo.CompetitionRoughVo">
+        <id column="co_id" property="id"/>
+        <result column="co_level" property="level"/>
+        <result column="co_name" property="name"/>
+        <result column="co_pic_url" property="picUrl"/>
+        <association property="competitionType" javaType="cn.hdustea.aha_server.entity.CompetitionType"
+                     column="co_type_id"
+                     select="cn.hdustea.aha_server.mapper.CompetitionTypeMapper.selectByPrimaryKey"/>
+    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         co_id, co_type_id, co_level, co_name, co_intro, co_pic_url
@@ -125,9 +134,16 @@
         from competition
     </select>
 
-    <select id="selectAllVo" resultMap="VoResultMap">
+    <select id="selectAllRoughVo" resultMap="RoughVoResultMap">
         select
         <include refid="Base_Column_List"/>
         from competition
+    </select>
+
+    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from competition
+        where co_id = #{id}
     </select>
 </mapper>

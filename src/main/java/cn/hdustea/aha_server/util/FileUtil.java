@@ -47,6 +47,13 @@ public class FileUtil {
         }
     }
 
+    /**
+     * 下载文件
+     *
+     * @param filePath 文件路径
+     * @param response HTTP响应
+     * @throws IOException IO操作异常
+     */
     public static void download(String filePath, HttpServletResponse response) throws IOException {
         File file = new File(filePath);
         if (!file.exists()) {

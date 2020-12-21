@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.mapper;
 
 import cn.hdustea.aha_server.entity.Competition;
+import cn.hdustea.aha_server.vo.CompetitionRoughVo;
 import cn.hdustea.aha_server.vo.CompetitionVo;
 
 import java.util.List;
@@ -25,5 +26,7 @@ public interface CompetitionMapper {
 
     List<Competition> selectAll();
 
-    List<CompetitionVo> selectAllVo();
+    List<CompetitionRoughVo> selectAllRoughVo();
+
+    CompetitionVo selectVoByPrimaryKey(Integer id);
 }
