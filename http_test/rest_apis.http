@@ -201,6 +201,12 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
+###判断资源是否已购买
+GET http://{{host}}/project/resource/purchased/check/11111
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
 ###获取项目所有成员信息
 GET http://{{host}}/project/70/members
 Authorization: {{auth_token}}
@@ -226,7 +232,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###收藏资源
-POST http://{{host}}/project/collection/70
+POST http://{{host}}/project/collection/78
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -602,6 +608,12 @@ Content-Type: application/json
 
 ###获取用户反馈
 GET http://{{host}}/feedback/me?pageNum=1&pageSize=5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取项目已购资源列表
+GET http://{{host}}/project/purchased/79
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

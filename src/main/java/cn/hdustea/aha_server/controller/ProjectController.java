@@ -483,6 +483,19 @@ public class ProjectController {
     }
 
     /**
+     * 根据项目id获取用户已购资源的id数组
+     *
+     * @param projectId 项目id
+     */
+    @RequiresLogin
+    @GetMapping("/purchased/{projectId}")
+    public ResponseBean<Integer[]> getAllPersonalResourcePurchasedVoByProjectId(@PathVariable("projectId") int projectId) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        Integer[] purchasedResourceIds = projectResourceService.getAllPurchasedResourceIdsByProjectIdAndUserId(projectId, userId);
+        return new ResponseBean<>(200, "succ", purchasedResourceIds);
+    }
+
+    /**
      * 增加项目阅读数
      *
      * @param projectId 项目id

@@ -3114,7 +3114,30 @@ resourceId|int|否|项目资源id
   "time": "string //响应时间"
 }
 ```
+## 根据项目id获取用户已购资源的id数组
 
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/purchased/{projectId} `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"int[] //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 用户简历相关请求
 
 ## 根据用户id查看用户简历

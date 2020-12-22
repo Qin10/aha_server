@@ -32,4 +32,10 @@ public interface PurchasedResourceMapper {
     PurchasedResource selectByUserIdAndResourceId(@Param("userId") Integer userId, @Param("resourceId") Integer resourceId);
 
     List<PurchasedResourceManagementVo> selectAllManagementVoByResourceId(@Param("resourceId") Integer resourceId);
+
+    List<PurchasedResource> selectAllByProjectIdAndUserId(@Param("projectId") Integer projectId,@Param("userId") Integer userId);
+
+    List<Integer> selectAllResourceIdByProjectIdAndUserId(@Param("projectId") Integer projectId,@Param("userId") Integer userId);
+
+
 }
