@@ -3100,7 +3100,9 @@ projectResourceId|int|否|项目资源id
 
 **请求参数**
 
-参数名|类型|必须|描述 --:|:--:|:--:|:-- resourceId|int|否|项目资源id
+参数名|类型|必须|描述
+--:|:--:|:--:|:-- 
+resourceId|int|否|项目资源id
 
 **返回结果**
 
