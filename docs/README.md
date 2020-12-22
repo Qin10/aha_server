@@ -343,7 +343,7 @@ code|string|否|小程序请求码
 
 **请求URL**
 
-/competition/{id} `GET` 
+/competition/{id} `GET`
 
 **请求参数**
 
@@ -355,17 +355,20 @@ id|int|否|竞赛信息id
 
 ```json
 {
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"id":"int",
-		"typeId":"int //竞赛类别id(外键)",
-		"level":"int //竞赛级别",
-		"name":"string //赛事名称",
-		"intro":"string //赛事简介",
-		"picUrl":"int //赛事图片保存路径"
-	},
-	"time":"string //响应时间"
+  "code": "int //响应状态码",
+  "msg": "string //响应消息",
+  "data": {
+    "id": "int //竞赛id",
+    "competitionType": {
+      "id": "int",
+      "name": "string"
+    },
+    "name": "string //赛事名称",
+    "level": "int //竞赛级别",
+    "intro": "string //赛事简介",
+    "picUrl": "int //赛事图片保存路径"
+  },
+  "time": "string //响应时间"
 }
 ```
 ## 获取所有竞赛信息
@@ -374,29 +377,29 @@ id|int|否|竞赛信息id
 
 **请求URL**
 
-/competition `GET` 
-
+/competition `GET`
 
 **返回结果**
 
 ```json
 {
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":[{
-		"id":"int //竞赛id",
-		"competitionType":{
-			"id":"int",
-			"name":"string"
-		},
-		"name":"string //赛事名称",
-		"level":"int //竞赛级别",
-		"intro":"string //赛事简介",
-		"picUrl":"int //赛事图片保存路径"
-	}],
-	"time":"string //响应时间"
+  "code": "int //响应状态码",
+  "msg": "string //响应消息",
+  "data": [
+    {
+      "id": "int //竞赛id",
+      "competitionType": {
+        "id": "int",
+        "name": "string"
+      },
+      "name": "string //赛事名称",
+      "level": "int //竞赛级别",
+      "picUrl": "int //赛事图片保存路径"
+    }
+  ],
+  "time": "string //响应时间"
 }
-```
+``` 
 ## 根据id获取竞赛类别
 
 *作者: STEA_YY*
