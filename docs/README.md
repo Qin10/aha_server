@@ -2930,7 +2930,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/collection/{projectId} `GET` 
+/project/collection/check/{projectId} `GET`
 
 **请求参数**
 
@@ -3075,24 +3075,50 @@ projectResourceId|int|否|项目资源id
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"previewUrl":"string //保存在oss里的预览文件地址",
 			"download":"int //资源文件下载量",
-			"score":"double //资源平均分",
-			"scoreCount":"int //评分人数",
-			"price":"double //资源价格",
-			"discount":"double //资源折扣"
-		},
-		"purchaseTime":"date //购买时间"
-	}],
-	"time":"string //响应时间"
+          "score": "double //资源平均分",
+          "scoreCount": "int //评分人数",
+          "price": "double //资源价格",
+          "discount": "double //资源折扣"
+        },
+      "purchaseTime": "date //购买时间"
+    }
+    ],
+  "time": "string //响应时间"
 }
 ```
+
+## 判断项目资源是否已经购买
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/resource/purchased/check/{resourceId} `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述 --:|:--:|:--:|:-- resourceId|int|否|项目资源id
+
+**返回结果**
+
+```json
+{
+  "code": "int //响应状态码",
+  "msg": "string //响应消息",
+  "data": "boolean //响应数据",
+  "time": "string //响应时间"
+}
+```
+
 # 用户简历相关请求
+
 ## 根据用户id查看用户简历
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/resume/{userId} `GET` 
+/resume/{userId} `GET`
 
 **请求参数**
 

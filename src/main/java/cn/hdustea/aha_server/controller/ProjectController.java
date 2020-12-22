@@ -402,7 +402,7 @@ public class ProjectController {
      * @param projectId 项目id
      */
     @RequiresLogin
-    @GetMapping("/collection/{projectId}")
+    @GetMapping("/collection/check/{projectId}")
     public ResponseBean<Boolean> getCollectedByProjectId(@PathVariable("projectId") int projectId) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         boolean result = projectService.hasCollected(projectId, userId);
@@ -467,6 +467,19 @@ public class ProjectController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         List<PurchasedResourceVo> purchasedResourceVos = projectResourceService.getAllPurchasedResourceVoByUserId(userId);
         return new ResponseBean<>(200, "succ", purchasedResourceVos);
+    }
+
+    /**
+     * 判断项目资源是否已经购买
+     *
+     * @param resourceId 项目资源id
+     */
+    @RequiresLogin
+    @GetMapping("/resource/purchased/check/{resourceId}")
+    public ResponseBean<Boolean> checkPurchasedResource(@PathVariable("resourceId") int resourceId) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        boolean purchased = projectResourceService.purchasedResource(userId, resourceId);
+        return new ResponseBean<>(200, "succ", purchased);
     }
 
     /**
