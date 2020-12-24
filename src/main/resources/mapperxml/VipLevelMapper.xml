@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hdustea.aha_server.mapper.VipLevelMapper">
+  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.VipLevel">
+    <!--@mbg.generated-->
+    <!--@Table vip_level-->
+    <id column="vip_id" property="id" />
+    <result column="vip_name" property="name" />
+    <result column="vip_weekly_contrib_point" property="weeklyContribPoint" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    vip_id, vip_name, vip_weekly_contrib_point
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from vip_level
+    where vip_id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from vip_level
+    where vip_id = #{id}
+  </delete>
+  <insert id="insert" keyColumn="vip_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.VipLevel" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into vip_level (vip_name, vip_weekly_contrib_point)
+    values (#{name}, #{weeklyContribPoint})
+  </insert>
+  <insert id="insertSelective" keyColumn="vip_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.VipLevel" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into vip_level
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        vip_name,
+      </if>
+      <if test="weeklyContribPoint != null">
+        vip_weekly_contrib_point,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="weeklyContribPoint != null">
+        #{weeklyContribPoint},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.VipLevel">
+    <!--@mbg.generated-->
+    update vip_level
+    <set>
+      <if test="name != null">
+        vip_name = #{name},
+      </if>
+      <if test="weeklyContribPoint != null">
+        vip_weekly_contrib_point = #{weeklyContribPoint},
+      </if>
+    </set>
+    where vip_id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.VipLevel">
+    <!--@mbg.generated-->
+    update vip_level
+    set vip_name = #{name},
+      vip_weekly_contrib_point = #{weeklyContribPoint}
+    where vip_id = #{id}
+  </update>
+</mapper>

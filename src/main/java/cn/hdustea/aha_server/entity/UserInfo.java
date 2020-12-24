@@ -85,4 +85,9 @@ public class UserInfo {
      * 用户参与过比赛标签
      */
     private String compTags;
+
+    /**
+     * 用户VIP等级(外键)
+     */
+    private Integer vipLevelId;
 }

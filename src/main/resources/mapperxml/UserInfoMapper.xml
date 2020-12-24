@@ -19,6 +19,7 @@
         <result column="ui_specialty_tags" property="specialtyTags"/>
         <result column="ui_true_name" property="trueName"/>
         <result column="ui_comp_tags" property="compTags"/>
+        <result column="ui_vip_level_id" property="vipLevelId"/>
     </resultMap>
     <resultMap id="RoughResultMap" type="cn.hdustea.aha_server.vo.UserRoughInfoVo">
         <result column="ui_user_id" property="userId"/>
@@ -26,16 +27,13 @@
         <result column="ui_gender" property="gender"/>
         <result column="ui_avatar_url" property="avatarUrl"/>
         <result column="ui_school" property="school"/>
+        <result column="ui_vip_level_id" property="vipLevelId"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         ui_user_id, ui_nickname, ui_gender, ui_birthday, ui_type_id, ui_signature, ui_avatar_url,
         ui_school, ui_academy, ui_major, ui_grade, ui_intro, ui_specialty_tags, ui_true_name,
-        ui_comp_tags
-    </sql>
-    <sql id="Rough_Column_List">
-        <!--@mbg.generated-->
-        ui_user_id, ui_nickname, ui_gender, ui_avatar_url, ui_school, ui_true_name
+        ui_comp_tags, ui_vip_level_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->

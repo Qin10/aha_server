@@ -34,4 +34,9 @@ public class UserRoughInfoVo {
      * 用户学校
      */
     private String school;
+
+    /**
+     * 用户VIP等级(外键)
+     */
+    private Integer vipLevelId;
 }
