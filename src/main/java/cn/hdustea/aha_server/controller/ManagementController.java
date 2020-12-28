@@ -79,6 +79,18 @@ public class ManagementController {
     }
 
     /**
+     * 获取项目资源文件COS下载签名
+     *
+     * @param projectResourceId 项目资源id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/project/resource/{projectResourceId}/sign/download/v2")
+    public ResponseBean<CosPolicyVo> signDownloadResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
+        CosPolicyVo cosPolicyVo = projectResourceService.signDownloadProjectResourceByIdToCos(projectResourceId);
+        return new ResponseBean<>(200, "succ", cosPolicyVo);
+    }
+
+    /**
      * 审核项目
      *
      * @param projectId       项目id

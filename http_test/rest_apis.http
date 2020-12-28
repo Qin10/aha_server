@@ -351,14 +351,13 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST http://{{host}}/project/resource/78
+POST http://{{host}}/project/resource/71
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "type": 1,
-  "name": "项目咕叽书",
-  "filename": "aaab.doc",
+  "name": "数据挖掘实验2",
+  "filename": "/第一个项目/数据挖掘实验2.docx",
   "price": 10.0,
   "discount": 0.0
 }
@@ -614,6 +613,18 @@ Authorization: {{auth_token}}
 
 ###获取项目已购资源列表
 GET http://{{host}}/project/purchased/79
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###签名上传
+GET http://{{host}}/userInfo/avatar/sign/upload/v2?filename=avatar.jpg
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###签名上传资源
+GET http://{{host}}/project/71/resources/sign/upload/private/v2?filename=数据挖掘实验2.docx
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

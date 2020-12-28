@@ -14,7 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author STEA_YY
  */
 @SpringBootApplication
-@EnableConfigurationProperties({JwtConfig.class, FileUploadPathConfig.class, AliyunOssConfig.class, UserOperationLogConfig.class, WechatConfig.class})
+@EnableConfigurationProperties({JwtConfig.class, FileUploadPathConfig.class, AliyunOssConfig.class, UserOperationLogConfig.class, WechatConfig.class, TencentCosConfig.class})
 @MapperScan(basePackages = "cn.hdustea.aha_server.mapper")
 @EnableScheduling
 @EnableAsync

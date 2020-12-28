@@ -13,10 +13,7 @@ import cn.hdustea.aha_server.exception.apiException.authenticationException.Perm
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
-import cn.hdustea.aha_server.service.OssService;
-import cn.hdustea.aha_server.service.ProjectResourceService;
-import cn.hdustea.aha_server.service.ProjectService;
-import cn.hdustea.aha_server.service.RedisService;
+import cn.hdustea.aha_server.service.*;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.*;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +40,8 @@ public class ProjectController {
     private ProjectResourceService projectResourceService;
     @Resource
     private OssService ossService;
+    @Resource
+    private CosService cosService;
     @Resource
     private RedisService redisService;
     @Resource
@@ -112,6 +111,19 @@ public class ProjectController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         OssPolicyVo ossPolicyVo = ossService.signUpload("resource/" + userId, false);
         return new ResponseBean<>(200, "succ", ossPolicyVo);
+    }
+
+    /**
+     * 获取COS公开资源上传签名(用于上传项目头像和获奖证明材料)
+     *
+     * @param filename 待上传文件名
+     */
+    @RequiresLogin(requireSignContract = true)
+    @GetMapping("/sign/upload/public/v2")
+    public ResponseBean<CosPolicyVo> signUploadPublicFileToCos(@RequestParam("filename") String filename) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/resource/" + userId + "/" + filename, false);
+        return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 
     /**
@@ -283,6 +295,24 @@ public class ProjectController {
     }
 
     /**
+     * 获取COS私有资源上传签名(用于上传资源文件)
+     *
+     * @param projectId 项目id
+     * @param filename  待上传文件名
+     */
+    @RequiresLogin(requireSignContract = true)
+    @GetMapping("/{projectId}/resources/sign/upload/private/v2")
+    public ResponseBean<CosPolicyVo> signUploadPrivateFileToCos(@PathVariable("projectId") int projectId, @RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
+        if (!projectService.hasPermission(userId, projectId)) {
+            throw new PermissionDeniedException();
+        }
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/" + projectDetailVo.getName() + "/" + filename, true);
+        return new ResponseBean<>(200, "succ", cosPolicyVo);
+    }
+
+    /**
      * 新增项目资源
      *
      * @param projectResourceDto 项目资源
@@ -351,6 +381,25 @@ public class ProjectController {
         projectResourceService.incrDownloadById(projectResourceId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
         return new ResponseBean<>(200, "succ", urlVo);
+    }
+
+    /**
+     * 获取项目资源文件COS下载签名
+     *
+     * @param projectResourceId 项目资源id
+     */
+    @RequestLimit()
+    @RequiresLogin
+    @GetMapping("/resource/{projectResourceId}/sign/download/v2")
+    public ResponseBean<CosPolicyVo> signDownloadResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
+            throw new PermissionDeniedException("您尚未购买本资源！");
+        }
+        CosPolicyVo cosPolicyVo = projectResourceService.signDownloadProjectResourceByIdToCos(projectResourceId);
+        projectResourceService.incrDownloadById(projectResourceId);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
+        return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 
     /**

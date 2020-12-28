@@ -12,7 +12,6 @@ import com.aliyuncs.imm.model.v20170906.CreateOfficeConversionTaskResponse;
 import com.aliyuncs.imm.model.v20170906.GetOfficeConversionTaskRequest;
 import com.aliyuncs.imm.model.v20170906.GetOfficeConversionTaskResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -39,7 +38,7 @@ public class OssDocumentConvertTask {
      *
      * @throws ClientException OSS客户端异常
      */
-    @Scheduled(fixedDelay = 1000)
+//    @Scheduled(fixedDelay = 1000)
     public void runConvertTask() throws ClientException {
         DocumentConvertInfoDto runningDocumentConvertInfoDto = (DocumentConvertInfoDto) redisService.get(RedisConstants.DOCUMENT_CONVERT_RUNNING_TASK_KEY);
         if (runningDocumentConvertInfoDto != null) {

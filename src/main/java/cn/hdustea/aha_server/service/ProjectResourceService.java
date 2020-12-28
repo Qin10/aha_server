@@ -43,6 +43,8 @@ public class ProjectResourceService {
     @Resource
     private OssService ossService;
     @Resource
+    private CosService cosService;
+    @Resource
     private ProjectService projectService;
     @Resource
     private RedisService redisService;
@@ -84,6 +86,24 @@ public class ProjectResourceService {
         }
         URL url = ossService.signDownload(projectResource.getFilename());
         return url.toString();
+    }
+
+    /**
+     * 根据项目资源id获取下载url
+     *
+     * @param id 项目资源id
+     * @return 下载url
+     * @throws SelectException 查询异常
+     */
+    public CosPolicyVo signDownloadProjectResourceByIdToCos(int id) throws SelectException {
+        ProjectResource projectResource = getProjectResourceById(id);
+        if (projectResource == null) {
+            throw new SelectException("不存在对应记录！");
+        }
+        if (projectResource.getFilename() == null) {
+            throw new SelectException("资源文件为空！");
+        }
+        return cosService.signDownloadAuthorization(projectResource.getFilename());
     }
 
     /**

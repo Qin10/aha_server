@@ -41,7 +41,7 @@ public class OssService {
             bucketName = aliyunOssConfig.getPublicBucketName();
         }
         String host = "http://" + bucketName + "." + aliyunOssConfig.getEndpoint();
-        Date expiration = new Date(new Date().getTime() + aliyunOssConfig.getExpireTime() * 1000);
+        Date expiration = new Date(new Date().getTime() + aliyunOssConfig.getExpireTime() * 1000L);
         PolicyConditions policyConditions = new PolicyConditions();
         policyConditions.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
         policyConditions.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, aliyunOssConfig.getMaxSize());
@@ -65,7 +65,7 @@ public class OssService {
      * @return 访问URL
      */
     public URL signDownload(String filename) {
-        Date expiration = new Date(new Date().getTime() + aliyunOssConfig.getExpireTime() * 1000);
+        Date expiration = new Date(new Date().getTime() + aliyunOssConfig.getExpireTime() * 1000L);
         return oss.generatePresignedUrl(aliyunOssConfig.getPrivateBucketName(), filename, expiration);
     }
 

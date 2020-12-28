@@ -848,6 +848,36 @@ projectResourceId|int|否|项目资源id
 	"time":"string //响应时间"
 }
 ```
+## 获取项目资源文件COS下载签名
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/resource/{projectResourceId}/sign/download/v2 `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
+}
+```
 ## 审核项目
 
 *作者: STEA_YY*
@@ -2348,6 +2378,36 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
+## 获取COS公开资源上传签名(用于上传项目头像和获奖证明材料)
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/sign/upload/public/v2 `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+filename|string|否|待上传文件名
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
+}
+```
 ## 新增项目
 
 *作者: STEA_YY*
@@ -2718,6 +2778,37 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
+## 获取COS私有资源上传签名(用于上传资源文件)
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/{projectId}/resources/sign/upload/private/v2 `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+filename|string|否|待上传文件名
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
+}
+```
 ## 新增项目资源
 
 *作者: STEA_YY*
@@ -2835,6 +2926,36 @@ projectResourceId|int|否|项目资源id
 	"msg":"string //响应消息",
 	"data":{
 		"url":"string //url字符串"
+	},
+	"time":"string //响应时间"
+}
+```
+## 获取项目资源文件COS下载签名
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/resource/{projectResourceId}/sign/download/v2 `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
 	},
 	"time":"string //响应时间"
 }
@@ -3533,6 +3654,36 @@ userId|int|否|用户id
 		"signature":"string //上传签名",
 		"expire":"long //签名过期时间戳",
 		"dir":"string //上传路径(文件前缀)"
+	},
+	"time":"string //响应时间"
+}
+```
+## 获取向COS上传公共文件签名，用于上传用户头像
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/userInfo/avatar/sign/upload/v2 `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+filename|string|否|文件名(要上传的文件的全名)
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
 	},
 	"time":"string //响应时间"
 }

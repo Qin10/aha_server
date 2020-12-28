@@ -3,9 +3,11 @@ package cn.hdustea.aha_server.controller;
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.UserInfo;
-import cn.hdustea.aha_server.service.OssService;
+import cn.hdustea.aha_server.service.CosService;
 import cn.hdustea.aha_server.service.UserInfoService;
+import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
+import cn.hdustea.aha_server.vo.CosPolicyVo;
 import cn.hdustea.aha_server.vo.OssPolicyVo;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
@@ -27,6 +29,8 @@ public class UserInfoController {
     private UserInfoService userInfoService;
     @Resource
     private OssService ossService;
+    @Resource
+    private CosService cosService;
 
     /**
      * 获取当前用户信息（包括全部详细信息和部分私有信息）
@@ -75,5 +79,19 @@ public class UserInfoController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         OssPolicyVo ossPolicyVo = ossService.signUpload("avatar/" + userId, false);
         return new ResponseBean<>(200, "succ", ossPolicyVo);
+    }
+
+    /**
+     * 获取向COS上传公共文件签名，用于上传用户头像
+     *
+     * @param filename 文件名(要上传的文件的全名)
+     */
+    @RequestLimit(amount = 5, time = 120)
+    @RequiresLogin(requireSignNotice = false)
+    @GetMapping("/avatar/sign/upload/v2")
+    public ResponseBean<CosPolicyVo> signUpdateUserAvatarToCos(@RequestParam("filename") String filename) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/avatar/" + userId + "/" + filename, false);
+        return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 }
