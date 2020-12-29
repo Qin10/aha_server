@@ -61,12 +61,20 @@ public class CosService {
         return cosPolicyVo;
     }
 
-    public String signPreviewAuthorization(String filename) {
+    public CosPolicyVo signPreviewAuthorization(String filename) {
+        Date expiration = new Date(System.currentTimeMillis() + tencentCosConfig.getExpireTime() * 1000L);
         HashMap<String, String> paramMap = new HashMap<>();
+        HashMap<String, String> headerMap = new HashMap<>();
         paramMap.put("ci-process", "doc-preview");
-        paramMap.put("ObjectKey", filename);
         COSCredentials cosCredentials = new BasicCOSCredentials(tencentCosConfig.getSecretId(), tencentCosConfig.getSecretKey());
         COSSigner cosSigner = new COSSigner();
-        return cosSigner.buildAuthorizationStr(HttpMethodName.GET, filename, null, paramMap, cosCredentials, new Date(System.currentTimeMillis() + tencentCosConfig.getExpireTime() * 1000L));
+        String authorization = cosSigner.buildAuthorizationStr(HttpMethodName.GET, filename, headerMap, paramMap, cosCredentials, expiration);
+        CosPolicyVo cosPolicyVo = new CosPolicyVo();
+        cosPolicyVo.setBucketName(tencentCosConfig.getResourceBucketName());
+        cosPolicyVo.setRegion(tencentCosConfig.getRegion());
+        cosPolicyVo.setAuthorization(authorization);
+        cosPolicyVo.setFilename(filename);
+        cosPolicyVo.setExpire(expiration.getTime());
+        return cosPolicyVo;
     }
 }

@@ -2960,6 +2960,36 @@ projectResourceId|int|否|项目资源id
 	"time":"string //响应时间"
 }
 ```
+## 获取项目资源文件COS阅读签名
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/resource/{projectResourceId}/sign/read/v2 `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectResourceId|int|否|项目资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
+}
+```
 ## 获取用户收藏项目列表
 
 *作者: STEA_YY*

@@ -356,8 +356,8 @@ Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "数据挖掘实验2",
-  "filename": "/第一个项目/数据挖掘实验2.docx",
+  "name": "1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目简介PPT",
+  "filename": "/第一个项目/1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目简介PPT.pptx",
   "price": 10.0,
   "discount": 0.0
 }
@@ -374,7 +374,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###删除项目资源
-DELETE http://{{host}}/project/resource/74
+DELETE http://{{host}}/project/resource/109
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -624,7 +624,26 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###签名上传资源
-GET http://{{host}}/project/71/resources/sign/upload/private/v2?filename=数据挖掘实验2.docx
+GET http://{{host}}/project/71/resources/sign/upload/private/v2?filename=1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目简介PPT.pptx
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###签名下载资源
+GET http://{{host}}/project/resource/107/sign/download/v2
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###签名阅读资源
+GET http://{{host}}/project/resource/107/sign/read/v2
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取项目资源信息
+GET http://{{host}}/project/resource/110
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+

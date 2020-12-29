@@ -373,7 +373,9 @@ public class ProjectController {
     public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
-            throw new PermissionDeniedException("您尚未购买本资源！");
+            if (!projectResourceService.hasPermission(userId, projectResourceId)) {
+                throw new PermissionDeniedException("您尚未购买本资源！");
+            }
         }
         String url = projectResourceService.signDownloadProjectResourceByid(projectResourceId);
         UrlVo urlVo = new UrlVo();
@@ -393,12 +395,33 @@ public class ProjectController {
     @GetMapping("/resource/{projectResourceId}/sign/download/v2")
     public ResponseBean<CosPolicyVo> signDownloadResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
-            throw new PermissionDeniedException("您尚未购买本资源！");
+        if (!projectResourceService.hasPermission(userId, projectResourceId)) {
+            throw new PermissionDeniedException("您不具有下载权限！");
         }
         CosPolicyVo cosPolicyVo = projectResourceService.signDownloadProjectResourceByIdToCos(projectResourceId);
         projectResourceService.incrDownloadById(projectResourceId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
+        return new ResponseBean<>(200, "succ", cosPolicyVo);
+    }
+
+    /**
+     * 获取项目资源文件COS阅读签名
+     *
+     * @param projectResourceId 项目资源id
+     */
+    @RequestLimit()
+    @RequiresLogin
+    @GetMapping("/resource/{projectResourceId}/sign/read/v2")
+    public ResponseBean<CosPolicyVo> signPreviewResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
+            if (!projectResourceService.hasPermission(userId, projectResourceId)) {
+                throw new PermissionDeniedException("您尚未购买本资源！");
+            }
+        }
+        CosPolicyVo cosPolicyVo = projectResourceService.signPreviewProjectResourceByIdToCos(projectResourceId);
+        projectResourceService.incrDownloadById(projectResourceId);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "阅读资源", "id=" + projectResourceId);
         return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 

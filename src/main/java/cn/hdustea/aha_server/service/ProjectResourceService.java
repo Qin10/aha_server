@@ -89,7 +89,7 @@ public class ProjectResourceService {
     }
 
     /**
-     * 根据项目资源id获取下载url
+     * 根据项目资源id获取COS下载签名
      *
      * @param id 项目资源id
      * @return 下载url
@@ -104,6 +104,24 @@ public class ProjectResourceService {
             throw new SelectException("资源文件为空！");
         }
         return cosService.signDownloadAuthorization(projectResource.getFilename());
+    }
+
+    /**
+     * 根据项目资源id获取COS在线阅读签名
+     *
+     * @param id 项目资源id
+     * @return 下载url
+     * @throws SelectException 查询异常
+     */
+    public CosPolicyVo signPreviewProjectResourceByIdToCos(int id) throws SelectException {
+        ProjectResource projectResource = getProjectResourceById(id);
+        if (projectResource == null) {
+            throw new SelectException("不存在对应记录！");
+        }
+        if (projectResource.getFilename() == null) {
+            throw new SelectException("资源文件为空！");
+        }
+        return cosService.signPreviewAuthorization(projectResource.getFilename());
     }
 
     /**
