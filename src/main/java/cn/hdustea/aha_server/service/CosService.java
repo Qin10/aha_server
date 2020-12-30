@@ -32,7 +32,7 @@ public class CosService {
         Date expiration = new Date(System.currentTimeMillis() + tencentCosConfig.getExpireTime() * 1000L);
         COSCredentials cosCredentials = new BasicCOSCredentials(tencentCosConfig.getSecretId(), tencentCosConfig.getSecretKey());
         COSSigner cosSigner = new COSSigner();
-        String authorization = cosSigner.buildAuthorizationStr(HttpMethodName.POST, filename, cosCredentials, expiration);
+        String authorization = cosSigner.buildAuthorizationStr(HttpMethodName.PUT, filename, cosCredentials, expiration);
         CosPolicyVo cosPolicyVo = new CosPolicyVo();
         cosPolicyVo.setBucketName(bucketName);
         cosPolicyVo.setRegion(tencentCosConfig.getRegion());
