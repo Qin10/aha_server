@@ -123,7 +123,7 @@ public class ProjectResourceService {
         if (projectResource.getFilename() == null) {
             throw new SelectException("资源文件为空！");
         }
-        if (projectResource.getType() != ProjectResourceTypes.DOCUMENT) {
+        if (projectResource.getType() == null || projectResource.getType() != ProjectResourceTypes.DOCUMENT) {
             throw new SelectException("资源类型错误！");
         }
         return cosService.signPreviewAuthorization(projectResource.getFilename());
@@ -305,7 +305,8 @@ public class ProjectResourceService {
             return true;
         }
         if (purchasedResource(userId, resourceId)) {
-            return getProjectResourceById(resourceId).getType() != ProjectResourceTypes.DOCUMENT;
+            ProjectResource projectResource = getProjectResourceById(resourceId);
+            return projectResource.getType() != null && projectResource.getType() != ProjectResourceTypes.DOCUMENT;
         }
         return false;
     }
