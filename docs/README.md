@@ -662,6 +662,37 @@ action|string|否|操作，取值pay、cancel
 	"time":"string //响应时间"
 }
 ```
+# COS相关请求
+## 获取COS公开资源上传签名
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/cos/sign/upload/public/v2 `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+filename|string|否|待上传文件名
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
+}
+```
 # 反馈类请求
 ## 分页获取用户全部反馈
 

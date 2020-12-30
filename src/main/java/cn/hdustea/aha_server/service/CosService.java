@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.TencentCosConfig;
 import cn.hdustea.aha_server.vo.CosPolicyVo;
-import com.qcloud.cos.COSClient;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.auth.COSSigner;
@@ -21,11 +20,7 @@ import java.util.HashMap;
 @Service
 public class CosService {
     @Resource
-    private COSClient cosClient;
-    @Resource
     private TencentCosConfig tencentCosConfig;
-    @Resource
-    private RedisService redisService;
 
     public CosPolicyVo signUploadAuthorization(String filename, boolean isResource) {
         String bucketName;
@@ -37,7 +32,7 @@ public class CosService {
         Date expiration = new Date(System.currentTimeMillis() + tencentCosConfig.getExpireTime() * 1000L);
         COSCredentials cosCredentials = new BasicCOSCredentials(tencentCosConfig.getSecretId(), tencentCosConfig.getSecretKey());
         COSSigner cosSigner = new COSSigner();
-        String authorization = cosSigner.buildAuthorizationStr(HttpMethodName.PUT, filename, cosCredentials, expiration);
+        String authorization = cosSigner.buildAuthorizationStr(HttpMethodName.POST, filename, cosCredentials, expiration);
         CosPolicyVo cosPolicyVo = new CosPolicyVo();
         cosPolicyVo.setBucketName(bucketName);
         cosPolicyVo.setRegion(tencentCosConfig.getRegion());

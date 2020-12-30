@@ -52,7 +52,7 @@ public class CosDocumentConvertTask {
                 if (docJobResponse.getJobsDetail().getState().equals("Success")) {
                     String previewUrl = "https://" + tencentCosConfig.getPublicBucketName() + ".cos." + tencentCosConfig.getRegion() + ".myqcloud.com" + runningDocumentConvertInfoDto.getTargetFilePath();
                     projectResourceMapper.updatePreviewUrlById(previewUrl, runningDocumentConvertInfoDto.getProjectResourceId());
-                    log.info(runningDocumentConvertInfoDto.getSrcFilename() + "的转换成功");
+                    log.debug(runningDocumentConvertInfoDto.getSrcFilename() + "的转换成功");
                 } else {
                     log.warn(runningDocumentConvertInfoDto.getSrcFilename() + "的转换出错，错误代码为：" + docJobResponse.getJobsDetail().getCode());
                 }
@@ -61,7 +61,7 @@ public class CosDocumentConvertTask {
         DocumentConvertInfoDto documentConvertInfoDto = (DocumentConvertInfoDto) redisService.lPop(RedisConstants.DOCUMENT_CONVERT_LIST_KEY);
         if (documentConvertInfoDto != null) {
             String filename = documentConvertInfoDto.getSrcFilename();
-            log.info("已收到转换请求，预备开始转换：" + filename);
+            log.debug("已收到转换请求，预备开始转换：" + filename);
             String targetPath;
             targetPath = "/preview_files" + filename + "/";
             documentConvertInfoDto.setTargetFilePath(targetPath);
@@ -88,6 +88,7 @@ public class CosDocumentConvertTask {
         output.setObject(documentConvertInfoDto.getTargetFilePath() + "${Page}.jpg");
         DocJobResponse docProcessJobs = cosClient.createDocProcessJobs(request);
         if (!docProcessJobs.getJobsDetail().getState().equals("Failed")) {
+            log.debug(documentConvertInfoDto.getSrcFilename() + "的转换已经开始，任务id为：" + docProcessJobs.getJobsDetail().getJobId());
             documentConvertInfoDto.setTaskId(docProcessJobs.getJobsDetail().getJobId());
             redisService.set(RedisConstants.DOCUMENT_CONVERT_RUNNING_TASK_KEY, documentConvertInfoDto);
         }
