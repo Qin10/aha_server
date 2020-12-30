@@ -395,8 +395,8 @@ public class ProjectController {
     @GetMapping("/resource/{projectResourceId}/sign/download/v2")
     public ResponseBean<CosPolicyVo> signDownloadResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        if (!projectResourceService.hasPermission(userId, projectResourceId)) {
-            throw new PermissionDeniedException("您不具有下载权限！");
+        if (!projectResourceService.allowDownload(userId, projectResourceId)) {
+            throw new PermissionDeniedException("您无权限下载本资源！");
         }
         CosPolicyVo cosPolicyVo = projectResourceService.signDownloadProjectResourceByIdToCos(projectResourceId);
         projectResourceService.incrDownloadById(projectResourceId);

@@ -5,10 +5,14 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
- * 项目资源Mapper
- *
- * @author STEA_YY
- **/
+* ${description}
+*
+* @author STEA_YY
+**/
+
+/**
+ * 团队资源表，一个团队对应多个资源，资源表包括了资源文件名称，类别，阅读量等
+ */
 @Data
 public class ProjectResource {
     private Integer id;
@@ -22,6 +26,11 @@ public class ProjectResource {
      * 资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)
      */
     private String name;
+
+    /**
+     * 资源类型
+     */
+    private Integer type;
 
     /**
      * 保存在oss里的资源文件名(包括前缀)

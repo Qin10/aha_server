@@ -28,6 +28,11 @@ public class ProjectResourceVo {
     private String name;
 
     /**
+     * 资源类型
+     */
+    private Integer type;
+
+    /**
      * 保存在oss里的资源文件名(包括前缀)
      */
     private String filename;

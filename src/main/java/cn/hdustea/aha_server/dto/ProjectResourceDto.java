@@ -21,6 +21,12 @@ public class ProjectResourceDto {
     private String name;
 
     /**
+     * 资源类型
+     */
+    @NotNull(message = "资源类型不能为空")
+    private Integer type;
+
+    /**
      * 保存在oss里的资源文件名(包括前缀)
      */
     @NotEmpty(message = "文件名不能为空")

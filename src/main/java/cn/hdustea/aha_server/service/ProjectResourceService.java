@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.constants.ProjectResourceTypes;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.ProjectResource;
@@ -24,7 +25,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 项目资源服务类
@@ -121,6 +123,9 @@ public class ProjectResourceService {
         if (projectResource.getFilename() == null) {
             throw new SelectException("资源文件为空！");
         }
+        if (projectResource.getType() != ProjectResourceTypes.DOCUMENT) {
+            throw new SelectException("资源类型错误！");
+        }
         return cosService.signPreviewAuthorization(projectResource.getFilename());
     }
 
@@ -136,7 +141,7 @@ public class ProjectResourceService {
         projectResource.setProjectId(projectId);
         projectResourceMapper.insertSelective(projectResource);
         Integer projectResourceId = projectResource.getId();
-        if (projectResourceId != null) {
+        if (projectResourceId != null && projectResource.getType() == ProjectResourceTypes.DOCUMENT) {
             DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
             documentConvertInfoDto.setProjectResourceId(projectResourceId);
             documentConvertInfoDto.setSrcFilename(projectResourceDto.getFilename());
@@ -293,6 +298,16 @@ public class ProjectResourceService {
     public boolean purchasedResource(int userId, int resourceId) {
         PurchasedResource purchasedResource = purchasedResourceMapper.selectByUserIdAndResourceId(userId, resourceId);
         return purchasedResource != null;
+    }
+
+    public boolean allowDownload(int userId, int resourceId) {
+        if (hasPermission(userId, resourceId)) {
+            return true;
+        }
+        if (purchasedResource(userId, resourceId)) {
+            return getProjectResourceById(resourceId).getType() != ProjectResourceTypes.DOCUMENT;
+        }
+        return false;
     }
 
     /**
