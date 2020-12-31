@@ -63,7 +63,7 @@ public class CosDocumentConvertTask {
             String filename = documentConvertInfoDto.getSrcFilename();
             log.debug("已收到转换请求，预备开始转换：" + filename);
             String targetPath;
-            targetPath = "/preview_files" + filename + "/";
+            targetPath = "/preview_files/" + documentConvertInfoDto.getProjectResourceId() + "/";
             documentConvertInfoDto.setTargetFilePath(targetPath);
             convertDocument(tencentCosConfig.getResourceBucketName(), tencentCosConfig.getPublicBucketName(), documentConvertInfoDto);
         }

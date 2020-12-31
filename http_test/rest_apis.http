@@ -351,15 +351,16 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST https://{{host}}/project/resource/71
+POST https://{{host}}/project/resource/87
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目简介PPT",
-  "filename": "/第一个项目/1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目简介PPT.pptx",
+  "name": "1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目详细方案.docx",
+  "filename": "/第一个测试项目/1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目详细方案.docx",
   "price": 10.0,
-  "discount": 0.0
+  "discount": 0.0,
+  "type": 2
 }
 
 ###修改项目资源
@@ -624,7 +625,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###签名上传资源
-GET https://{{host}}/project/71/resources/sign/upload/private/v2?filename=1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目简介PPT.pptx
+GET https://{{host}}/project/87/resources/sign/upload/private/v2?filename=1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目详细方案.docx
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -642,7 +643,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目资源信息
-GET https://{{host}}/project/resource/110
+GET https://{{host}}/project/resource/127
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
