@@ -21,7 +21,7 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * 贡献点订单类请求
+ * 贡献点相关请求
  *
  * @author STEA_YY
  **/
