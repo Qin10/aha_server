@@ -139,7 +139,6 @@ public class AuthService {
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(user.getId());
         userInfo.setNickname(phoneRegisterUserDto.getNickname());
-        userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
         userInfoService.saveUserInfo(userInfo);
         Oauth oauth = new Oauth();
         oauth.setUserId(user.getId());
@@ -250,11 +249,7 @@ public class AuthService {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(user.getId());
             userInfo.setNickname(wechatRegisterUserDto.getNickname());
-            if (wechatRegisterUserDto.getAvatarUrl() != null && !wechatRegisterUserDto.getAvatarUrl().equals("")) {
-                userInfo.setAvatarUrl("https://aha-public.oss-cn-hangzhou.aliyuncs.com/AhaIcon/logo.png");
-            } else {
-                userInfo.setAvatarUrl(wechatRegisterUserDto.getAvatarUrl());
-            }
+            userInfo.setAvatarUrl(wechatRegisterUserDto.getAvatarUrl());
             userInfoService.saveUserInfo(userInfo);
             Oauth oauth = new Oauth();
             oauth.setUserId(user.getId());
