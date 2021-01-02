@@ -30,9 +30,14 @@ public class User {
     private String studentRecFilename;
 
     /**
-     * 贡献点
+     * aha币数量
      */
-    private BigDecimal contribPoint;
+    private BigDecimal ahaCredit;
+
+    /**
+     * aha点数量
+     */
+    private BigDecimal ahaPoint;
 
     /**
      * 是否签署服务协议

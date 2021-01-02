@@ -24,6 +24,11 @@ public class ContribPointOrderVo {
     private UserRoughInfoVo user;
 
     /**
+     * 项目
+     */
+    private ProjectRoughVo project;
+
+    /**
      * 订单总价
      */
     private BigDecimal price;
@@ -47,4 +52,14 @@ public class ContribPointOrderVo {
      * 订单对应项目资源
      */
     private List<OrderProjectResourceVo> orderResources;
+
+    /**
+     * 订单实际支付aha币
+     */
+    private BigDecimal chargedAhaCredit;
+
+    /**
+     * 订单实际支付aha点
+     */
+    private BigDecimal chargedAhaPoint;
 }

@@ -3,12 +3,12 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.constants.ContribPointLogConstants;
 import cn.hdustea.aha_server.constants.ContribPointOrderConstants;
-import cn.hdustea.aha_server.controller.ContribPointOrderController;
+import cn.hdustea.aha_server.controller.ContribPointController;
 import cn.hdustea.aha_server.dto.ContribPointOrderResourcesDto;
 import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
+import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
-import cn.hdustea.aha_server.mapper.ContribPointLogMapper;
 import cn.hdustea.aha_server.mapper.ContribPointOrderMapper;
 import cn.hdustea.aha_server.mapper.OrderProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
@@ -38,9 +38,11 @@ public class ContribPointOrderService {
     @Resource
     private OrderProjectResourceMapper orderProjectResourceMapper;
     @Resource
-    private ContribPointLogMapper contribPointLogMapper;
+    private ContribPointLogService contribPointLogService;
     @Resource
     private UserService userService;
+    @Resource
+    private ProjectService projectService;
     @Resource
     private ProjectResourceService projectResourceService;
     @Resource
@@ -81,6 +83,7 @@ public class ContribPointOrderService {
         contribPointOrder.setCreateTime(new Date());
         contribPointOrder.setStatus(0);
         contribPointOrder.setUserId(userId);
+        contribPointOrder.setProjectId(contribPointOrderResourcesDto.getProjectId());
         contribPointOrderMapper.insertSelective(contribPointOrder);
         for (Integer resourceId : contribPointOrderResourcesDto.getResourceIds()) {
             ProjectResource projectResource = projectResourceService.getProjectResourceById(resourceId);
@@ -101,7 +104,6 @@ public class ContribPointOrderService {
             orderProjectResourceMapper.insertSelective(orderProjectResource);
             totalPrice = totalPrice.add(orderProjectResource.getPrice().multiply(BigDecimal.valueOf(1).subtract(orderProjectResource.getDiscount())));
         }
-
         contribPointOrder.setPrice(totalPrice);
         contribPointOrderMapper.updateByPrimaryKeySelective(contribPointOrder);
         return contribPointOrder.getId();
@@ -115,7 +117,7 @@ public class ContribPointOrderService {
      * @throws UpdateException 更新异常
      */
     @Transactional(rollbackFor = {Exception.class})
-    public void payOrder(int userId, int orderId) throws UpdateException {
+    public void payOrder(int userId, int orderId) throws UpdateException, SelectException {
         UserVo userVo = userService.getUserVoById(userId);
         ContribPointOrder contribPointOrder = contribPointOrderMapper.selectByPrimaryKey(orderId);
         if (contribPointOrder == null) {
@@ -127,17 +129,28 @@ public class ContribPointOrderService {
         if (contribPointOrder.getStatus() != ContribPointOrderConstants.STATUS_NOT_PAID) {
             throw new UpdateException("订单已支付或已被取消！");
         }
-        if (userVo.getContribPoint().compareTo(contribPointOrder.getPrice()) < 0) {
-            throw new UpdateException("用户贡献点余额不足！");
-        }
-        userService.updateDescContribPoint(userId, contribPointOrder.getPrice());
         Date payTime = new Date();
         ContribPointLog contribPointLog = new ContribPointLog();
+        if (userVo.getAhaPoint().compareTo(contribPointOrder.getPrice()) >= 0) {
+            userService.updateDescAhaPoint(userId, contribPointOrder.getPrice());
+            contribPointLog.setAhaPointAmount(contribPointOrder.getPrice().negate());
+        } else {
+            if (userVo.getAhaCredit().add(userVo.getAhaPoint()).compareTo(contribPointOrder.getPrice()) >= 0) {
+                BigDecimal ahaCreditAmount = contribPointOrder.getPrice().subtract(userVo.getAhaPoint());
+                BigDecimal ahaPointAmount = userVo.getAhaPoint();
+                userService.updateDescAhaPoint(userId, ahaPointAmount);
+                contribPointLog.setAhaPointAmount(ahaPointAmount.negate());
+                userService.updateDescAhaCredit(userId, ahaCreditAmount);
+                contribPointLog.setAhaCreditAmount(ahaCreditAmount.negate());
+                payOffPercentage(contribPointOrder.getProjectId(), ahaCreditAmount.multiply(ContribPointOrderConstants.PERCENTAGE_RATE));
+            } else {
+                throw new UpdateException("用户余额不足！");
+            }
+        }
         contribPointLog.setUserId(userId);
         contribPointLog.setSource(ContribPointLogConstants.FROM_PAY_RESOURCE);
-        contribPointLog.setAmount(contribPointOrder.getPrice().negate());
         contribPointLog.setTime(payTime);
-        contribPointLogMapper.insertSelective(contribPointLog);
+        contribPointLogService.saveContribPointLog(contribPointLog);
         contribPointOrder.setStatus(ContribPointOrderConstants.STATUS_PAID);
         contribPointOrder.setPayTime(payTime);
         contribPointOrderMapper.updateByPrimaryKeySelective(contribPointOrder);
@@ -148,7 +161,7 @@ public class ContribPointOrderService {
             purchasedResource.setResourceId(orderProjectResource.getResourceId());
             purchasedResource.setPurchaseTime(payTime);
             purchasedResourceMapper.insertSelective(purchasedResource);
-            log.info(userOperationLogConfig.getFormat(), ContribPointOrderController.MODULE_NAME, "购买资源", "id=" + orderProjectResource.getResourceId());
+            log.info(userOperationLogConfig.getFormat(), ContribPointController.MODULE_NAME, "购买资源", "id=" + orderProjectResource.getResourceId());
         }
     }
 
@@ -183,7 +196,7 @@ public class ContribPointOrderService {
      * @param action  操作(取值"pay","cancel")
      * @throws UpdateException 更新异常
      */
-    public void operateOrder(int userId, int orderId, String action) throws UpdateException {
+    public void operateOrder(int userId, int orderId, String action) throws UpdateException, SelectException {
         switch (action) {
             case ContribPointOrderConstants.ACTION_PAY: {
                 payOrder(userId, orderId);
@@ -197,5 +210,16 @@ public class ContribPointOrderService {
                 throw new UpdateException("'action'参数取值错误！");
             }
         }
+    }
+
+    private void payOffPercentage(int projectId, BigDecimal ahaPointAmount) throws SelectException {
+        Project project = projectService.getProjectById(projectId);
+        userService.updateIncAhaPoint(project.getCreatorUserId(), ahaPointAmount);
+        ContribPointLog contribPointLog = new ContribPointLog();
+        contribPointLog.setUserId(project.getCreatorUserId());
+        contribPointLog.setSource(ContribPointLogConstants.FROM_PERCENTAGE);
+        contribPointLog.setAhaPointAmount(ahaPointAmount);
+        contribPointLog.setTime(new Date());
+        contribPointLogService.saveContribPointLog(contribPointLog);
     }
 }

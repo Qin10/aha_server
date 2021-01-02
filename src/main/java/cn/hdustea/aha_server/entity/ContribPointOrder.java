@@ -18,9 +18,14 @@ public class ContribPointOrder {
     private Integer id;
 
     /**
-     * 用户id
+     * 用户id(外键)
      */
     private Integer userId;
+
+    /**
+     * 项目id(外键)
+     */
+    private Integer projectId;
 
     /**
      * 订单总价
@@ -41,4 +46,14 @@ public class ContribPointOrder {
      * 订单支付时间
      */
     private Date payTime;
+
+    /**
+     * 订单实际支付aha币
+     */
+    private BigDecimal chargedAhaCredit;
+
+    /**
+     * 订单实际支付aha点
+     */
+    private BigDecimal chargedAhaPoint;
 }

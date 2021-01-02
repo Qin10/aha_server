@@ -183,12 +183,42 @@ public class UserService {
     }
 
     /**
-     * 根据用户id减少贡献点
+     * 根据用户id减少Aha点
      *
-     * @param id               用户id
-     * @param descContribPoint 减少的贡献点
+     * @param id           用户id
+     * @param descAhaPoint 减少的Aha点
      */
-    public void updateDescContribPoint(Integer id, BigDecimal descContribPoint) {
-        userMapper.updateDecContribPointById(descContribPoint, id);
+    public void updateDescAhaPoint(Integer id, BigDecimal descAhaPoint) {
+        userMapper.updateDecAhaPointById(descAhaPoint, id);
+    }
+
+    /**
+     * 根据用户id减少Aha币
+     *
+     * @param id            用户id
+     * @param descAhaCredit 减少的Aha币
+     */
+    public void updateDescAhaCredit(Integer id, BigDecimal descAhaCredit) {
+        userMapper.updateDecAhaCreditById(descAhaCredit, id);
+    }
+
+    /**
+     * 根据用户id增加Aha点
+     *
+     * @param id           用户id
+     * @param incAhaPoint 增加的Aha点
+     */
+    public void updateIncAhaPoint(Integer id, BigDecimal incAhaPoint) {
+        userMapper.updateIncAhaPointById(incAhaPoint, id);
+    }
+
+    /**
+     * 根据用户id增加Aha币
+     *
+     * @param id            用户id
+     * @param incAhaCredit 增加的Aha币
+     */
+    public void updateIncAhaCredit(Integer id, BigDecimal incAhaCredit) {
+        userMapper.updateIncAhaCreditById(incAhaCredit, id);
     }
 }

@@ -120,6 +120,14 @@ public class ProjectService {
         return projectDetailVo;
     }
 
+    public Project getProjectById(int id) throws SelectException {
+        Project project = projectMapper.selectByPrimaryKey(id);
+        if (project == null) {
+            throw new SelectException("项目不存在！");
+        }
+        return project;
+    }
+
     /**
      * 新增项目
      *

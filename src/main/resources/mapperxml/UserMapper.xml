@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.UserMapper">
-    <resultMap id="selectUserIdAndContribPointResult" type="cn.hdustea.aha_server.vo.UserContribPointVo">
-        <result column="u_contrib_point" property="contribPoint"/>
-        <association property="user" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" column="u_id"
-                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.User">
+        <!--@mbg.generated-->
+        <!--@Table `user`-->
+        <id column="u_id" property="id"/>
+        <result column="u_password" property="password"/>
+        <result column="u_created_time" property="createdTime"/>
+        <result column="u_student_rec_filename" property="studentRecFilename"/>
+        <result column="u_aha_credit" property="ahaCredit"/>
+        <result column="u_aha_point" property="ahaPoint"/>
+        <result column="u_signed_notice" property="signedNotice"/>
+        <result column="u_signed_contract" property="signedContract"/>
+        <result column="u_role_id" property="roleId"/>
     </resultMap>
     <resultMap id="ManagementVoResultMap" type="cn.hdustea.aha_server.vo.UserManagementVo">
         <!--@mbg.generated-->
         <!--@Table `user`-->
         <id column="u_id" property="id"/>
-        <result column="u_id" property="id"/>
         <result column="u_created_time" property="createdTime"/>
         <result column="u_student_rec_filename" property="studentRecFilename"/>
-        <result column="u_contrib_point" property="contribPoint"/>
+        <result column="u_aha_credit" property="ahaCredit"/>
+        <result column="u_aha_point" property="ahaPoint"/>
         <result column="u_signed_notice" property="signedNotice"/>
         <result column="u_signed_contract" property="signedContract"/>
         <result column="u_role_id" property="roleId"/>
@@ -39,28 +47,17 @@
         <result column="u_password" property="password"/>
         <result column="u_created_time" property="createdTime"/>
         <result column="u_student_rec_filename" property="studentRecFilename"/>
-        <result column="u_contrib_point" property="contribPoint"/>
+        <result column="u_aha_credit" property="ahaCredit"/>
+        <result column="u_aha_point" property="ahaPoint"/>
         <result column="u_signed_notice" property="signedNotice"/>
         <result column="u_signed_contract" property="signedContract"/>
         <association property="role" javaType="cn.hdustea.aha_server.entity.Role" column="u_role_id"
                      select="cn.hdustea.aha_server.mapper.RoleMapper.selectByPrimaryKey"/>
     </resultMap>
-    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.User">
-        <!--@mbg.generated-->
-        <!--@Table `user`-->
-        <id column="u_id" property="id"/>
-        <result column="u_password" property="password"/>
-        <result column="u_created_time" property="createdTime"/>
-        <result column="u_student_rec_filename" property="studentRecFilename"/>
-        <result column="u_contrib_point" property="contribPoint"/>
-        <result column="u_signed_notice" property="signedNotice"/>
-        <result column="u_signed_contract" property="signedContract"/>
-        <result column="u_role_id" property="roleId"/>
-    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        u_id, u_password, u_created_time, u_student_rec_filename, u_contrib_point, u_signed_notice,
-        u_signed_contract, u_role_id
+        u_id, u_password, u_created_time, u_student_rec_filename, u_aha_credit, u_aha_point,
+        u_signed_notice, u_signed_contract, u_role_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -69,14 +66,6 @@
         from `user`
         where u_id = #{id}
     </select>
-
-    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from `user`
-        where u_id = #{id}
-    </select>
-
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
         delete
@@ -86,10 +75,10 @@
     <insert id="insert" keyColumn="u_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into `user` (u_password, u_created_time, u_student_rec_filename, u_contrib_point, u_signed_notice,
-                            u_signed_contract, u_role_id)
-        values (#{password}, #{createdTime}, #{studentRecFilename}, #{contribPoint}, #{signedNotice},
-                #{signedContract}, #{roleId})
+        insert into `user` (u_password, u_created_time, u_student_rec_filename, u_aha_credit, u_aha_point,
+                            u_signed_notice, u_signed_contract, u_role_id)
+        values (#{password}, #{createdTime}, #{studentRecFilename}, #{ahaCredit}, #{ahaPoint},
+                #{signedNotice}, #{signedContract}, #{roleId})
     </insert>
     <insert id="insertSelective" keyColumn="u_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.User"
             useGeneratedKeys="true">
@@ -105,8 +94,11 @@
             <if test="studentRecFilename != null">
                 u_student_rec_filename,
             </if>
-            <if test="contribPoint != null">
-                u_contrib_point,
+            <if test="ahaCredit != null">
+                u_aha_credit,
+            </if>
+            <if test="ahaPoint != null">
+                u_aha_point,
             </if>
             <if test="signedNotice != null">
                 u_signed_notice,
@@ -128,8 +120,11 @@
             <if test="studentRecFilename != null">
                 #{studentRecFilename},
             </if>
-            <if test="contribPoint != null">
-                #{contribPoint},
+            <if test="ahaCredit != null">
+                #{ahaCredit},
+            </if>
+            <if test="ahaPoint != null">
+                #{ahaPoint},
             </if>
             <if test="signedNotice != null">
                 #{signedNotice},
@@ -155,8 +150,11 @@
             <if test="studentRecFilename != null">
                 u_student_rec_filename = #{studentRecFilename},
             </if>
-            <if test="contribPoint != null">
-                u_contrib_point = #{contribPoint},
+            <if test="ahaCredit != null">
+                u_aha_credit = #{ahaCredit},
+            </if>
+            <if test="ahaPoint != null">
+                u_aha_point = #{ahaPoint},
             </if>
             <if test="signedNotice != null">
                 u_signed_notice = #{signedNotice},
@@ -176,12 +174,25 @@
         set u_password             = #{password},
             u_created_time         = #{createdTime},
             u_student_rec_filename = #{studentRecFilename},
-            u_contrib_point        = #{contribPoint},
+            u_aha_credit           = #{ahaCredit},
+            u_aha_point            = #{ahaPoint},
             u_signed_notice        = #{signedNotice},
             u_signed_contract      = #{signedContract},
             u_role_id              = #{roleId}
         where u_id = #{id}
     </update>
+    <resultMap id="selectUserIdAndContribPointResult" type="cn.hdustea.aha_server.vo.UserContribPointVo">
+        <result column="u_contrib_point" property="contribPoint"/>
+        <association column="u_id" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" property="user"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+    </resultMap>
+
+    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from `user`
+        where u_id = #{id}
+    </select>
 
 
     <!--auto generated by MybatisCodeHelper on 2020-11-02-->
@@ -215,7 +226,7 @@
 
     <!--auto generated by MybatisCodeHelper on 2020-11-04-->
     <select id="selectIdAndContribPoint" resultMap="selectUserIdAndContribPointResult">
-        select u_id, u_contrib_point
+        select u_id, (u_aha_credit + u_aha_point) as u_contrib_point
         from `user`
     </select>
 
@@ -256,10 +267,31 @@
         </where>
     </select>
 
-<!--auto generated by MybatisCodeHelper on 2020-12-08-->
-    <update id="updateDecContribPointById">
+    <!--auto generated by MybatisCodeHelper on 2020-12-08-->
+    <update id="updateDecAhaPointById">
         update `user`
-        set u_contrib_point=u_contrib_point-#{deductedContribPoint}
-        where u_id=#{id}
+        set u_aha_point=u_aha_point - #{deductedAhaPoint}
+        where u_id = #{id}
+    </update>
+
+    <!--auto generated by MybatisCodeHelper on 2020-12-08-->
+    <update id="updateDecAhaCreditById">
+        update `user`
+        set u_aha_credit=u_aha_credit - #{deductedAhaCredit}
+        where u_id = #{id}
+    </update>
+
+    <!--auto generated by MybatisCodeHelper on 2021-01-02-->
+    <update id="updateIncAhaPointById">
+        update `user`
+        set u_aha_point=u_aha_point + #{addedAhaPoint}
+        where u_id = #{id}
+    </update>
+
+    <!--auto generated by MybatisCodeHelper on 2021-01-02-->
+    <update id="updateIncAhaCreditById">
+        update `user`
+        set u_aha_credit=u_aha_credit + #{addedAhaCredit}
+        where u_id = #{id}
     </update>
 </mapper>

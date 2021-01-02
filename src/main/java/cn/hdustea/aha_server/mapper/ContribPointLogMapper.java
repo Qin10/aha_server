@@ -1,9 +1,11 @@
 package cn.hdustea.aha_server.mapper;
-
 import cn.hdustea.aha_server.entity.ContribPointLog;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
- * 贡献点变动日志mapper
+ * ${description}
  *
  * @author STEA_YY
  **/
@@ -19,4 +21,8 @@ public interface ContribPointLogMapper {
     int updateByPrimaryKeySelective(ContribPointLog record);
 
     int updateByPrimaryKey(ContribPointLog record);
+
+    List<ContribPointLog> selectAllByUserIdOrderByTimeDesc(@Param("userId")Integer userId);
+
+
 }

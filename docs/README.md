@@ -5,14 +5,14 @@
 
 **请求URL**
 
-/login/phone `POST` 
+/login/phone `POST`
 
 **请求体**
 
 ```json
 {
-	"phone":"string //手机号【必须】",
-	"password":"string //密码【必须】"
+  "phone":"string //手机号【必须】",
+  "password":"string //密码【必须】"
 }
 ```
 
@@ -20,42 +20,44 @@
 
 ```json
 {
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"token":"string //token令牌",
-		"personalUserInfo":{
-			"signedNotice":"boolean //是否签署服务协议",
-			"signedContract":"boolean //是否签署合同",
-			"contribPoint":"double //贡献点",
-			"role":{
-				"id":"int //角色id",
-				"name":"string //角色名称"
-			},
-			"oauths":[{
-				"oauthType":"string //授权类型",
-				"oauthId":"string //授权码"
-			}],
-			"userInfo":{
-				"userId":"int //用户id(外键)",
-				"nickname":"string //用户昵称",
-				"gender":"boolean //用户性别",
-				"birthday":"date //用户出生日期",
-				"typeId":"int //用户类别",
-				"signature":"string //用户个性签名",
-				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校",
-				"academy":"string //用户学院",
-				"major":"string //用户主修专业",
-				"grade":"int //用户当前年级",
-				"intro":"string //用户自我介绍",
-				"specialtyTags":"string //用户特长标签",
-				"trueName":"string //用户真实姓名",
-				"compTags":"string //用户参与过比赛标签"
-			}
-		}
-	},
-	"time":"string //响应时间"
+  "code":"int //响应状态码",
+  "msg":"string //响应消息",
+  "data":{
+    "token":"string //token令牌",
+    "personalUserInfo":{
+      "signedNotice":"boolean //是否签署服务协议",
+      "signedContract":"boolean //是否签署合同",
+      "ahaCredit":"double //aha币数量",
+      "ahaPoint":"double //aha点数量",
+      "role":{
+        "id":"int //角色id",
+        "name":"string //角色名称"
+      },
+      "oauths":[{
+        "oauthType":"string //授权类型",
+        "oauthId":"string //授权码"
+      }],
+      "userInfo":{
+        "userId":"int //用户id(外键)",
+        "nickname":"string //用户昵称",
+        "gender":"boolean //用户性别",
+        "birthday":"date //用户出生日期",
+        "typeId":"int //用户类别",
+        "signature":"string //用户个性签名",
+        "avatarUrl":"string //用户头像文件保存路径",
+        "school":"string //用户学校",
+        "academy":"string //用户学院",
+        "major":"string //用户主修专业",
+        "grade":"int //用户当前年级",
+        "intro":"string //用户自我介绍",
+        "specialtyTags":"string //用户特长标签",
+        "trueName":"string //用户真实姓名",
+        "compTags":"string //用户参与过比赛标签",
+        "vipLevelId":"int //用户VIP等级(外键)"
+      }
+    }
+  },
+  "time":"string //响应时间"
 }
 ```
 ## 通过手机号注册
@@ -64,7 +66,7 @@
 
 **请求URL**
 
-/register/phone `POST` 
+/register/phone `POST`
 
 **请求体**
 
@@ -89,7 +91,8 @@
 		"personalUserInfo":{
 			"signedNotice":"boolean //是否签署服务协议",
 			"signedContract":"boolean //是否签署合同",
-			"contribPoint":"double //贡献点",
+			"ahaCredit":"double //aha币数量",
+			"ahaPoint":"double //aha点数量",
 			"role":{
 				"id":"int //角色id",
 				"name":"string //角色名称"
@@ -113,7 +116,8 @@
 				"intro":"string //用户自我介绍",
 				"specialtyTags":"string //用户特长标签",
 				"trueName":"string //用户真实姓名",
-				"compTags":"string //用户参与过比赛标签"
+				"compTags":"string //用户参与过比赛标签",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			}
 		}
 	},
@@ -126,7 +130,7 @@
 
 **请求URL**
 
-/bind/phone `POST` 
+/bind/phone `POST`
 
 **请求体**
 
@@ -153,7 +157,7 @@
 
 **请求URL**
 
-/changePassword/phone/{phone} `POST` 
+/changePassword/phone/{phone} `POST`
 
 **请求参数**
 
@@ -186,7 +190,7 @@ phone|string|否|手机号
 
 **请求URL**
 
-/sign/notice `POST` 
+/sign/notice `POST`
 
 
 **返回结果**
@@ -207,7 +211,7 @@ phone|string|否|手机号
 
 **请求URL**
 
-/sign/contract `POST` 
+/sign/contract `POST`
 
 **请求参数**
 
@@ -238,7 +242,7 @@ signTime|date|否|合同签名时间
 
 **请求URL**
 
-/logout `GET` 
+/logout `GET`
 
 
 **返回结果**
@@ -257,7 +261,7 @@ signTime|date|否|合同签名时间
 
 **请求URL**
 
-/bind/wechat `POST` 
+/bind/wechat `POST`
 
 **请求参数**
 
@@ -281,7 +285,7 @@ code|string|否|小程序请求码
 
 **请求URL**
 
-/login/wechat `POST` 
+/login/wechat `POST`
 
 **请求体**
 
@@ -305,7 +309,8 @@ code|string|否|小程序请求码
 		"personalUserInfo":{
 			"signedNotice":"boolean //是否签署服务协议",
 			"signedContract":"boolean //是否签署合同",
-			"contribPoint":"double //贡献点",
+			"ahaCredit":"double //aha币数量",
+			"ahaPoint":"double //aha点数量",
 			"role":{
 				"id":"int //角色id",
 				"name":"string //角色名称"
@@ -329,7 +334,8 @@ code|string|否|小程序请求码
 				"intro":"string //用户自我介绍",
 				"specialtyTags":"string //用户特长标签",
 				"trueName":"string //用户真实姓名",
-				"compTags":"string //用户参与过比赛标签"
+				"compTags":"string //用户参与过比赛标签",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			}
 		}
 	},
@@ -355,20 +361,20 @@ id|int|否|竞赛信息id
 
 ```json
 {
-  "code": "int //响应状态码",
-  "msg": "string //响应消息",
-  "data": {
-    "id": "int //竞赛id",
-    "competitionType": {
-      "id": "int",
-      "name": "string"
-    },
-    "name": "string //赛事名称",
-    "level": "int //竞赛级别",
-    "intro": "string //赛事简介",
-    "picUrl": "int //赛事图片保存路径"
-  },
-  "time": "string //响应时间"
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"id":"int //竞赛id",
+		"competitionType":{
+			"id":"int",
+			"name":"string"
+		},
+		"name":"string //赛事名称",
+		"level":"int //竞赛级别",
+		"intro":"string //赛事简介",
+		"picUrl":"int //赛事图片保存路径"
+	},
+	"time":"string //响应时间"
 }
 ```
 ## 获取所有竞赛信息
@@ -377,36 +383,35 @@ id|int|否|竞赛信息id
 
 **请求URL**
 
-/competition `GET`
+/competition/getAllCompetition `GET`
+
 
 **返回结果**
 
 ```json
 {
-  "code": "int //响应状态码",
-  "msg": "string //响应消息",
-  "data": [
-    {
-      "id": "int //竞赛id",
-      "competitionType": {
-        "id": "int",
-        "name": "string"
-      },
-      "name": "string //赛事名称",
-      "level": "int //竞赛级别",
-      "picUrl": "int //赛事图片保存路径"
-    }
-  ],
-  "time": "string //响应时间"
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //竞赛id",
+		"competitionType":{
+			"id":"int",
+			"name":"string"
+		},
+		"name":"string //赛事名称",
+		"level":"int //竞赛级别",
+		"picUrl":"int //赛事图片保存路径"
+	}],
+	"time":"string //响应时间"
 }
-``` 
+```
 ## 根据id获取竞赛类别
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/competition/type/{id} `GET` 
+/competition/type/{id} `GET`
 
 **请求参数**
 
@@ -433,7 +438,7 @@ id|int|否|竞赛类别id
 
 **请求URL**
 
-/competition/type `GET` 
+/competition/type `GET`
 
 
 **返回结果**
@@ -456,7 +461,7 @@ id|int|否|竞赛类别id
 
 **请求URL**
 
-/order/{orderId} `GET` 
+/contribPoint/order/{orderId} `GET`
 
 **请求参数**
 
@@ -477,7 +482,28 @@ orderId|int|否|订单号
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
+		},
+		"project":{
+			"id":"int //项目id",
+			"creatorUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
+			},
+			"name":"string //项目名称",
+			"read":"int //点击率",
+			"collect":"int //收藏数量",
+			"avatarUrl":"string //团队头像url",
+			"tags":"string //项目标签",
+			"compId":"int //赛事id(外键)",
+			"awardLevel":"int //项目获奖级别",
+			"awardTime":"date //项目获奖时间",
+			"passed":"boolean //是否通过审核"
 		},
 		"price":"double //订单总价",
 		"status":"int //订单状态",
@@ -488,6 +514,7 @@ orderId|int|否|订单号
 				"id":"int //项目资源id",
 				"projectId":"int //项目id(外键)",
 				"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+				"type":"int //资源类型",
 				"filename":"string //保存在oss里的资源文件名(包括前缀)",
 				"previewUrl":"string //保存在oss里的预览文件地址",
 				"download":"int //资源文件下载量",
@@ -498,7 +525,9 @@ orderId|int|否|订单号
 			},
 			"discount":"double //资源折扣",
 			"price":"double //贡献点小计"
-		}]
+		}],
+		"chargedAhaCredit":"double //订单实际支付aha币",
+		"chargedAhaPoint":"double //订单实际支付aha点"
 	},
 	"time":"string //响应时间"
 }
@@ -509,7 +538,7 @@ orderId|int|否|订单号
 
 **请求URL**
 
-/order/me `GET` 
+/contribPoint/order/me `GET`
 
 
 **返回结果**
@@ -525,7 +554,28 @@ orderId|int|否|订单号
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
+		},
+		"project":{
+			"id":"int //项目id",
+			"creatorUser":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
+			},
+			"name":"string //项目名称",
+			"read":"int //点击率",
+			"collect":"int //收藏数量",
+			"avatarUrl":"string //团队头像url",
+			"tags":"string //项目标签",
+			"compId":"int //赛事id(外键)",
+			"awardLevel":"int //项目获奖级别",
+			"awardTime":"date //项目获奖时间",
+			"passed":"boolean //是否通过审核"
 		},
 		"price":"double //订单总价",
 		"status":"int //订单状态",
@@ -536,6 +586,7 @@ orderId|int|否|订单号
 				"id":"int //项目资源id",
 				"projectId":"int //项目id(外键)",
 				"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+				"type":"int //资源类型",
 				"filename":"string //保存在oss里的资源文件名(包括前缀)",
 				"previewUrl":"string //保存在oss里的预览文件地址",
 				"download":"int //资源文件下载量",
@@ -546,7 +597,9 @@ orderId|int|否|订单号
 			},
 			"discount":"double //资源折扣",
 			"price":"double //贡献点小计"
-		}]
+		}],
+		"chargedAhaCredit":"double //订单实际支付aha币",
+		"chargedAhaPoint":"double //订单实际支付aha点"
 	}],
 	"time":"string //响应时间"
 }
@@ -557,7 +610,7 @@ orderId|int|否|订单号
 
 **请求URL**
 
-/order `POST` 
+/contribPoint/order `POST`
 
 **请求体**
 
@@ -584,7 +637,7 @@ orderId|int|否|订单号
 
 **请求URL**
 
-/order/{orderId} `PUT` 
+/contribPoint/order/{orderId} `PUT`
 
 **请求参数**
 
@@ -603,14 +656,13 @@ action|string|否|操作，取值pay、cancel
 	"time":"string //响应时间"
 }
 ```
-# 贡献点排名相关请求
 ## 获取贡献点总排行榜
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/rank `GET` 
+/contribPoint/rank `GET`
 
 
 **返回结果**
@@ -625,7 +677,8 @@ action|string|否|操作，取值pay、cancel
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
 		},
 		"contribPoint":"double //贡献点",
 		"rank":"long //排名"
@@ -639,7 +692,7 @@ action|string|否|操作，取值pay、cancel
 
 **请求URL**
 
-/rank/me `GET` 
+/contribPoint/rank/me `GET`
 
 
 **返回结果**
@@ -654,11 +707,38 @@ action|string|否|操作，取值pay、cancel
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
 		},
 		"contribPoint":"double //贡献点",
 		"rank":"long //排名"
 	},
+	"time":"string //响应时间"
+}
+```
+## 获取用户个人贡献点变动日志
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/contribPoint/log/me `GET`
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int",
+		"userId":"int //用户id",
+		"source":"string //来源",
+		"ahaCreditAmount":"double //Aha币总额",
+		"ahaPointAmount":"double //Aha点总额",
+		"time":"date //发生时间"
+	}],
 	"time":"string //响应时间"
 }
 ```
@@ -700,7 +780,7 @@ filename|string|否|待上传文件名
 
 **请求URL**
 
-/feedback/me `GET` 
+/feedback/me `GET`
 
 **请求参数**
 
@@ -731,7 +811,8 @@ orderBy|string|否|排序方式
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"time":"date //反馈时间",
 			"type":"int //反馈类型",
@@ -751,7 +832,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/feedback `POST` 
+/feedback `POST`
 
 **请求体**
 
@@ -779,7 +860,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/file/{filename} `GET` 
+/file/{filename} `GET`
 
 **请求参数**
 
@@ -806,7 +887,7 @@ filename|string|否|文件名
 
 **请求URL**
 
-/admin/project `GET` 
+/admin/project `GET`
 
 **请求参数**
 
@@ -837,7 +918,8 @@ passed|boolean|否|是否通过审核
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"name":"string //项目名称",
 			"read":"int //点击率",
@@ -859,7 +941,7 @@ passed|boolean|否|是否通过审核
 
 **请求URL**
 
-/admin/project/resource/{projectResourceId}/sign/download `GET` 
+/admin/project/resource/{projectResourceId}/sign/download `GET`
 
 **请求参数**
 
@@ -915,7 +997,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/admin/project/check/{projectId} `POST` 
+/admin/project/check/{projectId} `POST`
 
 **请求参数**
 
@@ -948,7 +1030,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/admin/project/resource/check/{resourceId} `POST` 
+/admin/project/resource/check/{resourceId} `POST`
 
 **请求参数**
 
@@ -981,7 +1063,7 @@ resourceId|int|否|项目资源id
 
 **请求URL**
 
-/admin/project/resource/purchased/{resourceId} `GET` 
+/admin/project/resource/purchased/{resourceId} `GET`
 
 **请求参数**
 
@@ -1006,7 +1088,8 @@ pageSize|int|否|分页大小
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"purchaseTime":"date"
 		}]
@@ -1020,7 +1103,7 @@ pageSize|int|否|分页大小
 
 **请求URL**
 
-/admin/project/{projectId} `PUT` 
+/admin/project/{projectId} `PUT`
 
 **请求参数**
 
@@ -1060,7 +1143,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/admin/project/{projectId} `DELETE` 
+/admin/project/{projectId} `DELETE`
 
 **请求参数**
 
@@ -1084,7 +1167,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/admin/project/member/{projectId}/{memberUserId} `PUT` 
+/admin/project/member/{projectId}/{memberUserId} `PUT`
 
 **请求参数**
 
@@ -1121,7 +1204,7 @@ memberUserId|int|否|项目成员用户id
 
 **请求URL**
 
-/admin/project/members/{projectId} `PUT` 
+/admin/project/members/{projectId} `PUT`
 
 **请求参数**
 
@@ -1157,7 +1240,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/admin/project/member/{projectId}/{memberUserId} `DELETE` 
+/admin/project/member/{projectId}/{memberUserId} `DELETE`
 
 **请求参数**
 
@@ -1182,7 +1265,7 @@ memberUserId|int|否|成员用户id
 
 **请求URL**
 
-/admin/project/resource/{projectResourceId} `PUT` 
+/admin/project/resource/{projectResourceId} `PUT`
 
 **请求参数**
 
@@ -1216,7 +1299,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/admin/project/resource/{projectResourceId} `DELETE` 
+/admin/project/resource/{projectResourceId} `DELETE`
 
 **请求参数**
 
@@ -1240,7 +1323,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/admin/project/resource/score/{projectResourceId} `DELETE` 
+/admin/project/resource/score/{projectResourceId} `DELETE`
 
 **请求参数**
 
@@ -1265,7 +1348,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/competition `POST` 
+/admin/competition `POST`
 
 **请求体**
 
@@ -1296,7 +1379,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/competition/{id} `PUT` 
+/admin/competition/{id} `PUT`
 
 **请求参数**
 
@@ -1333,7 +1416,7 @@ id|int|否|竞赛id
 
 **请求URL**
 
-/admin/competition/{id} `DELETE` 
+/admin/competition/{id} `DELETE`
 
 **请求参数**
 
@@ -1357,7 +1440,7 @@ id|int|否|竞赛id
 
 **请求URL**
 
-/admin/competition/tag `POST` 
+/admin/competition/tag `POST`
 
 **请求体**
 
@@ -1384,7 +1467,7 @@ id|int|否|竞赛id
 
 **请求URL**
 
-/admin/competition/tag/{id} `PUT` 
+/admin/competition/tag/{id} `PUT`
 
 **请求参数**
 
@@ -1417,7 +1500,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/admin/competition/tag/{id} `DELETE` 
+/admin/competition/tag/{id} `DELETE`
 
 **请求参数**
 
@@ -1441,7 +1524,7 @@ id|int|否|竞赛标签id
 
 **请求URL**
 
-/admin/user `GET` 
+/admin/user `GET`
 
 **请求参数**
 
@@ -1471,7 +1554,8 @@ orderBy|string|否|排序方式
 			"id":"int //用户id",
 			"createdTime":"date //账户首次登录时间",
 			"studentRecFilename":"string //学生证图片保存路径",
-			"contribPoint":"double //贡献点",
+			"ahaCredit":"double //aha币数量",
+			"ahaPoint":"double //aha点数量",
 			"signedNotice":"boolean //是否签署服务协议",
 			"signedContract":"boolean //是否签署合同",
 			"roleId":"int //角色id(外键)",
@@ -1504,7 +1588,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/admin/user/{userId} `GET` 
+/admin/user/{userId} `GET`
 
 **请求参数**
 
@@ -1522,7 +1606,8 @@ userId|int|否|用户id
 		"id":"int //用户id",
 		"createdTime":"date //账户首次登录时间",
 		"studentRecFilename":"string //学生证图片保存路径",
-		"contribPoint":"double //贡献点",
+		"ahaCredit":"double //aha币数量",
+		"ahaPoint":"double //aha点数量",
 		"signedNotice":"boolean //是否签署服务协议",
 		"signedContract":"boolean //是否签署合同",
 		"roleId":"int //角色id(外键)",
@@ -1554,7 +1639,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/user/{userId} `PUT` 
+/admin/user/{userId} `PUT`
 
 **请求参数**
 
@@ -1590,7 +1675,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/user/info/{userId} `PUT` 
+/admin/user/info/{userId} `PUT`
 
 **请求参数**
 
@@ -1616,7 +1701,8 @@ userId|int|否|用户id
 	"intro":"string //用户自我介绍",
 	"specialtyTags":"string //用户特长标签",
 	"trueName":"string //用户真实姓名",
-	"compTags":"string //用户参与过比赛标签"
+	"compTags":"string //用户参与过比赛标签",
+	"vipLevelId":"int //用户VIP等级(外键)"
 }
 ```
 
@@ -1636,7 +1722,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/user/{userId} `DELETE` 
+/admin/user/{userId} `DELETE`
 
 **请求参数**
 
@@ -1660,7 +1746,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/user/contract/{userId} `GET` 
+/admin/user/contract/{userId} `GET`
 
 **请求参数**
 
@@ -1690,7 +1776,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/user/contract/signature/{userId} `GET` 
+/admin/user/contract/signature/{userId} `GET`
 
 **请求参数**
 
@@ -1714,7 +1800,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/message/systemNotice `POST` 
+/admin/message/systemNotice `POST`
 
 **请求体**
 
@@ -1744,7 +1830,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/message/systemPrivate `POST` 
+/admin/message/systemPrivate `POST`
 
 **请求体**
 
@@ -1774,7 +1860,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/notice `GET` 
+/admin/notice `GET`
 
 
 **返回结果**
@@ -1801,7 +1887,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/notice `POST` 
+/admin/notice `POST`
 
 **请求体**
 
@@ -1831,7 +1917,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/admin/notice/{noticeId} `PUT` 
+/admin/notice/{noticeId} `PUT`
 
 **请求参数**
 
@@ -1867,7 +1953,7 @@ noticeId|int|否|公告id
 
 **请求URL**
 
-/admin/feedback `GET` 
+/admin/feedback `GET`
 
 **请求参数**
 
@@ -1899,7 +1985,8 @@ orderBy|string|否|排序方式，取值asc、desc
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"time":"date //反馈时间",
 			"type":"int //反馈类型",
@@ -1919,7 +2006,7 @@ orderBy|string|否|排序方式，取值asc、desc
 
 **请求URL**
 
-/admin/feedback/{feedbackId} `PUT` 
+/admin/feedback/{feedbackId} `PUT`
 
 **请求参数**
 
@@ -1954,7 +2041,7 @@ feedbackId|int|否|反馈id
 
 **请求URL**
 
-/message/count/notRead `GET` 
+/message/count/notRead `GET`
 
 **请求参数**
 
@@ -1978,7 +2065,7 @@ type|string|否|消息类型(system:系统消息,private:私信)
 
 **请求URL**
 
-/message `GET` 
+/message `GET`
 
 **请求参数**
 
@@ -2005,14 +2092,16 @@ type|string|否|消息类型(system:系统消息,private:私信)
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"receiverUser":{
 				"userId":"int //用户id",
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"type":"int //类型",
 			"status":"int //阅读状态",
@@ -2030,7 +2119,7 @@ type|string|否|消息类型(system:系统消息,private:私信)
 
 **请求URL**
 
-/message/communication/{senderUserId} `GET` 
+/message/communication/{senderUserId} `GET`
 
 **请求参数**
 
@@ -2051,14 +2140,16 @@ senderUserId|int|否|对方用户id
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
 		},
 		"receiverUser":{
 			"userId":"int //用户id",
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
 		},
 		"type":"int //类型",
 		"status":"int //阅读状态",
@@ -2075,7 +2166,7 @@ senderUserId|int|否|对方用户id
 
 **请求URL**
 
-/message/{messageId} `GET` 
+/message/{messageId} `GET`
 
 **请求参数**
 
@@ -2099,7 +2190,7 @@ messageId|int|否|站内信id
 
 **请求URL**
 
-/message/{messageId} `DELETE` 
+/message/{messageId} `DELETE`
 
 **请求参数**
 
@@ -2123,7 +2214,7 @@ messageId|int|否|站内信id
 
 **请求URL**
 
-/message `POST` 
+/message `POST`
 
 **请求体**
 
@@ -2154,7 +2245,7 @@ messageId|int|否|站内信id
 
 **请求URL**
 
-/notice `GET` 
+/notice `GET`
 
 
 **返回结果**
@@ -2182,7 +2273,7 @@ messageId|int|否|站内信id
 
 **请求URL**
 
-/oss/green/callback `POST` 
+/oss/green/callback `POST`
 
 **请求参数**
 
@@ -2208,7 +2299,7 @@ content|string|否|返回实体(json)
 
 **请求URL**
 
-/project `GET` 
+/project `GET`
 
 **请求参数**
 
@@ -2238,7 +2329,8 @@ orderBy|string|否|排序方式
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"name":"string //项目名称",
 			"read":"int //点击率",
@@ -2260,7 +2352,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/project/me `GET` 
+/project/me `GET`
 
 **请求参数**
 
@@ -2289,7 +2381,8 @@ orderBy|string|否|排序方式
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"name":"string //项目名称",
 			"read":"int //点击率",
@@ -2311,7 +2404,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/project/{projectId} `GET` 
+/project/{projectId} `GET`
 
 **请求参数**
 
@@ -2332,7 +2425,8 @@ projectId|int|否|项目id
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
 		},
 		"name":"string //团队名称",
 		"avatarUrl":"string //团队头像url",
@@ -2361,7 +2455,8 @@ projectId|int|否|项目id
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 			"job":"string //团队成员职务",
@@ -2371,6 +2466,7 @@ projectId|int|否|项目id
 			"id":"int //项目资源id",
 			"projectId":"int //项目id(外键)",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+			"type":"int //资源类型",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"previewUrl":"string //保存在oss里的预览文件地址",
 			"download":"int //资源文件下载量",
@@ -2389,7 +2485,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/sign/upload/public `GET` 
+/project/sign/upload/public `GET`
 
 
 **返回结果**
@@ -2445,7 +2541,7 @@ filename|string|否|待上传文件名
 
 **请求URL**
 
-/project `POST` 
+/project `POST`
 
 **请求体**
 
@@ -2481,7 +2577,7 @@ filename|string|否|待上传文件名
 
 **请求URL**
 
-/project/{projectId} `PUT` 
+/project/{projectId} `PUT`
 
 **请求参数**
 
@@ -2521,7 +2617,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/{projectId} `DELETE` 
+/project/{projectId} `DELETE`
 
 **请求参数**
 
@@ -2545,7 +2641,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/{projectId}/members `GET` 
+/project/{projectId}/members `GET`
 
 **请求参数**
 
@@ -2565,7 +2661,8 @@ projectId|int|否|项目id
 			"nickname":"string //用户昵称",
 			"gender":"boolean //用户性别",
 			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校"
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
 		},
 		"rank":"int //团队成员顺位(决定显示顺序，1为队长)",
 		"job":"string //团队成员职务",
@@ -2580,7 +2677,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/member/{projectId} `POST` 
+/project/member/{projectId} `POST`
 
 **请求参数**
 
@@ -2616,7 +2713,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/member/{projectId}/{memberUserId} `PUT` 
+/project/member/{projectId}/{memberUserId} `PUT`
 
 **请求参数**
 
@@ -2653,7 +2750,7 @@ memberUserId|int|否|成员用户id
 
 **请求URL**
 
-/project/members/{projectId} `PUT` 
+/project/members/{projectId} `PUT`
 
 **请求参数**
 
@@ -2689,7 +2786,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/member/{projectId}/{memberUserId} `DELETE` 
+/project/member/{projectId}/{memberUserId} `DELETE`
 
 **请求参数**
 
@@ -2714,7 +2811,7 @@ memberUserId|int|否|成员用户id
 
 **请求URL**
 
-/project/{projectId}/resources `GET` 
+/project/{projectId}/resources `GET`
 
 **请求参数**
 
@@ -2732,6 +2829,7 @@ projectId|int|否|项目id
 		"id":"int //项目资源id",
 		"projectId":"int //项目id(外键)",
 		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+		"type":"int //资源类型",
 		"filename":"string //保存在oss里的资源文件名(包括前缀)",
 		"previewUrl":"string //保存在oss里的预览文件地址",
 		"download":"int //资源文件下载量",
@@ -2749,7 +2847,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/resource/{projectResourceId} `GET` 
+/project/resource/{projectResourceId} `GET`
 
 **请求参数**
 
@@ -2767,6 +2865,7 @@ projectResourceId|int|否|项目资源id
 		"id":"int //项目资源id",
 		"projectId":"int //项目id(外键)",
 		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+		"type":"int //资源类型",
 		"filename":"string //保存在oss里的资源文件名(包括前缀)",
 		"previewUrl":"string //保存在oss里的预览文件地址",
 		"download":"int //资源文件下载量",
@@ -2784,7 +2883,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/{projectId}/resources/sign/upload/private `GET` 
+/project/{projectId}/resources/sign/upload/private `GET`
 
 **请求参数**
 
@@ -2846,7 +2945,7 @@ filename|string|否|待上传文件名
 
 **请求URL**
 
-/project/resource/{projectId} `POST` 
+/project/resource/{projectId} `POST`
 
 **请求参数**
 
@@ -2859,6 +2958,7 @@ projectId|int|否|项目id
 ```json
 {
 	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)【必须】",
+	"type":"int //资源类型【必须】",
 	"filename":"string //保存在oss里的资源文件名(包括前缀)【必须】",
 	"price":"double //资源价格【必须】",
 	"discount":"double //资源折扣【必须】"
@@ -2883,7 +2983,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/resource/{projectResourceId} `PUT` 
+/project/resource/{projectResourceId} `PUT`
 
 **请求参数**
 
@@ -2917,7 +3017,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/resource/{projectResourceId} `DELETE` 
+/project/resource/{projectResourceId} `DELETE`
 
 **请求参数**
 
@@ -2941,7 +3041,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/resource/{projectResourceId}/sign/download `GET` 
+/project/resource/{projectResourceId}/sign/download `GET`
 
 **请求参数**
 
@@ -3027,7 +3127,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/collection `GET` 
+/project/collection `GET`
 
 
 **返回结果**
@@ -3044,7 +3144,8 @@ projectResourceId|int|否|项目资源id
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"name":"string //项目名称",
 			"read":"int //点击率",
@@ -3067,7 +3168,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/collection/{projectId} `POST` 
+/project/collection/{projectId} `POST`
 
 **请求参数**
 
@@ -3091,7 +3192,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/collection/{projectId} `DELETE` 
+/project/collection/{projectId} `DELETE`
 
 **请求参数**
 
@@ -3139,7 +3240,7 @@ projectId|int|否|项目id
 
 **请求URL**
 
-/project/resource/score `GET` 
+/project/resource/score `GET`
 
 **请求参数**
 
@@ -3169,7 +3270,8 @@ orderBy|string|否|排序方式
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
 				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校"
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
 			},
 			"resourceId":"int //项目资源id",
 			"score":"double //资源评分",
@@ -3186,7 +3288,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/project/resource/score/{projectResourceId} `POST` 
+/project/resource/score/{projectResourceId} `POST`
 
 **请求参数**
 
@@ -3219,7 +3321,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/resource/score/{projectResourceId} `DELETE` 
+/project/resource/score/{projectResourceId} `DELETE`
 
 **请求参数**
 
@@ -3243,7 +3345,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/resource/purchased `GET` 
+/project/resource/purchased `GET`
 
 
 **返回结果**
@@ -3257,21 +3359,20 @@ projectResourceId|int|否|项目资源id
 			"id":"int //项目资源id",
 			"projectId":"int //项目id(外键)",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+			"type":"int //资源类型",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"previewUrl":"string //保存在oss里的预览文件地址",
 			"download":"int //资源文件下载量",
-          "score": "double //资源平均分",
-          "scoreCount": "int //评分人数",
-          "price": "double //资源价格",
-          "discount": "double //资源折扣"
-        },
-      "purchaseTime": "date //购买时间"
-    }
-    ],
-  "time": "string //响应时间"
+			"score":"double //资源平均分",
+			"scoreCount":"int //评分人数",
+			"price":"double //资源价格",
+			"discount":"double //资源折扣"
+		},
+		"purchaseTime":"date //购买时间"
+	}],
+	"time":"string //响应时间"
 }
 ```
-
 ## 判断项目资源是否已经购买
 
 *作者: STEA_YY*
@@ -3283,17 +3384,17 @@ projectResourceId|int|否|项目资源id
 **请求参数**
 
 参数名|类型|必须|描述
---:|:--:|:--:|:-- 
+--:|:--:|:--:|:--
 resourceId|int|否|项目资源id
 
 **返回结果**
 
 ```json
 {
-  "code": "int //响应状态码",
-  "msg": "string //响应消息",
-  "data": "boolean //响应数据",
-  "time": "string //响应时间"
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"boolean //响应数据",
+	"time":"string //响应时间"
 }
 ```
 ## 根据项目id获取用户已购资源的id数组
@@ -3321,7 +3422,6 @@ projectId|int|否|项目id
 }
 ```
 # 用户简历相关请求
-
 ## 根据用户id查看用户简历
 
 *作者: STEA_YY*
@@ -3401,7 +3501,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/resume/me `GET` 
+/resume/me `GET`
 
 
 **返回结果**
@@ -3469,7 +3569,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/resume `PUT` 
+/resume `PUT`
 
 **请求体**
 
@@ -3543,7 +3643,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/sms/code `POST` 
+/sms/code `POST`
 
 **请求体**
 
@@ -3571,7 +3671,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/userInfo/me `GET` 
+/userInfo/me `GET`
 
 
 **返回结果**
@@ -3583,7 +3683,8 @@ userId|int|否|用户id
 	"data":{
 		"signedNotice":"boolean //是否签署服务协议",
 		"signedContract":"boolean //是否签署合同",
-		"contribPoint":"double //贡献点",
+		"ahaCredit":"double //aha币数量",
+		"ahaPoint":"double //aha点数量",
 		"role":{
 			"id":"int //角色id",
 			"name":"string //角色名称"
@@ -3607,7 +3708,8 @@ userId|int|否|用户id
 			"intro":"string //用户自我介绍",
 			"specialtyTags":"string //用户特长标签",
 			"trueName":"string //用户真实姓名",
-			"compTags":"string //用户参与过比赛标签"
+			"compTags":"string //用户参与过比赛标签",
+			"vipLevelId":"int //用户VIP等级(外键)"
 		}
 	},
 	"time":"string //响应时间"
@@ -3619,7 +3721,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/userInfo/me `PUT` 
+/userInfo/me `PUT`
 
 **请求体**
 
@@ -3639,7 +3741,8 @@ userId|int|否|用户id
 	"intro":"string //用户自我介绍",
 	"specialtyTags":"string //用户特长标签",
 	"trueName":"string //用户真实姓名",
-	"compTags":"string //用户参与过比赛标签"
+	"compTags":"string //用户参与过比赛标签",
+	"vipLevelId":"int //用户VIP等级(外键)"
 }
 ```
 
@@ -3659,7 +3762,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/userInfo/{userId} `GET` 
+/userInfo/{userId} `GET`
 
 **请求参数**
 
@@ -3688,7 +3791,8 @@ userId|int|否|用户id
 		"intro":"string //用户自我介绍",
 		"specialtyTags":"string //用户特长标签",
 		"trueName":"string //用户真实姓名",
-		"compTags":"string //用户参与过比赛标签"
+		"compTags":"string //用户参与过比赛标签",
+		"vipLevelId":"int //用户VIP等级(外键)"
 	},
 	"time":"string //响应时间"
 }
@@ -3699,7 +3803,7 @@ userId|int|否|用户id
 
 **请求URL**
 
-/userInfo/avatar/sign/upload `GET` 
+/userInfo/avatar/sign/upload `GET`
 
 
 **返回结果**
@@ -3737,15 +3841,15 @@ filename|string|否|文件名(要上传的文件的全名)
 
 ```json
 {
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"bucketName":"string //目标bucketName",
-		"region":"string //服务器地域",
-		"authorization":"string //上传签名",
-		"expire":"long //签名过期时间戳",
-		"filename":"string //完整文件名"
-	},
-	"time":"string //响应时间"
+  "code":"int //响应状态码",
+  "msg":"string //响应消息",
+  "data":{
+    "bucketName":"string //目标bucketName",
+    "region":"string //服务器地域",
+    "authorization":"string //上传签名",
+    "expire":"long //签名过期时间戳",
+    "filename":"string //完整文件名"
+  },
+  "time":"string //响应时间"
 }
 ```

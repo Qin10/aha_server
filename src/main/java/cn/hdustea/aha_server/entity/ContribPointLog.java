@@ -2,7 +2,6 @@ package cn.hdustea.aha_server.entity;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
 import lombok.Data;
 
 /**
@@ -25,9 +24,14 @@ public class ContribPointLog {
     private String source;
 
     /**
-     * 总额
+     * Aha币总额
      */
-    private BigDecimal amount;
+    private BigDecimal ahaCreditAmount;
+
+    /**
+     * Aha点总额
+     */
+    private BigDecimal ahaPointAmount;
 
     /**
      * 发生时间

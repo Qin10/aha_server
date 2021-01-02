@@ -23,9 +23,13 @@ public class PersonalUserInfoVo {
      */
     private boolean signedContract;
     /**
-     * 贡献点
+     * aha币数量
      */
-    private BigDecimal contribPoint;
+    private BigDecimal ahaCredit;
+    /**
+     * aha点数量
+     */
+    private BigDecimal ahaPoint;
     /**
      * 用户角色
      */

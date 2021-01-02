@@ -1,13 +1,9 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.ContribPointOrder;
-import cn.hdustea.aha_server.vo.ContribPointOrderVo;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import cn.hdustea.aha_server.entity.ContribPointOrder;import cn.hdustea.aha_server.vo.ContribPointOrderVo;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
- * 贡献点订单表mapper
+ * ${description}
  *
  * @author STEA_YY
  **/

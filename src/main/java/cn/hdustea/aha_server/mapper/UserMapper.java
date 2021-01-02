@@ -23,11 +23,11 @@ public interface UserMapper {
 
     User selectByPrimaryKey(Integer id);
 
-    UserVo selectVoByPrimaryKey(Integer id);
-
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    UserVo selectVoByPrimaryKey(Integer id);
 
     User selectById(@Param("id") Integer id);
 
@@ -43,5 +43,13 @@ public interface UserMapper {
 
     List<UserManagementVo> selectAllManagementVoByConditions(@Param("roleId") Integer roleId, @Param("signedNotice") Boolean signedNotice, @Param("signedContract") Boolean signedContract, @Param("typeId") Integer typeId, @Param("nicknameLike") String nicknameLike, @Param("trueNameLike") String trueNameLike);
 
-    int updateDecContribPointById(@Param("deductedContribPoint") BigDecimal deductedContribPoint, @Param("id") Integer id);
+    int updateDecAhaPointById(@Param("deductedAhaPoint") BigDecimal deductedAhaPoint, @Param("id") Integer id);
+
+    int updateDecAhaCreditById(@Param("deductedAhaCredit") BigDecimal deductedAhaCredit, @Param("id") Integer id);
+
+    int updateIncAhaPointById(@Param("addedAhaPoint")BigDecimal addedAhaPoint,@Param("id")Integer id);
+
+    int updateIncAhaCreditById(@Param("addedAhaCredit")BigDecimal addedAhaCredit,@Param("id")Integer id);
+
+
 }

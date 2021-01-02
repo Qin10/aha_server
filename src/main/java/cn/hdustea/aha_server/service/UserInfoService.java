@@ -57,7 +57,8 @@ public class UserInfoService {
         List<OauthVo> oauthVos = oauthService.getAllOauthVoByUserId(userId);
         UserInfo userInfo = getUserInfoByUserId(userId);
         PersonalUserInfoVo personalUserInfoVo = new PersonalUserInfoVo();
-        personalUserInfoVo.setContribPoint(userVo.getContribPoint());
+        personalUserInfoVo.setAhaCredit(userVo.getAhaCredit());
+        personalUserInfoVo.setAhaPoint(userVo.getAhaPoint());
         personalUserInfoVo.setSignedNotice(userVo.getSignedNotice());
         personalUserInfoVo.setSignedContract(userVo.getSignedContract());
         personalUserInfoVo.setRole(userVo.getRole());
