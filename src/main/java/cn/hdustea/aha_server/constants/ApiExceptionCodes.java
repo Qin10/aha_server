@@ -8,7 +8,7 @@ import lombok.Getter;
  * @author STEA_YY
  **/
 @Getter
-public enum ApiExceptionCode {
+public enum ApiExceptionCodes {
     /**
      * 未找到token
      */
@@ -89,8 +89,10 @@ public enum ApiExceptionCode {
     private final Integer value;
     private final String desc;
 
-    ApiExceptionCode(Integer value, String desc) {
+    ApiExceptionCodes(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
     }
+
+
 }

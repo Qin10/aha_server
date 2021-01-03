@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.ApiException;
 import cn.hdustea.aha_server.exception.RuntimeApiException;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 /**
  * 统一异常处理
@@ -22,6 +23,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class ExceptionController {
+
+    /**
+     * 捕捉控制器未找到异常
+     *
+     * @param e 控制器未找到异常类
+     * @return 返回错误码和HTTP404
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseBean<Object> handleNoHandlerFoundException(NoHandlerFoundException e) {
+        return new ResponseBean<>(404, e.getMessage(), null);
+    }
 
     /**
      * 捕捉用户鉴权相关异常
@@ -92,7 +105,7 @@ public class ExceptionController {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseBean<Object> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        return new ResponseBean<>(ApiExceptionCode.ARGUMENTS_VALID_FAIL.getValue(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), null);
+        return new ResponseBean<>(ApiExceptionCodes.ARGUMENTS_VALID_FAIL.getValue(), e.getBindingResult().getAllErrors().get(0).getDefaultMessage(), null);
     }
 
     /**

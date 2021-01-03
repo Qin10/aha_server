@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.daoException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 
 /**
@@ -10,11 +10,11 @@ import cn.hdustea.aha_server.exception.apiException.DaoException;
  **/
 public class InsertException extends DaoException {
     public InsertException(String message) {
-        super(message, ApiExceptionCode.INSERT_ERROR.getValue());
+        super(message, ApiExceptionCodes.INSERT_ERROR.getValue());
     }
 
     public InsertException() {
-        super(ApiExceptionCode.INSERT_ERROR.getDesc(), ApiExceptionCode.INSERT_ERROR.getValue());
+        super(ApiExceptionCodes.INSERT_ERROR.getDesc(), ApiExceptionCodes.INSERT_ERROR.getValue());
     }
 
     public InsertException(String message, Integer code) {

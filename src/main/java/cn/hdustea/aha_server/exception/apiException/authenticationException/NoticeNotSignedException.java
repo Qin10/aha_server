@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.authenticationException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
  **/
 public class NoticeNotSignedException extends AuthenticationException {
     public NoticeNotSignedException() {
-        super(ApiExceptionCode.NOTICE_NOT_SIGNED.getDesc(), ApiExceptionCode.NOTICE_NOT_SIGNED.getValue());
+        super(ApiExceptionCodes.NOTICE_NOT_SIGNED.getDesc(), ApiExceptionCodes.NOTICE_NOT_SIGNED.getValue());
     }
 
     public NoticeNotSignedException(String message) {
-        super(message, ApiExceptionCode.NOTICE_NOT_SIGNED.getValue());
+        super(message, ApiExceptionCodes.NOTICE_NOT_SIGNED.getValue());
     }
 }

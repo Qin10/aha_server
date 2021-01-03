@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.ApiException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.ApiException;
  **/
 public class ForbiddenException extends ApiException {
     public ForbiddenException() {
-        super(ApiExceptionCode.ACCESS_FORBIDDEN.getDesc(), ApiExceptionCode.ACCESS_FORBIDDEN.getValue());
+        super(ApiExceptionCodes.ACCESS_FORBIDDEN.getDesc(), ApiExceptionCodes.ACCESS_FORBIDDEN.getValue());
     }
 
     public ForbiddenException(String message) {
-        super(message, ApiExceptionCode.ACCESS_FORBIDDEN.getValue());
+        super(message, ApiExceptionCodes.ACCESS_FORBIDDEN.getValue());
     }
 }

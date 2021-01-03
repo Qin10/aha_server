@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.authenticationException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
  **/
 public class TokenNotFoundException extends AuthenticationException {
     public TokenNotFoundException() {
-        super(ApiExceptionCode.TOKEN_NOT_FOUND.getDesc(), ApiExceptionCode.TOKEN_NOT_FOUND.getValue());
+        super(ApiExceptionCodes.TOKEN_NOT_FOUND.getDesc(), ApiExceptionCodes.TOKEN_NOT_FOUND.getValue());
     }
 
     public TokenNotFoundException(String message) {
-        super(message, ApiExceptionCode.TOKEN_NOT_FOUND.getValue());
+        super(message, ApiExceptionCodes.TOKEN_NOT_FOUND.getValue());
     }
 }

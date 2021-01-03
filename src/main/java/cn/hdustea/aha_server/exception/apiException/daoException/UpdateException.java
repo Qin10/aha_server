@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.daoException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.apiException.DaoException;
  **/
 public class UpdateException extends DaoException {
     public UpdateException() {
-        super(ApiExceptionCode.UPDATE_ERROR.getDesc(), ApiExceptionCode.UPDATE_ERROR.getValue());
+        super(ApiExceptionCodes.UPDATE_ERROR.getDesc(), ApiExceptionCodes.UPDATE_ERROR.getValue());
     }
 
     public UpdateException(String message) {
-        super(message, ApiExceptionCode.UPDATE_ERROR.getValue());
+        super(message, ApiExceptionCodes.UPDATE_ERROR.getValue());
     }
 }

@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.daoException.insertException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.apiException.daoException.InsertException
  **/
 public class AccountExistedException extends InsertException {
     public AccountExistedException(String message) {
-        super(message, ApiExceptionCode.ACCOUNT_EXISTED.getValue());
+        super(message, ApiExceptionCodes.ACCOUNT_EXISTED.getValue());
     }
 
     public AccountExistedException() {
-        super(ApiExceptionCode.ACCOUNT_EXISTED.getDesc(), ApiExceptionCode.ACCOUNT_EXISTED.getValue());
+        super(ApiExceptionCodes.ACCOUNT_EXISTED.getDesc(), ApiExceptionCodes.ACCOUNT_EXISTED.getValue());
     }
 }

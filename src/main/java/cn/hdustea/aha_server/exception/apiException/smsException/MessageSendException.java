@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.smsException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.SmsException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.apiException.SmsException;
  **/
 public class MessageSendException extends SmsException {
     public MessageSendException() {
-        super(ApiExceptionCode.MESSAGE_SEND_FAIL.getDesc(), ApiExceptionCode.MESSAGE_SEND_FAIL.getValue());
+        super(ApiExceptionCodes.MESSAGE_SEND_FAIL.getDesc(), ApiExceptionCodes.MESSAGE_SEND_FAIL.getValue());
     }
 
     public MessageSendException(String message) {
-        super(message, ApiExceptionCode.MESSAGE_SEND_FAIL.getValue());
+        super(message, ApiExceptionCodes.MESSAGE_SEND_FAIL.getValue());
     }
 }

@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.smsException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.SmsException;
 
 /**
@@ -11,10 +11,10 @@ import cn.hdustea.aha_server.exception.apiException.SmsException;
 public class MessageCheckException extends SmsException {
 
     public MessageCheckException() {
-        super(ApiExceptionCode.MESSAGE_CHECK_FAIL.getDesc(), ApiExceptionCode.MESSAGE_CHECK_FAIL.getValue());
+        super(ApiExceptionCodes.MESSAGE_CHECK_FAIL.getDesc(), ApiExceptionCodes.MESSAGE_CHECK_FAIL.getValue());
     }
 
     public MessageCheckException(String message) {
-        super(message, ApiExceptionCode.MESSAGE_CHECK_FAIL.getValue());
+        super(message, ApiExceptionCodes.MESSAGE_CHECK_FAIL.getValue());
     }
 }

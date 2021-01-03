@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.daoException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.DaoException;
 
 /**
@@ -10,11 +10,11 @@ import cn.hdustea.aha_server.exception.apiException.DaoException;
  **/
 public class SelectException extends DaoException {
     public SelectException(String message) {
-        super(message, ApiExceptionCode.SELECT_ERROR.getValue());
+        super(message, ApiExceptionCodes.SELECT_ERROR.getValue());
     }
 
     public SelectException() {
-        super(ApiExceptionCode.INSERT_ERROR.getDesc(), ApiExceptionCode.SELECT_ERROR.getValue());
+        super(ApiExceptionCodes.INSERT_ERROR.getDesc(), ApiExceptionCodes.SELECT_ERROR.getValue());
     }
 
     public SelectException(String message, Integer code) {

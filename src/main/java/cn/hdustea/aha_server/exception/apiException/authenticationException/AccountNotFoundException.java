@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.authenticationException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 
 /**
@@ -11,10 +11,10 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 public class AccountNotFoundException extends AuthenticationException {
 
     public AccountNotFoundException(String message) {
-        super(message, ApiExceptionCode.USER_NOT_FOUND.getValue());
+        super(message, ApiExceptionCodes.USER_NOT_FOUND.getValue());
     }
 
     public AccountNotFoundException() {
-        super(ApiExceptionCode.USER_NOT_FOUND.getDesc(), ApiExceptionCode.USER_NOT_FOUND.getValue());
+        super(ApiExceptionCodes.USER_NOT_FOUND.getDesc(), ApiExceptionCodes.USER_NOT_FOUND.getValue());
     }
 }

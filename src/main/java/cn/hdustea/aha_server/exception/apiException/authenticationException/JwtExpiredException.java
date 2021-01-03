@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.authenticationException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
  **/
 public class JwtExpiredException extends AuthenticationException {
     public JwtExpiredException() {
-        super(ApiExceptionCode.TOKEN_EXPIRED.getDesc(), ApiExceptionCode.TOKEN_EXPIRED.getValue());
+        super(ApiExceptionCodes.TOKEN_EXPIRED.getDesc(), ApiExceptionCodes.TOKEN_EXPIRED.getValue());
     }
 
     public JwtExpiredException(String message) {
-        super(message, ApiExceptionCode.TOKEN_EXPIRED.getValue());
+        super(message, ApiExceptionCodes.TOKEN_EXPIRED.getValue());
     }
 }

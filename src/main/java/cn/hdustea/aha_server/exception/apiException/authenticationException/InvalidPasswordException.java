@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.authenticationException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 
 /**
@@ -11,10 +11,10 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 public class InvalidPasswordException extends AuthenticationException {
 
     public InvalidPasswordException(String message) {
-        super(message, ApiExceptionCode.INVALID_USER_PASSWORD.getValue());
+        super(message, ApiExceptionCodes.INVALID_USER_PASSWORD.getValue());
     }
 
     public InvalidPasswordException() {
-        super(ApiExceptionCode.INVALID_USER_PASSWORD.getDesc(), ApiExceptionCode.INVALID_USER_PASSWORD.getValue());
+        super(ApiExceptionCodes.INVALID_USER_PASSWORD.getDesc(), ApiExceptionCodes.INVALID_USER_PASSWORD.getValue());
     }
 }

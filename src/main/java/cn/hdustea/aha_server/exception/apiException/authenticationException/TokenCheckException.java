@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.exception.apiException.authenticationException;
 
-import cn.hdustea.aha_server.constants.ApiExceptionCode;
+import cn.hdustea.aha_server.constants.ApiExceptionCodes;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 
 /**
@@ -10,10 +10,10 @@ import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
  **/
 public class TokenCheckException extends AuthenticationException {
     public TokenCheckException() {
-        super(ApiExceptionCode.TOKEN_CHECK_FAIL.getDesc(), ApiExceptionCode.TOKEN_CHECK_FAIL.getValue());
+        super(ApiExceptionCodes.TOKEN_CHECK_FAIL.getDesc(), ApiExceptionCodes.TOKEN_CHECK_FAIL.getValue());
     }
 
     public TokenCheckException(String message) {
-        super(message, ApiExceptionCode.TOKEN_CHECK_FAIL.getValue());
+        super(message, ApiExceptionCodes.TOKEN_CHECK_FAIL.getValue());
     }
 }
