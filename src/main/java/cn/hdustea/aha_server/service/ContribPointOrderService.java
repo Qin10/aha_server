@@ -85,6 +85,9 @@ public class ContribPointOrderService {
      */
     @Transactional(rollbackFor = {Exception.class})
     public int createOrder(int userId, ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException {
+//        if (projectService.isMember(contribPointOrderResourcesDto.getProjectId(), userId)) {
+//            throw new InsertException("项目成员不可以购买项目资源！");
+//        }
         BigDecimal totalCost = BigDecimal.valueOf(0.0);
         ContribPointOrder contribPointOrder = new ContribPointOrder();
         contribPointOrder.setCreateTime(new Date());

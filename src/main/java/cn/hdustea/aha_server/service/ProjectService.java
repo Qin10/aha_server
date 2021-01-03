@@ -299,6 +299,16 @@ public class ProjectService {
         return userCollection != null;
     }
 
+    public boolean isMember(int projectId, int userId) {
+        Project project = projectMapper.selectByPrimaryKey(projectId);
+        if (project != null && project.getCreatorUserId().equals(userId)) {
+            return true;
+        } else {
+            ProjectMember projectMember = projectMemberMapper.selectByPrimaryKey(projectId, userId);
+            return projectMember != null;
+        }
+    }
+
     /**
      * 项目收藏数量递增
      *
