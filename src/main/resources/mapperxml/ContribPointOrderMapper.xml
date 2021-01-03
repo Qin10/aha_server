@@ -7,7 +7,7 @@
         <id column="cor_id" property="id"/>
         <result column="cor_user_id" property="userId"/>
         <result column="cor_project_id" property="projectId"/>
-        <result column="cor_price" property="price"/>
+        <result column="cor_total_cost" property="totalCost"/>
         <result column="cor_status" property="status"/>
         <result column="cor_create_time" property="createTime"/>
         <result column="cor_pay_time" property="payTime"/>
@@ -16,7 +16,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        cor_id, cor_user_id, cor_project_id, cor_price, cor_status, cor_create_time, cor_pay_time,
+        cor_id, cor_user_id, cor_project_id, cor_total_cost, cor_status, cor_create_time, cor_pay_time,
         cor_charged_aha_credit, cor_charged_aha_point
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -35,10 +35,10 @@
     <insert id="insert" keyColumn="cor_id" keyProperty="id"
             parameterType="cn.hdustea.aha_server.entity.ContribPointOrder" useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into contrib_point_order (cor_user_id, cor_project_id, cor_price, cor_status, cor_create_time,
+        insert into contrib_point_order (cor_user_id, cor_project_id, cor_total_cost, cor_status, cor_create_time,
                                          cor_pay_time,
                                          cor_charged_aha_credit, cor_charged_aha_point)
-        values (#{userId}, #{projectId}, #{price}, #{status}, #{createTime}, #{payTime},
+        values (#{userId}, #{projectId}, #{totalCost}, #{status}, #{createTime}, #{payTime},
                 #{chargedAhaCredit}, #{chargedAhaPoint})
     </insert>
     <insert id="insertSelective" keyColumn="cor_id" keyProperty="id"
@@ -52,8 +52,8 @@
             <if test="projectId != null">
                 cor_project_id,
             </if>
-            <if test="price != null">
-                cor_price,
+            <if test="totalCost != null">
+                cor_total_cost,
             </if>
             <if test="status != null">
                 cor_status,
@@ -78,8 +78,8 @@
             <if test="projectId != null">
                 #{projectId},
             </if>
-            <if test="price != null">
-                #{price},
+            <if test="totalCost != null">
+                #{totalCost},
             </if>
             <if test="status != null">
                 #{status},
@@ -108,8 +108,8 @@
             <if test="projectId != null">
                 cor_project_id = #{projectId},
             </if>
-            <if test="price != null">
-                cor_price = #{price},
+            <if test="totalCost != null">
+                cor_total_cost = #{totalCost},
             </if>
             <if test="status != null">
                 cor_status = #{status},
@@ -134,7 +134,7 @@
         update contrib_point_order
         set cor_user_id            = #{userId},
             cor_project_id         = #{projectId},
-            cor_price              = #{price},
+            cor_total_cost              = #{totalCost},
             cor_status             = #{status},
             cor_create_time        = #{createTime},
             cor_pay_time           = #{payTime},
@@ -144,7 +144,7 @@
     </update>
     <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.ContribPointOrderVo">
         <id column="cor_id" property="id"/>
-        <result column="cor_price" property="price"/>
+        <result column="cor_total_cost" property="totalCost"/>
         <result column="cor_status" property="status"/>
         <result column="cor_create_time" property="createTime"/>
         <result column="cor_pay_time" property="payTime"/>

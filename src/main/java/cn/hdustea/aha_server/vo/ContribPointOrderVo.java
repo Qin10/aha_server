@@ -31,7 +31,7 @@ public class ContribPointOrderVo {
     /**
      * 订单总价
      */
-    private BigDecimal price;
+    private BigDecimal totalCost;
 
     /**
      * 订单状态

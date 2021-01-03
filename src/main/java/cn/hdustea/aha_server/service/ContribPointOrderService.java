@@ -13,7 +13,10 @@ import cn.hdustea.aha_server.mapper.ContribPointOrderMapper;
 import cn.hdustea.aha_server.mapper.OrderProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
 import cn.hdustea.aha_server.vo.ContribPointOrderVo;
+import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.UserVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,8 +67,12 @@ public class ContribPointOrderService {
      * @param userId 用户id
      * @return 贡献点订单列表
      */
-    public List<ContribPointOrderVo> getAllContribPointOrderVoByUserId(int userId) {
-        return contribPointOrderMapper.selectAllVoByUserId(userId);
+    public PageVo<List<ContribPointOrderVo>> getAllContribPointOrderVoByUserId(int userId, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.orderBy("cor_create_time desc");
+        List<ContribPointOrderVo> contribPointOrderVos = contribPointOrderMapper.selectAllVoByUserId(userId);
+        PageInfo<ContribPointOrderVo> pageInfo = new PageInfo<>(contribPointOrderVos);
+        return new PageVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getList());
     }
 
     /**
@@ -78,7 +85,7 @@ public class ContribPointOrderService {
      */
     @Transactional(rollbackFor = {Exception.class})
     public int createOrder(int userId, ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException {
-        BigDecimal totalPrice = BigDecimal.valueOf(0.0);
+        BigDecimal totalCost = BigDecimal.valueOf(0.0);
         ContribPointOrder contribPointOrder = new ContribPointOrder();
         contribPointOrder.setCreateTime(new Date());
         contribPointOrder.setStatus(0);
@@ -102,9 +109,9 @@ public class ContribPointOrderService {
             orderProjectResource.setPrice(projectResource.getPrice());
             orderProjectResource.setDiscount(projectResource.getDiscount());
             orderProjectResourceMapper.insertSelective(orderProjectResource);
-            totalPrice = totalPrice.add(orderProjectResource.getPrice().multiply(BigDecimal.valueOf(1).subtract(orderProjectResource.getDiscount())));
+            totalCost = totalCost.add(orderProjectResource.getPrice().multiply(BigDecimal.valueOf(1).subtract(orderProjectResource.getDiscount())));
         }
-        contribPointOrder.setPrice(totalPrice);
+        contribPointOrder.setTotalCost(totalCost);
         contribPointOrderMapper.updateByPrimaryKeySelective(contribPointOrder);
         return contribPointOrder.getId();
     }
@@ -131,17 +138,21 @@ public class ContribPointOrderService {
         }
         Date payTime = new Date();
         ContribPointLog contribPointLog = new ContribPointLog();
-        if (userVo.getAhaPoint().compareTo(contribPointOrder.getPrice()) >= 0) {
-            userService.updateDescAhaPoint(userId, contribPointOrder.getPrice());
-            contribPointLog.setAhaPointAmount(contribPointOrder.getPrice().negate());
+        if (userVo.getAhaPoint().compareTo(contribPointOrder.getTotalCost()) >= 0) {
+            userService.updateDescAhaPoint(userId, contribPointOrder.getTotalCost());
+            contribPointLog.setAhaPointAmount(contribPointOrder.getTotalCost().negate());
+            contribPointOrder.setChargedAhaPoint(contribPointOrder.getTotalCost());
+            contribPointOrder.setChargedAhaCredit(BigDecimal.ZERO);
         } else {
-            if (userVo.getAhaCredit().add(userVo.getAhaPoint()).compareTo(contribPointOrder.getPrice()) >= 0) {
-                BigDecimal ahaCreditAmount = contribPointOrder.getPrice().subtract(userVo.getAhaPoint());
+            if (userVo.getAhaCredit().add(userVo.getAhaPoint()).compareTo(contribPointOrder.getTotalCost()) >= 0) {
+                BigDecimal ahaCreditAmount = contribPointOrder.getTotalCost().subtract(userVo.getAhaPoint());
                 BigDecimal ahaPointAmount = userVo.getAhaPoint();
                 userService.updateDescAhaPoint(userId, ahaPointAmount);
                 contribPointLog.setAhaPointAmount(ahaPointAmount.negate());
+                contribPointOrder.setChargedAhaPoint(ahaPointAmount);
                 userService.updateDescAhaCredit(userId, ahaCreditAmount);
                 contribPointLog.setAhaCreditAmount(ahaCreditAmount.negate());
+                contribPointOrder.setChargedAhaCredit(ahaCreditAmount);
                 payOffPercentage(contribPointOrder.getProjectId(), ahaCreditAmount.multiply(ContribPointOrderConstants.PERCENTAGE_RATE));
             } else {
                 throw new UpdateException("用户余额不足！");

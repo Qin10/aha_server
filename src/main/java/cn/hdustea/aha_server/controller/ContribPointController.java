@@ -11,6 +11,7 @@ import cn.hdustea.aha_server.service.ContribPointOrderService;
 import cn.hdustea.aha_server.service.ContributionRankService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.ContribPointOrderVo;
+import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import cn.hdustea.aha_server.vo.UserContribPointVo;
 import lombok.extern.slf4j.Slf4j;
@@ -51,12 +52,15 @@ public class ContribPointController {
 
     /**
      * 获取用户全部订单信息
+     *
+     * @param pageNum  页码
+     * @param pageSize 分页大小
      */
     @RequiresLogin
     @GetMapping("/order/me")
-    public ResponseBean<List<ContribPointOrderVo>> getAllPersonalOrderVo() {
+    public ResponseBean<PageVo<List<ContribPointOrderVo>>> getAllPersonalOrderVo(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        List<ContribPointOrderVo> ContribPointOrderVos = contribPointOrderService.getAllContribPointOrderVoByUserId(userId);
+        PageVo<List<ContribPointOrderVo>> ContribPointOrderVos = contribPointOrderService.getAllContribPointOrderVoByUserId(userId, pageNum, pageSize);
         return new ResponseBean<>(200, "succ", ContribPointOrderVos);
     }
 

@@ -175,22 +175,21 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###提交订单
-POST https://{{host}}/order
+POST https://{{host}}/contribPoint/order
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "projectId": 79,
+  "projectId": 97,
   "resourceIds": [
-    78,
-    79
+    157
   ]
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###支付订单
-PUT https://{{host}}/order/5?action=pay
+PUT https://{{host}}/contribPoint/order/30?action=pay
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -663,3 +662,11 @@ Content-Type: application/json
   "compName": "",
   "compId": 15
 }
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###查看用户订单
+GET https://{{host}}/contribPoint/order/me?pageNum=1&pageSize=5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
