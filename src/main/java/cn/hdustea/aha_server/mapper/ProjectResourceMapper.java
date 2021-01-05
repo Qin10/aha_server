@@ -1,6 +1,10 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.ProjectResource;import cn.hdustea.aha_server.vo.ProjectResourceVo;import org.apache.ibatis.annotations.Param;import java.math.BigDecimal;import java.util.List;
+import cn.hdustea.aha_server.entity.ProjectResource;
+import cn.hdustea.aha_server.vo.ProjectResourceVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * ${description}
@@ -24,6 +28,12 @@ public interface ProjectResourceMapper {
 
     List<ProjectResource> selectAllByProjectId(@Param("projectId") Integer projectId);
 
+    List<ProjectResourceVo> selectAllVoByProjectIdAndPassed(@Param("projectId") Integer projectId);
+
+    List<ProjectResourceVo> selectAllVoByProjectIdAndNotPassed(@Param("projectId") Integer projectId);
+
+    List<ProjectResourceVo> selectAllVoByProjectId(@Param("projectId") Integer projectId);
+
     List<ProjectResourceVo> selectAllVoByProjectIdAndNotFreezed(@Param("projectId") Integer projectId);
 
     List<ProjectResourceVo> selectAllVoByProjectIdAndFreezed(@Param("projectId") Integer projectId);
@@ -36,7 +46,9 @@ public interface ProjectResourceMapper {
 
     ProjectResource selectByFilename(@Param("filename") String filename);
 
-    int updateScoreAndScoreCountById(@Param("updatedScore") BigDecimal updatedScore, @Param("updatedScoreCount") Integer updatedScoreCount, @Param("id") Integer id);
+    int updatePassedByProjectId(@Param("updatedPassed") Boolean updatedPassed, @Param("projectId") Integer projectId);
 
-    int updatePriceAndDiscountById(@Param("updatedPrice") BigDecimal updatedPrice, @Param("updatedDiscount") BigDecimal updatedDiscount, @Param("id") Integer id);
+    int updatePassedById(@Param("updatedPassed") Boolean updatedPassed, @Param("id") Integer id);
+
+    List<ProjectResourceVo> selectAllVoByConditions(@Param("passed") Boolean passed,@Param("projectId") Integer projectId);
 }

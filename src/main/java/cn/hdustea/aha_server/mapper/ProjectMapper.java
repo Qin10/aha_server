@@ -5,7 +5,6 @@ import cn.hdustea.aha_server.vo.ProjectDetailVo;
 import cn.hdustea.aha_server.vo.ProjectRoughVo;
 import org.apache.ibatis.annotations.Param;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -41,8 +40,6 @@ public interface ProjectMapper {
     int updateIncCollectById(@Param("id") Integer id);
 
     int updateDecCollectById(@Param("id") Integer id);
-
-    int updateMeaningById(@Param("updatedMeaning") BigDecimal updatedMeaning, @Param("id") Integer id);
 
     int updatePassedById(@Param("updatedPassed") Boolean updatedPassed, @Param("id") Integer id);
 }

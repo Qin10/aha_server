@@ -24,6 +24,7 @@ public class TencentCosConfig {
     private String publicBucketName;
     private String resourceBucketName;
     private String documentConvertQueueId;
+    private String documentPreviewWatermarkText;
 
     @Bean
     public COSClient cosClient() {

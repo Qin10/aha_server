@@ -169,7 +169,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET https://{{host}}/project/78
+GET https://{{host}}/project/94
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -667,6 +667,46 @@ Content-Type: application/json
 
 ###查看用户订单
 GET https://{{host}}/contribPoint/order/me?pageNum=1&pageSize=5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###审核项目
+POST https://{{host}}/admin/project/check/94
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "passed": true
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###审核项目资源
+POST https://{{host}}/admin/project/resource/check/169
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "passed": false
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###用户查看自身项目资源（edit mode）
+GET https://{{host}}/project/94/resources?edit=true
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员查看项目资源
+GET https://{{host}}/admin/project/94/resources
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员查看全部资源
+GET https://{{host}}/admin/project/resource?pageNum=1&pageSize=5&passed=false
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

@@ -38,6 +38,8 @@ public class ProjectService {
     @Resource
     private ProjectMemberMapper projectMemberMapper;
     @Resource
+    private ProjectResourceService projectResourceService;
+    @Resource
     private UserCollectionMapper userCollectionMapper;
     @Resource
     private UserService userService;
@@ -336,11 +338,22 @@ public class ProjectService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void checkProjectByProjectId(ProjectCheckDto projectCheckDto, int projectId) throws UpdateException {
-        Project project = projectMapper.selectByPrimaryKey(projectId);
-        if (project == null) {
+        if (projectMapper.selectByPrimaryKey(projectId) == null) {
             throw new UpdateException("项目不存在！");
         }
-        projectMapper.updateMeaningById(projectCheckDto.getMeaning(), projectId);
-        projectMapper.updatePassedById(projectCheckDto.getPassed(), projectId);
+        Project project = new Project();
+        BeanUtils.copyProperties(projectCheckDto, project);
+        projectMapper.updateByPrimaryKeySelective(project);
+        projectResourceService.getAllProjectResourceVoByConditions(null, projectId);
+        projectResourceService.updatePassedByProjectAndConvertDocument(projectCheckDto.getPassed(), projectId);
+    }
+
+    public boolean isPassed(int projectId) {
+        Project project = projectMapper.selectByPrimaryKey(projectId);
+        if (project == null) {
+            return false;
+        } else {
+            return project.getPassed();
+        }
     }
 }

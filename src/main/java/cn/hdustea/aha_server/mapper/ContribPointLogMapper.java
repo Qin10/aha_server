@@ -23,6 +23,4 @@ public interface ContribPointLogMapper {
     int updateByPrimaryKey(ContribPointLog record);
 
     List<ContribPointLog> selectAllByUserIdOrderByTimeDesc(@Param("userId")Integer userId);
-
-
 }

@@ -71,4 +71,9 @@ public class ProjectResource {
      * 资源折扣
      */
     private BigDecimal discount;
+
+    /**
+     * 是否通过审核
+     */
+    private Boolean passed;
 }

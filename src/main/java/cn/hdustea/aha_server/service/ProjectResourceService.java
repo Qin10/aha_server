@@ -61,6 +61,18 @@ public class ProjectResourceService {
         return projectResourceMapper.selectByPrimaryKey(id);
     }
 
+    public List<ProjectResourceVo> getAllProjectResourceVoByConditions(Boolean passed, Integer projectId) {
+        return projectResourceMapper.selectAllVoByConditions(passed, projectId);
+    }
+
+    public PageVo<List<ProjectResourceVo>> getAllProjectResourceVoPagable(int pageNum, int pageSize, Boolean passed, Integer projectId) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.orderBy("pr_id desc");
+        List<ProjectResourceVo> projectResourceVos = projectResourceMapper.selectAllVoByConditions(passed, projectId);
+        PageInfo<ProjectResourceVo> pageInfo = new PageInfo<>(projectResourceVos);
+        return new PageVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getList());
+    }
+
     /**
      * 根据项目资源id获取项目资源VO
      *
@@ -140,14 +152,7 @@ public class ProjectResourceService {
         BeanUtils.copyProperties(projectResourceDto, projectResource);
         projectResource.setProjectId(projectId);
         projectResourceMapper.insertSelective(projectResource);
-        Integer projectResourceId = projectResource.getId();
-        if (projectResourceId != null && projectResource.getType() == ProjectResourceTypes.DOCUMENT) {
-            DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
-            documentConvertInfoDto.setProjectResourceId(projectResourceId);
-            documentConvertInfoDto.setSrcFilename(projectResourceDto.getFilename());
-            redisService.lPush(RedisConstants.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
-        }
-        return projectResourceId;
+        return projectResource.getId();
     }
 
     /**
@@ -337,6 +342,25 @@ public class ProjectResourceService {
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
+    public void updatePassedByProjectAndConvertDocument(boolean passed, int projectId) {
+        if (passed) {
+            List<ProjectResource> projectResources = projectResourceMapper.selectAllByProjectId(projectId);
+            for (ProjectResource projectResource : projectResources) {
+                if (!projectResource.getPassed()) {
+                    projectResourceMapper.updatePassedById(true, projectResource.getId());
+                    if (projectResource.getType() == ProjectResourceTypes.DOCUMENT && projectResource.getPreviewUrl() == null) {
+                        DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
+                        documentConvertInfoDto.setProjectResourceId(projectResource.getId());
+                        documentConvertInfoDto.setSrcFilename(projectResource.getFilename());
+                        redisService.lPush(RedisConstants.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
+                    }
+                }
+            }
+        } else {
+            projectResourceMapper.updatePassedByProjectId(false, projectId);
+        }
+    }
+
     /**
      * 审核项目资源
      *
@@ -345,11 +369,13 @@ public class ProjectResourceService {
      * @throws UpdateException 更新异常
      */
     public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException {
-        ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
-        if (projectResource == null) {
+        if (projectResourceMapper.selectByPrimaryKey(resourceId) == null) {
             throw new UpdateException("项目资源不存在！");
         }
-        projectResourceMapper.updatePriceAndDiscountById(projectResourceCheckDto.getPrice(), projectResourceCheckDto.getDiscount(), resourceId);
+        ProjectResource projectResource = new ProjectResource();
+        projectResource.setId(resourceId);
+        BeanUtils.copyProperties(projectResourceCheckDto, projectResource);
+        projectResourceMapper.updateByPrimaryKeySelective(projectResource);
     }
 
     /**
@@ -369,5 +395,14 @@ public class ProjectResourceService {
 
     public Integer[] getAllPurchasedResourceIdsByProjectIdAndUserId(int projectId, int userId) {
         return purchasedResourceMapper.selectAllResourceIdByProjectIdAndUserId(projectId, userId).toArray(new Integer[0]);
+    }
+
+    public boolean isPassed(int resourceId) {
+        ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
+        if (projectResource == null) {
+            return false;
+        } else {
+            return projectResource.getPassed();
+        }
     }
 }

@@ -78,9 +78,10 @@ public class CosDocumentConvertTask {
         docJobObject.setQueueId(tencentCosConfig.getDocumentConvertQueueId());
         DocProcessObject docProcessObject = docJobObject.getOperation().getDocProcessObject();
         docProcessObject.setQuality("100");
-        docProcessObject.setZoom("100");
+        docProcessObject.setZoom("75");
         docProcessObject.setStartPage("1");
         docProcessObject.setEndPage("5");
+//        docProcessObject.setImageParams("watermark/2/text/" + tencentCosConfig.getDocumentPreviewWatermarkText() + "/dissolve/50/batch/1/degree/45");
         docProcessObject.setTgtType("jpg");
         MediaOutputObject output = docJobObject.getOperation().getOutput();
         output.setRegion(tencentCosConfig.getRegion());

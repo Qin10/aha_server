@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.*;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
@@ -65,6 +66,33 @@ public class ManagementController {
     }
 
     /**
+     * 按条件分页获取项目资源
+     *
+     * @param pageNum   页码
+     * @param pageSize  分页大小
+     * @param projectId 项目id
+     * @param passed    是否通过审核
+     */
+    @RequiresLogin()
+    @GetMapping("/project/resource")
+    public ResponseBean<PageVo<List<ProjectResourceVo>>> getAllProjectResourceByConditions(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "projectId", required = false) Integer projectId, @RequestParam(value = "passed", required = false) Boolean passed) {
+        PageVo<List<ProjectResourceVo>> projectResourceVos = projectResourceService.getAllProjectResourceVoPagable(pageNum, pageSize, passed, projectId);
+        return new ResponseBean<>(200, "succ", projectResourceVos);
+    }
+
+    /**
+     * 根据项目id获取所有项目资源
+     *
+     * @param projectId 项目id
+     */
+    @RequiresLogin()
+    @GetMapping("/project/{projectId}/resources")
+    public ResponseBean<List<ProjectResourceVo>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) throws SelectException, PermissionDeniedException {
+        List<ProjectResourceVo> projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(null, projectId);
+        return new ResponseBean<>(200, "succ", projectResourceVos);
+    }
+
+    /**
      * 获取项目资源文件oss下载签名
      *
      * @param projectResourceId 项目资源id
@@ -111,7 +139,7 @@ public class ManagementController {
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/project/resource/check/{resourceId}")
-    public ResponseBean<Object> checkProjectResource(@PathVariable("resourceId") int resourceId, @RequestBody ProjectResourceCheckDto projectResourceCheckDto) throws UpdateException {
+    public ResponseBean<Object> checkProjectResource(@PathVariable("resourceId") int resourceId, @Validated @RequestBody ProjectResourceCheckDto projectResourceCheckDto) throws UpdateException {
         projectResourceService.checkResourceByResourceId(projectResourceCheckDto, resourceId);
         return new ResponseBean<>(200, "succ", null);
     }

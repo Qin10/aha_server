@@ -168,6 +168,9 @@ public class ProjectController {
         if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
+        if (projectService.isPassed(projectId)) {
+            throw new PermissionDeniedException();
+        }
         projectService.deleteProjectById(projectId);
         return new ResponseBean<>(200, "succ", null);
     }
@@ -260,8 +263,17 @@ public class ProjectController {
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/resources")
-    public ResponseBean<List<ProjectResourceVo>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) throws SelectException {
-        List<ProjectResourceVo> projectResourceVos = projectService.getProjectDetailById(projectId).getResources();
+    public ResponseBean<List<ProjectResourceVo>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId, @RequestParam(value = "edit", defaultValue = "false", required = false) boolean edit) throws SelectException, PermissionDeniedException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        List<ProjectResourceVo> projectResourceVos;
+        if (!edit) {
+            projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(true, projectId);
+        } else {
+            if (!projectService.hasPermission(userId, projectId)) {
+                throw new PermissionDeniedException();
+            }
+            projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(null, projectId);
+        }
         return new ResponseBean<>(200, "succ", projectResourceVos);
     }
 
@@ -304,11 +316,11 @@ public class ProjectController {
     @GetMapping("/{projectId}/resources/sign/upload/private/v2")
     public ResponseBean<CosPolicyVo> signUploadPrivateFileToCos(@PathVariable("projectId") int projectId, @RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
+        projectService.getProjectDetailById(projectId);
         if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/" + projectDetailVo.getName() + "/" + filename, true);
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/" + projectId + "/" + filename, true);
         return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 
@@ -356,6 +368,9 @@ public class ProjectController {
     public ResponseBean<Object> deleteProjectResourceById(@PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectResourceService.hasPermission(userId, projectResourceId)) {
+            throw new PermissionDeniedException();
+        }
+        if (!projectResourceService.isPassed(projectResourceId)) {
             throw new PermissionDeniedException();
         }
         projectResourceService.deleteProjectResourceById(projectResourceId);

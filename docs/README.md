@@ -11,8 +11,8 @@
 
 ```json
 {
-  "phone":"string //手机号【必须】",
-  "password":"string //密码【必须】"
+	"phone":"string //手机号【必须】",
+	"password":"string //密码【必须】"
 }
 ```
 
@@ -20,44 +20,44 @@
 
 ```json
 {
-  "code":"int //响应状态码",
-  "msg":"string //响应消息",
-  "data":{
-    "token":"string //token令牌",
-    "personalUserInfo":{
-      "signedNotice":"boolean //是否签署服务协议",
-      "signedContract":"boolean //是否签署合同",
-      "ahaCredit":"double //aha币数量",
-      "ahaPoint":"double //aha点数量",
-      "role":{
-        "id":"int //角色id",
-        "name":"string //角色名称"
-      },
-      "oauths":[{
-        "oauthType":"string //授权类型",
-        "oauthId":"string //授权码"
-      }],
-      "userInfo":{
-        "userId":"int //用户id(外键)",
-        "nickname":"string //用户昵称",
-        "gender":"boolean //用户性别",
-        "birthday":"date //用户出生日期",
-        "typeId":"int //用户类别",
-        "signature":"string //用户个性签名",
-        "avatarUrl":"string //用户头像文件保存路径",
-        "school":"string //用户学校",
-        "academy":"string //用户学院",
-        "major":"string //用户主修专业",
-        "grade":"int //用户当前年级",
-        "intro":"string //用户自我介绍",
-        "specialtyTags":"string //用户特长标签",
-        "trueName":"string //用户真实姓名",
-        "compTags":"string //用户参与过比赛标签",
-        "vipLevelId":"int //用户VIP等级(外键)"
-      }
-    }
-  },
-  "time":"string //响应时间"
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"token":"string //token令牌",
+		"personalUserInfo":{
+			"signedNotice":"boolean //是否签署服务协议",
+			"signedContract":"boolean //是否签署合同",
+			"ahaCredit":"double //aha币数量",
+			"ahaPoint":"double //aha点数量",
+			"role":{
+				"id":"int //角色id",
+				"name":"string //角色名称"
+			},
+			"oauths":[{
+				"oauthType":"string //授权类型",
+				"oauthId":"string //授权码"
+			}],
+			"userInfo":{
+				"userId":"int //用户id(外键)",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"birthday":"date //用户出生日期",
+				"typeId":"int //用户类别",
+				"signature":"string //用户个性签名",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"academy":"string //用户学院",
+				"major":"string //用户主修专业",
+				"grade":"int //用户当前年级",
+				"intro":"string //用户自我介绍",
+				"specialtyTags":"string //用户特长标签",
+				"trueName":"string //用户真实姓名",
+				"compTags":"string //用户参与过比赛标签",
+				"vipLevelId":"int //用户VIP等级(外键)"
+			}
+		}
+	},
+	"time":"string //响应时间"
 }
 ```
 ## 通过手机号注册
@@ -383,7 +383,7 @@ id|int|否|竞赛信息id
 
 **请求URL**
 
-/competition/getAllCompetition `GET`
+/competition `GET`
 
 
 **返回结果**
@@ -505,7 +505,7 @@ orderId|int|否|订单号
 			"awardTime":"date //项目获奖时间",
 			"passed":"boolean //是否通过审核"
 		},
-		"price":"double //订单总价",
+		"totalCost":"double //订单总价",
 		"status":"int //订单状态",
 		"createTime":"date //订单创建时间",
 		"payTime":"date //订单支付时间",
@@ -521,7 +521,8 @@ orderId|int|否|订单号
 				"score":"double //资源平均分",
 				"scoreCount":"int //评分人数",
 				"price":"double //资源价格",
-				"discount":"double //资源折扣"
+				"discount":"double //资源折扣",
+				"passed":"boolean //是否通过审核"
 			},
 			"discount":"double //资源折扣",
 			"price":"double //贡献点小计"
@@ -540,6 +541,12 @@ orderId|int|否|订单号
 
 /contribPoint/order/me `GET`
 
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
 
 **返回结果**
 
@@ -547,19 +554,12 @@ orderId|int|否|订单号
 {
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
-	"data":[{
-		"id":"int //订单号",
-		"user":{
-			"userId":"int //用户id",
-			"nickname":"string //用户昵称",
-			"gender":"boolean //用户性别",
-			"avatarUrl":"string //用户头像文件保存路径",
-			"school":"string //用户学校",
-			"vipLevelId":"int //用户VIP等级(外键)"
-		},
-		"project":{
-			"id":"int //项目id",
-			"creatorUser":{
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //订单号",
+			"user":{
 				"userId":"int //用户id",
 				"nickname":"string //用户昵称",
 				"gender":"boolean //用户性别",
@@ -567,40 +567,52 @@ orderId|int|否|订单号
 				"school":"string //用户学校",
 				"vipLevelId":"int //用户VIP等级(外键)"
 			},
-			"name":"string //项目名称",
-			"read":"int //点击率",
-			"collect":"int //收藏数量",
-			"avatarUrl":"string //团队头像url",
-			"tags":"string //项目标签",
-			"compId":"int //赛事id(外键)",
-			"awardLevel":"int //项目获奖级别",
-			"awardTime":"date //项目获奖时间",
-			"passed":"boolean //是否通过审核"
-		},
-		"price":"double //订单总价",
-		"status":"int //订单状态",
-		"createTime":"date //订单创建时间",
-		"payTime":"date //订单支付时间",
-		"orderResources":[{
-			"resource":{
-				"id":"int //项目资源id",
-				"projectId":"int //项目id(外键)",
-				"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-				"type":"int //资源类型",
-				"filename":"string //保存在oss里的资源文件名(包括前缀)",
-				"previewUrl":"string //保存在oss里的预览文件地址",
-				"download":"int //资源文件下载量",
-				"score":"double //资源平均分",
-				"scoreCount":"int //评分人数",
-				"price":"double //资源价格",
-				"discount":"double //资源折扣"
+			"project":{
+				"id":"int //项目id",
+				"creatorUser":{
+					"userId":"int //用户id",
+					"nickname":"string //用户昵称",
+					"gender":"boolean //用户性别",
+					"avatarUrl":"string //用户头像文件保存路径",
+					"school":"string //用户学校",
+					"vipLevelId":"int //用户VIP等级(外键)"
+				},
+				"name":"string //项目名称",
+				"read":"int //点击率",
+				"collect":"int //收藏数量",
+				"avatarUrl":"string //团队头像url",
+				"tags":"string //项目标签",
+				"compId":"int //赛事id(外键)",
+				"awardLevel":"int //项目获奖级别",
+				"awardTime":"date //项目获奖时间",
+				"passed":"boolean //是否通过审核"
 			},
-			"discount":"double //资源折扣",
-			"price":"double //贡献点小计"
-		}],
-		"chargedAhaCredit":"double //订单实际支付aha币",
-		"chargedAhaPoint":"double //订单实际支付aha点"
-	}],
+			"totalCost":"double //订单总价",
+			"status":"int //订单状态",
+			"createTime":"date //订单创建时间",
+			"payTime":"date //订单支付时间",
+			"orderResources":[{
+				"resource":{
+					"id":"int //项目资源id",
+					"projectId":"int //项目id(外键)",
+					"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+					"type":"int //资源类型",
+					"filename":"string //保存在oss里的资源文件名(包括前缀)",
+					"previewUrl":"string //保存在oss里的预览文件地址",
+					"download":"int //资源文件下载量",
+					"score":"double //资源平均分",
+					"scoreCount":"int //评分人数",
+					"price":"double //资源价格",
+					"discount":"double //资源折扣",
+					"passed":"boolean //是否通过审核"
+				},
+				"discount":"double //资源折扣",
+				"price":"double //贡献点小计"
+			}],
+			"chargedAhaCredit":"double //订单实际支付aha币",
+			"chargedAhaPoint":"double //订单实际支付aha点"
+		}]
+	},
 	"time":"string //响应时间"
 }
 ```
@@ -832,7 +844,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/feedback `POST`
+/feedback/saveFeedback `POST`
 
 **请求体**
 
@@ -932,6 +944,87 @@ passed|boolean|否|是否通过审核
 			"passed":"boolean //是否通过审核"
 		}]
 	},
+	"time":"string //响应时间"
+}
+```
+## 按条件分页获取项目资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/resource `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页码
+pageSize|int|否|分页大小
+projectId|int|否|项目id
+passed|boolean|否|是否通过审核
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //项目资源id",
+			"projectId":"int //项目id(外键)",
+			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+			"type":"int //资源类型",
+			"filename":"string //保存在oss里的资源文件名(包括前缀)",
+			"previewUrl":"string //保存在oss里的预览文件地址",
+			"download":"int //资源文件下载量",
+			"score":"double //资源平均分",
+			"scoreCount":"int //评分人数",
+			"price":"double //资源价格",
+			"discount":"double //资源折扣",
+			"passed":"boolean //是否通过审核"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 根据项目id获取所有项目资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/project/{projectId}/resources `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+projectId|int|否|项目id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //项目资源id",
+		"projectId":"int //项目id(外键)",
+		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+		"type":"int //资源类型",
+		"filename":"string //保存在oss里的资源文件名(包括前缀)",
+		"previewUrl":"string //保存在oss里的预览文件地址",
+		"download":"int //资源文件下载量",
+		"score":"double //资源平均分",
+		"scoreCount":"int //评分人数",
+		"price":"double //资源价格",
+		"discount":"double //资源折扣",
+		"passed":"boolean //是否通过审核"
+	}],
 	"time":"string //响应时间"
 }
 ```
@@ -1042,8 +1135,7 @@ resourceId|int|否|项目资源id
 
 ```json
 {
-	"price":"double //资源价格【必须】",
-	"discount":"double //资源折扣【必须】"
+	"passed":"boolean【必须】"
 }
 ```
 
@@ -2473,7 +2565,8 @@ projectId|int|否|项目id
 			"score":"double //资源平均分",
 			"scoreCount":"int //评分人数",
 			"price":"double //资源价格",
-			"discount":"double //资源折扣"
+			"discount":"double //资源折扣",
+			"passed":"boolean //是否通过审核"
 		}]
 	},
 	"time":"string //响应时间"
@@ -2541,7 +2634,7 @@ filename|string|否|待上传文件名
 
 **请求URL**
 
-/project `POST`
+/project/saveProject `POST`
 
 **请求体**
 
@@ -2836,7 +2929,8 @@ projectId|int|否|项目id
 		"score":"double //资源平均分",
 		"scoreCount":"int //评分人数",
 		"price":"double //资源价格",
-		"discount":"double //资源折扣"
+		"discount":"double //资源折扣",
+		"passed":"boolean //是否通过审核"
 	}],
 	"time":"string //响应时间"
 }
@@ -2872,7 +2966,8 @@ projectResourceId|int|否|项目资源id
 		"score":"double //资源平均分",
 		"scoreCount":"int //评分人数",
 		"price":"double //资源价格",
-		"discount":"double //资源折扣"
+		"discount":"double //资源折扣",
+		"passed":"boolean //是否通过审核"
 	},
 	"time":"string //响应时间"
 }
@@ -3366,7 +3461,8 @@ projectResourceId|int|否|项目资源id
 			"score":"double //资源平均分",
 			"scoreCount":"int //评分人数",
 			"price":"double //资源价格",
-			"discount":"double //资源折扣"
+			"discount":"double //资源折扣",
+			"passed":"boolean //是否通过审核"
 		},
 		"purchaseTime":"date //购买时间"
 	}],

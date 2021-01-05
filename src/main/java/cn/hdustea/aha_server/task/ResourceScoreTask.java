@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.task;
 
 import cn.hdustea.aha_server.dto.ResourceAvgScoreDto;
+import cn.hdustea.aha_server.entity.ProjectResource;
 import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
 import cn.hdustea.aha_server.mapper.ProjectResourceScoreMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,11 @@ public class ResourceScoreTask {
         List<ResourceAvgScoreDto> resourceAvgScoreDtos = projectResourceScoreMapper.selectAllAvgScore();
         for (ResourceAvgScoreDto resourceAvgScoreDto : resourceAvgScoreDtos) {
             Integer count = projectResourceScoreMapper.countByResourceId(resourceAvgScoreDto.getResourceId());
-            projectResourceMapper.updateScoreAndScoreCountById(resourceAvgScoreDto.getScore(), count, resourceAvgScoreDto.getResourceId());
+            ProjectResource projectResource = new ProjectResource();
+            projectResource.setId(resourceAvgScoreDto.getResourceId());
+            projectResource.setScore(resourceAvgScoreDto.getScore());
+            projectResource.setScoreCount(count);
+            projectResourceMapper.updateByPrimaryKeySelective(projectResource);
         }
     }
 }
