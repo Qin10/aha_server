@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.constants.MessageConstants;
 import cn.hdustea.aha_server.dto.MessageDto;
@@ -112,6 +113,7 @@ public class MessageController {
      *
      * @param messageDto 站内信
      */
+    @RequestLimit
     @RequiresLogin
     @PostMapping()
     public ResponseBean<Object> sendPrivateMessage(@Validated @RequestBody MessageDto messageDto) throws SelectException {

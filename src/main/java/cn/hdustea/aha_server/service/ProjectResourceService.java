@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
@@ -43,8 +42,6 @@ public class ProjectResourceService {
     @Resource
     private PurchasedResourceMapper purchasedResourceMapper;
     @Resource
-    private OssService ossService;
-    @Resource
     private CosService cosService;
     @Resource
     private ProjectService projectService;
@@ -61,14 +58,14 @@ public class ProjectResourceService {
         return projectResourceMapper.selectByPrimaryKey(id);
     }
 
-    public List<ProjectResourceVo> getAllProjectResourceVoByConditions(Boolean passed, Integer projectId) {
-        return projectResourceMapper.selectAllVoByConditions(passed, projectId);
+    public List<ProjectResourceVo> getAllProjectResourceVoByConditions(Boolean resourcePassed, Boolean projectPassed, Integer projectId) {
+        return projectResourceMapper.selectAllVoByConditions(resourcePassed, projectPassed, projectId);
     }
 
-    public PageVo<List<ProjectResourceVo>> getAllProjectResourceVoPagable(int pageNum, int pageSize, Boolean passed, Integer projectId) {
+    public PageVo<List<ProjectResourceVo>> getAllProjectResourceVoPagable(int pageNum, int pageSize, Boolean resourcePassed, Boolean projectPassed, Integer projectId) {
         PageHelper.startPage(pageNum, pageSize);
         PageHelper.orderBy("pr_id desc");
-        List<ProjectResourceVo> projectResourceVos = projectResourceMapper.selectAllVoByConditions(passed, projectId);
+        List<ProjectResourceVo> projectResourceVos = projectResourceMapper.selectAllVoByConditions(resourcePassed, projectPassed, projectId);
         PageInfo<ProjectResourceVo> pageInfo = new PageInfo<>(projectResourceVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getList());
     }
@@ -79,27 +76,8 @@ public class ProjectResourceService {
      * @param id 项目资源id
      * @return 项目资源
      */
-    public ProjectResourceVo getProjectResourceVoById(int id) {
-        return projectResourceMapper.selectVoByPrimaryKey(id);
-    }
-
-    /**
-     * 根据项目资源id获取下载url
-     *
-     * @param id 项目资源id
-     * @return 下载url
-     * @throws SelectException 查询异常
-     */
-    public String signDownloadProjectResourceByid(int id) throws SelectException {
-        ProjectResource projectResource = getProjectResourceById(id);
-        if (projectResource == null) {
-            throw new SelectException("不存在对应记录！");
-        }
-        if (projectResource.getFilename() == null) {
-            throw new SelectException("资源文件为空！");
-        }
-        URL url = ossService.signDownload(projectResource.getFilename());
-        return url.toString();
+    public ProjectResourceVo getProjectResourceVoByIdAndPassed(int id, Boolean passed) {
+        return projectResourceMapper.selectVoByPrimaryKeyAndPassed(id, passed);
     }
 
     /**
@@ -184,20 +162,6 @@ public class ProjectResourceService {
      */
     public void incrDownloadById(int id) {
         projectResourceMapper.updateIncDownloadById(id);
-    }
-
-    /**
-     * 根据文件名改变项目资源冻结状态
-     *
-     * @param filename 文件名
-     * @param freezed  资源冻结状态
-     */
-    public void freezeProjectResourceByFilename(String filename, boolean freezed) {
-        ProjectResource projectResource = projectResourceMapper.selectByFilename(filename);
-        if (projectResource != null) {
-            log.info("projectId=" + projectResource.getProjectId() + ";projectResourceId=" + projectResource.getId() + "，资源冻结状态更改为：" + freezed);
-            projectResourceMapper.updateFreezedByFilename(freezed, filename);
-        }
     }
 
     /**

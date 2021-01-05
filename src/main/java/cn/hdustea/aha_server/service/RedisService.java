@@ -93,6 +93,10 @@ public class RedisService {
         }
     }
 
+    public void incr(String key, double by) {
+        redisTemplate.opsForValue().increment(key, by);
+    }
+
     /**
      * 获取hashKey对应的所有键值
      *

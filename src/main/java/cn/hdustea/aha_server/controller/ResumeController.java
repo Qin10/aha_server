@@ -50,7 +50,7 @@ public class ResumeController {
      *
      * @param resume 用户简历
      */
-    @RequestLimit(amount = 4)
+    @RequestLimit()
     @RequiresLogin
     @PutMapping()
     public ResponseBean<Object> updateResume(@RequestBody Resume resume) throws SelectException {

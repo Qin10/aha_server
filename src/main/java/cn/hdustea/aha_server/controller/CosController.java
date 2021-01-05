@@ -29,7 +29,7 @@ public class CosController {
      * @param filename 待上传文件名
      */
     @RequiresLogin
-    @GetMapping("/sign/upload/public/v2")
+    @GetMapping("/sign/upload/public")
     public ResponseBean<CosPolicyVo> signPublicUploadToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/user_files/" + userId + "/" + filename, false);

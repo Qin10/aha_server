@@ -1,6 +1,5 @@
 package cn.hdustea.aha_server.controller;
 
-import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.*;
@@ -57,7 +56,6 @@ public class ManagementController {
      * @param orderBy    排序方式
      * @param passed     是否通过审核
      */
-    @RequestLimit(time = 5)
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/project")
     public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy, @RequestParam(value = "passed", required = false) Boolean passed) throws SelectException {
@@ -68,15 +66,16 @@ public class ManagementController {
     /**
      * 按条件分页获取项目资源
      *
-     * @param pageNum   页码
-     * @param pageSize  分页大小
-     * @param projectId 项目id
-     * @param passed    是否通过审核
+     * @param pageNum        页码
+     * @param pageSize       分页大小
+     * @param projectId      项目id
+     * @param resourcePassed 资源是否通过审核
+     * @param projectPassed  资源所在项目是否通过审核
      */
     @RequiresLogin()
     @GetMapping("/project/resource")
-    public ResponseBean<PageVo<List<ProjectResourceVo>>> getAllProjectResourceByConditions(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "projectId", required = false) Integer projectId, @RequestParam(value = "passed", required = false) Boolean passed) {
-        PageVo<List<ProjectResourceVo>> projectResourceVos = projectResourceService.getAllProjectResourceVoPagable(pageNum, pageSize, passed, projectId);
+    public ResponseBean<PageVo<List<ProjectResourceVo>>> getAllProjectResourceByConditions(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "projectId", required = false) Integer projectId, @RequestParam(value = "resourcePassed", required = false) Boolean resourcePassed, @RequestParam(value = "projectPassed", required = false) Boolean projectPassed) {
+        PageVo<List<ProjectResourceVo>> projectResourceVos = projectResourceService.getAllProjectResourceVoPagable(pageNum, pageSize, resourcePassed, projectPassed, projectId);
         return new ResponseBean<>(200, "succ", projectResourceVos);
     }
 
@@ -88,22 +87,8 @@ public class ManagementController {
     @RequiresLogin()
     @GetMapping("/project/{projectId}/resources")
     public ResponseBean<List<ProjectResourceVo>> getAllProjectResourceByProjectId(@PathVariable("projectId") int projectId) throws SelectException, PermissionDeniedException {
-        List<ProjectResourceVo> projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(null, projectId);
+        List<ProjectResourceVo> projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(null, null, projectId);
         return new ResponseBean<>(200, "succ", projectResourceVos);
-    }
-
-    /**
-     * 获取项目资源文件oss下载签名
-     *
-     * @param projectResourceId 项目资源id
-     */
-    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @GetMapping("/project/resource/{projectResourceId}/sign/download")
-    public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
-        String url = projectResourceService.signDownloadProjectResourceByid(projectResourceId);
-        UrlVo urlVo = new UrlVo();
-        urlVo.setUrl(url);
-        return new ResponseBean<>(200, "succ", urlVo);
     }
 
     /**
@@ -112,7 +97,7 @@ public class ManagementController {
      * @param projectResourceId 项目资源id
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @GetMapping("/project/resource/{projectResourceId}/sign/download/v2")
+    @GetMapping("/project/resource/{projectResourceId}/sign/download")
     public ResponseBean<CosPolicyVo> signDownloadResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException {
         CosPolicyVo cosPolicyVo = projectResourceService.signDownloadProjectResourceByIdToCos(projectResourceId);
         return new ResponseBean<>(200, "succ", cosPolicyVo);

@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.FeedbackUserDto;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
@@ -50,6 +51,7 @@ public class FeedbackController {
      *
      * @param feedbackUserDto 反馈
      */
+    @RequestLimit
     @RequiresLogin
     @PostMapping()
     public ResponseBean<Object> saveFeedback(@RequestBody @Validated FeedbackUserDto feedbackUserDto) {

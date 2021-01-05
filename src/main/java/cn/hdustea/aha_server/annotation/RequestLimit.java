@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface RequestLimit {
-    int amount() default 10;
+    int amount() default 30;
 
     int time() default 60;
 }

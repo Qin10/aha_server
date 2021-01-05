@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.controller;
 
+import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.dto.ContribPointOrderResourcesDto;
 import cn.hdustea.aha_server.entity.ContribPointLog;
@@ -69,6 +70,7 @@ public class ContribPointController {
      *
      * @param contribPointOrderResourcesDto 购买资源列表
      */
+    @RequestLimit
     @RequiresLogin
     @PostMapping("/order")
     public ResponseBean<Integer> createOrder(@RequestBody @Validated ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException {

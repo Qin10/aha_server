@@ -761,7 +761,7 @@ action|string|否|操作，取值pay、cancel
 
 **请求URL**
 
-/cos/sign/upload/public/v2 `GET`
+/cos/sign/upload/public `GET`
 
 **请求参数**
 
@@ -865,33 +865,6 @@ orderBy|string|否|排序方式
 	"time":"string //响应时间"
 }
 ```
-# 文件下载相关请求
-## 获取oss签名，已弃用
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/file/{filename} `GET`
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-filename|string|否|文件名
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"url":"string //url字符串"
-	},
-	"time":"string //响应时间"
-}
-```
 # 后台管理相关请求
 ## 分页获取所有项目粗略信息
 
@@ -962,7 +935,8 @@ passed|boolean|否|是否通过审核
 pageNum|int|否|页码
 pageSize|int|否|分页大小
 projectId|int|否|项目id
-passed|boolean|否|是否通过审核
+resourcePassed|boolean|否|资源是否通过审核
+projectPassed|boolean|否|资源所在项目是否通过审核
 
 **返回结果**
 
@@ -997,51 +971,13 @@ passed|boolean|否|是否通过审核
 
 **请求URL**
 
-/project/{projectId}/resources `GET`
+/admin/project/{projectId}/resources `GET`
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectId|int|否|项目id
-edit|boolean|否|是否处于编辑模式（项目编辑权限拥有者据此获取未通过审核资源）
-
-**返回结果**
-
-```json
-{
-  "code":"int //响应状态码",
-  "msg":"string //响应消息",
-  "data":[{
-    "id":"int //项目资源id",
-    "projectId":"int //项目id(外键)",
-    "name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-    "type":"int //资源类型",
-    "filename":"string //保存在oss里的资源文件名(包括前缀)",
-    "previewUrl":"string //保存在oss里的预览文件地址",
-    "download":"int //资源文件下载量",
-    "score":"double //资源平均分",
-    "scoreCount":"int //评分人数",
-    "price":"double //资源价格",
-    "discount":"double //资源折扣",
-    "passed":"boolean //是否通过审核"
-  }],
-  "time":"string //响应时间"
-}
-```
-## 获取项目资源文件oss下载签名
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/admin/project/resource/{projectResourceId}/sign/download `GET`
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-projectResourceId|int|否|项目资源id
 
 **返回结果**
 
@@ -1049,9 +985,20 @@ projectResourceId|int|否|项目资源id
 {
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
-	"data":{
-		"url":"string //url字符串"
-	},
+	"data":[{
+		"id":"int //项目资源id",
+		"projectId":"int //项目id(外键)",
+		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+		"type":"int //资源类型",
+		"filename":"string //保存在oss里的资源文件名(包括前缀)",
+		"previewUrl":"string //保存在oss里的预览文件地址",
+		"download":"int //资源文件下载量",
+		"score":"double //资源平均分",
+		"scoreCount":"int //评分人数",
+		"price":"double //资源价格",
+		"discount":"double //资源折扣",
+		"passed":"boolean //是否通过审核"
+	}],
 	"time":"string //响应时间"
 }
 ```
@@ -1061,7 +1008,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/admin/project/resource/{projectResourceId}/sign/download/v2 `GET`
+/admin/project/resource/{projectResourceId}/sign/download `GET`
 
 **请求参数**
 
@@ -2359,32 +2306,6 @@ messageId|int|否|站内信id
 	"time":"string //响应时间"
 }
 ```
-# OSS相关请求
-## 内容安全扫描异常回调(OSS端发送)
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/oss/green/callback `POST`
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-checksum|string|否|校验信息
-content|string|否|返回实体(json)
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
 # 项目相关请求
 ## 分页获取所有项目粗略信息
 
@@ -2573,39 +2494,13 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
-## 获取oss公开资源上传签名(用于上传项目头像和获奖证明材料)
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/project/sign/upload/public `GET`
-
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"accessid":"string //阿里云accessid",
-		"host":"string //oss服务器地址",
-		"policy":"string //上传保险",
-		"signature":"string //上传签名",
-		"expire":"long //签名过期时间戳",
-		"dir":"string //上传路径(文件前缀)"
-	},
-	"time":"string //响应时间"
-}
-```
 ## 获取COS公开资源上传签名(用于上传项目头像和获奖证明材料)
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project/sign/upload/public/v2 `GET`
+/project/sign/upload/public `GET`
 
 **请求参数**
 
@@ -2912,6 +2807,7 @@ memberUserId|int|否|成员用户id
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectId|int|否|项目id
+edit|boolean|否|是否处于编辑模式（项目编辑权限拥有者据此获取未通过审核资源）
 
 **返回结果**
 
@@ -2949,6 +2845,7 @@ projectId|int|否|项目id
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectResourceId|int|否|项目资源id
+edit|boolean|否|是否处于编辑模式（项目编辑权限拥有者据此获取未通过审核资源）
 
 **返回结果**
 
@@ -2973,44 +2870,13 @@ projectResourceId|int|否|项目资源id
 	"time":"string //响应时间"
 }
 ```
-## 获取oss私有资源上传签名(用于上传资源文件)
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/project/{projectId}/resources/sign/upload/private `GET`
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-projectId|int|否|项目id
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"accessid":"string //阿里云accessid",
-		"host":"string //oss服务器地址",
-		"policy":"string //上传保险",
-		"signature":"string //上传签名",
-		"expire":"long //签名过期时间戳",
-		"dir":"string //上传路径(文件前缀)"
-	},
-	"time":"string //响应时间"
-}
-```
 ## 获取COS私有资源上传签名(用于上传资源文件)
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project/{projectId}/resources/sign/upload/private/v2 `GET`
+/project/{projectId}/resources/sign/upload/private `GET`
 
 **请求参数**
 
@@ -3131,39 +2997,13 @@ projectResourceId|int|否|项目资源id
 	"time":"string //响应时间"
 }
 ```
-## 获取项目资源文件oss下载签名
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/project/resource/{projectResourceId}/sign/download `GET`
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-projectResourceId|int|否|项目资源id
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"url":"string //url字符串"
-	},
-	"time":"string //响应时间"
-}
-```
 ## 获取项目资源文件COS下载签名
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/project/resource/{projectResourceId}/sign/download/v2 `GET`
+/project/resource/{projectResourceId}/sign/download `GET`
 
 **请求参数**
 
@@ -3193,7 +3033,7 @@ projectResourceId|int|否|项目资源id
 
 **请求URL**
 
-/project/resource/{projectResourceId}/sign/read/v2 `GET`
+/project/resource/{projectResourceId}/sign/read `GET`
 
 **请求参数**
 
@@ -3894,39 +3734,13 @@ userId|int|否|用户id
 	"time":"string //响应时间"
 }
 ```
-## 获取向OSS上传公共文件签名，用于上传用户头像
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/userInfo/avatar/sign/upload `GET`
-
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"accessid":"string //阿里云accessid",
-		"host":"string //oss服务器地址",
-		"policy":"string //上传保险",
-		"signature":"string //上传签名",
-		"expire":"long //签名过期时间戳",
-		"dir":"string //上传路径(文件前缀)"
-	},
-	"time":"string //响应时间"
-}
-```
 ## 获取向COS上传公共文件签名，用于上传用户头像
 
 *作者: STEA_YY*
 
 **请求URL**
 
-/userInfo/avatar/sign/upload/v2 `GET`
+/userInfo/avatar/sign/upload `GET`
 
 **请求参数**
 
@@ -3938,15 +3752,15 @@ filename|string|否|文件名(要上传的文件的全名)
 
 ```json
 {
-  "code":"int //响应状态码",
-  "msg":"string //响应消息",
-  "data":{
-    "bucketName":"string //目标bucketName",
-    "region":"string //服务器地域",
-    "authorization":"string //上传签名",
-    "expire":"long //签名过期时间戳",
-    "filename":"string //完整文件名"
-  },
-  "time":"string //响应时间"
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
 }
 ```

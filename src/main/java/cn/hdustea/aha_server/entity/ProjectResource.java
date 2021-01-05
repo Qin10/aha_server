@@ -1,8 +1,7 @@
 package cn.hdustea.aha_server.entity;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
+import lombok.Data;
 
 /**
 * ${description}
@@ -46,11 +45,6 @@ public class ProjectResource {
      * 资源文件下载量
      */
     private Integer download;
-
-    /**
-     * 资源是否被冻结
-     */
-    private Boolean freezed;
 
     /**
      * 资源平均分

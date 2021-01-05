@@ -5,10 +5,8 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.service.CosService;
 import cn.hdustea.aha_server.service.UserInfoService;
-import cn.hdustea.aha_server.service.OssService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.CosPolicyVo;
-import cn.hdustea.aha_server.vo.OssPolicyVo;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +26,6 @@ public class UserInfoController {
     @Resource
     private UserInfoService userInfoService;
     @Resource
-    private OssService ossService;
-    @Resource
     private CosService cosService;
 
     /**
@@ -48,7 +44,7 @@ public class UserInfoController {
      *
      * @param userInfo 用户公共信息的实体类
      */
-    @RequestLimit(amount = 5, time = 120)
+    @RequestLimit()
     @RequiresLogin(requireSignNotice = false)
     @PutMapping("/me")
     public ResponseBean<Object> updatePersonalUserInfo(@RequestBody UserInfo userInfo) {
@@ -70,25 +66,13 @@ public class UserInfoController {
     }
 
     /**
-     * 获取向OSS上传公共文件签名，用于上传用户头像
-     */
-    @RequestLimit(amount = 5, time = 120)
-    @RequiresLogin(requireSignNotice = false)
-    @GetMapping("/avatar/sign/upload")
-    public ResponseBean<OssPolicyVo> signUpdateUserAvatar() {
-        Integer userId = ThreadLocalUtil.getCurrentUser();
-        OssPolicyVo ossPolicyVo = ossService.signUpload("avatar/" + userId, false);
-        return new ResponseBean<>(200, "succ", ossPolicyVo);
-    }
-
-    /**
      * 获取向COS上传公共文件签名，用于上传用户头像
      *
      * @param filename 文件名(要上传的文件的全名)
      */
-    @RequestLimit(amount = 5, time = 120)
+    @RequestLimit()
     @RequiresLogin(requireSignNotice = false)
-    @GetMapping("/avatar/sign/upload/v2")
+    @GetMapping("/avatar/sign/upload")
     public ResponseBean<CosPolicyVo> signUpdateUserAvatarToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/avatar/" + userId + "/" + filename, false);

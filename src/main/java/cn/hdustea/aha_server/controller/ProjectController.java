@@ -39,8 +39,6 @@ public class ProjectController {
     @Resource
     private ProjectResourceService projectResourceService;
     @Resource
-    private OssService ossService;
-    @Resource
     private CosService cosService;
     @Resource
     private RedisService redisService;
@@ -58,7 +56,7 @@ public class ProjectController {
      * @param sortBy     排序关键字
      * @param orderBy    排序方式
      */
-    @RequestLimit(time = 5)
+    @RequestLimit()
     @RequiresLogin
     @GetMapping()
     public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
@@ -76,7 +74,7 @@ public class ProjectController {
      * @param sortBy     排序关键字
      * @param orderBy    排序方式
      */
-    @RequestLimit(time = 5)
+    @RequestLimit()
     @RequiresLogin
     @GetMapping("/me")
     public ResponseBean<PageVo<List<ProjectRoughVo>>> getAllPersonalProjectPageable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "compId", required = false) Integer compId, @RequestParam(value = "awardLevel", required = false) Integer awardLevel, @RequestParam(value = "sortBy", required = false) String sortBy, @RequestParam(value = "orderBy", required = false) String orderBy) throws SelectException {
@@ -91,7 +89,7 @@ public class ProjectController {
      *
      * @param projectId 项目id
      */
-    @RequestLimit(time = 30)
+    @RequestLimit()
     @RequiresLogin
     @GetMapping("/{projectId}")
     public ResponseBean<ProjectDetailVo> getProjectById(@PathVariable("projectId") int projectId) throws SelectException {
@@ -103,23 +101,13 @@ public class ProjectController {
     }
 
     /**
-     * 获取oss公开资源上传签名(用于上传项目头像和获奖证明材料)
-     */
-    @RequiresLogin(requireSignContract = true)
-    @GetMapping("/sign/upload/public")
-    public ResponseBean<OssPolicyVo> signUploadPublicFile() {
-        Integer userId = ThreadLocalUtil.getCurrentUser();
-        OssPolicyVo ossPolicyVo = ossService.signUpload("resource/" + userId, false);
-        return new ResponseBean<>(200, "succ", ossPolicyVo);
-    }
-
-    /**
      * 获取COS公开资源上传签名(用于上传项目头像和获奖证明材料)
      *
      * @param filename 待上传文件名
      */
+    @RequestLimit
     @RequiresLogin(requireSignContract = true)
-    @GetMapping("/sign/upload/public/v2")
+    @GetMapping("/sign/upload/public")
     public ResponseBean<CosPolicyVo> signUploadPublicFileToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/resource/" + userId + "/" + filename, false);
@@ -131,6 +119,7 @@ public class ProjectController {
      *
      * @param projectDto 项目信息
      */
+    @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
     public ResponseBean<InsertedIdVo> saveProject(@RequestBody @Validated ProjectDto projectDto) {
@@ -145,6 +134,7 @@ public class ProjectController {
      * @param projectDto 修改的项目信息
      * @param projectId  项目id
      */
+    @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/{projectId}")
     public ResponseBean<Object> updateProjectById(@RequestBody ProjectDto projectDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
@@ -193,6 +183,7 @@ public class ProjectController {
      * @param projectMember 项目成员
      * @param projectId     项目id
      */
+    @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/member/{projectId}")
     public ResponseBean<Object> saveProjectMemberById(@RequestBody @Validated ProjectMember projectMember, @PathVariable("projectId") int projectId) throws PermissionDeniedException, InsertException, SelectException {
@@ -268,12 +259,12 @@ public class ProjectController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         List<ProjectResourceVo> projectResourceVos;
         if (!edit) {
-            projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(true, projectId);
+            projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(true, null, projectId);
         } else {
             if (!projectService.hasPermission(userId, projectId)) {
                 throw new PermissionDeniedException();
             }
-            projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(null, projectId);
+            projectResourceVos = projectResourceService.getAllProjectResourceVoByConditions(null, null, projectId);
         }
         return new ResponseBean<>(200, "succ", projectResourceVos);
     }
@@ -282,29 +273,22 @@ public class ProjectController {
      * 根据项目资源id获取项目资源
      *
      * @param projectResourceId 项目资源id
+     * @param edit              是否处于编辑模式（项目编辑权限拥有者据此获取未通过审核资源）
      */
     @RequiresLogin()
     @GetMapping("/resource/{projectResourceId}")
-    public ResponseBean<ProjectResourceVo> getProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId) {
-        ProjectResourceVo projectResourceVo = projectResourceService.getProjectResourceVoById(projectResourceId);
-        return new ResponseBean<>(200, "succ", projectResourceVo);
-    }
-
-    /**
-     * 获取oss私有资源上传签名(用于上传资源文件)
-     *
-     * @param projectId 项目id
-     */
-    @RequiresLogin(requireSignContract = true)
-    @GetMapping("/{projectId}/resources/sign/upload/private")
-    public ResponseBean<OssPolicyVo> signUploadPrivateFile(@PathVariable("projectId") int projectId) throws PermissionDeniedException, SelectException {
+    public ResponseBean<ProjectResourceVo> getProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestParam(value = "edit", defaultValue = "false", required = false) boolean edit) throws PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        ProjectDetailVo projectDetailVo = projectService.getProjectDetailById(projectId);
-        if (!projectService.hasPermission(userId, projectId)) {
-            throw new PermissionDeniedException();
+        ProjectResourceVo projectResourceVo;
+        if (!edit) {
+            projectResourceVo = projectResourceService.getProjectResourceVoByIdAndPassed(projectResourceId, true);
+        } else {
+            if (!projectResourceService.hasPermission(userId, projectResourceId)) {
+                throw new PermissionDeniedException();
+            }
+            projectResourceVo = projectResourceService.getProjectResourceVoByIdAndPassed(projectResourceId, null);
         }
-        OssPolicyVo ossPolicyVo = ossService.signUpload(projectDetailVo.getName() + "/", true);
-        return new ResponseBean<>(200, "succ", ossPolicyVo);
+        return new ResponseBean<>(200, "succ", projectResourceVo);
     }
 
     /**
@@ -313,8 +297,9 @@ public class ProjectController {
      * @param projectId 项目id
      * @param filename  待上传文件名
      */
+    @RequestLimit
     @RequiresLogin(requireSignContract = true)
-    @GetMapping("/{projectId}/resources/sign/upload/private/v2")
+    @GetMapping("/{projectId}/resources/sign/upload/private")
     public ResponseBean<CosPolicyVo> signUploadPrivateFileToCos(@PathVariable("projectId") int projectId, @RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         projectService.getProjectDetailById(projectId);
@@ -348,6 +333,7 @@ public class ProjectController {
      * @param projectResourceId        项目资源id
      * @param projectResourceUpdateDto 项目资源信息
      */
+    @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/resource/{projectResourceId}")
     public ResponseBean<Object> updateProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestBody ProjectResourceUpdateDto projectResourceUpdateDto) throws PermissionDeniedException {
@@ -379,41 +365,18 @@ public class ProjectController {
     }
 
     /**
-     * 获取项目资源文件oss下载签名
-     *
-     * @param projectResourceId 项目资源id
-     */
-    @RequestLimit()
-    @RequiresLogin
-    @GetMapping("/resource/{projectResourceId}/sign/download")
-    public ResponseBean<UrlVo> signDownloadResourceByid(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
-        Integer userId = ThreadLocalUtil.getCurrentUser();
-        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
-            if (!projectResourceService.hasPermission(userId, projectResourceId)) {
-                throw new PermissionDeniedException("您尚未购买本资源！");
-            }
-        }
-        String url = projectResourceService.signDownloadProjectResourceByid(projectResourceId);
-        UrlVo urlVo = new UrlVo();
-        urlVo.setUrl(url);
-        projectResourceService.incrDownloadById(projectResourceId);
-        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
-        return new ResponseBean<>(200, "succ", urlVo);
-    }
-
-    /**
      * 获取项目资源文件COS下载签名
      *
      * @param projectResourceId 项目资源id
      */
     @RequestLimit()
     @RequiresLogin
-    @GetMapping("/resource/{projectResourceId}/sign/download/v2")
+    @GetMapping("/resource/{projectResourceId}/sign/download")
     public ResponseBean<CosPolicyVo> signDownloadResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-//        if (!projectResourceService.allowDownload(userId, projectResourceId)) {
-//            throw new PermissionDeniedException("您无权限下载本资源！");
-//        }
+        if (!projectResourceService.allowDownload(userId, projectResourceId)) {
+            throw new PermissionDeniedException("您无权限下载本资源！");
+        }
         CosPolicyVo cosPolicyVo = projectResourceService.signDownloadProjectResourceByIdToCos(projectResourceId);
         projectResourceService.incrDownloadById(projectResourceId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "下载资源", "id=" + projectResourceId);
@@ -427,14 +390,14 @@ public class ProjectController {
      */
     @RequestLimit()
     @RequiresLogin
-    @GetMapping("/resource/{projectResourceId}/sign/read/v2")
+    @GetMapping("/resource/{projectResourceId}/sign/read")
     public ResponseBean<CosPolicyVo> signPreviewResourceByIdToCos(@PathVariable("projectResourceId") int projectResourceId) throws SelectException, PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-//        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
-//            if (!projectResourceService.hasPermission(userId, projectResourceId)) {
-//                throw new PermissionDeniedException("您尚未购买本资源！");
-//            }
-//        }
+        if (!projectResourceService.purchasedResource(userId, projectResourceId)) {
+            if (!projectResourceService.hasPermission(userId, projectResourceId)) {
+                throw new PermissionDeniedException("您尚未购买本资源！");
+            }
+        }
         CosPolicyVo cosPolicyVo = projectResourceService.signPreviewProjectResourceByIdToCos(projectResourceId);
         projectResourceService.incrDownloadById(projectResourceId);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "阅读资源", "id=" + projectResourceId);
@@ -457,7 +420,7 @@ public class ProjectController {
      *
      * @param projectId 项目id
      */
-    @RequestLimit(time = 30)
+    @RequestLimit()
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
     public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws InsertException {
@@ -473,7 +436,7 @@ public class ProjectController {
      *
      * @param projectId 项目id
      */
-    @RequestLimit(time = 30)
+    @RequestLimit()
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
     public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws DeleteException {
@@ -522,6 +485,7 @@ public class ProjectController {
      * @param projectResourceScoreDto 资源评分信息
      * @param projectResourceId       项目资源id
      */
+    @RequestLimit
     @RequiresLogin
     @PostMapping("/resource/score/{projectResourceId}")
     public ResponseBean<Object> saveResourceScore(@RequestBody @Validated ProjectResourceScoreDto projectResourceScoreDto, @PathVariable("projectResourceId") int projectResourceId) throws InsertException, PermissionDeniedException {

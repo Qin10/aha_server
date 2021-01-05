@@ -24,31 +24,21 @@ public interface ProjectResourceMapper {
 
     int updateByPrimaryKey(ProjectResource record);
 
-    ProjectResourceVo selectVoByPrimaryKey(Integer id);
+    ProjectResourceVo selectVoByPrimaryKeyAndPassed(@Param("id") Integer id, @Param("passed") Boolean passed);
 
     List<ProjectResource> selectAllByProjectId(@Param("projectId") Integer projectId);
 
     List<ProjectResourceVo> selectAllVoByProjectIdAndPassed(@Param("projectId") Integer projectId);
 
-    List<ProjectResourceVo> selectAllVoByProjectIdAndNotPassed(@Param("projectId") Integer projectId);
-
     List<ProjectResourceVo> selectAllVoByProjectId(@Param("projectId") Integer projectId);
-
-    List<ProjectResourceVo> selectAllVoByProjectIdAndNotFreezed(@Param("projectId") Integer projectId);
-
-    List<ProjectResourceVo> selectAllVoByProjectIdAndFreezed(@Param("projectId") Integer projectId);
 
     int updatePreviewUrlById(@Param("updatedPreviewUrl") String updatedPreviewUrl, @Param("id") Integer id);
 
     int updateIncDownloadById(@Param("id") Integer id);
 
-    int updateFreezedByFilename(@Param("updatedFreezed") Boolean updatedFreezed, @Param("filename") String filename);
-
-    ProjectResource selectByFilename(@Param("filename") String filename);
-
     int updatePassedByProjectId(@Param("updatedPassed") Boolean updatedPassed, @Param("projectId") Integer projectId);
 
     int updatePassedById(@Param("updatedPassed") Boolean updatedPassed, @Param("id") Integer id);
 
-    List<ProjectResourceVo> selectAllVoByConditions(@Param("passed") Boolean passed,@Param("projectId") Integer projectId);
+    List<ProjectResourceVo> selectAllVoByConditions(@Param("resourcePassed") Boolean resourcePassed, @Param("projectPassed") Boolean projectPassed, @Param("projectId") Integer projectId);
 }

@@ -344,7 +344,7 @@ public class ProjectService {
         Project project = new Project();
         BeanUtils.copyProperties(projectCheckDto, project);
         projectMapper.updateByPrimaryKeySelective(project);
-        projectResourceService.getAllProjectResourceVoByConditions(null, projectId);
+        projectResourceService.getAllProjectResourceVoByConditions(null, null, projectId);
         projectResourceService.updatePassedByProjectAndConvertDocument(projectCheckDto.getPassed(), projectId);
     }
 

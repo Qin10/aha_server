@@ -42,7 +42,7 @@ public class AuthController {
      *
      * @param phoneLoginUserDto 包含账号密码的实体，从请求Json中获取
      */
-    @RequestLimit(amount = 5, time = 300)
+    @RequestLimit(amount = 5, time = 180)
     @PostMapping("/login/phone")
     public ResponseBean<TokenAndPersonalUserInfoVo> loginByPhone(@RequestBody @Validated PhoneLoginUserDto phoneLoginUserDto) throws Exception {
         TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.loginByPhone(phoneLoginUserDto);
@@ -137,6 +137,7 @@ public class AuthController {
      *
      * @param code 小程序请求码
      */
+    @RequestLimit(amount = 1, time = 180)
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/bind/wechat")
     public ResponseBean<Object> wechatBind(@RequestParam("code") String code) throws Exception {
@@ -150,7 +151,7 @@ public class AuthController {
      *
      * @param wechatRegisterUserDto 包含注册信息的实体
      */
-    @RequestLimit(amount = 1)
+    @RequestLimit(amount = 1,time = 180)
     @PostMapping("/login/wechat")
     public ResponseBean<TokenAndPersonalUserInfoVo> loginByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
         TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo;
