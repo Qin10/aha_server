@@ -260,6 +260,7 @@ public class ProjectController {
      * 根据项目id获取所有项目资源
      *
      * @param projectId 项目id
+     * @param edit      是否处于编辑模式（项目编辑权限拥有者据此获取未通过审核资源）
      */
     @RequiresLogin()
     @GetMapping("/{projectId}/resources")

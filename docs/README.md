@@ -997,35 +997,36 @@ passed|boolean|否|是否通过审核
 
 **请求URL**
 
-/admin/project/{projectId}/resources `GET`
+/project/{projectId}/resources `GET`
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
 projectId|int|否|项目id
+edit|boolean|否|是否处于编辑模式（项目编辑权限拥有者据此获取未通过审核资源）
 
 **返回结果**
 
 ```json
 {
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":[{
-		"id":"int //项目资源id",
-		"projectId":"int //项目id(外键)",
-		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-		"type":"int //资源类型",
-		"filename":"string //保存在oss里的资源文件名(包括前缀)",
-		"previewUrl":"string //保存在oss里的预览文件地址",
-		"download":"int //资源文件下载量",
-		"score":"double //资源平均分",
-		"scoreCount":"int //评分人数",
-		"price":"double //资源价格",
-		"discount":"double //资源折扣",
-		"passed":"boolean //是否通过审核"
-	}],
-	"time":"string //响应时间"
+  "code":"int //响应状态码",
+  "msg":"string //响应消息",
+  "data":[{
+    "id":"int //项目资源id",
+    "projectId":"int //项目id(外键)",
+    "name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+    "type":"int //资源类型",
+    "filename":"string //保存在oss里的资源文件名(包括前缀)",
+    "previewUrl":"string //保存在oss里的预览文件地址",
+    "download":"int //资源文件下载量",
+    "score":"double //资源平均分",
+    "scoreCount":"int //评分人数",
+    "price":"double //资源价格",
+    "discount":"double //资源折扣",
+    "passed":"boolean //是否通过审核"
+  }],
+  "time":"string //响应时间"
 }
 ```
 ## 获取项目资源文件oss下载签名
