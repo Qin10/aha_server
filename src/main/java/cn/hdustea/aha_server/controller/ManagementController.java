@@ -132,14 +132,17 @@ public class ManagementController {
     /**
      * 分页获取项目购买记录
      *
-     * @param resourceId 项目资源id
      * @param pageNum    页码
      * @param pageSize   分页大小
+     * @param resourceId 项目资源id
+     * @param projectId  项目id
+     * @param userId     用户id
+     * @param orderId    订单id
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
-    @GetMapping("/project/resource/purchased/{resourceId}")
-    public ResponseBean<PageVo<List<PurchasedResourceManagementVo>>> getAllPurchasedResourceByResourceId(@PathVariable("resourceId") int resourceId, @RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize) {
-        PageVo<List<PurchasedResourceManagementVo>> purchasedResources = projectResourceService.getAllPurchasedResourceVoByResourceId(pageNum, pageSize, resourceId);
+    @GetMapping("/project/resource/purchased")
+    public ResponseBean<PageVo<List<PurchasedResourceManagementVo>>> getAllPurchasedResourceByResourceId(@RequestParam(value = "resourceId", required = false) Integer resourceId, @RequestParam(value = "projectId", required = false) Integer projectId, @RequestParam(value = "userId", required = false) Integer userId, @RequestParam(value = "orderId", required = false) Integer orderId, @RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize) {
+        PageVo<List<PurchasedResourceManagementVo>> purchasedResources = projectResourceService.getAllPurchasedResourceVoByResourceId(pageNum, pageSize, resourceId, projectId, userId, orderId);
         return new ResponseBean<>(200, "succ", purchasedResources);
     }
 

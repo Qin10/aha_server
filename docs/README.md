@@ -1103,15 +1103,18 @@ resourceId|int|否|项目资源id
 
 **请求URL**
 
-/admin/project/resource/purchased/{resourceId} `GET`
+/admin/project/resource/purchased `GET`
 
 **请求参数**
 
 参数名|类型|必须|描述
 --:|:--:|:--:|:--
-resourceId|int|否|项目资源id
 pageNum|int|否|页码
 pageSize|int|否|分页大小
+resourceId|int|否|项目资源id
+projectId|int|否|项目id
+userId|int|否|用户id
+orderId|int|否|订单id
 
 **返回结果**
 
@@ -1123,15 +1126,64 @@ pageSize|int|否|分页大小
 		"pageNum":"int //页码",
 		"pageSize":"int //分页大小",
 		"pageData":[{
-			"user":{
-				"userId":"int //用户id",
-				"nickname":"string //用户昵称",
-				"gender":"boolean //用户性别",
-				"avatarUrl":"string //用户头像文件保存路径",
-				"school":"string //用户学校",
-				"vipLevelId":"int //用户VIP等级(外键)"
-			},
-			"purchaseTime":"date"
+			"userId":"int //用户id",
+			"resourceId":"int //资源id",
+			"purchaseTime":"date //购买时间",
+			"contribPointOrder":{
+				"id":"int //订单号",
+				"user":{
+					"userId":"int //用户id",
+					"nickname":"string //用户昵称",
+					"gender":"boolean //用户性别",
+					"avatarUrl":"string //用户头像文件保存路径",
+					"school":"string //用户学校",
+					"vipLevelId":"int //用户VIP等级(外键)"
+				},
+				"project":{
+					"id":"int //项目id",
+					"creatorUser":{
+						"userId":"int //用户id",
+						"nickname":"string //用户昵称",
+						"gender":"boolean //用户性别",
+						"avatarUrl":"string //用户头像文件保存路径",
+						"school":"string //用户学校",
+						"vipLevelId":"int //用户VIP等级(外键)"
+					},
+					"name":"string //项目名称",
+					"read":"int //点击率",
+					"collect":"int //收藏数量",
+					"avatarUrl":"string //团队头像url",
+					"tags":"string //项目标签",
+					"compId":"int //赛事id(外键)",
+					"awardLevel":"int //项目获奖级别",
+					"awardTime":"date //项目获奖时间",
+					"passed":"boolean //是否通过审核"
+				},
+				"totalCost":"double //订单总价",
+				"status":"int //订单状态",
+				"createTime":"date //订单创建时间",
+				"payTime":"date //订单支付时间",
+				"orderResources":[{
+					"resource":{
+						"id":"int //项目资源id",
+						"projectId":"int //项目id(外键)",
+						"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
+						"type":"int //资源类型",
+						"filename":"string //保存在oss里的资源文件名(包括前缀)",
+						"previewUrl":"string //保存在oss里的预览文件地址",
+						"download":"int //资源文件下载量",
+						"score":"double //资源平均分",
+						"scoreCount":"int //评分人数",
+						"price":"double //资源价格",
+						"discount":"double //资源折扣",
+						"passed":"boolean //是否通过审核"
+					},
+					"discount":"double //资源折扣",
+					"price":"double //贡献点小计"
+				}],
+				"chargedAhaCredit":"double //订单实际支付aha币",
+				"chargedAhaPoint":"double //订单实际支付aha点"
+			}
 		}]
 	},
 	"time":"string //响应时间"

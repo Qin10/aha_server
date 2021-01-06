@@ -134,7 +134,7 @@
         update contrib_point_order
         set cor_user_id            = #{userId},
             cor_project_id         = #{projectId},
-            cor_total_cost              = #{totalCost},
+            cor_total_cost         = #{totalCost},
             cor_status             = #{status},
             cor_create_time        = #{createTime},
             cor_pay_time           = #{payTime},

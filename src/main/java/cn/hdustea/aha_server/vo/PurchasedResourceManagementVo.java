@@ -11,6 +11,22 @@ import java.util.Date;
  **/
 @Data
 public class PurchasedResourceManagementVo {
-    private UserRoughInfoVo user;
+    /**
+     * 用户id
+     */
+    private Integer userId;
+
+    /**
+     * 资源id
+     */
+    private Integer resourceId;
+
+    /**
+     * 购买时间
+     */
     private Date purchaseTime;
+    /**
+     * 订单
+     */
+    private ContribPointOrderVo contribPointOrder;
 }

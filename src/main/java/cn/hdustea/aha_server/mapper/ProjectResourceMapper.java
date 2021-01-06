@@ -20,6 +20,8 @@ public interface ProjectResourceMapper {
 
     ProjectResource selectByPrimaryKey(Integer id);
 
+    ProjectResourceVo selectVoByPrimaryKey(Integer id);
+
     int updateByPrimaryKeySelective(ProjectResource record);
 
     int updateByPrimaryKey(ProjectResource record);

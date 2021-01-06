@@ -169,7 +169,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET https://{{host}}/project/94
+GET https://{{host}}/project/97
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -350,13 +350,13 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST https://{{host}}/project/resource/87
+POST https://{{host}}/project/resource/94
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "name": "1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目详细方案.docx",
-  "filename": "/第一个测试项目/1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目详细方案.docx",
+  "name": "18051331 姚懿 计算机网络实验报告",
+  "filename": "/94/18051331 姚懿 计算机网络实验报告.docx",
   "price": 10.0,
   "discount": 0.0,
   "type": 2
@@ -624,7 +624,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###签名上传资源
-GET https://{{host}}/project/87/resources/sign/upload/private/v2?filename=1903918—STEA TEAM—【A06】交通时空大数据分析挖掘系统【东软】—项目详细方案.docx
+GET https://{{host}}/project/94/resources/sign/upload/private?filename=18051331 姚懿 计算机网络实验报告.docx
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -683,7 +683,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###审核项目资源
-POST https://{{host}}/admin/project/resource/check/169
+POST https://{{host}}/admin/project/resource/check/175
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -707,6 +707,12 @@ Authorization: {{auth_token}}
 
 ###管理员查看全部资源
 GET https://{{host}}/admin/project/resource?pageNum=1&pageSize=5
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员获取资源购买记录
+GET https://{{host}}/admin/project/resource/purchased/161?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

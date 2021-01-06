@@ -88,6 +88,9 @@ public class ContribPointOrderService {
         if (projectService.isMember(contribPointOrderResourcesDto.getProjectId(), userId)) {
             throw new InsertException("项目成员不可以购买项目资源！");
         }
+        if (!projectService.isPassed(contribPointOrderResourcesDto.getProjectId())) {
+            throw new InsertException("项目未通过审核！");
+        }
         BigDecimal totalCost = BigDecimal.valueOf(0.0);
         ContribPointOrder contribPointOrder = new ContribPointOrder();
         contribPointOrder.setCreateTime(new Date());
@@ -103,7 +106,10 @@ public class ContribPointOrderService {
             if (!projectResource.getProjectId().equals(contribPointOrderResourcesDto.getProjectId())) {
                 throw new InsertException("资源id=" + resourceId + "不属于指定项目！");
             }
-            if (purchasedResourceMapper.selectByUserIdAndResourceId(userId, resourceId) != null) {
+            if (!projectResource.getPassed()) {
+                throw new InsertException("资源id=" + resourceId + "未通过审核！");
+            }
+            if (purchasedResourceMapper.selectByPrimaryKey(userId, resourceId) != null) {
                 throw new InsertException("您已购买过该资源！");
             }
             OrderProjectResource orderProjectResource = new OrderProjectResource();
@@ -174,6 +180,7 @@ public class ContribPointOrderService {
             purchasedResource.setUserId(userId);
             purchasedResource.setResourceId(orderProjectResource.getResourceId());
             purchasedResource.setPurchaseTime(payTime);
+            purchasedResource.setOrderId(orderId);
             purchasedResourceMapper.insertSelective(purchasedResource);
             log.info(userOperationLogConfig.getFormat(), ContribPointController.MODULE_NAME, "购买资源", "id=" + orderProjectResource.getResourceId());
         }

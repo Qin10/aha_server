@@ -17,6 +17,11 @@ public class PurchasedResourceVo {
     private ProjectResourceVo resource;
 
     /**
+     * 订单表id
+     */
+    private Integer orderId;
+
+    /**
      * 购买时间
      */
     private Date purchaseTime;

@@ -160,6 +160,9 @@
             <if test="highestScore != null and lowestScore != null">
                 and prs_score between #{lowestScore} and #{highestScore}
             </if>
+            <if test="resourcePassed != null">
+                and pr_passed = #{resourcePassed}
+            </if>
         </where>
     </select>
 </mapper>

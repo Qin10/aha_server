@@ -38,5 +38,5 @@ public interface ProjectResourceScoreMapper {
 
     Integer countByResourceId(@Param("resourceId") Integer resourceId);
 
-    List<ProjectResourceScoreVo> selectAllVoByConditions(@Param("projectId") Integer projectId, @Param("resourceId") Integer resourceId, @Param("highestScore") BigDecimal highestScore, @Param("lowestScore") BigDecimal lowestScore);
+    List<ProjectResourceScoreVo> selectAllVoByConditions(@Param("projectId") Integer projectId, @Param("resourceId") Integer resourceId, @Param("highestScore") BigDecimal highestScore, @Param("lowestScore") BigDecimal lowestScore, @Param("resourcePassed") Boolean resourcePassed);
 }

@@ -1,8 +1,8 @@
 package cn.hdustea.aha_server.entity;
 
-import java.util.Date;
-
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * ${description}
@@ -20,6 +20,11 @@ public class PurchasedResource {
      * 项目资源id
      */
     private Integer resourceId;
+
+    /**
+     * 订单表id
+     */
+    private Integer orderId;
 
     /**
      * 购买时间

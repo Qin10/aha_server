@@ -252,7 +252,7 @@ public class ProjectResourceService {
         }
         PageHelper.startPage(pageNum, pageSize);
         PageHelper.orderBy(currentSortBy + " " + currentOrderBy);
-        List<ProjectResourceScoreVo> projectResourceScoreVos = projectResourceScoreMapper.selectAllVoByConditions(projectId, resourceId, highestScore, lowestScore);
+        List<ProjectResourceScoreVo> projectResourceScoreVos = projectResourceScoreMapper.selectAllVoByConditions(projectId, resourceId, highestScore, lowestScore, true);
         PageInfo<ProjectResourceScoreVo> pageInfo = new PageInfo<>(projectResourceScoreVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
@@ -265,7 +265,7 @@ public class ProjectResourceService {
      * @return 是否购买
      */
     public boolean purchasedResource(int userId, int resourceId) {
-        PurchasedResource purchasedResource = purchasedResourceMapper.selectByUserIdAndResourceId(userId, resourceId);
+        PurchasedResource purchasedResource = purchasedResourceMapper.selectByPrimaryKey(userId, resourceId);
         return purchasedResource != null;
     }
 
@@ -298,10 +298,10 @@ public class ProjectResourceService {
      * @param resourceId 项目资源id
      * @return 分页资源购买信息列表
      */
-    public PageVo<List<PurchasedResourceManagementVo>> getAllPurchasedResourceVoByResourceId(int pageNum, int pageSize, int resourceId) {
+    public PageVo<List<PurchasedResourceManagementVo>> getAllPurchasedResourceVoByResourceId(int pageNum, int pageSize, Integer resourceId, Integer projectId, Integer userId, Integer orderId) {
         PageHelper.startPage(pageNum, pageSize);
-        PageHelper.orderBy("pr_purchase_time desc");
-        List<PurchasedResourceManagementVo> purchasedResourceVos = purchasedResourceMapper.selectAllManagementVoByResourceId(resourceId);
+        PageHelper.orderBy("pur_purchase_time desc");
+        List<PurchasedResourceManagementVo> purchasedResourceVos = purchasedResourceMapper.selectAllManagementVoByConditions(resourceId, projectId, userId, orderId);
         PageInfo<PurchasedResourceManagementVo> pageInfo = new PageInfo<>(purchasedResourceVos);
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
@@ -311,18 +311,11 @@ public class ProjectResourceService {
             List<ProjectResource> projectResources = projectResourceMapper.selectAllByProjectId(projectId);
             for (ProjectResource projectResource : projectResources) {
                 if (!projectResource.getPassed()) {
-                    projectResourceMapper.updatePassedById(true, projectResource.getId());
-                    if (projectResource.getType() == ProjectResourceTypes.DOCUMENT && projectResource.getPreviewUrl() == null) {
-                        DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
-                        documentConvertInfoDto.setProjectResourceId(projectResource.getId());
-                        documentConvertInfoDto.setSrcFilename(projectResource.getFilename());
-                        redisService.lPush(RedisConstants.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
-                    }
+                    addToConvertList(projectResource);
                 }
             }
-        } else {
-            projectResourceMapper.updatePassedByProjectId(false, projectId);
         }
+        projectResourceMapper.updatePassedByProjectId(passed, projectId);
     }
 
     /**
@@ -333,12 +326,16 @@ public class ProjectResourceService {
      * @throws UpdateException 更新异常
      */
     public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException {
-        if (projectResourceMapper.selectByPrimaryKey(resourceId) == null) {
+        ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
+        if (projectResource == null) {
             throw new UpdateException("项目资源不存在！");
         }
-        ProjectResource projectResource = new ProjectResource();
-        projectResource.setId(resourceId);
-        BeanUtils.copyProperties(projectResourceCheckDto, projectResource);
+        if (projectResourceCheckDto.getPassed()) {
+            if (!projectResource.getPassed()) {
+                addToConvertList(projectResource);
+            }
+        }
+        projectResource.setPassed(projectResourceCheckDto.getPassed());
         projectResourceMapper.updateByPrimaryKeySelective(projectResource);
     }
 
@@ -369,4 +366,14 @@ public class ProjectResourceService {
             return projectResource.getPassed();
         }
     }
+
+    private void addToConvertList(ProjectResource projectResource) {
+        if (projectResource.getType() == ProjectResourceTypes.DOCUMENT && projectResource.getPreviewUrl() == null) {
+            DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
+            documentConvertInfoDto.setProjectResourceId(projectResource.getId());
+            documentConvertInfoDto.setSrcFilename(projectResource.getFilename());
+            redisService.lPush(RedisConstants.DOCUMENT_CONVERT_LIST_KEY, documentConvertInfoDto);
+        }
+    }
+
 }

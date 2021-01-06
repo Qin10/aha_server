@@ -29,13 +29,9 @@ public interface PurchasedResourceMapper {
 
     List<PurchasedResourceVo> selectAllVoByUserId(@Param("userId") Integer userId);
 
-    PurchasedResource selectByUserIdAndResourceId(@Param("userId") Integer userId, @Param("resourceId") Integer resourceId);
+    List<PurchasedResourceManagementVo> selectAllManagementVoByConditions(@Param("resourceId") Integer resourceId, @Param("projectId") Integer projectId, @Param("userId") Integer userId, @Param("orderId") Integer orderId);
 
-    List<PurchasedResourceManagementVo> selectAllManagementVoByResourceId(@Param("resourceId") Integer resourceId);
+    List<PurchasedResource> selectAllByProjectIdAndUserId(@Param("projectId") Integer projectId, @Param("userId") Integer userId);
 
-    List<PurchasedResource> selectAllByProjectIdAndUserId(@Param("projectId") Integer projectId,@Param("userId") Integer userId);
-
-    List<Integer> selectAllResourceIdByProjectIdAndUserId(@Param("projectId") Integer projectId,@Param("userId") Integer userId);
-
-
+    List<Integer> selectAllResourceIdByProjectIdAndUserId(@Param("projectId") Integer projectId, @Param("userId") Integer userId);
 }
