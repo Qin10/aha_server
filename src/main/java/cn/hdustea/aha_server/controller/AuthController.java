@@ -13,8 +13,7 @@ import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckExc
 import cn.hdustea.aha_server.service.AuthService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.ResponseBean;
-import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
-import cn.hdustea.aha_server.vo.TokenVo;
+import cn.hdustea.aha_server.vo.LoginInfoVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +43,10 @@ public class AuthController {
      */
     @RequestLimit(amount = 5, time = 180)
     @PostMapping("/login/phone")
-    public ResponseBean<TokenAndPersonalUserInfoVo> loginByPhone(@RequestBody @Validated PhoneLoginUserDto phoneLoginUserDto) throws Exception {
-        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.loginByPhone(phoneLoginUserDto);
+    public ResponseBean<LoginInfoVo> loginByPhone(@RequestBody @Validated PhoneLoginUserDto phoneLoginUserDto) throws Exception {
+        LoginInfoVo loginInfoVo = authService.loginByPhone(phoneLoginUserDto);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户登录", "");
-        return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoVo);
+        return new ResponseBean<>(200, "登录成功", loginInfoVo);
     }
 
     /**
@@ -57,10 +56,10 @@ public class AuthController {
      */
     @RequestLimit(amount = 1)
     @PostMapping("/register/phone")
-    public ResponseBean<TokenAndPersonalUserInfoVo> registerByPhone(@RequestBody @Validated PhoneRegisterUserDto phoneRegisterUserDto) throws Exception {
-        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo = authService.registerByPhone(phoneRegisterUserDto);
+    public ResponseBean<LoginInfoVo> registerByPhone(@RequestBody @Validated PhoneRegisterUserDto phoneRegisterUserDto) throws Exception {
+        LoginInfoVo loginInfoVo = authService.registerByPhone(phoneRegisterUserDto);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户注册", "");
-        return new ResponseBean<>(200, "注册成功", tokenAndPersonalUserInfoVo);
+        return new ResponseBean<>(200, "注册成功", loginInfoVo);
     }
 
     /**
@@ -96,12 +95,10 @@ public class AuthController {
     @RequestLimit(amount = 1, time = 180)
     @RequiresLogin(requireSignNotice = false)
     @PostMapping("/sign/notice")
-    public ResponseBean<TokenVo> signNotice() throws UpdateException {
+    public ResponseBean<String> signNotice() throws UpdateException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signNotice(userId);
-        TokenVo tokenVo = new TokenVo();
-        tokenVo.setToken(updatedToken);
-        return new ResponseBean<>(200, "已同意用户协议", tokenVo);
+        return new ResponseBean<>(200, "已同意用户协议", updatedToken);
     }
 
     /**
@@ -113,12 +110,10 @@ public class AuthController {
     @RequestLimit(amount = 1, time = 180)
     @RequiresLogin
     @PostMapping("/sign/contract")
-    public ResponseBean<TokenVo> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, InsertException {
+    public ResponseBean<String> signContract(MultipartFile file, @Validated Contract contract) throws IOException, UpdateException, InsertException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         String updatedToken = authService.signContract(userId, file, contract);
-        TokenVo tokenVo = new TokenVo();
-        tokenVo.setToken(updatedToken);
-        return new ResponseBean<>(200, "已签署合同", tokenVo);
+        return new ResponseBean<>(200, "已签署合同", updatedToken);
     }
 
     /**
@@ -153,10 +148,10 @@ public class AuthController {
      */
     @RequestLimit(amount = 1,time = 180)
     @PostMapping("/login/wechat")
-    public ResponseBean<TokenAndPersonalUserInfoVo> loginByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
-        TokenAndPersonalUserInfoVo tokenAndPersonalUserInfoVo;
-        tokenAndPersonalUserInfoVo = authService.LoginByWechat(wechatRegisterUserDto);
+    public ResponseBean<LoginInfoVo> loginByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
+        LoginInfoVo loginInfoVo;
+        loginInfoVo = authService.LoginByWechat(wechatRegisterUserDto);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户登录", "");
-        return new ResponseBean<>(200, "登录成功", tokenAndPersonalUserInfoVo);
+        return new ResponseBean<>(200, "登录成功", loginInfoVo);
     }
 }

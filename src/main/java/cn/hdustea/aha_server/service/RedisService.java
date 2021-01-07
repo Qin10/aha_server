@@ -124,6 +124,7 @@ public class RedisService {
      * @param by   要增加几(大于0)
      * @return 增加后的数值
      */
+    @SuppressWarnings("UnusedReturnValue")
     public double hIncr(String key, String item, double by) {
         return redisTemplate.opsForHash().increment(key, item, by);
     }

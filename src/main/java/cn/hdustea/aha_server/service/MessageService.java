@@ -214,6 +214,7 @@ public class MessageService {
      * @param messageDto 站内信
      * @param id         站内信内容id
      */
+    @SuppressWarnings("unused")
     public void updateNoticeTextById(MessageDto messageDto, int id) {
         MessageText messageText = new MessageText();
         messageText.setId(id);
@@ -237,6 +238,7 @@ public class MessageService {
      * @param status         状态
      * @param receiverUserId 收件人用户id
      */
+    @SuppressWarnings("unused")
     public void changeMessageStatusByReceiverUserId(int status, int receiverUserId) {
         messageMapper.updateStatusByReceiverUserId(status, receiverUserId);
     }

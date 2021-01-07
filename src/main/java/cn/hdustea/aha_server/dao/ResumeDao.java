@@ -14,5 +14,6 @@ import org.springframework.stereotype.Repository;
 public interface ResumeDao extends MongoRepository<Resume, ObjectId> {
     Resume findByUserId(Integer userId);
 
+    @SuppressWarnings("unused")
     void deleteByUserId(Integer userId);
 }

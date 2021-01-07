@@ -218,6 +218,7 @@ public class UserService {
      * @param id            用户id
      * @param incAhaCredit 增加的Aha币
      */
+    @SuppressWarnings("unused")
     public void updateIncAhaCredit(Integer id, BigDecimal incAhaCredit) {
         userMapper.updateIncAhaCreditById(incAhaCredit, id);
     }

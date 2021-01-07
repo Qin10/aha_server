@@ -19,7 +19,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.insertException
 import cn.hdustea.aha_server.exception.apiException.smsException.MessageCheckException;
 import cn.hdustea.aha_server.util.*;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
-import cn.hdustea.aha_server.vo.TokenAndPersonalUserInfoVo;
+import cn.hdustea.aha_server.vo.LoginInfoVo;
 import cn.hdustea.aha_server.vo.UserVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.MDC;
@@ -72,7 +72,7 @@ public class AuthService {
      * @return token令牌和用户部分信息
      * @throws Exception 向上抛出异常
      */
-    public TokenAndPersonalUserInfoVo loginByPhone(PhoneLoginUserDto phoneLoginUserDto) throws Exception {
+    public LoginInfoVo loginByPhone(PhoneLoginUserDto phoneLoginUserDto) throws Exception {
         Oauth oauth = oauthService.getOauthByOauthTypeAndOauthId(OauthTypes.PHONE, phoneLoginUserDto.getPhone());
         if (oauth == null) {
             throw new AccountNotFoundException("用户不存在！");
@@ -121,7 +121,7 @@ public class AuthService {
      * @throws MessageCheckException 短信验证码校验异常
      */
     @Transactional(rollbackFor = Exception.class)
-    public TokenAndPersonalUserInfoVo registerByPhone(PhoneRegisterUserDto phoneRegisterUserDto) throws DaoException, MessageCheckException {
+    public LoginInfoVo registerByPhone(PhoneRegisterUserDto phoneRegisterUserDto) throws DaoException, MessageCheckException {
         boolean SmsVerifyResult = smsService.verifySmsCode(phoneRegisterUserDto.getPhone(), phoneRegisterUserDto.getCode(), SmsConstants.REGISTER_MESSAGE);
         if (!SmsVerifyResult) {
             throw new MessageCheckException();
@@ -232,7 +232,7 @@ public class AuthService {
      * @throws SelectException         查询异常
      * @throws AuthorizationException  授权异常
      */
-    public TokenAndPersonalUserInfoVo LoginByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws JsonProcessingException, SelectException, AuthorizationException {
+    public LoginInfoVo LoginByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws JsonProcessingException, SelectException, AuthorizationException {
         String openid = WechatUtil.getWxInfo(wechatRegisterUserDto.getCode(), wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
         if (openid == null) {
             throw new AuthorizationException("非法授权码！");
@@ -308,7 +308,7 @@ public class AuthService {
      * @return token和部分用户信息
      * @throws SelectException 用户未找到异常
      */
-    private TokenAndPersonalUserInfoVo excuteLoginByUserId(int userId) throws SelectException {
+    private LoginInfoVo excuteLoginByUserId(int userId) throws SelectException {
         UserVo userVo = userService.getExistUserVoById(userId);
         messageService.saveAllNoticeNotReadByReceiverUserId(userVo.getId());
         String token = signToken(userVo);
@@ -316,6 +316,6 @@ public class AuthService {
         PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(userVo.getId());
         MDC.put("userId", userVo.getId().toString());
         MDC.put("ip", IpUtil.getIpAddr(request));
-        return new TokenAndPersonalUserInfoVo(token, personalUserInfo);
+        return new LoginInfoVo(token, personalUserInfo);
     }
 }

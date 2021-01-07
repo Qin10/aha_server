@@ -712,7 +712,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员获取资源购买记录
-GET https://{{host}}/admin/project/resource/purchased/161?pageNum=1&pageSize=5
+GET https://{{host}}/admin/project/resource/purchased?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

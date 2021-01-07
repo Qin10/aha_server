@@ -10,7 +10,7 @@ import lombok.Data;
  **/
 @Data
 @AllArgsConstructor
-public class TokenAndPersonalUserInfoVo {
+public class LoginInfoVo {
     /**
      * token令牌
      */

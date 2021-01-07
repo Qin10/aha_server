@@ -122,10 +122,10 @@ public class ProjectController {
     @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @PostMapping()
-    public ResponseBean<InsertedIdVo> saveProject(@RequestBody @Validated ProjectDto projectDto) {
+    public ResponseBean<Integer> saveProject(@RequestBody @Validated ProjectDto projectDto) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         Integer projectId = projectService.saveProjectAndAuthor(projectDto, userId);
-        return new ResponseBean<>(200, "succ", new InsertedIdVo(projectId));
+        return new ResponseBean<>(200, "succ", projectId);
     }
 
     /**
@@ -318,13 +318,13 @@ public class ProjectController {
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
-    public ResponseBean<InsertedIdVo> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean<Integer> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
         Integer projectResourceId = projectResourceService.saveProjectResourceByProjectId(projectResourceDto, projectId);
-        return new ResponseBean<>(200, "succ", new InsertedIdVo(projectResourceId));
+        return new ResponseBean<>(200, "succ", projectResourceId);
     }
 
     /**

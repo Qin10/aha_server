@@ -68,6 +68,7 @@ public class SmsService {
      * @param length 随机验证码的长度
      * @return 随机验证码
      */
+    @SuppressWarnings("unused")
     public String makeSmsCode(int length) {
         Random random = new Random();
         StringBuilder code = new StringBuilder();
