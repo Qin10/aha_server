@@ -23,6 +23,10 @@ public class PersonalUserInfoVo {
      */
     private boolean signedContract;
     /**
+     * 是否通过身份认证
+     */
+    private Boolean authenticated;
+    /**
      * aha币数量
      */
     private BigDecimal ahaCredit;

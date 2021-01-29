@@ -43,6 +43,8 @@ public class ManagementController {
     private NoticeService noticeService;
     @Resource
     private FeedbackService feedbackService;
+    @Resource
+    private RealNameAuthenticationService realNameAuthenticationService;
 
     /**
      * 分页获取所有项目粗略信息
@@ -507,6 +509,59 @@ public class ManagementController {
     @PutMapping("/feedback/{feedbackId}")
     public ResponseBean<Object> updateFeedbackById(@PathVariable("feedbackId") int feedbackId, @RequestBody FeedbackAdminDto feedbackAdminDto) {
         feedbackService.replyFeedbackById(feedbackAdminDto, feedbackId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 分页获取身份认证信息
+     *
+     * @param pageNum  页面
+     * @param pageSize 分页大小
+     * @param status   审核状态
+     * @param type     身份认证类型
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/authentication")
+    public ResponseBean<PageVo<List<RealNameAuthenticationVo>>> getRealNameAuthenticationVosPagable(@RequestParam(value = "pageNum") int pageNum, @RequestParam(value = "pageSize") int pageSize, @RequestParam(value = "status", required = false) Integer status, @RequestParam(value = "type", required = false) Integer type) {
+        PageVo<List<RealNameAuthenticationVo>> realNameAuthenticationVos = realNameAuthenticationService.getRealNameAuthenticationVosPagable(pageNum, pageSize, status, type);
+        return new ResponseBean<>(200, "succ", realNameAuthenticationVos);
+    }
+
+    /**
+     * 根据用户id获取实名认证信息
+     *
+     * @param userId 用户id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/authentication/{userId}")
+    public ResponseBean<RealNameAuthenticationVo> getRealNameAuthenticationVoByUserId(@PathVariable("userId") int userId) throws SelectException {
+        RealNameAuthenticationVo realNameAuthenticationVo = realNameAuthenticationService.getRealNameAuthenticationVoByUserId(userId);
+        return new ResponseBean<>(200, "succ", realNameAuthenticationVo);
+    }
+
+    /**
+     * 获取身份认证照片
+     *
+     * @param userId   用户id
+     * @param fileType 文件类型(取值:studentCard-学生证,idCardFront-身份证正面,idCardBack-身份证反面)
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/authentication/file/{userId}")
+    public ResponseBean<Object> getAuthenticationFile(@PathVariable("userId") int userId, @RequestParam(name = "fileType") String fileType, HttpServletResponse response) throws IOException, SelectException {
+        realNameAuthenticationService.getAuthenticationFileByUserIdAndFileType(userId, fileType, response);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 审核身份认证信息
+     *
+     * @param userId 用户id
+     * @param status 审核结果(取值:1-通过,2-不通过)
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PutMapping("/authentication/check/{userId}")
+    public ResponseBean<Object> checkAuthentication(@PathVariable("userId") int userId, @RequestParam("status") int status) throws SelectException, UpdateException {
+        realNameAuthenticationService.checkAuthenticationByUserId(userId, status);
         return new ResponseBean<>(200, "succ", null);
     }
 }

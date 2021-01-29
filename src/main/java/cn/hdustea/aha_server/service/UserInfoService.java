@@ -61,6 +61,7 @@ public class UserInfoService {
         personalUserInfoVo.setAhaPoint(userVo.getAhaPoint());
         personalUserInfoVo.setSignedNotice(userVo.getSignedNotice());
         personalUserInfoVo.setSignedContract(userVo.getSignedContract());
+        personalUserInfoVo.setAuthenticated(userVo.getAuthenticated());
         personalUserInfoVo.setRole(userVo.getRole());
         personalUserInfoVo.setOauths(oauthVos);
         personalUserInfoVo.setUserInfo(userInfo);

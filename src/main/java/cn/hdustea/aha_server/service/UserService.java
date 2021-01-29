@@ -182,6 +182,10 @@ public class UserService {
         userMapper.updateSignedContractById(signedContract, id);
     }
 
+    public void updateAuthenticated(Integer id, boolean authenticated) {
+        userMapper.updateAuthenticatedById(authenticated, id);
+    }
+
     /**
      * 根据用户id减少Aha点
      *
@@ -205,7 +209,7 @@ public class UserService {
     /**
      * 根据用户id增加Aha点
      *
-     * @param id           用户id
+     * @param id          用户id
      * @param incAhaPoint 增加的Aha点
      */
     public void updateIncAhaPoint(Integer id, BigDecimal incAhaPoint) {
@@ -215,7 +219,7 @@ public class UserService {
     /**
      * 根据用户id增加Aha币
      *
-     * @param id            用户id
+     * @param id           用户id
      * @param incAhaCredit 增加的Aha币
      */
     @SuppressWarnings("unused")

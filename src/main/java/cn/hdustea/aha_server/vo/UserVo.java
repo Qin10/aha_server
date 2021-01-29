@@ -51,6 +51,11 @@ public class UserVo {
     private Boolean signedContract;
 
     /**
+     * 是否通过身份认证
+     */
+    private Boolean authenticated;
+
+    /**
      * 用户角色
      */
     private Role role;

@@ -33,6 +33,7 @@ public class JwtUtil {
                     .withClaim("roleName", jwtPayloadDto.getRoleName())
                     .withClaim("signedNotice", jwtPayloadDto.isSignedNotice())
                     .withClaim("signedContract", jwtPayloadDto.isSignedContract())
+                    .withClaim("authenticated", jwtPayloadDto.isAuthenticated())
                     .build();
             verifier.verify(token);
             return true;
@@ -56,6 +57,7 @@ public class JwtUtil {
             jwtPayloadDto.setRoleName(jwt.getClaim("roleName").asString());
             jwtPayloadDto.setSignedNotice(jwt.getClaim("signedNotice").asBoolean());
             jwtPayloadDto.setSignedContract(jwt.getClaim("signedContract").asBoolean());
+            jwtPayloadDto.setAuthenticated(jwt.getClaim("authenticated").asBoolean());
         } catch (JWTDecodeException | NullPointerException ignored) {
 
         }
@@ -74,6 +76,7 @@ public class JwtUtil {
         jwtPayloadDto.setRoleName(userVo.getRole().getName());
         jwtPayloadDto.setSignedNotice(userVo.getSignedNotice());
         jwtPayloadDto.setSignedContract(userVo.getSignedContract());
+        jwtPayloadDto.setAuthenticated(userVo.getAuthenticated());
         return jwtPayloadDto;
     }
 
@@ -85,7 +88,7 @@ public class JwtUtil {
      * @return 加密的token
      */
     public static String sign(JwtPayloadDto jwtPayloadDto, String secret, int expireTime) {
-        Date date = new Date(System.currentTimeMillis() + (expireTime * 1000));
+        Date date = new Date(System.currentTimeMillis() + (expireTime * 1000L));
         Algorithm algorithm = Algorithm.HMAC256(secret);
         // 附带username信息
         return JWT.create()
@@ -93,6 +96,7 @@ public class JwtUtil {
                 .withClaim("roleName", jwtPayloadDto.getRoleName())
                 .withClaim("signedNotice", jwtPayloadDto.isSignedNotice())
                 .withClaim("signedContract", jwtPayloadDto.isSignedContract())
+                .withClaim("authenticated", jwtPayloadDto.isAuthenticated())
                 .withExpiresAt(date)
                 .sign(algorithm);
     }

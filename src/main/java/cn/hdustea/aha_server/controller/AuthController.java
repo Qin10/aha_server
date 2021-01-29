@@ -117,6 +117,22 @@ public class AuthController {
     }
 
     /**
+     * 实名认证
+     *
+     * @param realNameAuthenticationDto 认证信息封装类
+     * @param studentCard               学生证照片文件
+     * @param idCardFront               身份证正面照片文件
+     * @param idCardBack                身份证背面照片文件
+     */
+    @RequiresLogin
+    @PostMapping("/authenticate")
+    public ResponseBean<Object> authenticateRealName(@Validated RealNameAuthenticationDto realNameAuthenticationDto, MultipartFile studentCard, MultipartFile idCardFront, MultipartFile idCardBack) throws InsertException, IOException, UpdateException {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        authService.authenticateRealName(userId, realNameAuthenticationDto, studentCard, idCardFront, idCardBack);
+        return new ResponseBean<>(200, "已完成实名认证", null);
+    }
+
+    /**
      * 登出
      */
     @RequiresLogin
@@ -146,7 +162,7 @@ public class AuthController {
      *
      * @param wechatRegisterUserDto 包含注册信息的实体
      */
-    @RequestLimit(amount = 1,time = 180)
+    @RequestLimit(amount = 1, time = 180)
     @PostMapping("/login/wechat")
     public ResponseBean<LoginInfoVo> loginByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
         LoginInfoVo loginInfoVo;

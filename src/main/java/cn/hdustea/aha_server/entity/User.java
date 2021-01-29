@@ -50,6 +50,11 @@ public class User {
     private Boolean signedContract;
 
     /**
+     * 是否通过身份认证
+     */
+    private Boolean authenticated;
+
+    /**
      * 角色id(外键)
      */
     private Integer roleId;

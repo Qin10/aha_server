@@ -1,13 +1,6 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.User;
-import cn.hdustea.aha_server.vo.UserContribPointVo;
-import cn.hdustea.aha_server.vo.UserManagementVo;
-import cn.hdustea.aha_server.vo.UserVo;
-import org.apache.ibatis.annotations.Param;
-
-import java.math.BigDecimal;
-import java.util.List;
+import cn.hdustea.aha_server.entity.User;import cn.hdustea.aha_server.vo.UserContribPointVo;import cn.hdustea.aha_server.vo.UserManagementVo;import cn.hdustea.aha_server.vo.UserVo;import org.apache.ibatis.annotations.Param;import java.math.BigDecimal;import java.util.List;
 
 /**
  * ${description}
@@ -37,6 +30,8 @@ public interface UserMapper {
 
     int updateSignedContractById(@Param("updatedSignedContract") Boolean updatedSignedContract, @Param("id") Integer id);
 
+    int updateAuthenticatedById(@Param("updatedAuthenticated")Boolean updatedAuthenticated,@Param("id")Integer id);
+
     List<UserContribPointVo> selectIdAndContribPoint();
 
     UserManagementVo selectManagementVoByPrimaryKey(Integer id);
@@ -47,9 +42,7 @@ public interface UserMapper {
 
     int updateDecAhaCreditById(@Param("deductedAhaCredit") BigDecimal deductedAhaCredit, @Param("id") Integer id);
 
-    int updateIncAhaPointById(@Param("addedAhaPoint")BigDecimal addedAhaPoint,@Param("id")Integer id);
+    int updateIncAhaPointById(@Param("addedAhaPoint") BigDecimal addedAhaPoint, @Param("id") Integer id);
 
-    int updateIncAhaCreditById(@Param("addedAhaCredit")BigDecimal addedAhaCredit,@Param("id")Integer id);
-
-
+    int updateIncAhaCreditById(@Param("addedAhaCredit") BigDecimal addedAhaCredit, @Param("id") Integer id);
 }

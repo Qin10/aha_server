@@ -102,6 +102,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                         throw new ContractNotSignedException();
                     }
                 }
+                if (requiresLogin.requireAuthenticated()) {
+                    if (!jwtPayloadDto.isAuthenticated()) {
+                        throw new ContractNotSignedException();
+                    }
+                }
                 ThreadLocalUtil.setCurrentUser(jwtPayloadDto.getAccount());
                 MDC.put("userId", jwtPayloadDto.getAccount().toString());
                 MDC.put("ip", IpUtil.getIpAddr(request));
