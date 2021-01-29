@@ -232,6 +232,34 @@ signTime|date|否|合同签名时间
 	"time":"string //响应时间"
 }
 ```
+## 实名认证
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/authenticate `POST`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+studentCard|file|否|学生证照片文件
+idCardFront|file|否|身份证正面照片文件
+idCardBack|file|否|身份证背面照片文件
+trueName|string|是|真实姓名
+type|int|是|实名认证类型
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 ## 登出
 
 *作者: STEA_YY*
@@ -2111,6 +2139,145 @@ feedbackId|int|否|反馈id
 	"level":"int //反馈问题级别"
 }
 ```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 分页获取身份认证信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/authentication `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|否|页面
+pageSize|int|否|分页大小
+status|int|否|审核状态
+type|int|否|身份认证类型
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"user":{
+				"userId":"int //用户id",
+				"nickname":"string //用户昵称",
+				"gender":"boolean //用户性别",
+				"avatarUrl":"string //用户头像文件保存路径",
+				"school":"string //用户学校",
+				"vipLevelId":"int //用户VIP等级(外键)"
+			},
+			"trueName":"string //真实姓名",
+			"type":"int //认证类型(学生or社会人士)",
+			"studentCardFilename":"string //学生证图片文件名",
+			"idCardFrontFilename":"string //身份证正面文件名",
+			"idCardBackFilename":"string //身份证背面文件名",
+			"status":"int //认证审核状态",
+			"uploadTime":"date //上传日期",
+			"passTime":"date //审核通过日期"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 根据用户id获取实名认证信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/authentication/{userId} `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"user":{
+			"userId":"int //用户id",
+			"nickname":"string //用户昵称",
+			"gender":"boolean //用户性别",
+			"avatarUrl":"string //用户头像文件保存路径",
+			"school":"string //用户学校",
+			"vipLevelId":"int //用户VIP等级(外键)"
+		},
+		"trueName":"string //真实姓名",
+		"type":"int //认证类型(学生or社会人士)",
+		"studentCardFilename":"string //学生证图片文件名",
+		"idCardFrontFilename":"string //身份证正面文件名",
+		"idCardBackFilename":"string //身份证背面文件名",
+		"status":"int //认证审核状态",
+		"uploadTime":"date //上传日期",
+		"passTime":"date //审核通过日期"
+	},
+	"time":"string //响应时间"
+}
+```
+## 获取身份认证照片
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/authentication/file/{userId} `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+fileType|string|否|文件类型(取值:studentCard-学生证,idCardFront-身份证正面,idCardBack-身份证反面)
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 审核身份认证信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/authentication/check/{userId} `PUT`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+status|int|否|审核结果(取值:1-通过,2-不通过)
 
 **返回结果**
 
