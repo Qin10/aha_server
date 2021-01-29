@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +42,14 @@ public class RealNameAuthenticationService {
             throw new SelectException("该用户未进行实名认证");
         }
         return realNameAuthenticationVo;
+    }
+
+    public RealNameAuthentication getExistedRealNameAuthenticationByUserId(Integer userId) throws SelectException {
+        RealNameAuthentication realNameAuthentication = realNameAuthenticationMapper.selectByPrimaryKey(userId);
+        if (realNameAuthentication == null) {
+            throw new SelectException("该用户未进行实名认证");
+        }
+        return realNameAuthentication;
     }
 
     public PageVo<List<RealNameAuthenticationVo>> getRealNameAuthenticationVosPagable(int pageNum, int pageSize, Integer status, Integer type) {
@@ -93,24 +102,26 @@ public class RealNameAuthenticationService {
 
     @Transactional(rollbackFor = Exception.class)
     public void checkAuthenticationByUserId(int userId, int status) throws SelectException, UpdateException {
-        RealNameAuthenticationVo realNameAuthenticationVo = getRealNameAuthenticationVoByUserId(userId);
+        RealNameAuthentication realNameAuthentication = getExistedRealNameAuthenticationByUserId(userId);
         switch (status) {
             case RealNameAuthenticationConstants.STATUS_PASSED: {
-                realNameAuthenticationMapper.updateStatusByUserId(status, userId);
+                realNameAuthentication.setStatus(status);
+                realNameAuthentication.setPassTime(new Date());
+                realNameAuthenticationMapper.updateByPrimaryKey(realNameAuthentication);
                 userService.updateAuthenticated(userId, true);
                 break;
             }
             case RealNameAuthenticationConstants.STATUS_NOT_PASSED: {
                 try {
-                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthenticationVo.getStudentCardFilename());
+                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthentication.getStudentCardFilename());
                 } catch (Exception ignore) {
                 }
                 try {
-                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthenticationVo.getIdCardFrontFilename());
+                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthentication.getIdCardFrontFilename());
                 } catch (Exception ignore) {
                 }
                 try {
-                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthenticationVo.getIdCardBackFilename());
+                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthentication.getIdCardBackFilename());
                 } catch (Exception ignore) {
                 }
                 realNameAuthenticationMapper.deleteByPrimaryKey(userId);

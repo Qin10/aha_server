@@ -106,7 +106,7 @@ public class ProjectController {
      * @param filename 待上传文件名
      */
     @RequestLimit
-    @RequiresLogin(requireSignContract = true)
+    @RequiresLogin(requireSignContract = true,requireAuthenticated = true)
     @GetMapping("/sign/upload/public")
     public ResponseBean<CosPolicyVo> signUploadPublicFileToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
@@ -120,7 +120,7 @@ public class ProjectController {
      * @param projectDto 项目信息
      */
     @RequestLimit
-    @RequiresLogin(requireSignContract = true)
+    @RequiresLogin(requireSignContract = true,requireAuthenticated = true)
     @PostMapping()
     public ResponseBean<Integer> saveProject(@RequestBody @Validated ProjectDto projectDto) {
         Integer userId = ThreadLocalUtil.getCurrentUser();

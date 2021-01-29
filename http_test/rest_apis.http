@@ -724,7 +724,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员审核实名认证信息
-PUT https://{{host}}/admin/authentication/check/59?status=2
+PUT https://{{host}}/admin/authentication/check/59?status=1
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

@@ -237,7 +237,7 @@ public class AuthService {
                 }
                 if (idCardBack != null) {
                     String idCardBackFilename = FileUtil.upload(idCardBack, fileUploadPathConfig.getAuthenticationFilesPath());
-                    realNameAuthentication.setIdCardFrontFilename(idCardBackFilename);
+                    realNameAuthentication.setIdCardBackFilename(idCardBackFilename);
                 }
                 break;
             }
@@ -248,7 +248,7 @@ public class AuthService {
                 String idCardFrontFilename = FileUtil.upload(idCardFront, fileUploadPathConfig.getAuthenticationFilesPath());
                 realNameAuthentication.setIdCardFrontFilename(idCardFrontFilename);
                 String idCardBackFilename = FileUtil.upload(idCardBack, fileUploadPathConfig.getAuthenticationFilesPath());
-                realNameAuthentication.setIdCardFrontFilename(idCardBackFilename);
+                realNameAuthentication.setIdCardBackFilename(idCardBackFilename);
                 break;
             }
             default: {
