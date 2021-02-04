@@ -1,23 +1,24 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.dto.ProjectCheckDto;
+import cn.hdustea.aha_server.dto.ProjectDto;
+import cn.hdustea.aha_server.entity.Project;
+import cn.hdustea.aha_server.entity.ProjectMember;
+import cn.hdustea.aha_server.entity.UserCollection;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
-import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
-import cn.hdustea.aha_server.vo.PageVo;
-import cn.hdustea.aha_server.vo.ProjectDetailVo;
-import cn.hdustea.aha_server.vo.ProjectRoughVo;
-import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
+import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.mapper.ProjectMapper;
 import cn.hdustea.aha_server.mapper.ProjectMemberMapper;
 import cn.hdustea.aha_server.mapper.UserCollectionMapper;
-import cn.hdustea.aha_server.dto.ProjectDto;
+import cn.hdustea.aha_server.vo.PageVo;
+import cn.hdustea.aha_server.vo.ProjectDetailVo;
+import cn.hdustea.aha_server.vo.ProjectRoughVo;
 import cn.hdustea.aha_server.vo.UserCollectionVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +40,8 @@ public class ProjectService {
     private ProjectMemberMapper projectMemberMapper;
     @Resource
     private ProjectResourceService projectResourceService;
+    @Resource
+    private UserStatisticsService userStatisticsService;
     @Resource
     private UserCollectionMapper userCollectionMapper;
     @Resource
@@ -199,11 +202,13 @@ public class ProjectService {
      * @param projectId     项目id
      * @throws InsertException 插入异常
      */
+    @Transactional(rollbackFor = Exception.class)
     public void saveProjectMemberByProjectId(ProjectMember projectMember, int projectId) throws InsertException, SelectException {
         userService.getExistUserVoById(projectMember.getMemberUserId());
         projectMember.setProjectId(projectId);
         try {
             projectMemberMapper.insert(projectMember);
+            userStatisticsService.incrTotalProjectByUserId(1, projectMember.getMemberUserId());
         } catch (DuplicateKeyException e) {
             throw new InsertException("该队员已经存在！");
         }
@@ -216,7 +221,10 @@ public class ProjectService {
      * @param userId    用户id
      */
     public void deleteProjectMember(int projectId, int userId) {
-        projectMemberMapper.deleteByPrimaryKey(projectId, userId);
+        int result = projectMemberMapper.deleteByPrimaryKey(projectId, userId);
+        if (result != 0) {
+            userStatisticsService.decTotalProjectByUserId(1, userId);
+        }
     }
 
     /**
@@ -262,17 +270,18 @@ public class ProjectService {
      * @param projectId 项目id
      * @param userId    用户id
      */
-    public void saveCollection(int projectId, int userId) throws InsertException {
+    @Transactional(rollbackFor = Exception.class)
+    public void saveCollection(int projectId, int userId) throws InsertException, SelectException {
+        Project project = getProjectById(projectId);
         UserCollection userCollection = new UserCollection();
         userCollection.setProjectId(projectId);
         userCollection.setUserId(userId);
         userCollection.setTimestamp(new Date());
         try {
             userCollectionMapper.insert(userCollection);
+            userStatisticsService.incrTotalReceivedCollectionByUserId(1, project.getCreatorUserId());
         } catch (DuplicateKeyException e) {
             throw new InsertException("您已收藏过该项目！");
-        } catch (DataIntegrityViolationException e) {
-            throw new InsertException("项目不存在！");
         }
     }
 
@@ -282,11 +291,14 @@ public class ProjectService {
      * @param projectId 项目id
      * @param userId    用户id
      */
-    public void deleteCollection(int projectId, int userId) throws DeleteException {
+    public void deleteCollection(int projectId, int userId) throws DeleteException, SelectException {
+        Project project = getProjectById(projectId);
         int result = userCollectionMapper.deleteByPrimaryKey(userId, projectId);
         if (result == 0) {
             throw new DeleteException("您未收藏过此项目！");
         }
+        userStatisticsService.decTotalReceivedCollectionByUserId(1, project.getCreatorUserId());
+
     }
 
     /**
@@ -343,6 +355,7 @@ public class ProjectService {
         }
         Project project = new Project();
         BeanUtils.copyProperties(projectCheckDto, project);
+        project.setId(projectId);
         projectMapper.updateByPrimaryKeySelective(project);
         projectResourceService.getAllProjectResourceVoByConditions(null, null, projectId);
         projectResourceService.updatePassedByProjectAndConvertDocument(projectCheckDto.getPassed(), projectId);

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.hdustea.aha_server.mapper.ActivityMapper">
+  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.Activity">
+    <!--@mbg.generated-->
+    <!--@Table activity-->
+    <id column="act_id" property="id" />
+    <result column="act_creator_user_id" property="creatorUserId" />
+    <result column="act_title" property="title" />
+    <result column="act_intro" property="intro" />
+    <result column="act_start_time" property="startTime" />
+    <result column="act_end_time" property="endTime" />
+    <result column="act_create_time" property="createTime" />
+    <result column="act_exchange_aha_point" property="exchangeAhaPoint" />
+    <result column="act_exchange_aha_credit" property="exchangeAhaCredit" />
+    <result column="act_code_sum" property="codeSum" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    act_id, act_creator_user_id, act_title, act_intro, act_start_time, act_end_time, 
+    act_create_time, act_exchange_aha_point, act_exchange_aha_credit, act_code_sum
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from activity
+    where act_id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from activity
+    where act_id = #{id}
+  </delete>
+  <insert id="insert" keyColumn="act_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Activity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into activity (act_creator_user_id, act_title, act_intro, act_start_time, act_end_time, act_create_time, 
+      act_exchange_aha_point, act_exchange_aha_credit, act_code_sum)
+    values (#{creatorUserId}, #{title}, #{intro}, #{startTime}, #{endTime}, #{createTime}, 
+      #{exchangeAhaPoint}, #{exchangeAhaCredit}, #{codeSum})
+  </insert>
+  <insert id="insertSelective" keyColumn="act_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.Activity" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into activity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="creatorUserId != null">
+        act_creator_user_id,
+      </if>
+      <if test="title != null">
+        act_title,
+      </if>
+      <if test="intro != null">
+        act_intro,
+      </if>
+      <if test="startTime != null">
+        act_start_time,
+      </if>
+      <if test="endTime != null">
+        act_end_time,
+      </if>
+      <if test="createTime != null">
+        act_create_time,
+      </if>
+      <if test="exchangeAhaPoint != null">
+        act_exchange_aha_point,
+      </if>
+      <if test="exchangeAhaCredit != null">
+        act_exchange_aha_credit,
+      </if>
+      <if test="codeSum != null">
+        act_code_sum,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="creatorUserId != null">
+        #{creatorUserId},
+      </if>
+      <if test="title != null">
+        #{title},
+      </if>
+      <if test="intro != null">
+        #{intro},
+      </if>
+      <if test="startTime != null">
+        #{startTime},
+      </if>
+      <if test="endTime != null">
+        #{endTime},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="exchangeAhaPoint != null">
+        #{exchangeAhaPoint},
+      </if>
+      <if test="exchangeAhaCredit != null">
+        #{exchangeAhaCredit},
+      </if>
+      <if test="codeSum != null">
+        #{codeSum},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.Activity">
+    <!--@mbg.generated-->
+    update activity
+    <set>
+      <if test="creatorUserId != null">
+        act_creator_user_id = #{creatorUserId},
+      </if>
+      <if test="title != null">
+        act_title = #{title},
+      </if>
+      <if test="intro != null">
+        act_intro = #{intro},
+      </if>
+      <if test="startTime != null">
+        act_start_time = #{startTime},
+      </if>
+      <if test="endTime != null">
+        act_end_time = #{endTime},
+      </if>
+      <if test="createTime != null">
+        act_create_time = #{createTime},
+      </if>
+      <if test="exchangeAhaPoint != null">
+        act_exchange_aha_point = #{exchangeAhaPoint},
+      </if>
+      <if test="exchangeAhaCredit != null">
+        act_exchange_aha_credit = #{exchangeAhaCredit},
+      </if>
+      <if test="codeSum != null">
+        act_code_sum = #{codeSum},
+      </if>
+    </set>
+    where act_id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.Activity">
+    <!--@mbg.generated-->
+    update activity
+    set act_creator_user_id = #{creatorUserId},
+      act_title = #{title},
+      act_intro = #{intro},
+      act_start_time = #{startTime},
+      act_end_time = #{endTime},
+      act_create_time = #{createTime},
+      act_exchange_aha_point = #{exchangeAhaPoint},
+      act_exchange_aha_credit = #{exchangeAhaCredit},
+      act_code_sum = #{codeSum}
+    where act_id = #{id}
+  </update>
+</mapper>

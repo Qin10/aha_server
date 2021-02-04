@@ -30,7 +30,7 @@ public interface UserMapper {
 
     int updateSignedContractById(@Param("updatedSignedContract") Boolean updatedSignedContract, @Param("id") Integer id);
 
-    int updateAuthenticatedById(@Param("updatedAuthenticated")Boolean updatedAuthenticated,@Param("id")Integer id);
+    int updateAuthenticatedById(@Param("updatedAuthenticated") Integer updatedAuthenticated, @Param("id") Integer id);
 
     List<UserContribPointVo> selectIdAndContribPoint();
 

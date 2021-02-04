@@ -1,168 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.RealNameAuthenticationMapper">
-    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.RealNameAuthentication">
-        <!--@mbg.generated-->
-        <!--@Table real_name_authentication-->
-        <id column="rna_user_id" property="userId"/>
-        <result column="rna_true_name" property="trueName"/>
-        <result column="rna_type" property="type"/>
-        <result column="rna_student_card_filename" property="studentCardFilename"/>
-        <result column="rna_id_card_front_filename" property="idCardFrontFilename"/>
-        <result column="rna_id_card_back_filename" property="idCardBackFilename"/>
-        <result column="rna_status" property="status"/>
-        <result column="rna_upload_time" property="uploadTime"/>
-        <result column="rna_pass_time" property="passTime"/>
-    </resultMap>
-    <sql id="Base_Column_List">
-        <!--@mbg.generated-->
-        rna_user_id, rna_true_name, rna_type, rna_student_card_filename, rna_id_card_front_filename,
-        rna_id_card_back_filename, rna_status, rna_upload_time, rna_pass_time
-    </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-        <!--@mbg.generated-->
-        select
-        <include refid="Base_Column_List"/>
-        from real_name_authentication
-        where rna_user_id = #{userId}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-        <!--@mbg.generated-->
-        delete
-        from real_name_authentication
-        where rna_user_id = #{userId}
-    </delete>
-    <insert id="insert" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
-        <!--@mbg.generated-->
-        insert into real_name_authentication (rna_user_id, rna_true_name, rna_type, rna_student_card_filename,
-                                              rna_id_card_front_filename,
-                                              rna_id_card_back_filename, rna_status, rna_upload_time, rna_pass_time)
-        values (#{userId}, #{trueName}, #{type}, #{studentCardFilename}, #{idCardFrontFilename},
-                #{idCardBackFilename}, #{status}, #{uploadTime}, #{passTime})
-    </insert>
-    <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
-        <!--@mbg.generated-->
-        insert into real_name_authentication
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                rna_user_id,
-            </if>
-            <if test="trueName != null">
-                rna_true_name,
-            </if>
-            <if test="type != null">
-                rna_type,
-            </if>
-            <if test="studentCardFilename != null">
-                rna_student_card_filename,
-            </if>
-            <if test="idCardFrontFilename != null">
-                rna_id_card_front_filename,
-            </if>
-            <if test="idCardBackFilename != null">
-                rna_id_card_back_filename,
-            </if>
-            <if test="status != null">
-                rna_status,
-            </if>
-            <if test="uploadTime != null">
-                rna_upload_time,
-            </if>
-            <if test="passTime != null">
-                rna_pass_time,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="userId != null">
-                #{userId},
-            </if>
-            <if test="trueName != null">
-                #{trueName},
-            </if>
-            <if test="type != null">
-                #{type},
-            </if>
-            <if test="studentCardFilename != null">
-                #{studentCardFilename},
-            </if>
-            <if test="idCardFrontFilename != null">
-                #{idCardFrontFilename},
-            </if>
-            <if test="idCardBackFilename != null">
-                #{idCardBackFilename},
-            </if>
-            <if test="status != null">
-                #{status},
-            </if>
-            <if test="uploadTime != null">
-                #{uploadTime},
-            </if>
-            <if test="passTime != null">
-                #{passTime},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
-        <!--@mbg.generated-->
-        update real_name_authentication
-        <set>
-            <if test="trueName != null">
-                rna_true_name = #{trueName},
-            </if>
-            <if test="type != null">
-                rna_type = #{type},
-            </if>
-            <if test="studentCardFilename != null">
-                rna_student_card_filename = #{studentCardFilename},
-            </if>
-            <if test="idCardFrontFilename != null">
-                rna_id_card_front_filename = #{idCardFrontFilename},
-            </if>
-            <if test="idCardBackFilename != null">
-                rna_id_card_back_filename = #{idCardBackFilename},
-            </if>
-            <if test="status != null">
-                rna_status = #{status},
-            </if>
-            <if test="uploadTime != null">
-                rna_upload_time = #{uploadTime},
-            </if>
-            <if test="passTime != null">
-                rna_pass_time = #{passTime},
-            </if>
-        </set>
-        where rna_user_id = #{userId}
-    </update>
-    <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
-        <!--@mbg.generated-->
-        update real_name_authentication
-        set rna_true_name              = #{trueName},
-            rna_type                   = #{type},
-            rna_student_card_filename  = #{studentCardFilename},
-            rna_id_card_front_filename = #{idCardFrontFilename},
-            rna_id_card_back_filename  = #{idCardBackFilename},
-            rna_status                 = #{status},
-            rna_upload_time            = #{uploadTime},
-            rna_pass_time              = #{passTime}
-        where rna_user_id = #{userId}
-    </update>
+  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.RealNameAuthentication">
+    <!--@mbg.generated-->
+    <!--@Table real_name_authentication-->
+    <id column="rna_user_id" property="userId" />
+    <result column="rna_true_name" property="trueName" />
+    <result column="rna_type" property="type" />
+    <result column="rna_student_card_filename" property="studentCardFilename" />
+    <result column="rna_id_card_front_filename" property="idCardFrontFilename" />
+    <result column="rna_id_card_back_filename" property="idCardBackFilename" />
+    <result column="rna_status" property="status" />
+    <result column="rna_upload_time" property="uploadTime" />
+    <result column="rna_pass_time" property="passTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    rna_user_id, rna_true_name, rna_type, rna_student_card_filename, rna_id_card_front_filename, 
+    rna_id_card_back_filename, rna_status, rna_upload_time, rna_pass_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from real_name_authentication
+    where rna_user_id = #{userId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from real_name_authentication
+    where rna_user_id = #{userId}
+  </delete>
+  <insert id="insert" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
+    <!--@mbg.generated-->
+    insert into real_name_authentication (rna_user_id, rna_true_name, rna_type, rna_student_card_filename, rna_id_card_front_filename, 
+      rna_id_card_back_filename, rna_status, rna_upload_time, rna_pass_time)
+    values (#{userId}, #{trueName}, #{type}, #{studentCardFilename}, #{idCardFrontFilename}, 
+      #{idCardBackFilename}, #{status}, #{uploadTime}, #{passTime})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
+    <!--@mbg.generated-->
+    insert into real_name_authentication
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        rna_user_id,
+      </if>
+      <if test="trueName != null">
+        rna_true_name,
+      </if>
+      <if test="type != null">
+        rna_type,
+      </if>
+      <if test="studentCardFilename != null">
+        rna_student_card_filename,
+      </if>
+      <if test="idCardFrontFilename != null">
+        rna_id_card_front_filename,
+      </if>
+      <if test="idCardBackFilename != null">
+        rna_id_card_back_filename,
+      </if>
+      <if test="status != null">
+        rna_status,
+      </if>
+      <if test="uploadTime != null">
+        rna_upload_time,
+      </if>
+      <if test="passTime != null">
+        rna_pass_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId},
+      </if>
+      <if test="trueName != null">
+        #{trueName},
+      </if>
+      <if test="type != null">
+        #{type},
+      </if>
+      <if test="studentCardFilename != null">
+        #{studentCardFilename},
+      </if>
+      <if test="idCardFrontFilename != null">
+        #{idCardFrontFilename},
+      </if>
+      <if test="idCardBackFilename != null">
+        #{idCardBackFilename},
+      </if>
+      <if test="status != null">
+        #{status},
+      </if>
+      <if test="uploadTime != null">
+        #{uploadTime},
+      </if>
+      <if test="passTime != null">
+        #{passTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
+    <!--@mbg.generated-->
+    update real_name_authentication
+    <set>
+      <if test="trueName != null">
+        rna_true_name = #{trueName},
+      </if>
+      <if test="type != null">
+        rna_type = #{type},
+      </if>
+      <if test="studentCardFilename != null">
+        rna_student_card_filename = #{studentCardFilename},
+      </if>
+      <if test="idCardFrontFilename != null">
+        rna_id_card_front_filename = #{idCardFrontFilename},
+      </if>
+      <if test="idCardBackFilename != null">
+        rna_id_card_back_filename = #{idCardBackFilename},
+      </if>
+      <if test="status != null">
+        rna_status = #{status},
+      </if>
+      <if test="uploadTime != null">
+        rna_upload_time = #{uploadTime},
+      </if>
+      <if test="passTime != null">
+        rna_pass_time = #{passTime},
+      </if>
+    </set>
+    where rna_user_id = #{userId}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.RealNameAuthentication">
+    <!--@mbg.generated-->
+    update real_name_authentication
+    set rna_true_name = #{trueName},
+      rna_type = #{type},
+      rna_student_card_filename = #{studentCardFilename},
+      rna_id_card_front_filename = #{idCardFrontFilename},
+      rna_id_card_back_filename = #{idCardBackFilename},
+      rna_status = #{status},
+      rna_upload_time = #{uploadTime},
+      rna_pass_time = #{passTime}
+    where rna_user_id = #{userId}
+  </update>
     <resultMap id="VoResultMap" type="cn.hdustea.aha_server.vo.RealNameAuthenticationVo">
-        <result column="rna_true_name" property="trueName"/>
-        <result column="rna_type" property="type"/>
-        <result column="rna_student_card_filename" property="studentCardFilename"/>
-        <result column="rna_id_card_front_filename" property="idCardFrontFilename"/>
-        <result column="rna_id_card_back_filename" property="idCardBackFilename"/>
-        <result column="rna_status" property="status"/>
-        <result column="rna_upload_time" property="uploadTime"/>
-        <result column="rna_pass_time" property="passTime"/>
-        <association column="rna_user_id" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" property="user"
-                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+        <result column="rna_true_name" property="trueName" />
+        <result column="rna_type" property="type" />
+        <result column="rna_student_card_filename" property="studentCardFilename" />
+        <result column="rna_id_card_front_filename" property="idCardFrontFilename" />
+        <result column="rna_id_card_back_filename" property="idCardBackFilename" />
+        <result column="rna_status" property="status" />
+        <result column="rna_upload_time" property="uploadTime" />
+        <result column="rna_pass_time" property="passTime" />
+        <association column="rna_user_id" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" property="user" select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey" />
     </resultMap>
 
     <!--auto generated by MybatisCodeHelper on 2021-01-29-->
     <select id="selectAllVoByConditions" resultMap="VoResultMap">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List" />
         from real_name_authentication
         <where>
             <if test="status != null">
@@ -181,11 +178,11 @@
         where rna_user_id = #{userId}
     </update>
 
-    <select id="selectVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="VoResultMap">
-        <!--@mbg.generated-->
+<!--auto generated by MybatisCodeHelper on 2021-02-02-->
+  <select id="selectVoByUserId" resultMap="VoResultMap">
         select
         <include refid="Base_Column_List"/>
         from real_name_authentication
-        where rna_user_id = #{userId}
+        where rna_user_id=#{userId}
     </select>
 </mapper>

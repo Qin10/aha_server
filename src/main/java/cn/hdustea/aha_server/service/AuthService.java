@@ -4,7 +4,6 @@ import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JwtConfig;
 import cn.hdustea.aha_server.config.WechatConfig;
 import cn.hdustea.aha_server.constants.OauthTypes;
-import cn.hdustea.aha_server.constants.RealNameAuthenticationConstants;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.constants.SmsConstants;
 import cn.hdustea.aha_server.dto.*;
@@ -24,7 +23,6 @@ import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.UserVo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.slf4j.MDC;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,6 +44,8 @@ public class AuthService {
     private UserService userService;
     @Resource
     private UserInfoService userInfoService;
+    @Resource
+    private UserStatisticsService userStatisticsService;
     @Resource
     private ResumeService resumeService;
     @Resource
@@ -149,8 +149,7 @@ public class AuthService {
         oauth.setOauthType(OauthTypes.PHONE);
         oauth.setOauthId(phoneRegisterUserDto.getPhone());
         oauthService.saveOauth(oauth);
-        Resume resume = new Resume();
-        resumeService.updateResumeByUserId(resume, user.getId());
+        saveAdditionalRecords(user.getId());
         return excuteLoginByUserId(user.getId());
     }
 
@@ -218,50 +217,6 @@ public class AuthService {
         return signToken(userVo);
     }
 
-    public void authenticateRealName(Integer userId, RealNameAuthenticationDto realNameAuthenticationDto, MultipartFile studentCard, MultipartFile idCardFront, MultipartFile idCardBack) throws UpdateException, InsertException, IOException {
-        UserVo userVo = userService.getUserVoById(userId);
-        if (userVo.getAuthenticated()) {
-            throw new UpdateException("已通过实名认证！");
-        }
-        RealNameAuthentication realNameAuthentication = new RealNameAuthentication();
-        switch (realNameAuthenticationDto.getType()) {
-            case RealNameAuthenticationConstants.TYPE_STUDENT: {
-                if (studentCard == null) {
-                    throw new InsertException("学生认证必须上传学生证照片！");
-                }
-                String studentCardFilename = FileUtil.upload(studentCard, fileUploadPathConfig.getAuthenticationFilesPath());
-                realNameAuthentication.setStudentCardFilename(studentCardFilename);
-                if (idCardFront != null) {
-                    String idCardFrontFilename = FileUtil.upload(idCardFront, fileUploadPathConfig.getAuthenticationFilesPath());
-                    realNameAuthentication.setIdCardFrontFilename(idCardFrontFilename);
-                }
-                if (idCardBack != null) {
-                    String idCardBackFilename = FileUtil.upload(idCardBack, fileUploadPathConfig.getAuthenticationFilesPath());
-                    realNameAuthentication.setIdCardBackFilename(idCardBackFilename);
-                }
-                break;
-            }
-            case RealNameAuthenticationConstants.TYPE_SOCIAL_MAN: {
-                if (idCardBack == null || idCardFront == null) {
-                    throw new InsertException("社会人士身份认证必须上传身份证正反面照片！");
-                }
-                String idCardFrontFilename = FileUtil.upload(idCardFront, fileUploadPathConfig.getAuthenticationFilesPath());
-                realNameAuthentication.setIdCardFrontFilename(idCardFrontFilename);
-                String idCardBackFilename = FileUtil.upload(idCardBack, fileUploadPathConfig.getAuthenticationFilesPath());
-                realNameAuthentication.setIdCardBackFilename(idCardBackFilename);
-                break;
-            }
-            default: {
-                throw new InsertException("认证类型错误！");
-            }
-        }
-        BeanUtils.copyProperties(realNameAuthenticationDto, realNameAuthentication);
-        realNameAuthentication.setUserId(userId);
-        realNameAuthentication.setStatus(RealNameAuthenticationConstants.STATUS_PENDING_FOR_CHECK);
-        realNameAuthentication.setUploadTime(new Date());
-        realNameAuthenticationService.saveRealNameAuthentication(realNameAuthentication);
-    }
-
     /**
      * 处理用户登出请求，移除token
      *
@@ -280,6 +235,7 @@ public class AuthService {
      * @throws SelectException         查询异常
      * @throws AuthorizationException  授权异常
      */
+    @Transactional(rollbackFor = Exception.class)
     public LoginInfoVo LoginByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws JsonProcessingException, SelectException, AuthorizationException {
         String openid = WechatUtil.getWxInfo(wechatRegisterUserDto.getCode(), wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
         if (openid == null) {
@@ -304,8 +260,7 @@ public class AuthService {
             oauth.setOauthType(OauthTypes.WECHAT);
             oauth.setOauthId(openid);
             oauthService.saveOauth(oauth);
-            Resume resume = new Resume();
-            resumeService.updateResumeByUserId(resume, user.getId());
+            saveAdditionalRecords(user.getId());
             return excuteLoginByUserId(user.getId());
         }
     }
@@ -365,5 +320,17 @@ public class AuthService {
         MDC.put("userId", userVo.getId().toString());
         MDC.put("ip", IpUtil.getIpAddr(request));
         return new LoginInfoVo(token, personalUserInfo);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    void saveAdditionalRecords(int userId) throws SelectException {
+        Resume resume = new Resume();
+        resumeService.updateResumeByUserId(resume, userId);
+        RealNameAuthentication realNameAuthentication = new RealNameAuthentication();
+        realNameAuthentication.setUserId(userId);
+        realNameAuthenticationService.saveRealNameAuthentication(realNameAuthentication);
+        UserStatistics userStatistics = new UserStatistics();
+        userStatistics.setUserId(userId);
+        userStatisticsService.saveUserStatistics(userStatistics);
     }
 }

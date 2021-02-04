@@ -2,9 +2,6 @@ package cn.hdustea.aha_server.dto;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 /**
  * 实名认证信息DTO
  *
@@ -15,11 +12,25 @@ public class RealNameAuthenticationDto {
     /**
      * 真实姓名
      */
-    @NotEmpty(message = "真实姓名不能为空！")
     private String trueName;
+
     /**
-     * 实名认证类型
+     * 认证类型(学生or社会人士)
      */
-    @NotNull(message = "认证类型不能为空！")
     private Integer type;
+
+    /**
+     * 学生证图片文件名
+     */
+    private String studentCardFilename;
+
+    /**
+     * 身份证正面文件名
+     */
+    private String idCardFrontFilename;
+
+    /**
+     * 身份证背面文件名
+     */
+    private String idCardBackFilename;
 }

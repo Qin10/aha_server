@@ -25,7 +25,7 @@ public class PersonalUserInfoVo {
     /**
      * 是否通过身份认证
      */
-    private Boolean authenticated;
+    private Integer authenticated;
     /**
      * aha币数量
      */

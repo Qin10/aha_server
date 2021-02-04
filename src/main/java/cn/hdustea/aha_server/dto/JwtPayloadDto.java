@@ -29,5 +29,5 @@ public class JwtPayloadDto {
     /**
      * 是否通过身份认证
      */
-    private boolean authenticated;
+    private Integer authenticated;
 }

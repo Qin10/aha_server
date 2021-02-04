@@ -51,7 +51,7 @@ public class UserManagementVo {
     /**
      * 是否通过身份认证
      */
-    private Boolean authenticated;
+    private Integer authenticated;
 
     /**
      * 角色id(外键)

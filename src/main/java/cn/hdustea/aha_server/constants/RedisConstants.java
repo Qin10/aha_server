@@ -36,6 +36,10 @@ public class RedisConstants {
      */
     public static final String REQUEST_LIMIT_PREFIX = "request:limit:";
 
+    public static final String ACTIVITY_CODE_COUNT_PREFIX = "activity:code:count:";
+
+    public static final String ACTIVITY_CODE_PREFIX = "activity:code:";
+
     /**
      * 项目阅读量Hash key
      */

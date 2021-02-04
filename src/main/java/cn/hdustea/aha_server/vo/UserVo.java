@@ -53,7 +53,7 @@ public class UserVo {
     /**
      * 是否通过身份认证
      */
-    private Boolean authenticated;
+    private Integer authenticated;
 
     /**
      * 用户角色

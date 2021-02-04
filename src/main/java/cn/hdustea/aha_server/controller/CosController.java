@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.config.TencentCosConfig;
 import cn.hdustea.aha_server.service.CosService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.CosPolicyVo;
@@ -22,6 +23,8 @@ import javax.annotation.Resource;
 public class CosController {
     @Resource
     private CosService cosService;
+    @Resource
+    private TencentCosConfig tencentCosConfig;
 
     /**
      * 获取COS公开资源上传签名
@@ -32,7 +35,7 @@ public class CosController {
     @GetMapping("/sign/upload/public")
     public ResponseBean<CosPolicyVo> signPublicUploadToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/user_files/" + userId + "/" + filename, false);
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/user_files/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
         return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 }

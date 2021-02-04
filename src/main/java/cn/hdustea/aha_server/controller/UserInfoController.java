@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.config.TencentCosConfig;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.service.CosService;
 import cn.hdustea.aha_server.service.UserInfoService;
@@ -27,6 +28,8 @@ public class UserInfoController {
     private UserInfoService userInfoService;
     @Resource
     private CosService cosService;
+    @Resource
+    private TencentCosConfig tencentCosConfig;
 
     /**
      * 获取当前用户信息（包括全部详细信息和部分私有信息）
@@ -75,7 +78,7 @@ public class UserInfoController {
     @GetMapping("/avatar/sign/upload")
     public ResponseBean<CosPolicyVo> signUpdateUserAvatarToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/avatar/" + userId + "/" + filename, false);
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/avatar/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
         return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 }

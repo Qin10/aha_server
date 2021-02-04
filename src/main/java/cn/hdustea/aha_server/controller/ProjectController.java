@@ -2,6 +2,7 @@ package cn.hdustea.aha_server.controller;
 
 import cn.hdustea.aha_server.annotation.RequestLimit;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
+import cn.hdustea.aha_server.config.TencentCosConfig;
 import cn.hdustea.aha_server.config.UserOperationLogConfig;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.ProjectDto;
@@ -44,6 +45,8 @@ public class ProjectController {
     private RedisService redisService;
     @Resource
     private UserOperationLogConfig userOperationLogConfig;
+    @Resource
+    private TencentCosConfig tencentCosConfig;
 
     /**
      * 分页获取所有项目粗略信息
@@ -106,11 +109,11 @@ public class ProjectController {
      * @param filename 待上传文件名
      */
     @RequestLimit
-    @RequiresLogin(requireSignContract = true,requireAuthenticated = true)
+    @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload/public")
     public ResponseBean<CosPolicyVo> signUploadPublicFileToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/resource/" + userId + "/" + filename, false);
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/resource/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
         return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 
@@ -120,7 +123,7 @@ public class ProjectController {
      * @param projectDto 项目信息
      */
     @RequestLimit
-    @RequiresLogin(requireSignContract = true,requireAuthenticated = true)
+    @RequiresLogin(requireSignContract = true)
     @PostMapping()
     public ResponseBean<Integer> saveProject(@RequestBody @Validated ProjectDto projectDto) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
@@ -306,7 +309,7 @@ public class ProjectController {
         if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/" + projectId + "/" + filename, true);
+        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/" + projectId + "/" + filename, tencentCosConfig.getResourceBucketName());
         return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 
@@ -423,7 +426,7 @@ public class ProjectController {
     @RequestLimit()
     @RequiresLogin
     @PostMapping("/collection/{projectId}")
-    public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws InsertException {
+    public ResponseBean<Object> collectResource(@PathVariable("projectId") int projectId) throws InsertException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         projectService.saveCollection(projectId, userId);
         projectService.incrCollectByProjectId(projectId);
@@ -439,7 +442,7 @@ public class ProjectController {
     @RequestLimit()
     @RequiresLogin
     @DeleteMapping("/collection/{projectId}")
-    public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws DeleteException {
+    public ResponseBean<Object> cancelCollection(@PathVariable("projectId") int projectId) throws DeleteException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         projectService.deleteCollection(projectId, userId);
         projectService.descCollectByProjectId(projectId);

@@ -8,6 +8,7 @@ import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.service.*;
+import cn.hdustea.aha_server.util.ThreadLocalUtil;
 import cn.hdustea.aha_server.vo.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +46,8 @@ public class ManagementController {
     private FeedbackService feedbackService;
     @Resource
     private RealNameAuthenticationService realNameAuthenticationService;
+    @Resource
+    private ActivityService activityService;
 
     /**
      * 分页获取所有项目粗略信息
@@ -540,16 +543,16 @@ public class ManagementController {
     }
 
     /**
-     * 获取身份认证照片
+     * 获取身份认证照片下载签名
      *
      * @param userId   用户id
      * @param fileType 文件类型(取值:studentCard-学生证,idCardFront-身份证正面,idCardBack-身份证反面)
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/authentication/file/{userId}")
-    public ResponseBean<Object> getAuthenticationFile(@PathVariable("userId") int userId, @RequestParam(name = "fileType") String fileType, HttpServletResponse response) throws IOException, SelectException {
-        realNameAuthenticationService.getAuthenticationFileByUserIdAndFileType(userId, fileType, response);
-        return new ResponseBean<>(200, "succ", null);
+    public ResponseBean<CosPolicyVo> getAuthenticationFile(@PathVariable("userId") int userId, @RequestParam(name = "fileType") String fileType) throws SelectException {
+        CosPolicyVo cosPolicyVo = realNameAuthenticationService.signDownloadAuthenticationFileByUserIdAndFileType(userId, fileType);
+        return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 
     /**
@@ -563,5 +566,27 @@ public class ManagementController {
     public ResponseBean<Object> checkAuthentication(@PathVariable("userId") int userId, @RequestParam("status") int status) throws SelectException, UpdateException {
         realNameAuthenticationService.checkAuthenticationByUserId(userId, status);
         return new ResponseBean<>(200, "succ", null);
+    }
+
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PostMapping("/activity")
+    public ResponseBean<Object> saveActivity(@Validated @RequestBody ActivityDto activityDto) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        activityService.saveActivityAndCreator(activityDto, userId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @DeleteMapping("/activity/{activityId}")
+    public ResponseBean<Object> saveActivity(@PathVariable("activityId") int activityId) {
+        activityService.deleteActivityById(activityId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/activity/code")
+    public ResponseBean<List<String>> generateActivityCode(@RequestParam int activityId, @RequestParam int count) throws SelectException, PermissionDeniedException {
+        List<String> codes = activityService.generateCodeById(activityId, count);
+        return new ResponseBean<>(200, "succ", codes);
     }
 }

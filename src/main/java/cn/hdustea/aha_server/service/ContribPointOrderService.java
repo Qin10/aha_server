@@ -47,6 +47,8 @@ public class ContribPointOrderService {
     @Resource
     private ProjectService projectService;
     @Resource
+    private UserStatisticsService userStatisticsService;
+    @Resource
     private ProjectResourceService projectResourceService;
     @Resource
     private UserOperationLogConfig userOperationLogConfig;
@@ -168,7 +170,8 @@ public class ContribPointOrderService {
             }
         }
         contribPointLog.setUserId(userId);
-        contribPointLog.setSource(ContribPointLogConstants.FROM_PAY_RESOURCE);
+        contribPointLog.setType(ContribPointLogConstants.FROM_PAY_RESOURCE);
+        contribPointLog.setExternalId(orderId);
         contribPointLog.setTime(payTime);
         contribPointLogService.saveContribPointLog(contribPointLog);
         contribPointOrder.setStatus(ContribPointOrderConstants.STATUS_PAID);
@@ -182,6 +185,7 @@ public class ContribPointOrderService {
             purchasedResource.setPurchaseTime(payTime);
             purchasedResource.setOrderId(orderId);
             purchasedResourceMapper.insertSelective(purchasedResource);
+            userStatisticsService.incrTotalTotalPurchasedCountByUserId(1, userId);
             log.info(userOperationLogConfig.getFormat(), ContribPointController.MODULE_NAME, "购买资源", "id=" + orderProjectResource.getResourceId());
         }
     }
@@ -238,7 +242,8 @@ public class ContribPointOrderService {
         userService.updateIncAhaPoint(project.getCreatorUserId(), ahaPointAmount);
         ContribPointLog contribPointLog = new ContribPointLog();
         contribPointLog.setUserId(project.getCreatorUserId());
-        contribPointLog.setSource(ContribPointLogConstants.FROM_PERCENTAGE);
+        contribPointLog.setType(ContribPointLogConstants.FROM_PERCENTAGE);
+        contribPointLog.setExternalId(projectId);
         contribPointLog.setAhaPointAmount(ahaPointAmount);
         contribPointLog.setTime(new Date());
         contribPointLogService.saveContribPointLog(contribPointLog);

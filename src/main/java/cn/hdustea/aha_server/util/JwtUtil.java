@@ -33,7 +33,7 @@ public class JwtUtil {
                     .withClaim("roleName", jwtPayloadDto.getRoleName())
                     .withClaim("signedNotice", jwtPayloadDto.isSignedNotice())
                     .withClaim("signedContract", jwtPayloadDto.isSignedContract())
-                    .withClaim("authenticated", jwtPayloadDto.isAuthenticated())
+                    .withClaim("authenticated", jwtPayloadDto.getAuthenticated())
                     .build();
             verifier.verify(token);
             return true;
@@ -57,7 +57,7 @@ public class JwtUtil {
             jwtPayloadDto.setRoleName(jwt.getClaim("roleName").asString());
             jwtPayloadDto.setSignedNotice(jwt.getClaim("signedNotice").asBoolean());
             jwtPayloadDto.setSignedContract(jwt.getClaim("signedContract").asBoolean());
-            jwtPayloadDto.setAuthenticated(jwt.getClaim("authenticated").asBoolean());
+            jwtPayloadDto.setAuthenticated(jwt.getClaim("authenticated").asInt());
         } catch (JWTDecodeException | NullPointerException ignored) {
 
         }
@@ -96,7 +96,7 @@ public class JwtUtil {
                 .withClaim("roleName", jwtPayloadDto.getRoleName())
                 .withClaim("signedNotice", jwtPayloadDto.isSignedNotice())
                 .withClaim("signedContract", jwtPayloadDto.isSignedContract())
-                .withClaim("authenticated", jwtPayloadDto.isAuthenticated())
+                .withClaim("authenticated", jwtPayloadDto.getAuthenticated())
                 .withExpiresAt(date)
                 .sign(algorithm);
     }

@@ -1,9 +1,8 @@
 package cn.hdustea.aha_server.entity;
 
-import lombok.Data;
-
 import java.math.BigDecimal;
 import java.util.Date;
+import lombok.Data;
 
 /**
  * ${description}
@@ -52,7 +51,7 @@ public class User {
     /**
      * 是否通过身份认证
      */
-    private Boolean authenticated;
+    private Integer authenticated;
 
     /**
      * 角色id(外键)

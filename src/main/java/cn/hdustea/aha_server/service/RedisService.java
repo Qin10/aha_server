@@ -9,10 +9,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -38,6 +35,16 @@ public class RedisService {
         if (time > 0) {
             redisTemplate.expire(key, time, TimeUnit.SECONDS);
         }
+    }
+
+    /**
+     * 指定缓存失效时间戳
+     *
+     * @param key  键
+     * @param date 失效时间戳
+     */
+    public void expireAt(String key, Date date) {
+        redisTemplate.expireAt(key, date);
     }
 
     /**
@@ -127,6 +134,17 @@ public class RedisService {
     @SuppressWarnings("UnusedReturnValue")
     public double hIncr(String key, String item, double by) {
         return redisTemplate.opsForHash().increment(key, item, by);
+    }
+
+    /**
+     * 哈希缓存放入
+     *
+     * @param key     键
+     * @param hashKey 哈希键
+     * @param item    值
+     */
+    public void hPut(String key, String hashKey, Object item) {
+        redisTemplate.opsForHash().put(key, hashKey, item);
     }
 
     /**

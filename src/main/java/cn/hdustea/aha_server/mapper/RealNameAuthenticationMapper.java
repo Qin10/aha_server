@@ -1,6 +1,10 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.RealNameAuthentication;import cn.hdustea.aha_server.vo.RealNameAuthenticationVo;import org.apache.ibatis.annotations.Param;import java.util.List;
+import cn.hdustea.aha_server.entity.RealNameAuthentication;
+import cn.hdustea.aha_server.vo.RealNameAuthenticationVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * ${description}
@@ -20,7 +24,7 @@ public interface RealNameAuthenticationMapper {
 
     int updateByPrimaryKey(RealNameAuthentication record);
 
-    RealNameAuthenticationVo selectVoByPrimaryKey(Integer userId);
+    RealNameAuthenticationVo selectVoByUserId(@Param("userId") Integer userId);
 
     List<RealNameAuthenticationVo> selectAllVoByConditions(@Param("type") Integer type, @Param("status") Integer status);
 

@@ -22,13 +22,7 @@ public class CosService {
     @Resource
     private TencentCosConfig tencentCosConfig;
 
-    public CosPolicyVo signUploadAuthorization(String filename, boolean isResource) {
-        String bucketName;
-        if (isResource) {
-            bucketName = tencentCosConfig.getResourceBucketName();
-        } else {
-            bucketName = tencentCosConfig.getPublicBucketName();
-        }
+    public CosPolicyVo signUploadAuthorization(String filename, String bucketName) {
         Date expiration = new Date(System.currentTimeMillis() + tencentCosConfig.getExpireTime() * 1000L);
         COSCredentials cosCredentials = new BasicCOSCredentials(tencentCosConfig.getSecretId(), tencentCosConfig.getSecretKey());
         COSSigner cosSigner = new COSSigner();

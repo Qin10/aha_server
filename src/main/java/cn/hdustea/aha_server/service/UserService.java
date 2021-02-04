@@ -11,6 +11,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -25,6 +26,8 @@ import java.util.List;
 public class UserService {
     @Resource
     private UserMapper userMapper;
+    @Resource
+    private UserStatisticsService userStatisticsService;
 
     /**
      * 根据id查找用户，如果未找到则抛出异常
@@ -182,7 +185,7 @@ public class UserService {
         userMapper.updateSignedContractById(signedContract, id);
     }
 
-    public void updateAuthenticated(Integer id, boolean authenticated) {
+    public void updateAuthenticated(Integer id, Integer authenticated) {
         userMapper.updateAuthenticatedById(authenticated, id);
     }
 
@@ -212,8 +215,10 @@ public class UserService {
      * @param id          用户id
      * @param incAhaPoint 增加的Aha点
      */
+    @Transactional(rollbackFor = Exception.class)
     public void updateIncAhaPoint(Integer id, BigDecimal incAhaPoint) {
         userMapper.updateIncAhaPointById(incAhaPoint, id);
+        userStatisticsService.incrTotalContribPointByUserId(incAhaPoint,id);
     }
 
     /**
@@ -223,7 +228,9 @@ public class UserService {
      * @param incAhaCredit 增加的Aha币
      */
     @SuppressWarnings("unused")
+    @Transactional(rollbackFor = Exception.class)
     public void updateIncAhaCredit(Integer id, BigDecimal incAhaCredit) {
         userMapper.updateIncAhaCreditById(incAhaCredit, id);
+        userStatisticsService.incrTotalContribPointByUserId(incAhaCredit,id);
     }
 }

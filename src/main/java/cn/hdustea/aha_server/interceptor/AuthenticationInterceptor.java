@@ -4,6 +4,7 @@ import cn.hdustea.aha_server.annotation.PassAuthentication;
 import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.config.JwtConfig;
 import cn.hdustea.aha_server.constants.RedisConstants;
+import cn.hdustea.aha_server.constants.UserConstants;
 import cn.hdustea.aha_server.dto.JwtPayloadDto;
 import cn.hdustea.aha_server.exception.apiException.AuthenticationException;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.*;
@@ -103,8 +104,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     }
                 }
                 if (requiresLogin.requireAuthenticated()) {
-                    if (!jwtPayloadDto.isAuthenticated()) {
-                        throw new ContractNotSignedException();
+                    if (!jwtPayloadDto.getAuthenticated().equals(UserConstants.AUTHENTICATION_STATUS_AUTHENTICATED)) {
+                        throw new NotAuthenticatedException();
                     }
                 }
                 ThreadLocalUtil.setCurrentUser(jwtPayloadDto.getAccount());

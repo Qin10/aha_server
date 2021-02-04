@@ -38,6 +38,10 @@ public enum ApiExceptionCodes {
      */
     CONTRACT_NOT_SIGNED(107, "未签署合同！"),
     /**
+     * 未进行实名认证
+     */
+    NOT_AUTHENTICATED(108, "未进行实名认证！"),
+    /**
      * 用户不存在
      */
     USER_NOT_FOUND(301, "用户不存在！"),
@@ -93,6 +97,5 @@ public enum ApiExceptionCodes {
         this.value = value;
         this.desc = desc;
     }
-
 
 }

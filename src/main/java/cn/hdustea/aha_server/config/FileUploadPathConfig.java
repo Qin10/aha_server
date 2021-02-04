@@ -12,5 +12,4 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 public class FileUploadPathConfig {
     private String contractSignaturePath;
-    private String authenticationFilesPath;
 }

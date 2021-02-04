@@ -23,6 +23,7 @@ public class TencentCosConfig {
     private long expireTime;
     private String publicBucketName;
     private String resourceBucketName;
+    private String profileBucketName;
     private String documentConvertQueueId;
     private String documentPreviewWatermarkText;
 

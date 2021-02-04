@@ -19,9 +19,14 @@ public class ContribPointLog {
     private Integer userId;
 
     /**
-     * 来源
+     * 类型
      */
-    private String source;
+    private Integer type;
+
+    /**
+     * 业务外键
+     */
+    private Integer externalId;
 
     /**
      * Aha币总额

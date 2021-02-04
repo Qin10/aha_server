@@ -1,24 +1,25 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
+import cn.hdustea.aha_server.config.TencentCosConfig;
 import cn.hdustea.aha_server.constants.RealNameAuthenticationConstants;
+import cn.hdustea.aha_server.constants.UserConstants;
+import cn.hdustea.aha_server.dto.RealNameAuthenticationDto;
 import cn.hdustea.aha_server.entity.RealNameAuthentication;
-import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.mapper.RealNameAuthenticationMapper;
-import cn.hdustea.aha_server.util.FileUtil;
+import cn.hdustea.aha_server.vo.CosPolicyVo;
 import cn.hdustea.aha_server.vo.PageVo;
 import cn.hdustea.aha_server.vo.RealNameAuthenticationVo;
+import cn.hdustea.aha_server.vo.UserVo;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.dao.DuplicateKeyException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +36,18 @@ public class RealNameAuthenticationService {
     private RealNameAuthenticationMapper realNameAuthenticationMapper;
     @Resource
     private UserService userService;
+    @Resource
+    private CosService cosService;
+    @Resource
+    private TencentCosConfig tencentCosConfig;
+
+    public Integer getAuthenticationStatusByUserId(int userId) {
+        UserVo userVo = userService.getUserVoById(userId);
+        return userVo.getAuthenticated();
+    }
 
     public RealNameAuthenticationVo getRealNameAuthenticationVoByUserId(Integer userId) throws SelectException {
-        RealNameAuthenticationVo realNameAuthenticationVo = realNameAuthenticationMapper.selectVoByPrimaryKey(userId);
+        RealNameAuthenticationVo realNameAuthenticationVo = realNameAuthenticationMapper.selectVoByUserId(userId);
         if (realNameAuthenticationVo == null) {
             throw new SelectException("该用户未进行实名认证");
         }
@@ -60,44 +70,51 @@ public class RealNameAuthenticationService {
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getList());
     }
 
-    public void getAuthenticationFileByUserIdAndFileType(int userId, String fileType, HttpServletResponse response) throws SelectException, IOException {
+    public CosPolicyVo signDownloadAuthenticationFileByUserIdAndFileType(int userId, String fileType) throws SelectException {
         RealNameAuthenticationVo realNameAuthenticationVo = getRealNameAuthenticationVoByUserId(userId);
-        String filePath = null;
+        String filename;
         switch (fileType) {
             case "studentCard": {
                 if (realNameAuthenticationVo.getStudentCardFilename() == null) {
                     throw new SelectException("学生证照片不存在！");
                 }
-                filePath = fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthenticationVo.getStudentCardFilename();
+                filename = realNameAuthenticationVo.getStudentCardFilename();
                 break;
             }
             case "idCardFront": {
                 if (realNameAuthenticationVo.getStudentCardFilename() == null) {
                     throw new SelectException("身份证正面照片不存在！");
                 }
-                filePath = fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthenticationVo.getIdCardFrontFilename();
+                filename = realNameAuthenticationVo.getIdCardFrontFilename();
                 break;
             }
             case "idCardBack": {
                 if (realNameAuthenticationVo.getStudentCardFilename() == null) {
                     throw new SelectException("身份证背面照片不存在！");
                 }
-                filePath = fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthenticationVo.getIdCardBackFilename();
+                filename = realNameAuthenticationVo.getIdCardBackFilename();
                 break;
             }
             default: {
                 throw new SelectException("fileType参数取值错误！");
             }
         }
-        FileUtil.download(filePath, response);
+        return cosService.signDownloadAuthorization(filename);
     }
 
-    public void saveRealNameAuthentication(RealNameAuthentication realNameAuthentication) throws InsertException {
-        try {
-            realNameAuthenticationMapper.insert(realNameAuthentication);
-        } catch (DuplicateKeyException e) {
-            throw new InsertException("实名认证记录已存在！");
-        }
+    public CosPolicyVo signUpload(String filename, int userId) {
+        return cosService.signUploadAuthorization("/authentication/" + userId + "/" + filename, tencentCosConfig.getProfileBucketName());
+    }
+
+    public void updateRealNameAuthenticationByUserId(RealNameAuthenticationDto realNameAuthenticationDto, int userId) {
+        RealNameAuthentication realNameAuthentication = new RealNameAuthentication();
+        BeanUtils.copyProperties(realNameAuthenticationDto, realNameAuthentication);
+        realNameAuthentication.setUserId(userId);
+        realNameAuthenticationMapper.updateByPrimaryKey(realNameAuthentication);
+    }
+
+    public void saveRealNameAuthentication(RealNameAuthentication realNameAuthentication) {
+        realNameAuthenticationMapper.insert(realNameAuthentication);
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -108,24 +125,13 @@ public class RealNameAuthenticationService {
                 realNameAuthentication.setStatus(status);
                 realNameAuthentication.setPassTime(new Date());
                 realNameAuthenticationMapper.updateByPrimaryKey(realNameAuthentication);
-                userService.updateAuthenticated(userId, true);
+                userService.updateAuthenticated(userId, UserConstants.AUTHENTICATION_STATUS_AUTHENTICATED);
                 break;
             }
             case RealNameAuthenticationConstants.STATUS_NOT_PASSED: {
-                try {
-                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthentication.getStudentCardFilename());
-                } catch (Exception ignore) {
-                }
-                try {
-                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthentication.getIdCardFrontFilename());
-                } catch (Exception ignore) {
-                }
-                try {
-                    FileUtil.delete(fileUploadPathConfig.getAuthenticationFilesPath() + realNameAuthentication.getIdCardBackFilename());
-                } catch (Exception ignore) {
-                }
-                realNameAuthenticationMapper.deleteByPrimaryKey(userId);
-                userService.updateAuthenticated(userId, false);
+                realNameAuthentication.setStatus(status);
+                realNameAuthenticationMapper.updateByPrimaryKey(realNameAuthentication);
+                userService.updateAuthenticated(userId, UserConstants.AUTHENTICATION_STATUS_CHECK_NOT_PASS);
                 break;
             }
             default: {
