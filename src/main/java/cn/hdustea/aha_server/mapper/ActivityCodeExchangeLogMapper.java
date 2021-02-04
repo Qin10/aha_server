@@ -1,6 +1,8 @@
 package cn.hdustea.aha_server.mapper;
-
 import cn.hdustea.aha_server.entity.ActivityCodeExchangeLog;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * ${description}
@@ -19,4 +21,8 @@ public interface ActivityCodeExchangeLogMapper {
     int updateByPrimaryKeySelective(ActivityCodeExchangeLog record);
 
     int updateByPrimaryKey(ActivityCodeExchangeLog record);
+
+    List<ActivityCodeExchangeLog> selectAllByConditions(@Param("userId")Integer userId,@Param("activityId")Integer activityId);
+
+
 }

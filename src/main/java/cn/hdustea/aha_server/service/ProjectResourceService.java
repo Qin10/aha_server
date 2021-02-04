@@ -1,6 +1,6 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.constants.ProjectResourceTypes;
+import cn.hdustea.aha_server.constants.ProjectResourceConstants;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.ProjectResource;
@@ -113,7 +113,7 @@ public class ProjectResourceService {
         if (projectResource.getFilename() == null) {
             throw new SelectException("资源文件为空！");
         }
-        if (projectResource.getType() == null || projectResource.getType() != ProjectResourceTypes.DOCUMENT) {
+        if (projectResource.getType() == null || projectResource.getType() != ProjectResourceConstants.TYPE_DOCUMENT) {
             throw new SelectException("资源类型错误！");
         }
         return cosService.signPreviewAuthorization(projectResource.getFilename());
@@ -275,7 +275,7 @@ public class ProjectResourceService {
         }
         if (purchasedResource(userId, resourceId)) {
             ProjectResource projectResource = getProjectResourceById(resourceId);
-            return projectResource.getType() != null && projectResource.getType() != ProjectResourceTypes.DOCUMENT;
+            return projectResource.getType() != null && projectResource.getType() != ProjectResourceConstants.TYPE_DOCUMENT;
         }
         return false;
     }
@@ -368,7 +368,7 @@ public class ProjectResourceService {
     }
 
     private void addToConvertList(ProjectResource projectResource) {
-        if (projectResource.getType() == ProjectResourceTypes.DOCUMENT && projectResource.getPreviewUrl() == null) {
+        if (projectResource.getType() == ProjectResourceConstants.TYPE_DOCUMENT && projectResource.getPreviewUrl() == null) {
             DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
             documentConvertInfoDto.setProjectResourceId(projectResource.getId());
             documentConvertInfoDto.setSrcFilename(projectResource.getFilename());

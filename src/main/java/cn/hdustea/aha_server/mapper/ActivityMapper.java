@@ -1,4 +1,6 @@
 package cn.hdustea.aha_server.mapper;
+import org.apache.ibatis.annotations.Param;
+import java.util.List;
 
 import cn.hdustea.aha_server.entity.Activity;
 
@@ -19,4 +21,8 @@ public interface ActivityMapper {
     int updateByPrimaryKeySelective(Activity record);
 
     int updateByPrimaryKey(Activity record);
+
+    List<Activity> selectAll();
+
+
 }

@@ -24,6 +24,11 @@ public class RealNameAuthenticationController {
     @Resource
     private RealNameAuthenticationService realNameAuthenticationService;
 
+    /**
+     * 获取实名认证文件COS上传签名
+     *
+     * @param filename 文件名
+     */
     @GetMapping("/sign/upload")
     @RequiresLogin
     public ResponseBean<CosPolicyVo> signProfileUploadToCos(@RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
@@ -36,6 +41,11 @@ public class RealNameAuthenticationController {
         return new ResponseBean<>(200, "succ", cosPolicyVo);
     }
 
+    /**
+     * 更新实名认证信息
+     *
+     * @param realNameAuthenticationDto 实名认证信息
+     */
     @PutMapping()
     @RequiresLogin
     public ResponseBean<Object> updatePersonalAuthentication(@RequestBody RealNameAuthenticationDto realNameAuthenticationDto) throws PermissionDeniedException {

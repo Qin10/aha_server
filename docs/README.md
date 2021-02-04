@@ -1,3 +1,138 @@
+# 活动类请求
+## 分页获取活动信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/activity `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|是|页码
+pageSize|int|是|分页大小
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //主键",
+			"creatorUserId":"int //创建者用户id",
+			"title":"string //活动标题",
+			"intro":"string //活动介绍",
+			"startTime":"date //活动开始时间",
+			"endTime":"date //活动结束时间",
+			"createTime":"date //活动创建时间",
+			"exchangeAhaPoint":"double //兑换aha点数额",
+			"exchangeAhaCredit":"double //兑换aha币数额",
+			"codeSum":"int //活动最大允许兑换券数量"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 获取用户个人兑换日志
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/activity/log/me `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|是|页码
+pageSize|int|是|分页大小
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"pageNum":"int //页码",
+		"pageSize":"int //分页大小",
+		"pageData":[{
+			"id":"int //主键",
+			"userId":"int //兑换者id",
+			"activityId":"int //活动id",
+			"code":"string //兑换码",
+			"exchangeTime":"date //兑换时间"
+		}]
+	},
+	"time":"string //响应时间"
+}
+```
+## 根据活动id获取活动信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/activity/{id} `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|活动id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"id":"int //主键",
+		"creatorUserId":"int //创建者用户id",
+		"title":"string //活动标题",
+		"intro":"string //活动介绍",
+		"startTime":"date //活动开始时间",
+		"endTime":"date //活动结束时间",
+		"createTime":"date //活动创建时间",
+		"exchangeAhaPoint":"double //兑换aha点数额",
+		"exchangeAhaCredit":"double //兑换aha币数额",
+		"codeSum":"int //活动最大允许兑换券数量"
+	},
+	"time":"string //响应时间"
+}
+```
+## 使用兑换码
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/activity/code `POST`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+code|string|是|兑换码
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 授权鉴权类请求
 ## 通过账号密码登录
 
@@ -27,6 +162,7 @@
 		"personalUserInfo":{
 			"signedNotice":"boolean //是否签署服务协议",
 			"signedContract":"boolean //是否签署合同",
+			"authenticated":"int //是否通过身份认证",
 			"ahaCredit":"double //aha币数量",
 			"ahaPoint":"double //aha点数量",
 			"role":{
@@ -91,6 +227,7 @@
 		"personalUserInfo":{
 			"signedNotice":"boolean //是否签署服务协议",
 			"signedContract":"boolean //是否签署合同",
+			"authenticated":"int //是否通过身份认证",
 			"ahaCredit":"double //aha币数量",
 			"ahaPoint":"double //aha点数量",
 			"role":{
@@ -232,34 +369,6 @@ signTime|date|否|合同签名时间
 	"time":"string //响应时间"
 }
 ```
-## 实名认证
-
-*作者: STEA_YY*
-
-**请求URL**
-
-/authenticate `POST`
-
-**请求参数**
-
-参数名|类型|必须|描述
---:|:--:|:--:|:--
-studentCard|file|否|学生证照片文件
-idCardFront|file|否|身份证正面照片文件
-idCardBack|file|否|身份证背面照片文件
-trueName|string|是|真实姓名
-type|int|是|实名认证类型
-
-**返回结果**
-
-```json
-{
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":"object //响应数据",
-	"time":"string //响应时间"
-}
-```
 ## 登出
 
 *作者: STEA_YY*
@@ -333,6 +442,7 @@ code|string|否|小程序请求码
 		"personalUserInfo":{
 			"signedNotice":"boolean //是否签署服务协议",
 			"signedContract":"boolean //是否签署合同",
+			"authenticated":"int //是否通过身份认证",
 			"ahaCredit":"double //aha币数量",
 			"ahaPoint":"double //aha点数量",
 			"role":{
@@ -770,7 +880,8 @@ action|string|否|操作，取值pay、cancel
 	"data":[{
 		"id":"int",
 		"userId":"int //用户id",
-		"source":"string //来源",
+		"type":"int //类型",
+		"externalId":"int //业务外键",
 		"ahaCreditAmount":"double //Aha币总额",
 		"ahaPointAmount":"double //Aha点总额",
 		"time":"date //发生时间"
@@ -868,7 +979,7 @@ orderBy|string|否|排序方式
 
 **请求URL**
 
-/feedback/saveFeedback `POST`
+/feedback `POST`
 
 **请求体**
 
@@ -1674,6 +1785,7 @@ orderBy|string|否|排序方式
 			"ahaPoint":"double //aha点数量",
 			"signedNotice":"boolean //是否签署服务协议",
 			"signedContract":"boolean //是否签署合同",
+			"authenticated":"int //是否通过身份认证",
 			"roleId":"int //角色id(外键)",
 			"role":{
 				"id":"int //角色id",
@@ -1726,6 +1838,7 @@ userId|int|否|用户id
 		"ahaPoint":"double //aha点数量",
 		"signedNotice":"boolean //是否签署服务协议",
 		"signedContract":"boolean //是否签署合同",
+		"authenticated":"int //是否通过身份认证",
 		"roleId":"int //角色id(外键)",
 		"role":{
 			"id":"int //角色id",
@@ -2239,7 +2352,7 @@ userId|int|否|用户id
 	"time":"string //响应时间"
 }
 ```
-## 获取身份认证照片
+## 获取身份认证照片下载签名
 
 *作者: STEA_YY*
 
@@ -2260,7 +2373,13 @@ fileType|string|否|文件类型(取值:studentCard-学生证,idCardFront-身份
 {
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
-	"data":"object //响应数据",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
 	"time":"string //响应时间"
 }
 ```
@@ -2286,6 +2405,87 @@ status|int|否|审核结果(取值:1-通过,2-不通过)
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 新建活动
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/activity `POST`
+
+**请求体**
+
+```json
+{
+	"title":"string //活动标题【必须】",
+	"intro":"string //活动介绍【必须】",
+	"startTime":"date //活动开始时间【必须】",
+	"endTime":"date //活动结束时间【必须】",
+	"exchangeAhaPoint":"double //兑换aha点数额【必须】",
+	"exchangeAhaCredit":"double //兑换aha币数额【必须】",
+	"codeSum":"int //活动最大允许兑换券数量【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除活动
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/activity/{activityId} `DELETE`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+activityId|int|否|活动id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 生成指定数量兑换码
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/activity/code `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+activityId|int|是|活动id
+count|int|是|生成数量
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"string[] //响应数据",
 	"time":"string //响应时间"
 }
 ```
@@ -2745,7 +2945,7 @@ filename|string|否|待上传文件名
 
 **请求URL**
 
-/project/saveProject `POST`
+/project `POST`
 
 **请求体**
 
@@ -3570,6 +3770,67 @@ projectId|int|否|项目id
 	"time":"string //响应时间"
 }
 ```
+# 实名认证类请求
+## 获取实名认证文件COS上传签名
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/authentication/sign/upload `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+filename|string|否|文件名
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
+}
+```
+## 更新实名认证信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/authentication `PUT`
+
+**请求体**
+
+```json
+{
+	"trueName":"string //真实姓名",
+	"type":"int //认证类型(学生or社会人士)",
+	"studentCardFilename":"string //学生证图片文件名",
+	"idCardFrontFilename":"string //身份证正面文件名",
+	"idCardBackFilename":"string //身份证背面文件名"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 用户简历相关请求
 ## 根据用户id查看用户简历
 
@@ -3832,6 +4093,7 @@ userId|int|否|用户id
 	"data":{
 		"signedNotice":"boolean //是否签署服务协议",
 		"signedContract":"boolean //是否签署合同",
+		"authenticated":"int //是否通过身份认证",
 		"ahaCredit":"double //aha币数量",
 		"ahaPoint":"double //aha点数量",
 		"role":{
@@ -3964,15 +4226,71 @@ filename|string|否|文件名(要上传的文件的全名)
 
 ```json
 {
-  "code":"int //响应状态码",
-  "msg":"string //响应消息",
-  "data":{
-    "bucketName":"string //目标bucketName",
-    "region":"string //服务器地域",
-    "authorization":"string //上传签名",
-    "expire":"long //签名过期时间戳",
-    "filename":"string //完整文件名"
-  },
-  "time":"string //响应时间"
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"bucketName":"string //目标bucketName",
+		"region":"string //服务器地域",
+		"authorization":"string //上传签名",
+		"expire":"long //签名过期时间戳",
+		"filename":"string //完整文件名"
+	},
+	"time":"string //响应时间"
+}
+```
+# 用户统计信息类请求
+## 获取指定用户统计信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/statistics/{userId} `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+userId|int|否|用户id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"userId":"int //主键",
+		"totalContribPoint":"double //累计获取贡献点",
+		"totalProject":"int //累计参与项目数",
+		"totalReceivedCollection":"int //累计获得的收藏",
+		"totalPurchasedCount":"int //累计被购买次数"
+	},
+	"time":"string //响应时间"
+}
+```
+## 获取用户个人统计信息
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/statistics/me `GET`
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"userId":"int //主键",
+		"totalContribPoint":"double //累计获取贡献点",
+		"totalProject":"int //累计参与项目数",
+		"totalReceivedCollection":"int //累计获得的收藏",
+		"totalPurchasedCount":"int //累计被购买次数"
+	},
+	"time":"string //响应时间"
 }
 ```

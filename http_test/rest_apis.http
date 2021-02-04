@@ -683,12 +683,12 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###审核项目资源
-POST https://{{host}}/admin/project/resource/check/175
+POST https://{{host}}/admin/project/resource/check/187
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "passed": false
+  "passed": true
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -725,6 +725,47 @@ Authorization: {{auth_token}}
 
 ###管理员审核实名认证信息
 PUT https://{{host}}/admin/authentication/check/59?status=1
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员创建活动
+POST https://{{host}}/admin/activity
+Authorization: {{auth_token}}
+Content-Type: application/json
+
+{
+  "title": "测试活动",
+  "intro": "进行一个活动创建的测试",
+  "startTime": "2021-02-04T00:00:00.000Z",
+  "endTime": "2021-05-05T00:00:00.000Z",
+  "exchangeAhaPoint": 5000,
+  "exchangeAhaCredit": 3000,
+  "codeSum": 2000
+}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员发放兑换码
+GET https://{{host}}/admin/activity/code?activityId=1&count=1
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###用户使用兑换码
+POST https://{{host}}/activity/code?code=brr33eo0
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###请求实名认证签名接口
+GET https://{{host}}/authentication/sign/upload?filename=a.jpg
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取用户个人统计信息
+GET https://{{host}}/statistics/me
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

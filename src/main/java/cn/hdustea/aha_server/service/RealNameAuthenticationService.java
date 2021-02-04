@@ -114,7 +114,7 @@ public class RealNameAuthenticationService {
     }
 
     public void saveRealNameAuthentication(RealNameAuthentication realNameAuthentication) {
-        realNameAuthenticationMapper.insert(realNameAuthentication);
+        realNameAuthenticationMapper.insertSelective(realNameAuthentication);
     }
 
     @Transactional(rollbackFor = Exception.class)

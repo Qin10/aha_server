@@ -17,8 +17,12 @@ public class UserStatisticsService {
     @Resource
     private UserStatisticsMapper userStatisticsMapper;
 
+    public UserStatistics getUserStatisticsByUserId(int userId) {
+        return userStatisticsMapper.selectByPrimaryKey(userId);
+    }
+
     public void saveUserStatistics(UserStatistics userStatistics) {
-        userStatisticsMapper.insert(userStatistics);
+        userStatisticsMapper.insertSelective(userStatistics);
     }
 
     public void incrTotalContribPointByUserId(BigDecimal contribPoint, int userId) {

@@ -1,94 +1,112 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.hdustea.aha_server.mapper.ActivityCodeExchangeLogMapper">
-  <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog">
-    <!--@mbg.generated-->
-    <!--@Table activity_code_exchange_log-->
-    <id column="acel_id" property="id" />
-    <result column="acel_user_id" property="userId" />
-    <result column="acel_activity_id" property="activityId" />
-    <result column="acel_code" property="code" />
-    <result column="acel_exchange_time" property="exchangeTime" />
-  </resultMap>
-  <sql id="Base_Column_List">
-    <!--@mbg.generated-->
-    acel_id, acel_user_id, acel_activity_id, acel_code, acel_exchange_time
-  </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    <!--@mbg.generated-->
-    select 
-    <include refid="Base_Column_List" />
-    from activity_code_exchange_log
-    where acel_id = #{id}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    <!--@mbg.generated-->
-    delete from activity_code_exchange_log
-    where acel_id = #{id}
-  </delete>
-  <insert id="insert" keyColumn="acel_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into activity_code_exchange_log (acel_user_id, acel_activity_id, acel_code, acel_exchange_time)
-    values (#{userId}, #{activityId}, #{code}, #{exchangeTime})
-  </insert>
-  <insert id="insertSelective" keyColumn="acel_id" keyProperty="id" parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog" useGeneratedKeys="true">
-    <!--@mbg.generated-->
-    insert into activity_code_exchange_log
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        acel_user_id,
-      </if>
-      <if test="activityId != null">
-        acel_activity_id,
-      </if>
-      <if test="code != null">
-        acel_code,
-      </if>
-      <if test="exchangeTime != null">
-        acel_exchange_time,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="userId != null">
-        #{userId},
-      </if>
-      <if test="activityId != null">
-        #{activityId},
-      </if>
-      <if test="code != null">
-        #{code},
-      </if>
-      <if test="exchangeTime != null">
-        #{exchangeTime},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog">
-    <!--@mbg.generated-->
-    update activity_code_exchange_log
-    <set>
-      <if test="userId != null">
-        acel_user_id = #{userId},
-      </if>
-      <if test="activityId != null">
-        acel_activity_id = #{activityId},
-      </if>
-      <if test="code != null">
-        acel_code = #{code},
-      </if>
-      <if test="exchangeTime != null">
-        acel_exchange_time = #{exchangeTime},
-      </if>
-    </set>
-    where acel_id = #{id}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog">
-    <!--@mbg.generated-->
-    update activity_code_exchange_log
-    set acel_user_id = #{userId},
-      acel_activity_id = #{activityId},
-      acel_code = #{code},
-      acel_exchange_time = #{exchangeTime}
-    where acel_id = #{id}
-  </update>
+    <resultMap id="BaseResultMap" type="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog">
+        <!--@mbg.generated-->
+        <!--@Table activity_code_exchange_log-->
+        <id column="acel_id" property="id"/>
+        <result column="acel_user_id" property="userId"/>
+        <result column="acel_activity_id" property="activityId"/>
+        <result column="acel_code" property="code"/>
+        <result column="acel_exchange_time" property="exchangeTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        acel_id, acel_user_id, acel_activity_id, acel_code, acel_exchange_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        <!--@mbg.generated-->
+        select
+        <include refid="Base_Column_List"/>
+        from activity_code_exchange_log
+        where acel_id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        <!--@mbg.generated-->
+        delete
+        from activity_code_exchange_log
+        where acel_id = #{id}
+    </delete>
+    <insert id="insert" keyColumn="acel_id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into activity_code_exchange_log (acel_user_id, acel_activity_id, acel_code, acel_exchange_time)
+        values (#{userId}, #{activityId}, #{code}, #{exchangeTime})
+    </insert>
+    <insert id="insertSelective" keyColumn="acel_id" keyProperty="id"
+            parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into activity_code_exchange_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                acel_user_id,
+            </if>
+            <if test="activityId != null">
+                acel_activity_id,
+            </if>
+            <if test="code != null">
+                acel_code,
+            </if>
+            <if test="exchangeTime != null">
+                acel_exchange_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="activityId != null">
+                #{activityId},
+            </if>
+            <if test="code != null">
+                #{code},
+            </if>
+            <if test="exchangeTime != null">
+                #{exchangeTime},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog">
+        <!--@mbg.generated-->
+        update activity_code_exchange_log
+        <set>
+            <if test="userId != null">
+                acel_user_id = #{userId},
+            </if>
+            <if test="activityId != null">
+                acel_activity_id = #{activityId},
+            </if>
+            <if test="code != null">
+                acel_code = #{code},
+            </if>
+            <if test="exchangeTime != null">
+                acel_exchange_time = #{exchangeTime},
+            </if>
+        </set>
+        where acel_id = #{id}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.hdustea.aha_server.entity.ActivityCodeExchangeLog">
+        <!--@mbg.generated-->
+        update activity_code_exchange_log
+        set acel_user_id       = #{userId},
+            acel_activity_id   = #{activityId},
+            acel_code          = #{code},
+            acel_exchange_time = #{exchangeTime}
+        where acel_id = #{id}
+    </update>
+
+    <!--auto generated by MybatisCodeHelper on 2021-02-04-->
+    <select id="selectAllByConditions" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from activity_code_exchange_log
+        <where>
+            <if test="userId != null">
+                and acel_id = #{userId}
+            </if>
+            <if test="activityId != null">
+                and acel_activity_id = #{activityId}
+            </if>
+        </where>
+    </select>
 </mapper>

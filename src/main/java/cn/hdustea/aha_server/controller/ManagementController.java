@@ -568,6 +568,11 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 新建活动
+     *
+     * @param activityDto 活动信息
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/activity")
     public ResponseBean<Object> saveActivity(@Validated @RequestBody ActivityDto activityDto) {
@@ -576,13 +581,24 @@ public class ManagementController {
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 删除活动
+     *
+     * @param activityId 活动id
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @DeleteMapping("/activity/{activityId}")
-    public ResponseBean<Object> saveActivity(@PathVariable("activityId") int activityId) {
+    public ResponseBean<Object> deleteActivity(@PathVariable("activityId") int activityId) {
         activityService.deleteActivityById(activityId);
         return new ResponseBean<>(200, "succ", null);
     }
 
+    /**
+     * 生成指定数量兑换码
+     *
+     * @param activityId 活动id
+     * @param count      生成数量
+     */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @GetMapping("/activity/code")
     public ResponseBean<List<String>> generateActivityCode(@RequestParam int activityId, @RequestParam int count) throws SelectException, PermissionDeniedException {

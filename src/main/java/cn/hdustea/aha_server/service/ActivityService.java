@@ -11,6 +11,9 @@ import cn.hdustea.aha_server.exception.apiException.daoException.SelectException
 import cn.hdustea.aha_server.mapper.ActivityCodeExchangeLogMapper;
 import cn.hdustea.aha_server.mapper.ActivityMapper;
 import cn.hdustea.aha_server.util.CommonUtil;
+import cn.hdustea.aha_server.vo.PageVo;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,6 +42,22 @@ public class ActivityService {
     @Resource
     private ActivityCodeExchangeLogMapper activityCodeExchangeLogMapper;
 
+    public PageVo<List<ActivityCodeExchangeLog>> getActivityCodeExchangeLogPagable(int pageNum, int pageSize, Integer userId, Integer activityId) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.orderBy("acel_id desc");
+        List<ActivityCodeExchangeLog> activityCodeExchangeLogs = activityCodeExchangeLogMapper.selectAllByConditions(userId, activityId);
+        PageInfo<ActivityCodeExchangeLog> pageInfo = new PageInfo<>(activityCodeExchangeLogs);
+        return new PageVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getList());
+    }
+
+    public PageVo<List<Activity>> getActivitiesPagable(int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        PageHelper.orderBy("act_id desc");
+        List<Activity> activities = activityMapper.selectAll();
+        PageInfo<Activity> pageInfo = new PageInfo<>(activities);
+        return new PageVo<>(pageInfo.getPageNum(), pageInfo.getPageSize(), pageInfo.getList());
+    }
+
     public Activity getExistedActivityById(int id) throws SelectException {
         Activity activity = activityMapper.selectByPrimaryKey(id);
         if (activity == null) {
@@ -64,7 +83,10 @@ public class ActivityService {
 
     public List<String> generateCodeById(int id, int count) throws SelectException, PermissionDeniedException {
         Activity activity = getExistedActivityById(id);
-        Integer sum = (Integer) redisService.get(RedisConstants.ACTIVITY_CODE_COUNT_PREFIX);
+        if (new Date().compareTo(activity.getEndTime()) > 0) {
+            throw new PermissionDeniedException("活动已经截止！");
+        }
+        Integer sum = (Integer) redisService.get(RedisConstants.ACTIVITY_CODE_COUNT_PREFIX + id);
         if (sum + count > activity.getCodeSum()) {
             throw new PermissionDeniedException("兑换码可生成额度不足！");
         }
@@ -73,14 +95,14 @@ public class ActivityService {
         for (int i = 0; i < count; i++) {
             do {
                 tempCode = CommonUtil.generateRandomString(8);
-            } while (redisService.get(RedisConstants.ACTIVITY_CODE_PREFIX + tempCode) == null);
+            } while (redisService.get(RedisConstants.ACTIVITY_CODE_PREFIX + tempCode) != null);
             redisService.set(RedisConstants.ACTIVITY_CODE_PREFIX + tempCode, id);
             redisService.expireAt(RedisConstants.ACTIVITY_CODE_PREFIX + tempCode, activity.getEndTime());
-            Integer sumNow = (Integer) redisService.get(RedisConstants.ACTIVITY_CODE_COUNT_PREFIX);
+            Integer sumNow = (Integer) redisService.get(RedisConstants.ACTIVITY_CODE_COUNT_PREFIX + id);
             if (sumNow + 1 > activity.getCodeSum()) {
                 break;
             }
-            redisService.incr(RedisConstants.ACTIVITY_CODE_COUNT_PREFIX, 1);
+            redisService.incr(RedisConstants.ACTIVITY_CODE_COUNT_PREFIX + id, 1);
             codes.add(tempCode);
         }
         return codes;
