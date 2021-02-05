@@ -10,6 +10,8 @@ import cn.hdustea.aha_server.dto.ProjectResourceDto;
 import cn.hdustea.aha_server.dto.ProjectResourceScoreDto;
 import cn.hdustea.aha_server.dto.ProjectResourceUpdateDto;
 import cn.hdustea.aha_server.entity.ProjectMember;
+import cn.hdustea.aha_server.entity.ProjectResourceFinancialScheme;
+import cn.hdustea.aha_server.entity.ProjectResourceType;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
@@ -321,7 +323,7 @@ public class ProjectController {
      */
     @RequiresLogin(requireSignContract = true)
     @PostMapping("/resource/{projectId}")
-    public ResponseBean<Integer> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean<Integer> saveProjectResourceByProjectId(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId) throws PermissionDeniedException, SelectException, InsertException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
@@ -548,6 +550,26 @@ public class ProjectController {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         Integer[] purchasedResourceIds = projectResourceService.getAllPurchasedResourceIdsByProjectIdAndUserId(projectId, userId);
         return new ResponseBean<>(200, "succ", purchasedResourceIds);
+    }
+
+    /**
+     * 获取全部竞赛资源类型取值和定价系数
+     */
+    @RequiresLogin
+    @GetMapping("/type")
+    public ResponseBean<List<ProjectResourceType>> getAllProjectResourceType() {
+        List<ProjectResourceType> projectResourceTypes = projectResourceService.getAllProjectResourceType();
+        return new ResponseBean<>(200, "succ", projectResourceTypes);
+    }
+
+    /**
+     * 获取全部竞赛资源-获奖等级定价方案
+     */
+    @RequiresLogin
+    @GetMapping("/financialScheme")
+    public ResponseBean<List<ProjectResourceFinancialScheme>> getAllProjectResourceFinancialScheme() {
+        List<ProjectResourceFinancialScheme> projectResourceFinancialSchemes = projectResourceService.getAllProjectResourceFinancialScheme();
+        return new ResponseBean<>(200, "succ", projectResourceFinancialSchemes);
     }
 
     /**

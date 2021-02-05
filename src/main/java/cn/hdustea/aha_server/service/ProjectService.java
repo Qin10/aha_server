@@ -349,7 +349,7 @@ public class ProjectService {
      * @throws UpdateException 更新异常
      */
     @Transactional(rollbackFor = Exception.class)
-    public void checkProjectByProjectId(ProjectCheckDto projectCheckDto, int projectId) throws UpdateException {
+    public void checkProjectByProjectId(ProjectCheckDto projectCheckDto, int projectId) throws UpdateException, SelectException {
         if (projectMapper.selectByPrimaryKey(projectId) == null) {
             throw new UpdateException("项目不存在！");
         }
@@ -357,8 +357,7 @@ public class ProjectService {
         BeanUtils.copyProperties(projectCheckDto, project);
         project.setId(projectId);
         projectMapper.updateByPrimaryKeySelective(project);
-        projectResourceService.getAllProjectResourceVoByConditions(null, null, projectId);
-        projectResourceService.updatePassedByProjectAndConvertDocument(projectCheckDto.getPassed(), projectId);
+        projectResourceService.checkResourceByProjectId(projectCheckDto.getPassed(), projectId);
     }
 
     public boolean isPassed(int projectId) {

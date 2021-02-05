@@ -648,7 +648,8 @@ orderId|int|否|订单号
 				"id":"int //项目资源id",
 				"projectId":"int //项目id(外键)",
 				"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-				"type":"int //资源类型",
+				"fileType":"int //资源文件类型",
+				"typeId":"int //资源类型id(外键)",
 				"filename":"string //保存在oss里的资源文件名(包括前缀)",
 				"previewUrl":"string //保存在oss里的预览文件地址",
 				"download":"int //资源文件下载量",
@@ -730,7 +731,8 @@ pageSize|int|否|分页大小
 					"id":"int //项目资源id",
 					"projectId":"int //项目id(外键)",
 					"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-					"type":"int //资源类型",
+					"fileType":"int //资源文件类型",
+					"typeId":"int //资源类型id(外键)",
 					"filename":"string //保存在oss里的资源文件名(包括前缀)",
 					"previewUrl":"string //保存在oss里的预览文件地址",
 					"download":"int //资源文件下载量",
@@ -1086,7 +1088,8 @@ projectPassed|boolean|否|资源所在项目是否通过审核
 			"id":"int //项目资源id",
 			"projectId":"int //项目id(外键)",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-			"type":"int //资源类型",
+			"fileType":"int //资源文件类型",
+			"typeId":"int //资源类型id(外键)",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"previewUrl":"string //保存在oss里的预览文件地址",
 			"download":"int //资源文件下载量",
@@ -1124,7 +1127,8 @@ projectId|int|否|项目id
 		"id":"int //项目资源id",
 		"projectId":"int //项目id(外键)",
 		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-		"type":"int //资源类型",
+		"fileType":"int //资源文件类型",
+		"typeId":"int //资源类型id(外键)",
 		"filename":"string //保存在oss里的资源文件名(包括前缀)",
 		"previewUrl":"string //保存在oss里的预览文件地址",
 		"download":"int //资源文件下载量",
@@ -1303,7 +1307,8 @@ orderId|int|否|订单id
 						"id":"int //项目资源id",
 						"projectId":"int //项目id(外键)",
 						"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-						"type":"int //资源类型",
+						"fileType":"int //资源文件类型",
+						"typeId":"int //资源类型id(外键)",
 						"filename":"string //保存在oss里的资源文件名(包括前缀)",
 						"previewUrl":"string //保存在oss里的预览文件地址",
 						"download":"int //资源文件下载量",
@@ -2669,7 +2674,7 @@ messageId|int|否|站内信id
 
 **请求URL**
 
-/message `POST`
+/message/sendPrivateMessage `POST`
 
 **请求体**
 
@@ -2895,7 +2900,8 @@ projectId|int|否|项目id
 			"id":"int //项目资源id",
 			"projectId":"int //项目id(外键)",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-			"type":"int //资源类型",
+			"fileType":"int //资源文件类型",
+			"typeId":"int //资源类型id(外键)",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"previewUrl":"string //保存在oss里的预览文件地址",
 			"download":"int //资源文件下载量",
@@ -3232,7 +3238,8 @@ edit|boolean|否|是否处于编辑模式（项目编辑权限拥有者据此获
 		"id":"int //项目资源id",
 		"projectId":"int //项目id(外键)",
 		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-		"type":"int //资源类型",
+		"fileType":"int //资源文件类型",
+		"typeId":"int //资源类型id(外键)",
 		"filename":"string //保存在oss里的资源文件名(包括前缀)",
 		"previewUrl":"string //保存在oss里的预览文件地址",
 		"download":"int //资源文件下载量",
@@ -3270,7 +3277,8 @@ edit|boolean|否|是否处于编辑模式（项目编辑权限拥有者据此获
 		"id":"int //项目资源id",
 		"projectId":"int //项目id(外键)",
 		"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-		"type":"int //资源类型",
+		"fileType":"int //资源文件类型",
+		"typeId":"int //资源类型id(外键)",
 		"filename":"string //保存在oss里的资源文件名(包括前缀)",
 		"previewUrl":"string //保存在oss里的预览文件地址",
 		"download":"int //资源文件下载量",
@@ -3333,7 +3341,8 @@ projectId|int|否|项目id
 ```json
 {
 	"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)【必须】",
-	"type":"int //资源类型【必须】",
+	"fileType":"int //资源文件类型【必须】",
+	"typeId":"int //资源类型id(外键)【必须】",
 	"filename":"string //保存在oss里的资源文件名(包括前缀)【必须】",
 	"price":"double //资源价格【必须】",
 	"discount":"double //资源折扣【必须】"
@@ -3706,7 +3715,8 @@ projectResourceId|int|否|项目资源id
 			"id":"int //项目资源id",
 			"projectId":"int //项目id(外键)",
 			"name":"string //资源名称(前端显示，如“城市鹰眼”智慧交通大数据挖掘系统-项目详细文档)",
-			"type":"int //资源类型",
+			"fileType":"int //资源文件类型",
+			"typeId":"int //资源类型id(外键)",
 			"filename":"string //保存在oss里的资源文件名(包括前缀)",
 			"previewUrl":"string //保存在oss里的预览文件地址",
 			"download":"int //资源文件下载量",
@@ -3767,6 +3777,53 @@ projectId|int|否|项目id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":"int[] //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 获取全部竞赛资源类型取值和定价系数
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/type `GET`
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //主键",
+		"name":"string //资源类型名称",
+		"priceCoefficient":"double //资源价格系数"
+	}],
+	"time":"string //响应时间"
+}
+```
+## 获取全部竞赛资源-获奖等级定价方案
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/project/financialScheme `GET`
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //主键",
+		"awardLevel":"int //获奖等级",
+		"priceUpperLimit":"double //资源定价上限",
+		"priceLowerLimit":"double //资源定价下限"
+	}],
 	"time":"string //响应时间"
 }
 ```
@@ -4282,15 +4339,15 @@ userId|int|否|用户id
 
 ```json
 {
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":{
-		"userId":"int //主键",
-		"totalContribPoint":"double //累计获取贡献点",
-		"totalProject":"int //累计参与项目数",
-		"totalReceivedCollection":"int //累计获得的收藏",
-		"totalPurchasedCount":"int //累计被购买次数"
-	},
-	"time":"string //响应时间"
+  "code":"int //响应状态码",
+  "msg":"string //响应消息",
+  "data":{
+    "userId":"int //主键",
+    "totalContribPoint":"double //累计获取贡献点",
+    "totalProject":"int //累计参与项目数",
+    "totalReceivedCollection":"int //累计获得的收藏",
+    "totalPurchasedCount":"int //累计被购买次数"
+  },
+  "time":"string //响应时间"
 }
 ```

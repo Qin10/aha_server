@@ -1,5 +1,7 @@
 package cn.hdustea.aha_server.constants;
 
+import java.math.BigDecimal;
+
 /**
  * 项目资源常量类
  *
@@ -22,4 +24,6 @@ public class ProjectResourceConstants {
      * 其他资源
      */
     public static final int TYPE_OTHER = 3;
+
+    public static final BigDecimal REWARD_COEFFICIENT = BigDecimal.valueOf(1.25);
 }

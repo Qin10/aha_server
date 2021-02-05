@@ -21,10 +21,16 @@ public class ProjectResourceDto {
     private String name;
 
     /**
-     * 资源类型
+     * 资源文件类型
      */
-    @NotNull(message = "资源类型不能为空")
-    private Integer type;
+    @NotNull(message = "资源文件类型不能为空")
+    private Integer fileType;
+
+    /**
+     * 资源类型id(外键)
+     */
+    @NotNull(message = "资源类型id不能为空")
+    private Integer typeId;
 
     /**
      * 保存在oss里的资源文件名(包括前缀)

@@ -1,18 +1,15 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.constants.ContribPointLogConstants;
 import cn.hdustea.aha_server.constants.ProjectResourceConstants;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.*;
-import cn.hdustea.aha_server.entity.ProjectResource;
-import cn.hdustea.aha_server.entity.ProjectResourceScore;
-import cn.hdustea.aha_server.entity.PurchasedResource;
+import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
-import cn.hdustea.aha_server.mapper.ProjectResourceMapper;
-import cn.hdustea.aha_server.mapper.ProjectResourceScoreMapper;
-import cn.hdustea.aha_server.mapper.PurchasedResourceMapper;
+import cn.hdustea.aha_server.mapper.*;
 import cn.hdustea.aha_server.vo.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -21,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -42,9 +40,19 @@ public class ProjectResourceService {
     @Resource
     private PurchasedResourceMapper purchasedResourceMapper;
     @Resource
+    private ProjectResourceFinancialSchemeMapper projectResourceFinancialSchemeMapper;
+    @Resource
+    private ProjectResourceTypeMapper projectResourceTypeMapper;
+    @Resource
+    private UserService userService;
+    @Resource
     private CosService cosService;
     @Resource
     private ProjectService projectService;
+    @Resource
+    private ContribPointLogService contribPointLogService;
+    @Resource
+    private UserStatisticsService userStatisticsService;
     @Resource
     private RedisService redisService;
 
@@ -113,7 +121,7 @@ public class ProjectResourceService {
         if (projectResource.getFilename() == null) {
             throw new SelectException("资源文件为空！");
         }
-        if (projectResource.getType() == null || projectResource.getType() != ProjectResourceConstants.TYPE_DOCUMENT) {
+        if (projectResource.getFileType() == null || projectResource.getFileType() != ProjectResourceConstants.TYPE_DOCUMENT) {
             throw new SelectException("资源类型错误！");
         }
         return cosService.signPreviewAuthorization(projectResource.getFilename());
@@ -125,7 +133,11 @@ public class ProjectResourceService {
      * @param projectResourceDto 项目资源
      * @param projectId          项目id
      */
-    public Integer saveProjectResourceByProjectId(ProjectResourceDto projectResourceDto, int projectId) {
+    public Integer saveProjectResourceByProjectId(ProjectResourceDto projectResourceDto, int projectId) throws SelectException, InsertException {
+        Project project = projectService.getProjectById(projectId);
+        if (!checkResourcePrice(project.getAwardLevel(), projectResourceDto.getTypeId(), projectResourceDto.getPrice())) {
+            throw new InsertException("资源定价不符合规范！");
+        }
         ProjectResource projectResource = new ProjectResource();
         BeanUtils.copyProperties(projectResourceDto, projectResource);
         projectResource.setProjectId(projectId);
@@ -275,7 +287,7 @@ public class ProjectResourceService {
         }
         if (purchasedResource(userId, resourceId)) {
             ProjectResource projectResource = getProjectResourceById(resourceId);
-            return projectResource.getType() != null && projectResource.getType() != ProjectResourceConstants.TYPE_DOCUMENT;
+            return projectResource.getFileType() != null && projectResource.getFileType() != ProjectResourceConstants.TYPE_DOCUMENT;
         }
         return false;
     }
@@ -306,16 +318,37 @@ public class ProjectResourceService {
         return new PageVo<>(pageInfo.getPageNum(), pageInfo.getSize(), pageInfo.getList());
     }
 
-    public void updatePassedByProjectAndConvertDocument(boolean passed, int projectId) {
+    @Transactional(rollbackFor = Exception.class)
+    public void checkResourceByProjectId(boolean passed, Integer projectId) throws UpdateException, SelectException {
+        Project project = projectService.getProjectById(projectId);
         if (passed) {
             List<ProjectResource> projectResources = projectResourceMapper.selectAllByProjectId(projectId);
             for (ProjectResource projectResource : projectResources) {
                 if (!projectResource.getPassed()) {
+                    sendReward(project, projectResource);
                     addToConvertList(projectResource);
                 }
             }
         }
         projectResourceMapper.updatePassedByProjectId(passed, projectId);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public void sendReward(Project project, ProjectResource projectResource) throws SelectException, UpdateException {
+        boolean checkResult = checkResourcePrice(project.getAwardLevel(), projectResource.getTypeId(), projectResource.getPrice());
+        if (!checkResult) {
+            throw new UpdateException("资源id=" + projectResource.getId() + "定价不合规范！");
+        }
+        BigDecimal rewardAhaCredit = ProjectResourceConstants.REWARD_COEFFICIENT.multiply(projectResource.getPrice());
+        userService.updateIncAhaCredit(project.getCreatorUserId(), rewardAhaCredit);
+        ContribPointLog contribPointLog = new ContribPointLog();
+        contribPointLog.setUserId(project.getCreatorUserId());
+        contribPointLog.setType(ContribPointLogConstants.FROM_CONTRIBUTE_RESOURCES);
+        contribPointLog.setAhaCreditAmount(rewardAhaCredit);
+        contribPointLog.setExternalId(projectResource.getId());
+        contribPointLog.setTime(new Date());
+        contribPointLogService.saveContribPointLog(contribPointLog);
+        userStatisticsService.incrTotalContribPointByUserId(rewardAhaCredit, project.getCreatorUserId());
     }
 
     /**
@@ -325,13 +358,16 @@ public class ProjectResourceService {
      * @param resourceId              项目资源id
      * @throws UpdateException 更新异常
      */
-    public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException {
+    @Transactional(rollbackFor = Exception.class)
+    public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException, SelectException {
         ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
         if (projectResource == null) {
-            throw new UpdateException("项目资源不存在！");
+            throw new SelectException("项目资源不存在！");
         }
         if (projectResourceCheckDto.getPassed()) {
             if (!projectResource.getPassed()) {
+                Project project = projectService.getProjectById(projectResource.getProjectId());
+                sendReward(project, projectResource);
                 addToConvertList(projectResource);
             }
         }
@@ -368,7 +404,7 @@ public class ProjectResourceService {
     }
 
     private void addToConvertList(ProjectResource projectResource) {
-        if (projectResource.getType() == ProjectResourceConstants.TYPE_DOCUMENT && projectResource.getPreviewUrl() == null) {
+        if (projectResource.getFileType() == ProjectResourceConstants.TYPE_DOCUMENT && projectResource.getPreviewUrl() == null) {
             DocumentConvertInfoDto documentConvertInfoDto = new DocumentConvertInfoDto();
             documentConvertInfoDto.setProjectResourceId(projectResource.getId());
             documentConvertInfoDto.setSrcFilename(projectResource.getFilename());
@@ -376,4 +412,22 @@ public class ProjectResourceService {
         }
     }
 
+    public boolean checkResourcePrice(int awardLevel, int typeId, BigDecimal price) throws SelectException {
+        ProjectResourceFinancialScheme projectResourceFinancialScheme = projectResourceFinancialSchemeMapper.selectByAwardLevel(awardLevel);
+        if (projectResourceFinancialScheme == null) {
+            throw new SelectException("项目获奖等级取值错误！");
+        }
+        ProjectResourceType projectResourceType = projectResourceTypeMapper.selectByPrimaryKey(typeId);
+        BigDecimal upperLimit = projectResourceType.getPriceCoefficient().multiply(projectResourceFinancialScheme.getPriceUpperLimit());
+        BigDecimal lowerLimit = projectResourceType.getPriceCoefficient().multiply(projectResourceFinancialScheme.getPriceLowerLimit());
+        return price.compareTo(upperLimit) <= 0 && price.compareTo(lowerLimit) >= 0;
+    }
+
+    public List<ProjectResourceFinancialScheme> getAllProjectResourceFinancialScheme() {
+        return projectResourceFinancialSchemeMapper.selectAll();
+    }
+
+    public List<ProjectResourceType> getAllProjectResourceType() {
+        return projectResourceTypeMapper.selectAll();
+    }
 }

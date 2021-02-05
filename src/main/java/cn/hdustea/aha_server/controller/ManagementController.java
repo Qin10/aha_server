@@ -116,7 +116,7 @@ public class ManagementController {
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/project/check/{projectId}")
-    public ResponseBean<Object> checkProject(@PathVariable("projectId") int projectId, @RequestBody ProjectCheckDto projectCheckDto) throws UpdateException {
+    public ResponseBean<Object> checkProject(@PathVariable("projectId") int projectId, @RequestBody ProjectCheckDto projectCheckDto) throws UpdateException, SelectException {
         projectService.checkProjectByProjectId(projectCheckDto, projectId);
         return new ResponseBean<>(200, "succ", null);
     }
@@ -129,7 +129,7 @@ public class ManagementController {
      */
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/project/resource/check/{resourceId}")
-    public ResponseBean<Object> checkProjectResource(@PathVariable("resourceId") int resourceId, @Validated @RequestBody ProjectResourceCheckDto projectResourceCheckDto) throws UpdateException {
+    public ResponseBean<Object> checkProjectResource(@PathVariable("resourceId") int resourceId, @Validated @RequestBody ProjectResourceCheckDto projectResourceCheckDto) throws UpdateException, SelectException {
         projectResourceService.checkResourceByResourceId(projectResourceCheckDto, resourceId);
         return new ResponseBean<>(200, "succ", null);
     }

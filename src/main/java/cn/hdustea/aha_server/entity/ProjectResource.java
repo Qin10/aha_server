@@ -1,7 +1,8 @@
 package cn.hdustea.aha_server.entity;
 
-import java.math.BigDecimal;
 import lombok.Data;
+
+import java.math.BigDecimal;
 
 /**
 * ${description}
@@ -27,9 +28,14 @@ public class ProjectResource {
     private String name;
 
     /**
-     * 资源类型
+     * 资源文件类型
      */
-    private Integer type;
+    private Integer fileType;
+
+    /**
+     * 资源类型id(外键)
+     */
+    private Integer typeId;
 
     /**
      * 保存在oss里的资源文件名(包括前缀)

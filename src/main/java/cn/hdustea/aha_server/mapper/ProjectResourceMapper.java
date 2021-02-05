@@ -1,10 +1,6 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.ProjectResource;
-import cn.hdustea.aha_server.vo.ProjectResourceVo;
-import org.apache.ibatis.annotations.Param;
-
-import java.util.List;
+import cn.hdustea.aha_server.entity.ProjectResource;import cn.hdustea.aha_server.vo.ProjectResourceVo;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * ${description}
@@ -20,11 +16,11 @@ public interface ProjectResourceMapper {
 
     ProjectResource selectByPrimaryKey(Integer id);
 
-    ProjectResourceVo selectVoByPrimaryKey(Integer id);
-
     int updateByPrimaryKeySelective(ProjectResource record);
 
     int updateByPrimaryKey(ProjectResource record);
+
+    ProjectResourceVo selectVoByPrimaryKey(Integer id);
 
     ProjectResourceVo selectVoByPrimaryKeyAndPassed(@Param("id") Integer id, @Param("passed") Boolean passed);
 
