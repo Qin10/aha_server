@@ -22,9 +22,14 @@ public class SlideShowResource {
     private String pictureUrl;
 
     /**
-     * 轮播图路由路径
+     * 链接类型
      */
-    private String routerLink;
+    private Integer linkType;
+
+    /**
+     * 轮播图链接路径
+     */
+    private String linkUrl;
 
     /**
      * 是否启用

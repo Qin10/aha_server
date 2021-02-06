@@ -363,12 +363,13 @@ Content-Type: application/json
 }
 
 ###修改项目资源
-PUT https://{{host}}/project/resource/3
+PUT https://{{host}}/project/resource/196
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 {
-  "type": 2
+  "name": "hahaha",
+  "typeId": 2
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -753,7 +754,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###用户使用兑换码
-POST https://{{host}}/activity/code?code=brr33eo0
+POST https://{{host}}/activity/code?code=nizg8gk3
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -766,6 +767,12 @@ Authorization: {{auth_token}}
 
 ###获取用户个人统计信息
 GET https://{{host}}/statistics/me
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取轮播图资源
+GET https://{{host}}/slideShow
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

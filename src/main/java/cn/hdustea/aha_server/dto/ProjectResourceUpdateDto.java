@@ -17,6 +17,16 @@ public class ProjectResourceUpdateDto {
     private String name;
 
     /**
+     * 资源文件类型
+     */
+    private Integer fileType;
+
+    /**
+     * 资源类型id(外键)
+     */
+    private Integer typeId;
+
+    /**
      * 资源价格
      */
     private BigDecimal price;

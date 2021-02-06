@@ -5,7 +5,6 @@ import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.ActivityDto;
 import cn.hdustea.aha_server.entity.Activity;
 import cn.hdustea.aha_server.entity.ActivityCodeExchangeLog;
-import cn.hdustea.aha_server.entity.ContribPointLog;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.ActivityCodeExchangeLogMapper;
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +34,7 @@ public class ActivityService {
     @Resource
     private RedisService redisService;
     @Resource
-    private UserService userService;
-    @Resource
-    private ContribPointLogService contribPointLogService;
+    private ContribPointService contribPointService;
     @Resource
     private ActivityCodeExchangeLogMapper activityCodeExchangeLogMapper;
 
@@ -131,20 +127,7 @@ public class ActivityService {
         activityCodeExchangeLog.setCode(code);
         activityCodeExchangeLog.setExchangeTime(now);
         activityCodeExchangeLogMapper.insertSelective(activityCodeExchangeLog);
-        ContribPointLog contribPointLog = new ContribPointLog();
-        contribPointLog.setUserId(userId);
-        contribPointLog.setType(ContribPointLogConstants.FROM_ACTIVITY_EXCHANGE);
-        contribPointLog.setExternalId(activityCodeExchangeLog.getId());
-        contribPointLog.setTime(now);
-        if (activity.getExchangeAhaPoint().compareTo(BigDecimal.ZERO) > 0) {
-            userService.updateIncAhaPoint(userId, activity.getExchangeAhaPoint());
-            contribPointLog.setAhaPointAmount(activity.getExchangeAhaPoint());
-        }
-        if (activity.getExchangeAhaCredit().compareTo(BigDecimal.ZERO) > 0) {
-            userService.updateIncAhaCredit(userId, activity.getExchangeAhaCredit());
-            contribPointLog.setAhaCreditAmount(activity.getExchangeAhaCredit());
-        }
-        contribPointLogService.saveContribPointLog(contribPointLog);
+        contribPointService.sendContribPoint(userId, ContribPointLogConstants.FROM_ACTIVITY_EXCHANGE, activityCodeExchangeLog.getId(), activity.getExchangeAhaPoint(), activity.getExchangeAhaCredit());
         redisService.del(RedisConstants.ACTIVITY_CODE_PREFIX + code);
     }
 }

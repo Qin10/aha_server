@@ -344,7 +344,10 @@ public class ProjectController {
     public ResponseBean<Object> updateProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestBody ProjectResourceUpdateDto projectResourceUpdateDto) throws PermissionDeniedException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectResourceService.hasPermission(userId, projectResourceId)) {
-            throw new PermissionDeniedException();
+            throw new PermissionDeniedException("您无权限修改本资源！");
+        }
+        if (projectResourceService.isPassed(projectResourceId)) {
+            throw new PermissionDeniedException("资源已经通过审核，无法修改！");
         }
         projectResourceService.updateProjectResourceById(projectResourceUpdateDto, projectResourceId);
         return new ResponseBean<>(200, "succ", null);
@@ -362,7 +365,7 @@ public class ProjectController {
         if (!projectResourceService.hasPermission(userId, projectResourceId)) {
             throw new PermissionDeniedException();
         }
-        if (!projectResourceService.isPassed(projectResourceId)) {
+        if (projectResourceService.isPassed(projectResourceId)) {
             throw new PermissionDeniedException();
         }
         projectResourceService.deleteProjectResourceById(projectResourceId);

@@ -130,7 +130,6 @@ public class MessageService {
      */
     @Transactional(rollbackFor = Exception.class)
     public void sendPrivateMessage(MessageDto messageDto, int senderUserId) throws SelectException {
-        System.out.println(messageDto.getReceiverUserId());
         userService.getExistUserVoById(messageDto.getReceiverUserId());
         Message message = new Message();
         MessageText messageText = new MessageText();

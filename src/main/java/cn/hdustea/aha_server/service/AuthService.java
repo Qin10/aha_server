@@ -3,9 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.JwtConfig;
 import cn.hdustea.aha_server.config.WechatConfig;
-import cn.hdustea.aha_server.constants.OauthTypes;
-import cn.hdustea.aha_server.constants.RedisConstants;
-import cn.hdustea.aha_server.constants.SmsConstants;
+import cn.hdustea.aha_server.constants.*;
 import cn.hdustea.aha_server.dto.*;
 import cn.hdustea.aha_server.entity.*;
 import cn.hdustea.aha_server.exception.apiException.AuthorizationException;
@@ -46,6 +44,10 @@ public class AuthService {
     private UserInfoService userInfoService;
     @Resource
     private UserStatisticsService userStatisticsService;
+    @Resource
+    private RewardFinancialSchemeService rewardFinancialSchemeService;
+    @Resource
+    private ContribPointService contribPointService;
     @Resource
     private ResumeService resumeService;
     @Resource
@@ -150,6 +152,8 @@ public class AuthService {
         oauth.setOauthId(phoneRegisterUserDto.getPhone());
         oauthService.saveOauth(oauth);
         saveAdditionalRecords(user.getId());
+        RewardFinancialScheme rewardFinancialScheme = rewardFinancialSchemeService.getRewardFinancialSchemeById(RewardFinancialSchemeConstants.ID_REWARD_REGISTER);
+        contribPointService.sendContribPoint(user.getId(), ContribPointLogConstants.FROM_REGISTER_REWARD, null, rewardFinancialScheme.getAhaPointAmount(), rewardFinancialScheme.getAhaCreditAmount());
         return excuteLoginByUserId(user.getId());
     }
 
@@ -261,6 +265,8 @@ public class AuthService {
             oauth.setOauthId(openid);
             oauthService.saveOauth(oauth);
             saveAdditionalRecords(user.getId());
+            RewardFinancialScheme rewardFinancialScheme = rewardFinancialSchemeService.getRewardFinancialSchemeById(RewardFinancialSchemeConstants.ID_REWARD_REGISTER);
+            contribPointService.sendContribPoint(user.getId(), ContribPointLogConstants.FROM_REGISTER_REWARD, null, rewardFinancialScheme.getAhaPointAmount(), rewardFinancialScheme.getAhaCreditAmount());
             return excuteLoginByUserId(user.getId());
         }
     }
@@ -315,7 +321,6 @@ public class AuthService {
         UserVo userVo = userService.getExistUserVoById(userId);
         messageService.saveAllNoticeNotReadByReceiverUserId(userVo.getId());
         String token = signToken(userVo);
-
         PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(userVo.getId());
         MDC.put("userId", userVo.getId().toString());
         MDC.put("ip", IpUtil.getIpAddr(request));

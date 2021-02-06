@@ -1,8 +1,6 @@
 package cn.hdustea.aha_server.mapper;
-import cn.hdustea.aha_server.entity.SlideShowResource;
-import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
+import cn.hdustea.aha_server.entity.SlideShowResource;import org.apache.ibatis.annotations.Param;import java.util.List;
 
 /**
  * ${description}
@@ -22,5 +20,5 @@ public interface SlideShowResourceMapper {
 
     int updateByPrimaryKey(SlideShowResource record);
 
-    List<SlideShowResource> selectAllByConditions(@Param("enabled")Boolean enabled);
+    List<SlideShowResource> selectAllByConditions(@Param("enabled") Boolean enabled);
 }

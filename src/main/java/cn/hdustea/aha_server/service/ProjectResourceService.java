@@ -44,17 +44,13 @@ public class ProjectResourceService {
     @Resource
     private ProjectResourceTypeMapper projectResourceTypeMapper;
     @Resource
-    private UserService userService;
-    @Resource
     private CosService cosService;
     @Resource
     private ProjectService projectService;
     @Resource
-    private ContribPointLogService contribPointLogService;
-    @Resource
-    private UserStatisticsService userStatisticsService;
-    @Resource
     private RedisService redisService;
+    @Resource
+    private ContribPointService contribPointService;
 
     /**
      * 根据项目资源id获取项目资源
@@ -340,15 +336,7 @@ public class ProjectResourceService {
             throw new UpdateException("资源id=" + projectResource.getId() + "定价不合规范！");
         }
         BigDecimal rewardAhaCredit = ProjectResourceConstants.REWARD_COEFFICIENT.multiply(projectResource.getPrice());
-        userService.updateIncAhaCredit(project.getCreatorUserId(), rewardAhaCredit);
-        ContribPointLog contribPointLog = new ContribPointLog();
-        contribPointLog.setUserId(project.getCreatorUserId());
-        contribPointLog.setType(ContribPointLogConstants.FROM_CONTRIBUTE_RESOURCES);
-        contribPointLog.setAhaCreditAmount(rewardAhaCredit);
-        contribPointLog.setExternalId(projectResource.getId());
-        contribPointLog.setTime(new Date());
-        contribPointLogService.saveContribPointLog(contribPointLog);
-        userStatisticsService.incrTotalContribPointByUserId(rewardAhaCredit, project.getCreatorUserId());
+        contribPointService.sendContribPoint(project.getCreatorUserId(),ContribPointLogConstants.FROM_CONTRIBUTE_RESOURCES,projectResource.getId(),null,rewardAhaCredit);
     }
 
     /**

@@ -20,9 +20,16 @@ public class SlideShowResourceDto {
     private String pictureUrl;
 
     /**
-     * 轮播图路由路径
+     * 链接类型
      */
-    private String routerLink;
+    @NotNull(message = "连接类型不能为空！")
+    private Integer linkType;
+
+    /**
+     * 轮播图链接路径
+     */
+    @NotEmpty(message = "链接路径不能为空！")
+    private String linkUrl;
 
     /**
      * 是否启用
