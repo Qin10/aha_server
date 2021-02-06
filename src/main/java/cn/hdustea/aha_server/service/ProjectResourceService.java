@@ -1,6 +1,7 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.constants.ContribPointLogConstants;
+import cn.hdustea.aha_server.constants.ProjectResourceCheckLogConstants;
 import cn.hdustea.aha_server.constants.ProjectResourceConstants;
 import cn.hdustea.aha_server.constants.RedisConstants;
 import cn.hdustea.aha_server.dto.*;
@@ -43,6 +44,8 @@ public class ProjectResourceService {
     private ProjectResourceFinancialSchemeMapper projectResourceFinancialSchemeMapper;
     @Resource
     private ProjectResourceTypeMapper projectResourceTypeMapper;
+    @Resource
+    private ProjectResourceCheckLogMapper projectResourceCheckLogMapper;
     @Resource
     private CosService cosService;
     @Resource
@@ -336,7 +339,7 @@ public class ProjectResourceService {
             throw new UpdateException("资源id=" + projectResource.getId() + "定价不合规范！");
         }
         BigDecimal rewardAhaCredit = ProjectResourceConstants.REWARD_COEFFICIENT.multiply(projectResource.getPrice());
-        contribPointService.sendContribPoint(project.getCreatorUserId(),ContribPointLogConstants.FROM_CONTRIBUTE_RESOURCES,projectResource.getId(),null,rewardAhaCredit);
+        contribPointService.sendContribPoint(project.getCreatorUserId(), ContribPointLogConstants.FROM_CONTRIBUTE_RESOURCES, projectResource.getId(), null, rewardAhaCredit);
     }
 
     /**
@@ -347,20 +350,31 @@ public class ProjectResourceService {
      * @throws UpdateException 更新异常
      */
     @Transactional(rollbackFor = Exception.class)
-    public void checkResourceByResourceId(ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException, SelectException {
+    public void checkResourceByResourceId(int operateUserId, ProjectResourceCheckDto projectResourceCheckDto, int resourceId) throws UpdateException, SelectException {
         ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
         if (projectResource == null) {
             throw new SelectException("项目资源不存在！");
         }
+        ProjectResourceCheckLog projectResourceCheckLog = new ProjectResourceCheckLog();
+        projectResourceCheckLog.setResourceId(resourceId);
+        projectResourceCheckLog.setOperateUserId(operateUserId);
+        projectResourceCheckLog.setOperateTime(new Date());
         if (projectResourceCheckDto.getPassed()) {
+            projectResourceCheckLog.setCheckStatus(ProjectResourceCheckLogConstants.STATUS_PASS);
             if (!projectResource.getPassed()) {
                 Project project = projectService.getProjectById(projectResource.getProjectId());
-                sendReward(project, projectResource);
+                List<ProjectResourceCheckLog> passedLogs = projectResourceCheckLogMapper.selectByResourceIdAndCheckStatus(resourceId, ProjectResourceCheckLogConstants.STATUS_PASS);
+                if (passedLogs == null || passedLogs.isEmpty()) {
+                    sendReward(project, projectResource);
+                }
                 addToConvertList(projectResource);
             }
+        } else {
+            projectResourceCheckLog.setCheckStatus(ProjectResourceCheckLogConstants.STATUS_NOT_PASS);
         }
         projectResource.setPassed(projectResourceCheckDto.getPassed());
         projectResourceMapper.updateByPrimaryKeySelective(projectResource);
+        projectResourceCheckLogMapper.insertSelective(projectResourceCheckLog);
     }
 
     /**

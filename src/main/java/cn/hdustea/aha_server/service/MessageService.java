@@ -271,7 +271,7 @@ public class MessageService {
      * @param receiverUserId 收件人id
      */
     @Async
-    public void saveAllNoticeNotReadByReceiverUserId(int receiverUserId) {
+    public void pullAllNoticeNotReadByReceiverUserId(int receiverUserId) {
         List<MessageText> messageTexts = messageTextMapper.selectAllNoticeNotReadByReceiveUserId(receiverUserId);
         List<Message> messages = new ArrayList<>();
         for (MessageText messageText : messageTexts) {

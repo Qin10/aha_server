@@ -121,4 +121,16 @@ public class MessageController {
         messageService.sendPrivateMessage(messageDto, userId);
         return new ResponseBean<>(200, "succ", null);
     }
+
+    /**
+     * 拉取群发信息
+     */
+    @RequestLimit
+    @RequiresLogin
+    @GetMapping("/notice/pull")
+    public ResponseBean<Object> pullNotice() {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        messageService.pullAllNoticeNotReadByReceiverUserId(userId);
+        return new ResponseBean<>(200, "succ", null);
+    }
 }

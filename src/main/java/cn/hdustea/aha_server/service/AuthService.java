@@ -319,7 +319,7 @@ public class AuthService {
      */
     private LoginInfoVo excuteLoginByUserId(int userId) throws SelectException {
         UserVo userVo = userService.getExistUserVoById(userId);
-        messageService.saveAllNoticeNotReadByReceiverUserId(userVo.getId());
+        messageService.pullAllNoticeNotReadByReceiverUserId(userVo.getId());
         String token = signToken(userVo);
         PersonalUserInfoVo personalUserInfo = userInfoService.getPersonalUserInfo(userVo.getId());
         MDC.put("userId", userVo.getId().toString());

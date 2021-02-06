@@ -132,7 +132,8 @@ public class ManagementController {
     @RequiresLogin(requiresRoles = "ROLE_ADMIN")
     @PostMapping("/project/resource/check/{resourceId}")
     public ResponseBean<Object> checkProjectResource(@PathVariable("resourceId") int resourceId, @Validated @RequestBody ProjectResourceCheckDto projectResourceCheckDto) throws UpdateException, SelectException {
-        projectResourceService.checkResourceByResourceId(projectResourceCheckDto, resourceId);
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        projectResourceService.checkResourceByResourceId(userId, projectResourceCheckDto, resourceId);
         return new ResponseBean<>(200, "succ", null);
     }
 

@@ -357,7 +357,7 @@ public class ProjectService {
         BeanUtils.copyProperties(projectCheckDto, project);
         project.setId(projectId);
         projectMapper.updateByPrimaryKeySelective(project);
-        projectResourceService.checkResourceByProjectId(projectCheckDto.getPassed(), projectId);
+//        projectResourceService.checkResourceByProjectId(projectCheckDto.getPassed(), projectId);
     }
 
     public boolean isPassed(int projectId) {

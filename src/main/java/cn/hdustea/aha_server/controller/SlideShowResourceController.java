@@ -26,7 +26,7 @@ public class SlideShowResourceController {
      * 获取全部启用的轮播图资源
      */
     @GetMapping()
-    @RequiresLogin
+    @RequiresLogin(requireSignNotice = false)
     public ResponseBean<List<SlideShowResource>> getAllSlideShowResourceEnabled() {
         List<SlideShowResource> slideShowResources = slideShowResourceService.getAllSlideShowResourceByConditions(true);
         return new ResponseBean<>(200, "succ", slideShowResources);
