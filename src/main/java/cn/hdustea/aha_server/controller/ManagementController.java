@@ -48,6 +48,8 @@ public class ManagementController {
     private RealNameAuthenticationService realNameAuthenticationService;
     @Resource
     private ActivityService activityService;
+    @Resource
+    private SlideShowResourceService slideShowResourceService;
 
     /**
      * 分页获取所有项目粗略信息
@@ -604,5 +606,66 @@ public class ManagementController {
     public ResponseBean<List<String>> generateActivityCode(@RequestParam int activityId, @RequestParam int count) throws SelectException, PermissionDeniedException {
         List<String> codes = activityService.generateCodeById(activityId, count);
         return new ResponseBean<>(200, "succ", codes);
+    }
+
+    /**
+     * 获取指定轮播图资源
+     *
+     * @param id 轮播图资源id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/slideShow/{id}")
+    public ResponseBean<SlideShowResource> getSlideShowResourceById(@PathVariable("id") int id) {
+        SlideShowResource slideShowResource = slideShowResourceService.getSlideShowResourceById(id);
+        return new ResponseBean<>(200, "succ", slideShowResource);
+    }
+
+    /**
+     * 按条件获取全部轮播图资源
+     *
+     * @param enabled 是否启用
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/slideShow")
+    public ResponseBean<List<SlideShowResource>> getAllSlideShowResourceEnabled(@RequestParam(required = false) Boolean enabled) {
+        List<SlideShowResource> slideShowResources = slideShowResourceService.getAllSlideShowResourceByConditions(enabled);
+        return new ResponseBean<>(200, "succ", slideShowResources);
+    }
+
+    /**
+     * 新建轮播图资源
+     *
+     * @param slideShowResourceDto 轮播图资源信息
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PostMapping("/slideShow")
+    public ResponseBean<Object> saveSlideShowResource(@Validated @RequestBody SlideShowResourceDto slideShowResourceDto) {
+        slideShowResourceService.saveSlideShowResource(slideShowResourceDto);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 更新轮播图资源
+     *
+     * @param slideShowResourceDto 轮播图资源信息
+     * @param id                   轮播图资源id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @PutMapping("/slideShow/{id}")
+    public ResponseBean<Object> updateSlideShowResourceById(@RequestBody SlideShowResourceDto slideShowResourceDto, @PathVariable("id") int id) {
+        slideShowResourceService.updateSlideShowResourceById(slideShowResourceDto, id);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 删除轮播图资源
+     *
+     * @param id 轮播图资源id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @DeleteMapping("/slideShow/{id}")
+    public ResponseBean<Object> deleteSlideShowResourceById(@PathVariable("id") int id) {
+        slideShowResourceService.deleteSlideShowResourceById(id);
+        return new ResponseBean<>(200, "succ", null);
     }
 }

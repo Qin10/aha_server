@@ -2494,6 +2494,151 @@ count|int|是|生成数量
 	"time":"string //响应时间"
 }
 ```
+## 获取指定轮播图资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/slideShow/{id} `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|轮播图资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":{
+		"id":"int //主键",
+		"pictureUrl":"string //轮播图图片url",
+		"routerLink":"string //轮播图路由路径",
+		"enabled":"boolean //是否启用",
+		"uploadTime":"date //轮播图上传时间"
+	},
+	"time":"string //响应时间"
+}
+```
+## 按条件获取全部轮播图资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/slideShow `GET`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+enabled|boolean|否|是否启用
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //主键",
+		"pictureUrl":"string //轮播图图片url",
+		"routerLink":"string //轮播图路由路径",
+		"enabled":"boolean //是否启用",
+		"uploadTime":"date //轮播图上传时间"
+	}],
+	"time":"string //响应时间"
+}
+```
+## 新建轮播图资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/slideShow `POST`
+
+**请求体**
+
+```json
+{
+	"pictureUrl":"string //轮播图图片url【必须】",
+	"routerLink":"string //轮播图路由路径",
+	"enabled":"boolean //是否启用【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 更新轮播图资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/slideShow/{id} `PUT`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|轮播图资源id
+**请求体**
+
+```json
+{
+	"pictureUrl":"string //轮播图图片url【必须】",
+	"routerLink":"string //轮播图路由路径",
+	"enabled":"boolean //是否启用【必须】"
+}
+```
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+## 删除轮播图资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/admin/slideShow/{id} `DELETE`
+
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+id|int|否|轮播图资源id
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
 # 站内信相关请求
 ## 根据条件获取未读消息条数
 
@@ -4100,6 +4245,32 @@ userId|int|否|用户id
 	"code":"int //响应状态码",
 	"msg":"string //响应消息",
 	"data":"object //响应数据",
+	"time":"string //响应时间"
+}
+```
+# 轮播图相关请求
+## 获取全部启用的轮播图资源
+
+*作者: STEA_YY*
+
+**请求URL**
+
+/slideShow `GET`
+
+
+**返回结果**
+
+```json
+{
+	"code":"int //响应状态码",
+	"msg":"string //响应消息",
+	"data":[{
+		"id":"int //主键",
+		"pictureUrl":"string //轮播图图片url",
+		"routerLink":"string //轮播图路由路径",
+		"enabled":"boolean //是否启用",
+		"uploadTime":"date //轮播图上传时间"
+	}],
 	"time":"string //响应时间"
 }
 ```
