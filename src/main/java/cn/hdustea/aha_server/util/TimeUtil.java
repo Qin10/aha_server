@@ -1,8 +1,8 @@
 package cn.hdustea.aha_server.util;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -31,6 +31,16 @@ public class TimeUtil {
     public static String getFormattedDate(Date date) {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         return formatter.format(date);
+    }
+
+    public static String getISO8601Timestamp(Date date) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return format.format(date);
+    }
+
+    public static String getISO8601Timestamp(Long timestamp) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        return format.format(timestamp);
     }
 
     /**

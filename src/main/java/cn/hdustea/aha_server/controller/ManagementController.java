@@ -610,6 +610,18 @@ public class ManagementController {
     }
 
     /**
+     * 获取当前已发放兑换码数量
+     *
+     * @param activityId 活动id
+     */
+    @RequiresLogin(requiresRoles = "ROLE_ADMIN")
+    @GetMapping("/activity/code/count")
+    public ResponseBean<Integer> getCurrentActivityCodeCount(@RequestParam int activityId) {
+        Integer currentCount = activityService.getCurrentCountById(activityId);
+        return new ResponseBean<>(200, "succ", currentCount);
+    }
+
+    /**
      * 获取指定轮播图资源
      *
      * @param id 轮播图资源id

@@ -4,7 +4,7 @@ import cn.hdustea.aha_server.annotation.RequiresLogin;
 import cn.hdustea.aha_server.config.TencentCosConfig;
 import cn.hdustea.aha_server.service.CosService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.vo.CosPolicyVo;
+import cn.hdustea.aha_server.vo.CosPostPolicyVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,9 +33,17 @@ public class CosController {
      */
     @RequiresLogin
     @GetMapping("/sign/upload/public")
-    public ResponseBean<CosPolicyVo> signPublicUploadToCos(@RequestParam("filename") String filename) {
+    public ResponseBean<CosPostPolicyVo> signPublicUploadToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/user_files/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
-        return new ResponseBean<>(200, "succ", cosPolicyVo);
+        CosPostPolicyVo cosPostPolicyVo = cosService.signPostAuthorization("/user_files/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
+        return new ResponseBean<>(200, "succ", cosPostPolicyVo);
+    }
+
+    @RequiresLogin
+    @GetMapping("/sign/upload/test")
+    public ResponseBean<CosPostPolicyVo> signPostUploadToCos(@RequestParam("filename") String filename) {
+        Integer userId = ThreadLocalUtil.getCurrentUser();
+        CosPostPolicyVo cosPostPolicyVo = cosService.signPostAuthorization("/user_files/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
+        return new ResponseBean<>(200, "succ", cosPostPolicyVo);
     }
 }

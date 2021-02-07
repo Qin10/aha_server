@@ -1,7 +1,10 @@
 package cn.hdustea.aha_server.service;
 
 import cn.hdustea.aha_server.config.TencentCosConfig;
+import cn.hdustea.aha_server.util.EncryptUtil;
+import cn.hdustea.aha_server.util.TimeUtil;
 import cn.hdustea.aha_server.vo.CosPolicyVo;
+import cn.hdustea.aha_server.vo.CosPostPolicyVo;
 import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.auth.COSSigner;
@@ -22,7 +25,8 @@ public class CosService {
     @Resource
     private TencentCosConfig tencentCosConfig;
 
-    public CosPolicyVo signUploadAuthorization(String filename, String bucketName) {
+    @SuppressWarnings("unused")
+    public CosPolicyVo signPutAuthorization(String filename, String bucketName) {
         Date expiration = new Date(System.currentTimeMillis() + tencentCosConfig.getExpireTime() * 1000L);
         COSCredentials cosCredentials = new BasicCOSCredentials(tencentCosConfig.getSecretId(), tencentCosConfig.getSecretKey());
         COSSigner cosSigner = new COSSigner();
@@ -65,5 +69,34 @@ public class CosService {
         cosPolicyVo.setFilename(filename);
         cosPolicyVo.setExpire(expiration.getTime());
         return cosPolicyVo;
+    }
+
+    public CosPostPolicyVo signPostAuthorization(String filename, String bucketName) {
+        COSSigner cosSigner = new COSSigner();
+        long now = System.currentTimeMillis();
+        long startTimestamp = now / 1000L;
+        long endTimestamp = startTimestamp + tencentCosConfig.getExpireTime();
+        String keyTime = startTimestamp + ";" + endTimestamp;
+        String policy = "{\n" +
+                "    \"expiration\": \"" + TimeUtil.getISO8601Timestamp(endTimestamp * 1000L) + "\",\n" +
+                "    \"conditions\": [\n" +
+                "        { \"bucket\": \"" + bucketName + "\" },\n" +
+                "        { \"key\": \"" + filename + "\" },\n" +
+                "        { \"q-sign-algorithm\": \"sha1\" },\n" +
+                "        { \"q-ak\": \"" + tencentCosConfig.getSecretId() + "\" },\n" +
+                "        { \"q-sign-time\":\"" + keyTime + "\" }\n" +
+                "    ]\n" +
+                "}";
+        String encodedPolicy = EncryptUtil.toBase64String(policy.getBytes());
+        String signature = cosSigner.buildPostObjectSignature(tencentCosConfig.getSecretKey(), keyTime, policy);
+        CosPostPolicyVo cosPostPolicyVo = new CosPostPolicyVo();
+        cosPostPolicyVo.setRegion(tencentCosConfig.getRegion());
+        cosPostPolicyVo.setBucketName(bucketName);
+        cosPostPolicyVo.setKeyTime(keyTime);
+        cosPostPolicyVo.setPolicy(encodedPolicy);
+        cosPostPolicyVo.setSignature(signature);
+        cosPostPolicyVo.setSecretId(tencentCosConfig.getSecretId());
+        cosPostPolicyVo.setFilename(filename);
+        return cosPostPolicyVo;
     }
 }

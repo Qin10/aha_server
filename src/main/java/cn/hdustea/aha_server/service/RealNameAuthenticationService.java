@@ -1,6 +1,5 @@
 package cn.hdustea.aha_server.service;
 
-import cn.hdustea.aha_server.config.FileUploadPathConfig;
 import cn.hdustea.aha_server.config.TencentCosConfig;
 import cn.hdustea.aha_server.constants.RealNameAuthenticationConstants;
 import cn.hdustea.aha_server.constants.UserConstants;
@@ -9,10 +8,7 @@ import cn.hdustea.aha_server.entity.RealNameAuthentication;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.exception.apiException.daoException.UpdateException;
 import cn.hdustea.aha_server.mapper.RealNameAuthenticationMapper;
-import cn.hdustea.aha_server.vo.CosPolicyVo;
-import cn.hdustea.aha_server.vo.PageVo;
-import cn.hdustea.aha_server.vo.RealNameAuthenticationVo;
-import cn.hdustea.aha_server.vo.UserVo;
+import cn.hdustea.aha_server.vo.*;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -30,8 +26,6 @@ import java.util.List;
  **/
 @Service
 public class RealNameAuthenticationService {
-    @Resource
-    private FileUploadPathConfig fileUploadPathConfig;
     @Resource
     private RealNameAuthenticationMapper realNameAuthenticationMapper;
     @Resource
@@ -102,8 +96,8 @@ public class RealNameAuthenticationService {
         return cosService.signDownloadAuthorization(filename);
     }
 
-    public CosPolicyVo signUpload(String filename, int userId) {
-        return cosService.signUploadAuthorization("/authentication/" + userId + "/" + filename, tencentCosConfig.getProfileBucketName());
+    public CosPostPolicyVo signUpload(String filename, int userId) {
+        return cosService.signPostAuthorization("/authentication/" + userId + "/" + filename, tencentCosConfig.getProfileBucketName());
     }
 
     public void updateRealNameAuthenticationByUserId(RealNameAuthenticationDto realNameAuthenticationDto, int userId) {

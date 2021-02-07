@@ -7,7 +7,7 @@ import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.service.CosService;
 import cn.hdustea.aha_server.service.UserInfoService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.vo.CosPolicyVo;
+import cn.hdustea.aha_server.vo.CosPostPolicyVo;
 import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import lombok.extern.slf4j.Slf4j;
@@ -76,9 +76,9 @@ public class UserInfoController {
     @RequestLimit()
     @RequiresLogin(requireSignNotice = false)
     @GetMapping("/avatar/sign/upload")
-    public ResponseBean<CosPolicyVo> signUpdateUserAvatarToCos(@RequestParam("filename") String filename) {
+    public ResponseBean<CosPostPolicyVo> signUpdateUserAvatarToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/avatar/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
-        return new ResponseBean<>(200, "succ", cosPolicyVo);
+        CosPostPolicyVo cosPostPolicyVo = cosService.signPostAuthorization("/avatar/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
+        return new ResponseBean<>(200, "succ", cosPostPolicyVo);
     }
 }

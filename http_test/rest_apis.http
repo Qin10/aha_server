@@ -753,6 +753,13 @@ Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
+###管理员查看已发放兑换码数量
+GET https://{{host}}/admin/activity/code/count?activityId=2
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+
 ###用户使用兑换码
 POST https://{{host}}/activity/code?code=nizg8gk3
 Authorization: {{auth_token}}
@@ -779,6 +786,12 @@ Authorization: {{auth_token}}
 
 ###获取用户贡献点流水
 GET https://{{host}}/contribPoint/log/me?pageNum=1&pageSize=5&sortBy=ahaCredit
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取post cos签名
+GET https://{{host}}/cos/sign/upload/test?filename=操作系统实验报告.docx
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

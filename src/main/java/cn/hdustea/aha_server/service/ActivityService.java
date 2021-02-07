@@ -130,4 +130,8 @@ public class ActivityService {
         contribPointService.sendContribPoint(userId, ContribPointLogConstants.FROM_ACTIVITY_EXCHANGE, activityCodeExchangeLog.getId(), activity.getExchangeAhaPoint(), activity.getExchangeAhaCredit());
         redisService.del(RedisConstants.ACTIVITY_CODE_PREFIX + code);
     }
+
+    public Integer getCurrentCountById(int activityId) {
+        return (Integer) redisService.get(RedisConstants.ACTIVITY_CODE_COUNT_PREFIX + activityId);
+    }
 }

@@ -113,10 +113,10 @@ public class ProjectController {
     @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/sign/upload/public")
-    public ResponseBean<CosPolicyVo> signUploadPublicFileToCos(@RequestParam("filename") String filename) {
+    public ResponseBean<CosPostPolicyVo> signUploadPublicFileToCos(@RequestParam("filename") String filename) {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/resource/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
-        return new ResponseBean<>(200, "succ", cosPolicyVo);
+        CosPostPolicyVo cosPostPolicyVo = cosService.signPostAuthorization("/resource/" + userId + "/" + filename, tencentCosConfig.getPublicBucketName());
+        return new ResponseBean<>(200, "succ", cosPostPolicyVo);
     }
 
     /**
@@ -305,14 +305,14 @@ public class ProjectController {
     @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @GetMapping("/{projectId}/resources/sign/upload/private")
-    public ResponseBean<CosPolicyVo> signUploadPrivateFileToCos(@PathVariable("projectId") int projectId, @RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
+    public ResponseBean<CosPostPolicyVo> signUploadPrivateFileToCos(@PathVariable("projectId") int projectId, @RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         projectService.getProjectDetailById(projectId);
         if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
         }
-        CosPolicyVo cosPolicyVo = cosService.signUploadAuthorization("/" + projectId + "/" + filename, tencentCosConfig.getResourceBucketName());
-        return new ResponseBean<>(200, "succ", cosPolicyVo);
+        CosPostPolicyVo cosPostPolicyVo = cosService.signPostAuthorization("/" + projectId + "/" + filename, tencentCosConfig.getResourceBucketName());
+        return new ResponseBean<>(200, "succ", cosPostPolicyVo);
     }
 
     /**

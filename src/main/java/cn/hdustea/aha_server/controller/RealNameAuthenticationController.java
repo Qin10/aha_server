@@ -7,7 +7,7 @@ import cn.hdustea.aha_server.exception.apiException.authenticationException.Perm
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.service.RealNameAuthenticationService;
 import cn.hdustea.aha_server.util.ThreadLocalUtil;
-import cn.hdustea.aha_server.vo.CosPolicyVo;
+import cn.hdustea.aha_server.vo.CosPostPolicyVo;
 import cn.hdustea.aha_server.vo.ResponseBean;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,14 +31,14 @@ public class RealNameAuthenticationController {
      */
     @GetMapping("/sign/upload")
     @RequiresLogin
-    public ResponseBean<CosPolicyVo> signProfileUploadToCos(@RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
+    public ResponseBean<CosPostPolicyVo> signProfileUploadToCos(@RequestParam("filename") String filename) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         Integer status = realNameAuthenticationService.getAuthenticationStatusByUserId(userId);
         if (status.equals(UserConstants.AUTHENTICATION_STATUS_AUTHENTICATED)) {
             throw new PermissionDeniedException("您已经完成实名认证！");
         }
-        CosPolicyVo cosPolicyVo = realNameAuthenticationService.signUpload(filename, userId);
-        return new ResponseBean<>(200, "succ", cosPolicyVo);
+        CosPostPolicyVo cosPostPolicyVo = realNameAuthenticationService.signUpload(filename, userId);
+        return new ResponseBean<>(200, "succ", cosPostPolicyVo);
     }
 
     /**
