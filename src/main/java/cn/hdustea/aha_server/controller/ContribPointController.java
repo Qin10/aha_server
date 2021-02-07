@@ -120,12 +120,18 @@ public class ContribPointController {
 
     /**
      * 获取用户个人贡献点变动日志
+     *
+     * @param pageNum  页码
+     * @param pageSize 分页大小
+     * @param type     类型
+     * @param sortBy   排序关键字(取值time、type、contribPoint、ahaPoint、ahaCredit)
+     * @param orderBy  排序方式(取值desc、asc，默认desc)
      */
     @RequiresLogin
     @GetMapping("/log/me")
-    public ResponseBean<List<ContribPointLog>> getPersonalContribPointLog() {
+    public ResponseBean<PageVo<List<ContribPointLog>>> getPersonalContribPointLog(@RequestParam int pageNum, @RequestParam int pageSize, @RequestParam(required = false) Integer type, @RequestParam(required = false, defaultValue = "time") String sortBy, @RequestParam(required = false, defaultValue = "desc") String orderBy) throws SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
-        List<ContribPointLog> contribPointLogs = contribPointLogService.getAllContribPointLogByUserId(userId);
+        PageVo<List<ContribPointLog>> contribPointLogs = contribPointLogService.getAllContribPointLogPagableByUserIdAndConditions(pageNum, pageSize, userId, type, sortBy, orderBy);
         return new ResponseBean<>(200, "succ", contribPointLogs);
     }
 }

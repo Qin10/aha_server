@@ -776,3 +776,9 @@ GET https://{{host}}/slideShow
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###获取用户贡献点流水
+GET https://{{host}}/contribPoint/log/me?pageNum=1&pageSize=5&sortBy=ahaCredit
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}

@@ -872,23 +872,36 @@ action|string|否|操作，取值pay、cancel
 
 /contribPoint/log/me `GET`
 
+**请求参数**
+
+参数名|类型|必须|描述
+--:|:--:|:--:|:--
+pageNum|int|是|页码
+pageSize|int|是|分页大小
+type|int|否|类型
+sortBy|string|否|排序关键字(取值time、type、contribPoint、ahaPoint、ahaCredit)
+orderBy|string|否|排序方式(取值desc、asc，默认desc)
 
 **返回结果**
 
 ```json
 {
-	"code":"int //响应状态码",
-	"msg":"string //响应消息",
-	"data":[{
-		"id":"int",
-		"userId":"int //用户id",
-		"type":"int //类型",
-		"externalId":"int //业务外键",
-		"ahaCreditAmount":"double //Aha币总额",
-		"ahaPointAmount":"double //Aha点总额",
-		"time":"date //发生时间"
-	}],
-	"time":"string //响应时间"
+  "code":"int //响应状态码",
+  "msg":"string //响应消息",
+  "data":{
+    "pageNum":"int //页码",
+    "pageSize":"int //分页大小",
+    "pageData":[{
+      "id":"int",
+      "userId":"int //用户id",
+      "type":"int //类型",
+      "externalId":"int //业务外键",
+      "ahaCreditAmount":"double //Aha币总额",
+      "ahaPointAmount":"double //Aha点总额",
+      "time":"date //发生时间"
+    }]
+  },
+  "time":"string //响应时间"
 }
 ```
 # COS相关请求

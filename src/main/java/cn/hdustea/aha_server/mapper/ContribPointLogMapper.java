@@ -1,6 +1,9 @@
 package cn.hdustea.aha_server.mapper;
 
-import cn.hdustea.aha_server.entity.ContribPointLog;import org.apache.ibatis.annotations.Param;import java.util.List;
+import cn.hdustea.aha_server.entity.ContribPointLog;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * ${description}
@@ -20,5 +23,5 @@ public interface ContribPointLogMapper {
 
     int updateByPrimaryKey(ContribPointLog record);
 
-    List<ContribPointLog> selectAllByUserIdOrderByTimeDesc(@Param("userId") Integer userId);
+    List<ContribPointLog> selectAllByConditions(@Param("userId") Integer userId, @Param("type") Integer type);
 }
