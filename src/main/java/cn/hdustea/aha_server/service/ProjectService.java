@@ -39,8 +39,6 @@ public class ProjectService {
     @Resource
     private ProjectMemberMapper projectMemberMapper;
     @Resource
-    private ProjectResourceService projectResourceService;
-    @Resource
     private UserStatisticsService userStatisticsService;
     @Resource
     private UserCollectionMapper userCollectionMapper;
@@ -192,6 +190,10 @@ public class ProjectService {
      * @param id 项目id
      */
     public void deleteProjectById(int id) {
+        List<ProjectMember> projectMembers = projectMemberMapper.selectAllByProjectId(id);
+        for (ProjectMember projectMember : projectMembers) {
+            userStatisticsService.decTotalProjectByUserId(1, projectMember.getMemberUserId());
+        }
         projectMapper.deleteByPrimaryKey(id);
     }
 
@@ -349,7 +351,7 @@ public class ProjectService {
      * @throws UpdateException 更新异常
      */
     @Transactional(rollbackFor = Exception.class)
-    public void checkProjectByProjectId(ProjectCheckDto projectCheckDto, int projectId) throws UpdateException, SelectException {
+    public void checkProjectByProjectId(ProjectCheckDto projectCheckDto, int projectId) throws UpdateException {
         if (projectMapper.selectByPrimaryKey(projectId) == null) {
             throw new UpdateException("项目不存在！");
         }
@@ -358,6 +360,10 @@ public class ProjectService {
         project.setId(projectId);
         projectMapper.updateByPrimaryKeySelective(project);
 //        projectResourceService.checkResourceByProjectId(projectCheckDto.getPassed(), projectId);
+    }
+
+    public void updatePassedByProjectId(Boolean passed, int projectId) {
+        projectMapper.updatePassedById(passed, projectId);
     }
 
     public boolean isPassed(int projectId) {

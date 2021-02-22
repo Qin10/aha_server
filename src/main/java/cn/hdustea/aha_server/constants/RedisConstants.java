@@ -40,6 +40,8 @@ public class RedisConstants {
 
     public static final String ACTIVITY_CODE_PREFIX = "activity:code:";
 
+    public static final String PROJECT_UPLOAD_TEMP_TOKEN_PREFIX = "project:upload:token:";
+
     /**
      * 项目阅读量Hash key
      */

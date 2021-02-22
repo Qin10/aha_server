@@ -1,5 +1,6 @@
 package cn.hdustea.aha_server.service;
 
+import cn.hdustea.aha_server.config.ProjectResourceUploadConfig;
 import cn.hdustea.aha_server.constants.ContribPointLogConstants;
 import cn.hdustea.aha_server.constants.ProjectResourceCheckLogConstants;
 import cn.hdustea.aha_server.constants.ProjectResourceConstants;
@@ -25,6 +26,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 项目资源服务类
@@ -54,6 +56,34 @@ public class ProjectResourceService {
     private RedisService redisService;
     @Resource
     private ContribPointService contribPointService;
+    @Resource
+    private ProjectResourceUploadConfig projectResourceUploadConfig;
+
+    public String createTempUploadToken(int projectId) {
+        String token = UUID.randomUUID().toString();
+        redisService.set(RedisConstants.PROJECT_UPLOAD_TEMP_TOKEN_PREFIX + projectId, token, projectResourceUploadConfig.getTokenExpireTime());
+        return token;
+    }
+
+    public boolean verifyUploadTokenByProjectId(int projectId, String token) {
+        String currentToken = (String) redisService.get(RedisConstants.PROJECT_UPLOAD_TEMP_TOKEN_PREFIX + projectId);
+        if (currentToken == null) {
+            return false;
+        }
+        return currentToken.equals(token);
+    }
+
+    public boolean verifyUploadTokenByResourceId(int resourceId, String token) {
+        ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(resourceId);
+        if (projectResource == null) {
+            return false;
+        }
+        String currentToken = (String) redisService.get(RedisConstants.PROJECT_UPLOAD_TEMP_TOKEN_PREFIX + projectResource.getProjectId());
+        if (currentToken == null) {
+            return false;
+        }
+        return currentToken.equals(token);
+    }
 
     /**
      * 根据项目资源id获取项目资源
@@ -61,8 +91,16 @@ public class ProjectResourceService {
      * @param id 项目资源id
      * @return 项目资源
      */
-    public ProjectResource getProjectResourceById(int id) {
-        return projectResourceMapper.selectByPrimaryKey(id);
+    public ProjectResource getProjectResourceById(int id) throws SelectException {
+        ProjectResource projectResource = projectResourceMapper.selectByPrimaryKey(id);
+        if (projectResource == null) {
+            throw new SelectException("资源不存在！");
+        }
+        return projectResource;
+    }
+
+    public List<ProjectResource> getAllProjectResourceByProjectId(int projectId) {
+        return projectResourceMapper.selectAllByProjectId(projectId);
     }
 
     public List<ProjectResourceVo> getAllProjectResourceVoByConditions(Boolean resourcePassed, Boolean projectPassed, Integer projectId) {
@@ -280,7 +318,7 @@ public class ProjectResourceService {
         return purchasedResource != null;
     }
 
-    public boolean allowDownload(int userId, int resourceId) {
+    public boolean allowDownload(int userId, int resourceId) throws SelectException {
         if (hasPermission(userId, resourceId)) {
             return true;
         }
@@ -384,7 +422,7 @@ public class ProjectResourceService {
      * @param projectResourceId 项目资源id
      * @return 是否有权限
      */
-    public boolean hasPermission(int userId, int projectResourceId) {
+    public boolean hasPermission(int userId, int projectResourceId) throws SelectException {
         ProjectResource projectResource = getProjectResourceById(projectResourceId);
         if (projectResource == null) {
             return false;

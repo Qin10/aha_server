@@ -73,7 +73,7 @@ public class ContribPointController {
     @RequestLimit
     @RequiresLogin
     @PostMapping("/order")
-    public ResponseBean<Integer> createOrder(@RequestBody @Validated ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException {
+    public ResponseBean<Integer> createOrder(@RequestBody @Validated ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         int orderId = contribPointOrderService.createOrder(userId, contribPointOrderResourcesDto);
         return new ResponseBean<>(200, "succ", orderId);

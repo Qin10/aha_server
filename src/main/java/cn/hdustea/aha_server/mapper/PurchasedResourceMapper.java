@@ -21,6 +21,10 @@ public interface PurchasedResourceMapper {
 
     PurchasedResource selectByPrimaryKey(@Param("userId") Integer userId, @Param("resourceId") Integer resourceId);
 
+    List<PurchasedResource> selectAllByResourceId(@Param("resourceId")Integer resourceId);
+
+
+
     int updateByPrimaryKeySelective(PurchasedResource record);
 
     int updateByPrimaryKey(PurchasedResource record);

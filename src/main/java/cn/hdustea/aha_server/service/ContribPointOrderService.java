@@ -86,7 +86,7 @@ public class ContribPointOrderService {
      * @throws InsertException 插入异常
      */
     @Transactional(rollbackFor = {Exception.class})
-    public int createOrder(int userId, ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException {
+    public int createOrder(int userId, ContribPointOrderResourcesDto contribPointOrderResourcesDto) throws InsertException, SelectException {
         if (projectService.isMember(contribPointOrderResourcesDto.getProjectId(), userId)) {
             throw new InsertException("项目成员不可以购买项目资源！");
         }
@@ -102,9 +102,6 @@ public class ContribPointOrderService {
         contribPointOrderMapper.insertSelective(contribPointOrder);
         for (Integer resourceId : contribPointOrderResourcesDto.getResourceIds()) {
             ProjectResource projectResource = projectResourceService.getProjectResourceById(resourceId);
-            if (projectResource == null) {
-                throw new InsertException("资源id=" + resourceId + "不存在！");
-            }
             if (!projectResource.getProjectId().equals(contribPointOrderResourcesDto.getProjectId())) {
                 throw new InsertException("资源id=" + resourceId + "不属于指定项目！");
             }

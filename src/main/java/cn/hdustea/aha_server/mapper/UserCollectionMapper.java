@@ -27,4 +27,8 @@ public interface UserCollectionMapper {
     List<UserCollection> selectAllByUserId(@Param("userId") Integer userId);
 
     List<UserCollectionVo> selectAllVoByUserId(@Param("userId") Integer userId);
+
+    List<UserCollection> selectAllByProjectId(@Param("projectId")Integer projectId);
+
+
 }

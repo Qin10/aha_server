@@ -13,6 +13,7 @@ import cn.hdustea.aha_server.entity.ProjectMember;
 import cn.hdustea.aha_server.entity.ProjectResourceFinancialScheme;
 import cn.hdustea.aha_server.entity.ProjectResourceType;
 import cn.hdustea.aha_server.exception.apiException.authenticationException.PermissionDeniedException;
+import cn.hdustea.aha_server.exception.apiException.authenticationException.TokenCheckException;
 import cn.hdustea.aha_server.exception.apiException.daoException.DeleteException;
 import cn.hdustea.aha_server.exception.apiException.daoException.InsertException;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
@@ -148,6 +149,7 @@ public class ProjectController {
             throw new PermissionDeniedException();
         }
         projectService.updateProjectByProjectId(projectDto, projectId);
+        projectService.updatePassedByProjectId(false, projectId);
         return new ResponseBean<>(200, "succ", null);
     }
 
@@ -158,7 +160,7 @@ public class ProjectController {
      */
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/{projectId}")
-    public ResponseBean<Object> deleteProjectById(@PathVariable("projectId") int projectId) throws PermissionDeniedException {
+    public ResponseBean<Object> deleteProjectById(@PathVariable("projectId") int projectId) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectService.hasPermission(userId, projectId)) {
             throw new PermissionDeniedException();
@@ -282,7 +284,7 @@ public class ProjectController {
      */
     @RequiresLogin()
     @GetMapping("/resource/{projectResourceId}")
-    public ResponseBean<ProjectResourceVo> getProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestParam(value = "edit", defaultValue = "false", required = false) boolean edit) throws PermissionDeniedException {
+    public ResponseBean<ProjectResourceVo> getProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestParam(value = "edit", defaultValue = "false", required = false) boolean edit) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         ProjectResourceVo projectResourceVo;
         if (!edit) {
@@ -316,6 +318,23 @@ public class ProjectController {
     }
 
     /**
+     * 通过临时令牌获取COS私有资源上传签名(用于上传资源文件)
+     *
+     * @param projectId 项目id
+     * @param filename  待上传文件名
+     * @param token     临时令牌
+     */
+    @RequestLimit
+    @GetMapping("/{projectId}/resources/sign/upload/private/token")
+    public ResponseBean<CosPostPolicyVo> signUploadPrivateFileToCosWithToken(@PathVariable("projectId") int projectId, @RequestParam("filename") String filename, @RequestParam String token) throws TokenCheckException {
+        if (!projectResourceService.verifyUploadTokenByProjectId(projectId, token)) {
+            throw new TokenCheckException("token校验失败！");
+        }
+        CosPostPolicyVo cosPostPolicyVo = cosService.signPostAuthorization("/" + projectId + "/" + filename, tencentCosConfig.getResourceBucketName());
+        return new ResponseBean<>(200, "succ", cosPostPolicyVo);
+    }
+
+    /**
      * 新增项目资源
      *
      * @param projectResourceDto 项目资源
@@ -333,6 +352,22 @@ public class ProjectController {
     }
 
     /**
+     * 通过临时令牌新增项目资源
+     *
+     * @param projectResourceDto 项目资源
+     * @param projectId          项目id
+     * @param token              临时令牌
+     */
+    @PostMapping("/resource/{projectId}/token")
+    public ResponseBean<Integer> saveProjectResourceByProjectWithToken(@RequestBody @Validated ProjectResourceDto projectResourceDto, @PathVariable("projectId") int projectId, @RequestParam String token) throws TokenCheckException, SelectException, InsertException {
+        if (!projectResourceService.verifyUploadTokenByProjectId(projectId, token)) {
+            throw new TokenCheckException("token校验失败！");
+        }
+        Integer projectResourceId = projectResourceService.saveProjectResourceByProjectId(projectResourceDto, projectId);
+        return new ResponseBean<>(200, "succ", projectResourceId);
+    }
+
+    /**
      * 更新项目资源
      *
      * @param projectResourceId        项目资源id
@@ -341,10 +376,30 @@ public class ProjectController {
     @RequestLimit
     @RequiresLogin(requireSignContract = true)
     @PutMapping("/resource/{projectResourceId}")
-    public ResponseBean<Object> updateProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestBody ProjectResourceUpdateDto projectResourceUpdateDto) throws PermissionDeniedException {
+    public ResponseBean<Object> updateProjectResourceByResourceId(@PathVariable("projectResourceId") int projectResourceId, @RequestBody ProjectResourceUpdateDto projectResourceUpdateDto) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectResourceService.hasPermission(userId, projectResourceId)) {
             throw new PermissionDeniedException("您无权限修改本资源！");
+        }
+        if (projectResourceService.isPassed(projectResourceId)) {
+            throw new PermissionDeniedException("资源已经通过审核，无法修改！");
+        }
+        projectResourceService.updateProjectResourceById(projectResourceUpdateDto, projectResourceId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 使用临时令牌更新项目资源
+     *
+     * @param projectResourceId        项目资源id
+     * @param projectResourceUpdateDto 项目资源信息
+     * @param token                    临时令牌
+     */
+    @RequestLimit
+    @PutMapping("/resource/{projectResourceId}/token")
+    public ResponseBean<Object> updateProjectResourceByResourceIdWithToken(@PathVariable("projectResourceId") int projectResourceId, @RequestBody ProjectResourceUpdateDto projectResourceUpdateDto, @RequestParam String token) throws PermissionDeniedException, TokenCheckException {
+        if (!projectResourceService.verifyUploadTokenByResourceId(projectResourceId, token)) {
+            throw new TokenCheckException("token校验失败！");
         }
         if (projectResourceService.isPassed(projectResourceId)) {
             throw new PermissionDeniedException("资源已经通过审核，无法修改！");
@@ -360,10 +415,29 @@ public class ProjectController {
      */
     @RequiresLogin(requireSignContract = true)
     @DeleteMapping("/resource/{projectResourceId}")
-    public ResponseBean<Object> deleteProjectResourceById(@PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException {
+    public ResponseBean<Object> deleteProjectResourceById(@PathVariable("projectResourceId") int projectResourceId) throws PermissionDeniedException, SelectException {
         Integer userId = ThreadLocalUtil.getCurrentUser();
         if (!projectResourceService.hasPermission(userId, projectResourceId)) {
             throw new PermissionDeniedException();
+        }
+        if (projectResourceService.isPassed(projectResourceId)) {
+            throw new PermissionDeniedException();
+        }
+        projectResourceService.deleteProjectResourceById(projectResourceId);
+        return new ResponseBean<>(200, "succ", null);
+    }
+
+    /**
+     * 根据临时令牌删除项目资源
+     *
+     * @param projectResourceId 项目资源id
+     * @param token             临时令牌
+     */
+    @RequiresLogin(requireSignContract = true)
+    @DeleteMapping("/resource/{projectResourceId}/token")
+    public ResponseBean<Object> deleteProjectResourceByIdWithToken(@PathVariable("projectResourceId") int projectResourceId, @RequestParam String token) throws PermissionDeniedException, TokenCheckException {
+        if (!projectResourceService.verifyUploadTokenByResourceId(projectResourceId, token)) {
+            throw new TokenCheckException("token校验失败！");
         }
         if (projectResourceService.isPassed(projectResourceId)) {
             throw new PermissionDeniedException();
