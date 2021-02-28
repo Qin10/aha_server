@@ -1,0 +1,53 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/aha_data?serverTimezone=Hongkong
+    username: root
+    password: ROOT_root123
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  data:
+    mongodb:
+      port: 27017
+      host: 127.0.0.1
+      database: aha
+    redis:
+      repositories:
+        enabled: false
+  jackson:
+    time-zone: GMT+8
+  resources:
+    add-mappings: false
+  mvc:
+    throw-exception-if-no-handler-found: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapperxml/*.xml
+server:
+  port: 8089
+jwt-config:
+  secret: Gzysb233
+  expireTime: 600
+  refreshTokenExpireTime: 604800
+file-upload-path:
+  contractSignaturePath: /home/aha_files/contract_signatures/
+#  contractSignaturePath: C:/dev/
+user-operation-log:
+  format: '[{}][{}][{}]'
+wechat:
+  appid: wx2af10f72ca23e721
+  secret: d97b306eecf39066bf3b24b434b5fc79
+tencent-cos:
+  secretId: AKIDHNKEC2IOGxUnw3pf7MRK9nNl1BFMNTVS
+  secretKey: 56xeMqOj1ILExVJ7UnIfx0YrxownQt9F
+  region: ap-shanghai
+  expireTime: 1200
+  publicBucketName: aha-public-1257019972
+  resourceBucketName: aha-resource-1257019972
+  profileBucketName: aha-profile-1257019972
+  documentConvertQueueId: pdd0c43c4fec74f23bca0ae2addc5ad86
+  documentPreviewWatermarkText: QWhh5Yib5oSP56m66Ze05paH5qGj6aKE6KeI
+project-resource-upload:
+  tokenExpireTime: 86400

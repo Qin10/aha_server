@@ -576,6 +576,7 @@ public class ProjectController {
             throw new PermissionDeniedException("您尚未购买本资源！");
         }
         projectResourceService.saveResourceScore(projectResourceScoreDto, projectResourceId, userId);
+        log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "评价资源", "id=" + projectResourceId + "," + "score=" + projectResourceScoreDto.getScore().toString());
         return new ResponseBean<>(200, "succ", null);
     }
 

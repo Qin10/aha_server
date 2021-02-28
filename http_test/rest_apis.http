@@ -1,5 +1,5 @@
 ###发送注册验证短信
-POST https://{{host}}/sms/code
+POST http://{{host}}/sms/code
 Content-Type: application/json
 
 {
@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###发送修改密码验证短信
-POST https://{{host}}/sms/code
+POST http://{{host}}/sms/code
 Content-Type: application/json
 
 {
@@ -17,7 +17,7 @@ Content-Type: application/json
 }
 
 ###发送绑定手机号验证短信
-POST https://{{host}}/sms/code
+POST http://{{host}}/sms/code
 Content-Type: application/json
 
 {
@@ -26,30 +26,30 @@ Content-Type: application/json
 }
 
 ###用户注册
-POST https://{{host}}/register/phone
+POST http://{{host}}/register/phone
 Content-Type: application/json
 
 {
   "phone": "13819154341",
   "password": "114514",
-  "nickname": "GZY",
+  "nickname": "GZYSB",
   "code": "1234",
   "signedNotice": true
 }
 
 ###用户登录
-POST https://{{host}}/login/phone
+POST http://{{host}}/login/phone
 Content-Type: application/json
 
 {
-  "phone": "15382355341",
+  "phone": "13819154341",
   "password": "114514"
 }
 
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###绑定手机号
-POST https://{{host}}/bind/phone
+POST http://{{host}}/bind/phone
 Authorization:{{auth_token}}
 Content-Type: application/json
 
@@ -59,13 +59,13 @@ Content-Type: application/json
 }
 
 ###签署服务协议
-POST https://{{host}}/sign/notice
+POST http://{{host}}/sign/notice
 Authorization:{{auth_token}}
 
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###用户修改密码
-POST https://{{host}}/changePassword/phone/15382355341
+POST http://{{host}}/changePassword/phone/15382355341
 Content-Type: application/json
 
 {
@@ -76,36 +76,36 @@ Content-Type: application/json
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###获取用户个人信息
-GET https://{{host}}/userInfo/55
+GET http://{{host}}/userInfo/55
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###搜索用户个人信息
-GET https://{{host}}/userInfo/search?nickname=YY
+GET http://{{host}}/userInfo/search?nickname=YY
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###用户修改个人信息
-PUT https://{{host}}/userInfo/me
+PUT http://{{host}}/userInfo/me
 Authorization:{{auth_token}}
 Content-Type: application/json
 
 {
-  "avatarUrl": "https://www.baidu.com"
+  "avatarUrl": "http://www.baidu.com"
 }
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取用户简历信息
-GET https://{{host}}/resume/me
+GET http://{{host}}/resume/me
 Authorization:{{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改用户简历
-PUT https://{{host}}/resume
+PUT http://{{host}}/resume
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -163,19 +163,19 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目列表
-GET https://{{host}}/project?pageNum=1&pageSize=5
+GET http://{{host}}/project?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目详细信息
-GET https://{{host}}/project/97
+GET http://{{host}}/project/97
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###提交订单
-POST https://{{host}}/contribPoint/order
+POST http://{{host}}/contribPoint/order
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -189,73 +189,73 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###支付订单
-PUT https://{{host}}/contribPoint/order/30?action=pay
+PUT http://{{host}}/contribPoint/order/30?action=pay
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取全部已购买资源
-GET https://{{host}}/project/resource/purchased
+GET http://{{host}}/project/resource/purchased
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###判断资源是否已购买
-GET https://{{host}}/project/resource/purchased/check/11111
+GET http://{{host}}/project/resource/purchased/check/11111
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有成员信息
-GET https://{{host}}/project/70/members
+GET http://{{host}}/project/70/members
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目所有资源信息
-GET https://{{host}}/project/7/resources
+GET http://{{host}}/project/7/resources
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取资源信息
-GET https://{{host}}/project/resource/78
+GET http://{{host}}/project/resource/78
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看收藏资源列表
-GET https://{{host}}/project/collection
+GET http://{{host}}/project/collection
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###收藏资源
-POST https://{{host}}/project/collection/78
+POST http://{{host}}/project/collection/78
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###取消收藏资源
-DELETE https://{{host}}/project/collection/70
+DELETE http://{{host}}/project/collection/70
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###判断收藏资源
-GET https://{{host}}/project/collection/70
+GET http://{{host}}/project/collection/70
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看资源评论
-GET https://{{host}}/project/resource/score?pageNum=1&pageSize=5&projectId=72
+GET http://{{host}}/project/resource/score?pageNum=1&pageSize=5&projectId=72
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###评论项目
-POST https://{{host}}/project/score/89
+POST http://{{host}}/project/score/89
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -267,7 +267,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###新建项目
-POST https://{{host}}/project
+POST http://{{host}}/project
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -282,13 +282,13 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###删除项目
-DELETE https://{{host}}/project/15
+DELETE http://{{host}}/project/15
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改项目信息
-PUT https://{{host}}/project/7
+PUT http://{{host}}/project/7
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -299,7 +299,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目成员
-POST https://{{host}}/project/member/70
+POST http://{{host}}/project/member/70
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -313,7 +313,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###修改项目成员信息
-PUT https://{{host}}/project/member/70/49
+PUT http://{{host}}/project/member/70/49
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -325,7 +325,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###批量修改项目成员信息
-PUT https://{{host}}/project/members/1
+PUT http://{{host}}/project/members/1
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -343,14 +343,14 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###删除项目成员
-DELETE https://{{host}}/project/member/4/15382355341
+DELETE http://{{host}}/project/member/4/15382355341
 Authorization: {{auth_token}}
 Content-Type: application/json
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加项目资源
-POST https://{{host}}/project/resource/94
+POST http://{{host}}/project/resource/94
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -363,7 +363,7 @@ Content-Type: application/json
 }
 
 ###修改项目资源
-PUT https://{{host}}/project/resource/196
+PUT http://{{host}}/project/resource/196
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -375,25 +375,25 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###删除项目资源
-DELETE https://{{host}}/project/resource/109
+DELETE http://{{host}}/project/resource/109
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取贡献点排行榜总表
-GET https://{{host}}/rank
+GET http://{{host}}/rank
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取贡献点排行榜个人排名
-GET https://{{host}}/rank/me
+GET http://{{host}}/rank/me
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员发送公告
-POST https://{{host}}/admin/message/systemNotice
+POST http://{{host}}/admin/message/systemNotice
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -402,7 +402,7 @@ Content-Type: application/json
 }
 
 ###管理员发送系统消息
-POST https://{{host}}/admin/message/systemPrivate
+POST http://{{host}}/admin/message/systemPrivate
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -414,19 +414,19 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员分页获取用户信息
-GET https://{{host}}/admin/user?pageNum=1&pageSize=10
+GET http://{{host}}/admin/user?pageNum=1&pageSize=10
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ### 管理员获取用户信息
-GET https://{{host}}/admin/user/33
+GET http://{{host}}/admin/user/33
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ### 修改用户公开信息
-PUT https://{{host}}/admin/user/info/33
+PUT http://{{host}}/admin/user/info/33
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -437,7 +437,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ### 修改用户私有信息
-PUT https://{{host}}/admin/user/33
+PUT http://{{host}}/admin/user/33
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -448,31 +448,31 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看未读站内信数量
-GET https://{{host}}/message/count/notRead?type=private
+GET http://{{host}}/message/count/notRead?type=private
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看站内信
-GET https://{{host}}/message?pageNum=1&pageSize=10&type=private
+GET http://{{host}}/message?pageNum=1&pageSize=10&type=private
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###根据id查看站内信
-GET https://{{host}}/message/22
+GET http://{{host}}/message/22
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###根据对话获取站内信
-GET https://{{host}}/message/communication/49
+GET http://{{host}}/message/communication/49
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###投递站内信
-POST  https://{{host}}/message
+POST  http://{{host}}/message
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -485,13 +485,13 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###微信绑定
-POST https://{{host}}/bind/wechat?code=053gCg1w3ikZnV2cl74w3rBPOj1gCg1C
+POST http://{{host}}/bind/wechat?code=053gCg1w3ikZnV2cl74w3rBPOj1gCg1C
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###微信注册登录
-POST https://{{host}}/login/wechat
+POST http://{{host}}/login/wechat
 Content-Type: application/json
 
 {
@@ -503,25 +503,25 @@ Content-Type: application/json
 > {% client.global.set("auth_token",response.body.data.token);%}
 
 ###获取全部竞赛信息
-GET https://{{host}}/competition
+GET http://{{host}}/competition
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取全部竞赛标签信息
-GET https://{{host}}/competition/type
+GET http://{{host}}/competition/type
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###根据id获取竞赛信息
-GET https://{{host}}/competition/5
+GET http://{{host}}/competition/5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加竞赛标签
-POST https://{{host}}/admin/competition/tag
+POST http://{{host}}/admin/competition/tag
 Content-Type: application/json
 Authorization: {{auth_token}}
 
@@ -532,7 +532,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###添加竞赛信息
-POST https://{{host}}/admin/competition
+POST http://{{host}}/admin/competition
 Content-Type: application/json
 Authorization: {{auth_token}}
 
@@ -545,19 +545,19 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看用户项目
-GET https://{{host}}/project/me?pageNum=1&pageSize=5
+GET http://{{host}}/project/me?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看系统公告
-GET https://{{host}}/notice
+GET http://{{host}}/notice
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###发布系统公告
-POST https://{{host}}/admin/notice
+POST http://{{host}}/admin/notice
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -572,19 +572,19 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取资源购买记录
-GET https://{{host}}/admin/project/resource/purchased/78?pageNum=1&pageSize=5
+GET http://{{host}}/admin/project/resource/purchased/78?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员获取反馈
-GET https://{{host}}/admin/feedback?pageNum=1&pageSize=5&userId=53
+GET http://{{host}}/admin/feedback?pageNum=1&pageSize=5&userId=53
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员回复反馈
-PUT https://{{host}}/admin/feedback/6
+PUT http://{{host}}/admin/feedback/6
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -595,7 +595,7 @@ Content-Type: application/json
 }
 
 ###创建反馈
-POST https://{{host}}/feedback
+POST http://{{host}}/feedback
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -607,43 +607,43 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取用户反馈
-GET https://{{host}}/feedback/me?pageNum=1&pageSize=5
+GET http://{{host}}/feedback/me?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目已购资源列表
-GET https://{{host}}/project/purchased/79
+GET http://{{host}}/project/purchased/79
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###签名上传
-GET https://{{host}}/userInfo/avatar/sign/upload/v2?filename=avatar.jpg
+GET http://{{host}}/userInfo/avatar/sign/upload/v2?filename=avatar.jpg
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###签名上传资源
-GET https://{{host}}/project/94/resources/sign/upload/private?filename=18051331 姚懿 计算机网络实验报告.docx
+GET http://{{host}}/project/94/resources/sign/upload/private?filename=18051331 姚懿 计算机网络实验报告.docx
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###签名下载资源
-GET https://{{host}}/project/resource/107/sign/download/v2
+GET http://{{host}}/project/resource/107/sign/download/v2
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###签名阅读资源
-GET https://{{host}}/project/resource/227/sign/read
+GET http://{{host}}/project/resource/227/sign/read
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取项目资源信息
-GET https://{{host}}/project/resource/127
+GET http://{{host}}/project/resource/127
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
@@ -655,7 +655,7 @@ Authorization: {{auth_token}}
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员修改项目信息
-PUT https://{{host}}/admin/project/94
+PUT http://{{host}}/admin/project/94
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -667,13 +667,13 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###查看用户订单
-GET https://{{host}}/contribPoint/order/me?pageNum=1&pageSize=5
+GET http://{{host}}/contribPoint/order/me?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###审核项目
-POST https://{{host}}/admin/project/check/94
+POST http://{{host}}/admin/project/check/94
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -684,7 +684,7 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###审核项目资源
-POST https://{{host}}/admin/project/resource/check/187
+POST http://{{host}}/admin/project/resource/check/187
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -695,43 +695,43 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###用户查看自身项目资源（edit mode）
-GET https://{{host}}/project/94/resources?edit=true
+GET http://{{host}}/project/94/resources?edit=true
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员查看项目资源
-GET https://{{host}}/admin/project/94/resources
+GET http://{{host}}/admin/project/94/resources
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员查看全部资源
-GET https://{{host}}/admin/project/resource?pageNum=1&pageSize=5
+GET http://{{host}}/admin/project/resource?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员获取资源购买记录
-GET https://{{host}}/admin/project/resource/purchased?pageNum=1&pageSize=5
+GET http://{{host}}/admin/project/resource/purchased?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员分页获取实名认证信息
-GET https://{{host}}/admin/authentication?pageNum=1&pageSize=5
+GET http://{{host}}/admin/authentication?pageNum=1&pageSize=5
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员审核实名认证信息
-PUT https://{{host}}/admin/authentication/check/59?status=1
+PUT http://{{host}}/admin/authentication/check/59?status=1
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员创建活动
-POST https://{{host}}/admin/activity
+POST http://{{host}}/admin/activity
 Authorization: {{auth_token}}
 Content-Type: application/json
 
@@ -748,50 +748,56 @@ Content-Type: application/json
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员发放兑换码
-GET https://{{host}}/admin/activity/code?activityId=1&count=1
+GET http://{{host}}/admin/activity/code?activityId=1&count=1
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###管理员查看已发放兑换码数量
-GET https://{{host}}/admin/activity/code/count?activityId=2
+GET http://{{host}}/admin/activity/code/count?activityId=2
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 
 ###用户使用兑换码
-POST https://{{host}}/activity/code?code=nizg8gk3
+POST http://{{host}}/activity/code?code=nizg8gk3
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###请求实名认证签名接口
-GET https://{{host}}/authentication/sign/upload?filename=a.jpg
+GET http://{{host}}/authentication/sign/upload?filename=a.jpg
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取用户个人统计信息
-GET https://{{host}}/statistics/me
+GET http://{{host}}/statistics/me
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取轮播图资源
-GET https://{{host}}/slideShow
+GET http://{{host}}/slideShow
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取用户贡献点流水
-GET https://{{host}}/contribPoint/log/me?pageNum=1&pageSize=5&sortBy=ahaCredit
+GET http://{{host}}/contribPoint/log/me?pageNum=1&pageSize=5&sortBy=ahaCredit
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
 
 ###获取post cos签名
-GET https://{{host}}/cos/sign/upload/test?filename=操作系统实验报告.docx
+GET http://{{host}}/cos/sign/upload/test?filename=操作系统实验报告.docx
+Authorization: {{auth_token}}
+
+> {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
+
+###管理员增加项目成员
+DELETE http://{{host}}/admin/project/member/176/112
 Authorization: {{auth_token}}
 
 > {%if (response.headers.valueOf("Authorization")!=null){client.global.set("auth_token",response.headers.valueOf("Authorization"));}%}
