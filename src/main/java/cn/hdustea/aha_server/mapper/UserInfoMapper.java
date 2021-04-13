@@ -1,7 +1,13 @@
 package cn.hdustea.aha_server.mapper;
 
+import cn.hdustea.aha_server.entity.User;
 import cn.hdustea.aha_server.entity.UserInfo;
+import cn.hdustea.aha_server.entity.UserStatistics;
+import cn.hdustea.aha_server.vo.UserContribPointVo;
 import cn.hdustea.aha_server.vo.UserRoughInfoVo;
+import cn.hdustea.aha_server.vo.UserTalentMarketDetailVo;
+
+import java.util.List;
 
 /**
  * ${description}
@@ -22,4 +28,10 @@ public interface UserInfoMapper {
     int updateByPrimaryKey(UserInfo record);
 
     UserRoughInfoVo selectRoughVoByPrimaryKey(Integer userId);
+
+    List<UserRoughInfoVo> selectAllTalentMarketRoughVo();
+
+    List<UserContribPointVo> selectAllTalentMarketRoughVoOrderByContrib();
+
+    UserTalentMarketDetailVo selectTalentMarketDetailVoByPrimaryKey(Integer userId);
 }

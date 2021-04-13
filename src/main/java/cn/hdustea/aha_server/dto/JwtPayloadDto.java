@@ -25,7 +25,6 @@ public class JwtPayloadDto {
      * 是否签署合同
      */
     private boolean signedContract;
-
     /**
      * 是否通过身份认证
      */

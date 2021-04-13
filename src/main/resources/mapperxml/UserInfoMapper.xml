@@ -21,19 +21,47 @@
         <result column="ui_comp_tags" property="compTags"/>
         <result column="ui_vip_level_id" property="vipLevelId"/>
     </resultMap>
+    <resultMap id="TalentMarketDetailResultMap" type="cn.hdustea.aha_server.vo.UserTalentMarketDetailVo">
+        <id column="ui_user_id" property="userId"/>
+        <result column="ui_nickname" property="nickname"/>
+        <result column="ui_gender" property="gender"/>
+        <result column="ui_birthday" property="birthday"/>
+        <result column="ui_avatar_url" property="avatarUrl"/>
+        <result column="ui_school" property="school"/>
+        <result column="ui_academy" property="academy"/>
+        <result column="ui_major" property="major"/>
+        <result column="ui_grade" property="grade"/>
+        <result column="ui_intro" property="intro"/>
+        <result column="ui_specialty_tags" property="specialtyTags"/>
+        <result column="ui_true_name" property="trueName"/>
+        <result column="ui_comp_tags" property="compTags"/>
+    </resultMap>
     <resultMap id="RoughResultMap" type="cn.hdustea.aha_server.vo.UserRoughInfoVo">
-        <result column="ui_user_id" property="userId"/>
+        <id column="ui_user_id" property="userId"/>
         <result column="ui_nickname" property="nickname"/>
         <result column="ui_gender" property="gender"/>
         <result column="ui_avatar_url" property="avatarUrl"/>
         <result column="ui_school" property="school"/>
         <result column="ui_vip_level_id" property="vipLevelId"/>
     </resultMap>
+    <resultMap id="RoughResultMapOrderByContrib" type="cn.hdustea.aha_server.vo.UserContribPointVo">
+        <result column="ui_contrib_point" property="contribPoint"/>
+        <association column="ui_user_id" javaType="cn.hdustea.aha_server.vo.UserRoughInfoVo" property="user"
+                     select="cn.hdustea.aha_server.mapper.UserInfoMapper.selectRoughVoByPrimaryKey"/>
+    </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
         ui_user_id, ui_nickname, ui_gender, ui_birthday, ui_type_id, ui_signature, ui_avatar_url,
         ui_school, ui_academy, ui_major, ui_grade, ui_intro, ui_specialty_tags, ui_true_name,
         ui_comp_tags, ui_vip_level_id
+    </sql>
+    <sql id="TM_Detail_Column_List">
+        ui_user_id, ui_nickname, ui_gender, ui_birthday, ui_avatar_url,
+        ui_school, ui_academy, ui_major, ui_grade, ui_intro, ui_specialty_tags, ui_true_name,
+        ui_comp_tags
+    </sql>
+    <sql id="Rough_Column_List">
+        ui_user_id, ui_nickname, ui_gender, ui_avatar_url, ui_school, ui_vip_level_id
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         <!--@mbg.generated-->
@@ -223,11 +251,27 @@
             ui_comp_tags      = #{compTags}
         where ui_user_id = #{userId}
     </update>
-
     <select id="selectRoughVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="RoughResultMap">
         select
-        <include refid="Base_Column_List"/>
+        <include refid="Rough_Column_List"/>
         from user_info
         where ui_user_id = #{userId}
+    </select>
+    <select id="selectAllTalentMarketRoughVo" resultMap="RoughResultMap">
+        select
+        <include refid="Rough_Column_List"/>
+        from user_info
+    </select>
+    <select id="selectTalentMarketDetailVoByPrimaryKey" parameterType="java.lang.Integer" resultMap="TalentMarketDetailResultMap">
+        select
+        <include refid="TM_Detail_Column_List"/>
+        from user_info
+        where ui_user_id = #{userId}
+    </select>
+    <select id="selectAllTalentMarketRoughVoOrderByContrib" resultMap="RoughResultMapOrderByContrib">
+        select ui_user_id, ui_nickname, ui_gender, ui_avatar_url, ui_school, (u_aha_credit + u_aha_point) as ui_contrib_point, ui_vip_level_id
+        from user_info, user
+        where ui_user_id = u_id
+        order by ui_contrib_point desc
     </select>
 </mapper>

@@ -150,7 +150,7 @@ public class AuthController {
     @PostMapping("/login/wechat")
     public ResponseBean<LoginInfoVo> loginByWechat(@RequestBody @Validated WechatRegisterUserDto wechatRegisterUserDto) throws Exception {
         LoginInfoVo loginInfoVo;
-        loginInfoVo = authService.LoginByWechat(wechatRegisterUserDto);
+        loginInfoVo = authService.loginByWechat(wechatRegisterUserDto);
         log.info(userOperationLogConfig.getFormat(), MODULE_NAME, "用户登录", "");
         return new ResponseBean<>(200, "登录成功", loginInfoVo);
     }

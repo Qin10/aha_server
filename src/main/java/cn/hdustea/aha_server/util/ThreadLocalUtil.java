@@ -6,7 +6,7 @@ package cn.hdustea.aha_server.util;
  * @author STEA_YY
  **/
 public class ThreadLocalUtil {
-    private static final ThreadLocal<Integer> CURRENT_USER_THREAD_LOCAL = new ThreadLocal<Integer>();
+    private static final ThreadLocal<Integer> CURRENT_USER_THREAD_LOCAL = new ThreadLocal<>();
 
     public static void setCurrentUser(Integer userId) {
         CURRENT_USER_THREAD_LOCAL.set(userId);

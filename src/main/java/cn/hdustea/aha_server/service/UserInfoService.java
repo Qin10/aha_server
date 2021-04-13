@@ -3,10 +3,7 @@ package cn.hdustea.aha_server.service;
 import cn.hdustea.aha_server.entity.UserInfo;
 import cn.hdustea.aha_server.exception.apiException.daoException.SelectException;
 import cn.hdustea.aha_server.mapper.UserInfoMapper;
-import cn.hdustea.aha_server.vo.OauthVo;
-import cn.hdustea.aha_server.vo.PersonalUserInfoVo;
-import cn.hdustea.aha_server.vo.UserRoughInfoVo;
-import cn.hdustea.aha_server.vo.UserVo;
+import cn.hdustea.aha_server.vo.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

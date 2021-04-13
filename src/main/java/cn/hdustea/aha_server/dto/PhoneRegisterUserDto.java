@@ -33,6 +33,7 @@ public class PhoneRegisterUserDto {
     @Length(min = 4, max = 12, message = "昵称长度不符合要求")
     @NotEmpty(message = "昵称不能为空")
     private String nickname;
+
     /**
      * 是否同意服务协议
      */

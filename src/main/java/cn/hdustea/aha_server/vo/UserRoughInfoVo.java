@@ -2,6 +2,8 @@ package cn.hdustea.aha_server.vo;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 用户粗略信息VO
  *

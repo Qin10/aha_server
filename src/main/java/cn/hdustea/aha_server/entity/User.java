@@ -5,6 +5,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
+ * 用户私有信息表
  * ${description}
  *
  * @author STEA_YY
@@ -12,6 +13,7 @@ import lombok.Data;
 @Data
 public class User {
     private Integer id;
+
 
     /**
      * 用户密码

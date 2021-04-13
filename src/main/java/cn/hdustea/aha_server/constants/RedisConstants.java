@@ -7,17 +7,17 @@ package cn.hdustea.aha_server.constants;
  **/
 public class RedisConstants {
     /**
-     * 注册短信验证码Redis前缀
+     * 注册短信验证码 Redis前缀
      */
     public static final String REGISTER_MESSAGE_CODE_PREFIX = "user:register:code:";
 
     /**
-     * 修改密码短信验证码Redis前缀
+     * 修改密码短信验证码 Redis前缀
      */
     public static final String CHANGE_PASSWORD_MESSAGE_CODE_PREFIX = "user:changePassword:code:";
 
     /**
-     * 绑定手机号短信验证码Redis前缀
+     * 绑定手机号短信验证码 Redis前缀
      */
     public static final String BIND_PHONE_MESSAGE_CODE_PREFIX = "user:bindPhone:code:";
 
@@ -43,11 +43,12 @@ public class RedisConstants {
     public static final String PROJECT_UPLOAD_TEMP_TOKEN_PREFIX = "project:upload:token:";
 
     /**
-     * 项目阅读量Hash key
+     * 项目阅读量 Hash key
      */
     public static final String PROJECT_READ_KEY = "project:read";
+
     /**
-     * 用户排行榜Hash key
+     * 用户排行榜 Hash key
      */
     public static final String CONTRIBUTION_RANK_KEY = "contribution:rank";
 
@@ -60,4 +61,9 @@ public class RedisConstants {
      * OSS文档转换任务id key
      */
     public static final String DOCUMENT_CONVERT_RUNNING_TASK_KEY = "document:convert:running:task";
+
+    /**
+     * 人才市场排行榜 Hash key
+     */
+    public static final String TALENTMARKET_CONTRIBUTION_RANK_KEY = "talentmarket:contribution:rank_key";
 }

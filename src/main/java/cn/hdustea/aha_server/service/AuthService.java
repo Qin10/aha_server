@@ -240,7 +240,7 @@ public class AuthService {
      * @throws AuthorizationException  授权异常
      */
     @Transactional(rollbackFor = Exception.class)
-    public LoginInfoVo LoginByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws JsonProcessingException, SelectException, AuthorizationException {
+    public LoginInfoVo loginByWechat(WechatRegisterUserDto wechatRegisterUserDto) throws JsonProcessingException, SelectException, AuthorizationException {
         String openid = WechatUtil.getWxInfo(wechatRegisterUserDto.getCode(), wechatConfig.getAppid(), wechatConfig.getSecret()).getOpenid();
         if (openid == null) {
             throw new AuthorizationException("非法授权码！");

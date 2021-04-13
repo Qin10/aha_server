@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Redis操作工具类
  *
- * @author 王赛超、STEA_YY
+ * @author 王赛超、STEA_YY、Qin Zhenghan
  */
 @Service
 public class RedisService {
@@ -52,7 +52,6 @@ public class RedisService {
      *
      * @param key 一个或多个键
      */
-    @SuppressWarnings("unchecked")
     public void del(String... key) {
         if (key != null && key.length > 0) {
             if (key.length == 1) {

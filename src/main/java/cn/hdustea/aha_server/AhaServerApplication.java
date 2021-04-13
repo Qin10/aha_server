@@ -21,6 +21,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 public class AhaServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(AhaServerApplication.class, args);
+        System.out.println("GOGO");
 //        buildApiDoc();
     }
 

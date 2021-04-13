@@ -66,7 +66,7 @@ public class ProjectService {
         if (sortBy != null && !sortBy.equals("")) {
             switch (sortBy) {
                 case "time": {
-                    currentSortBy = "p_id";
+                    currentSortBy = "p_award_time";
                     break;
                 }
                 case "collect": {

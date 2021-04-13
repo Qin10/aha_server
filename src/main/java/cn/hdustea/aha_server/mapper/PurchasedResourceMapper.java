@@ -23,8 +23,6 @@ public interface PurchasedResourceMapper {
 
     List<PurchasedResource> selectAllByResourceId(@Param("resourceId")Integer resourceId);
 
-
-
     int updateByPrimaryKeySelective(PurchasedResource record);
 
     int updateByPrimaryKey(PurchasedResource record);

@@ -3,10 +3,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://127.0.0.1:3306/aha_data?serverTimezone=Hongkong
     username: root
-    password: ROOT_root123
+#    password: ROOT_root123
+    password:
   redis:
     host: 127.0.0.1
     port: 6379
+    password: 330800
   data:
     mongodb:
       port: 27017
@@ -32,8 +34,8 @@ jwt-config:
   expireTime: 600
   refreshTokenExpireTime: 604800
 file-upload-path:
-  contractSignaturePath: /home/aha_files/contract_signatures/
-#  contractSignaturePath: C:/dev/
+#  contractSignaturePath: /home/aha_files/contract_signatures/
+  contractSignaturePath: /Users/cygao/casual/aha_casual
 user-operation-log:
   format: '[{}][{}][{}]'
 wechat:

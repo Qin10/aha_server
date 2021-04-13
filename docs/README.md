@@ -4886,3 +4886,90 @@ status|int|否|审核结果(取值:1-通过,2-不通过)
 	"time":"string //响应时间"
 }
 ```
+
+# 人才市场后台管理类请求
+
+## 分页获取人才粗略信息列表
+
+*作者: Qin Zhenghan*
+
+**请求URL**
+
+/talentMarket `GET`
+
+**请求参数**
+
+|  参数名  | 类型 | 必须 |   描述   |
+| :------: | :--: | :--: | :------: |
+| pageNum  | int  |  是  |   页码   |
+| pageSize | int  |  是  | 分页大小 |
+
+**返回结果**
+
+```json
+{
+    "code": "int //响应状态码",
+    "msg": "string //响应消息",
+    "data": {
+        "pageNum": "int //页码",
+        "pageSize": "int //分页大小",
+        "pageData": [
+            {
+                "user": {
+                    "userId": "int //用户id",
+                    "nickname": "string //用户昵称",
+                    "gender": "boolean //用户性别",
+                    "avatarUrl": "string //用户头像文件保存路径",
+                    "school": "string //用户学校",
+                    "vipLevelId": "string //用户VIP等级"
+                },
+                "contribPoint": "BigDecimal //用户贡献点",
+                "rank": "long //用户贡献点排名"
+            }
+        ]
+    },
+    "time": "string //响应时间"
+}
+```
+
+## 获取人才详细信息
+
+*作者: Qin Zhenghan*
+
+**请求URL**
+
+/talentMarket/{userId} `GET`
+
+**请求参数**
+
+| 参数名 | 类型 | 必须 |  描述  |
+| :----: | :--: | :--: | :----: |
+| userId | int  |  是  | 用户id |
+
+**返回结果**
+
+```json
+{
+    "code": "int //响应状态码",
+    "msg": "string //响应消息",
+    "data": {
+        "userId": "int //用户id",
+        "nickname": "string //用户昵称",
+        "gender": "boolean //用户性别",
+        "birthday": "string //用户头像文件保存路径",
+        "avatarUrl": "string //用户头像文件保存路径",
+        "school": "string //用户学校",
+        "academy": "string //用户学院",
+        "major": "string //用户主修专业",
+		"grade": "int //用户当前年级",
+		"intro": "string //用户自我介绍",
+        "specialtyTags":"string //用户特长标签",
+		"trueName": "string //用户真实姓名",
+		"compTags": "string //用户参与过比赛标签",
+        "oauths": "Oauths //鉴权对象",
+        "userInfo": "UserInfo //UserInfo对象"
+    },
+    "time": "string //响应时间"
+}
+```
+
